@@ -1,135 +1,136 @@
 # The Organon
 
-> A methodology for LLM-human collaboration on complex systems.
+> The meta-organon: guidance for creating guidance systems in human-machine collaborative projects.
 
 ---
 
-## What is an Organon?
+## Definition
 
-An **Organon** is the complete guidance system for a project or domain. It consists of three artifacts:
+An **organon** is a complete guidance system for a project or domain. It encodes taste, judgment, and behavioral constraints that enable any agent (human or LLM) to make decisions aligned with the system's character.
 
-| Artifact | Question | Character | Audience |
-|----------|----------|-----------|----------|
-| **Philosophy** | Why do we do it this way? | Explanatory | Humans understanding the system |
-| **Ethos** | What should we do and not do? | Normative | LLMs (and humans) behaving in the system |
-| **Protocol** | How do we accomplish this task? | Procedural | Agents executing specific tasks |
+| Artifact | Question | Character | File |
+|----------|----------|-----------|------|
+| **Philosophy** | Why? | Explanatory | `PHILOSOPHY.md` |
+| **Ethos** | What? | Normative | `ETHOS.md` |
+| **Protocol** | How? | Procedural | `PROTOCOL.md` or `protocols/*.md` |
 
-The term comes from Aristotle's *Organon* — his collection of works on logic and reasoning. An organon is an **instrument for correct thinking and acting**.
+**Etymology:** From Aristotle's *Organon* (Greek: ὄργανον, "instrument") — tools for correct reasoning.
 
 ---
 
-## Why This Matters
+## When to Create an Organon
 
-When humans collaborate with LLMs on complex systems, behavioral consistency becomes critical. An LLM working on a codebase today should make decisions compatible with the LLM (or human) who worked on it yesterday.
-
-Without an organon, LLMs:
-- Make locally reasonable but globally inconsistent decisions
-- Reinvent approaches that contradict established patterns
-- Drift from the system's intended character over time
-- Waste tokens rediscovering context that should be given
-
-An organon encodes the "taste" and "judgment" that would otherwise require human supervision at every decision point.
+| Signal | Action |
+|--------|--------|
+| Multiple agents (human or LLM) work on the same system | Create organon |
+| Decisions require "taste" or "judgment" | Create organon |
+| Behavioral consistency matters more than local optimization | Create organon |
+| Onboarding should transfer character, not just knowledge | Create organon |
+| Single person, simple project, no LLM collaboration | Skip organon |
 
 ---
 
 ## Contents
 
-| Chapter | Description |
-|---------|-------------|
-| [01-terminology.md](./01-terminology.md) | Definitions of philosophy, ethos, protocol |
-| [02-documentation-layers.md](./02-documentation-layers.md) | The three-layer documentation model |
-| [03-artifact-scopes.md](./03-artifact-scopes.md) | How organon artifacts apply at different project levels |
+| Document | Purpose |
+|----------|---------|
+| [PHILOSOPHY.md](./PHILOSOPHY.md) | Why this methodology exists |
+| [ETHOS.md](./ETHOS.md) | Constraints for creating organons |
+| [templates.md](./templates.md) | Copy-paste templates for each artifact |
+| [scopes.md](./scopes.md) | Hierarchical organons (product → domain → feature) |
+| [patterns.md](./patterns.md) | Documentation layers, inheritance, common structures |
 
 ---
 
 ## Quick Reference
 
-### Philosophy
+### Creating an Organon
 
-**Purpose:** Explain *why* decisions were made.
-
-```markdown
-# Feature X Philosophy
-
-## The Problem
-What challenge does this feature address?
-
-## The Bet
-What approach did we choose and why?
-
-## Trade-offs
-What did we sacrifice for what we gained?
+```
+1. Identify the scope (product, domain, feature, component)
+2. Write ETHOS.md first (most critical for LLM behavior)
+3. Write PHILOSOPHY.md (explains reasoning to humans)
+4. Write protocols as needed (specific repeatable tasks)
 ```
 
-### Ethos
-
-**Purpose:** Constrain *what* should and shouldn't be done.
+### Ethos Structure (Critical)
 
 ```markdown
-# Feature X Ethos
+# [Scope] Ethos
 
 ## Identity
-- **IS:** What this feature is
-- **IS NOT:** What this feature is not
+- **IS:** [what this is]
+- **IS NOT:** [what this is not]
 
 ## Invariants
-1. Rule that must never be violated
-2. Another inviolable rule
+1. [rule that must never be violated]
+2. [another inviolable rule]
+
+## Principles (Prioritized)
+1. [highest priority principle]
+2. [second priority principle]
 
 ## Decision Heuristics
-- When X, do Y
-- When uncertain, prefer Z
+- When [situation], do [action]
+- When uncertain, prefer [default]
+
+## Out of Scope
+- [explicitly not our concern]
 ```
 
-### Protocol
-
-**Purpose:** Specify *how* to accomplish specific tasks.
+### Philosophy Structure
 
 ```markdown
-# Protocol: Task Name
+# [Scope] Philosophy
+
+## The Problem
+[What challenge does this address?]
+
+## The Bet
+[What approach did we choose?]
+
+## Trade-offs
+| Decision | Benefit | Cost |
+|----------|---------|------|
+| [choice] | [gain]  | [loss] |
+```
+
+### Protocol Structure
+
+```markdown
+# Protocol: [Task Name]
 
 ## Goal
-What this protocol accomplishes.
+[What this accomplishes]
 
 ## Preconditions
-- What must be true before starting
+- [what must be true before starting]
 
 ## Steps
-1. First step
-2. Second step
-3. Third step
+1. [first step]
+2. [second step]
 
 ## Verification
-How to confirm success.
+[how to confirm success]
 ```
 
 ---
 
-## Applying an Organon
+## For LLMs
 
-An organon can exist at multiple scopes within a project:
+**Reading organons:**
+1. Always read ETHOS.md first — it constrains your behavior
+2. Read PHILOSOPHY.md for context when decisions seem arbitrary
+3. Follow protocols literally when they exist
 
+**Creating organons:**
+1. See [ETHOS.md](./ETHOS.md) for constraints on writing organons
+2. See [templates.md](./templates.md) for copy-paste starting points
+3. Prioritize token efficiency — ethos docs are injected repeatedly
+
+**Navigation in projects with organons:**
 ```
-Project Organon (repo root)
-    ├── Documentation Organon (docs/)
-    │   ├── Feature Organon (docs/features/X/)
-    │   └── Feature Organon (docs/features/Y/)
-    └── Source Organon (src/)
-        └── Component Organon (src/components/Z/)
+Product ethos (repo root) → Domain ethos (docs/, src/) → Feature ethos (features/X/)
 ```
 
-Each level inherits from its parent and adds domain-specific guidance.
-
-See [03-artifact-scopes.md](./03-artifact-scopes.md) for details.
-
----
-
-## This Book
-
-This repository is itself an organon — a methodology for creating organons. It's framework-agnostic and can be applied to any project where LLMs collaborate with humans.
-
-**Not project-specific:** This methodology applies to any codebase, not just one project.
-
-**Portable:** Copy these patterns to your own projects.
-
-**Evolving:** This is a living document, refined through practice.
+Each level inherits from parent. Child scopes add constraints, never contradict.
