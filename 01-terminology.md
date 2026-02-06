@@ -1,4 +1,4 @@
-# Terminology: Ethos, Philosophy, and Protocol
+# Terminology: The Organon
 
 > Foundational vocabulary for LLM-guided system development.
 
@@ -13,42 +13,50 @@ When humans collaborate with LLMs on complex systems, behavioral consistency bec
 - Drift from the system's intended character over time
 - Waste tokens rediscovering context that should be given
 
-Three distinct artifact types address this problem at different levels of abstraction.
+A complete guidance system addresses this problem at three levels of abstraction.
+
+---
+
+## The Organon
+
+**Definition:** An *organon* is the complete guidance system for a project or domain. It consists of three artifacts: philosophy, ethos, and protocol.
+
+**Etymology:** From Aristotle's *Organon* (Greek: ὄργανον, "instrument") — his collection of works on logic and reasoning. An organon is an instrument for correct thinking and acting.
+
+**Purpose:** To encode the "taste" and "judgment" that would otherwise require human supervision at every decision point. A well-crafted organon enables any agent (human or LLM) to make decisions aligned with the system's character.
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                          ORGANON                                 │
+│                                                                  │
+│   The complete guidance system for a project or domain          │
+│                                                                  │
+│  ┌───────────────────────────────────────────────────────────┐  │
+│  │                      PHILOSOPHY                            │  │
+│  │   "Why we do things this way"                              │  │
+│  │   Explanatory · Retrospective · Reasoning                  │  │
+│  └───────────────────────────────────────────────────────────┘  │
+│                              │                                   │
+│                              ▼                                   │
+│  ┌───────────────────────────────────────────────────────────┐  │
+│  │                        ETHOS                               │  │
+│  │   "What we are and are not"                                │  │
+│  │   Normative · Prospective · Constraining                   │  │
+│  └───────────────────────────────────────────────────────────┘  │
+│                              │                                   │
+│                              ▼                                   │
+│  ┌───────────────────────────────────────────────────────────┐  │
+│  │                       PROTOCOL                             │  │
+│  │   "How to accomplish specific tasks"                       │  │
+│  │   Procedural · Operational · Step-by-step                  │  │
+│  └───────────────────────────────────────────────────────────┘  │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
 
 ---
 
 ## The Three Artifacts
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                         PHILOSOPHY                               │
-│                                                                  │
-│   "Why we do things this way"                                   │
-│                                                                  │
-│   Explanatory · Retrospective · Reasoning                       │
-│   Answers: What is our thinking? What trade-offs did we make?   │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                           ETHOS                                  │
-│                                                                  │
-│   "What we are and are not"                                     │
-│                                                                  │
-│   Normative · Prospective · Constraining                        │
-│   Answers: What should we do? What is out of bounds?            │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                          PROTOCOL                                │
-│                                                                  │
-│   "How to accomplish specific tasks"                            │
-│                                                                  │
-│   Procedural · Operational · Step-by-step                       │
-│   Answers: What are the exact steps? What is the sequence?      │
-└─────────────────────────────────────────────────────────────────┘
-```
 
 ---
 
@@ -294,6 +302,8 @@ An agent should:
 
 ## Summary
 
+An **organon** is the complete guidance system, composed of three artifacts:
+
 | Artifact | Question Answered | Character | Audience |
 |----------|-------------------|-----------|----------|
 | Philosophy | Why do we do it this way? | Explanatory | Humans understanding the system |
@@ -304,6 +314,7 @@ An agent should:
 - Write **philosophy** for humans who will maintain and evolve the system
 - Write **ethos** for LLMs who will work within the system
 - Write **protocols** for any agent who must execute specific tasks reliably
+- Collect all three into an **organon** for the project or domain
 
 The ethos is the critical artifact for LLM behavioral consistency. It encodes the "taste" and "judgment" that would otherwise require human supervision at every decision point.
 
@@ -312,7 +323,7 @@ The ethos is the critical artifact for LLM behavioral consistency. It encodes th
 ## Next Steps
 
 - [02-documentation-layers.md](./02-documentation-layers.md) — The three-layer documentation model (code, LLM docs, human docs)
-- [03-artifact-scopes.md](./03-artifact-scopes.md) — How philosophy/ethos apply at different project levels
+- [03-artifact-scopes.md](./03-artifact-scopes.md) — How organon artifacts apply at different project levels
 - 04-ethos-patterns.md — Common patterns in well-structured ethos documents (planned)
 - 05-philosophy-to-ethos.md — Extracting ethos from existing philosophy (planned)
 - 06-protocol-design.md — Designing protocols that LLMs can follow (planned)

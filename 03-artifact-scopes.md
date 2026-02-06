@@ -1,6 +1,6 @@
-# Artifact Scopes: Hierarchical Philosophy and Ethos
+# Artifact Scopes: Hierarchical Organons
 
-> How philosophy/ethos/protocol artifacts apply at different levels of a project.
+> How organon artifacts (philosophy, ethos, protocol) apply at different levels of a project.
 
 ---
 
@@ -17,15 +17,15 @@ A monolithic ethos either becomes too long to be useful, or too abstract to guid
 
 ---
 
-## The Solution: Scoped Artifacts
+## The Solution: Scoped Organons
 
-Philosophy/ethos/protocol artifacts exist at multiple **scopes**. Each scope governs a specific domain, and scopes form a hierarchy:
+An organon (philosophy + ethos + protocol) can exist at multiple **scopes**. Each scope governs a specific domain, and scopes form a hierarchy:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                     PRODUCT SCOPE                           │
+│                    PRODUCT ORGANON                          │
 │                                                             │
-│   Repo root: PHILOSOPHY.md, ETHOS.md                        │
+│   Repo root: PHILOSOPHY.md, ETHOS.md, PROTOCOL.md           │
 │   Governs: The entire codebase and project                  │
 │   Example: "Constellation is a type-safe pipeline DSL"      │
 └─────────────────────────────────────────────────────────────┘
@@ -34,7 +34,7 @@ Philosophy/ethos/protocol artifacts exist at multiple **scopes**. Each scope gov
             ▼                 ▼                 ▼
 ┌───────────────────┐ ┌───────────────┐ ┌───────────────────┐
 │ DOCUMENTATION     │ │ SOURCE CODE   │ │ DEPLOYMENT        │
-│ SCOPE             │ │ SCOPE         │ │ SCOPE             │
+│ ORGANON           │ │ ORGANON       │ │ ORGANON           │
 │                   │ │               │ │                   │
 │ docs/PHILOSOPHY   │ │ src/ETHOS     │ │ deploy/ETHOS      │
 │ docs/ETHOS        │ │ (if needed)   │ │ (if needed)       │
@@ -43,7 +43,7 @@ Philosophy/ethos/protocol artifacts exist at multiple **scopes**. Each scope gov
             ├─────────────────┬─────────────────┐
             ▼                 ▼                 ▼
 ┌───────────────────┐ ┌───────────────┐ ┌───────────────────┐
-│ FEATURE SCOPE     │ │ FEATURE SCOPE │ │ FEATURE SCOPE     │
+│ FEATURE ORGANON   │ │ FEATURE ORGANON│ │ FEATURE ORGANON  │
 │                   │ │               │ │                   │
 │ features/X/       │ │ features/Y/   │ │ features/Z/       │
 │ PHILOSOPHY.md     │ │ PHILOSOPHY.md │ │ PHILOSOPHY.md     │
@@ -166,16 +166,16 @@ Component Ethos (adds implementation constraints)
 
 ---
 
-## When to Create Scoped Artifacts
+## When to Create Scoped Organons
 
 ### Create a new scope when:
 
 | Signal | Action |
 |--------|--------|
-| A domain has unique constraints not applicable elsewhere | Create domain-level ethos |
-| A feature requires specialized decision-making guidance | Create feature-level philosophy/ethos |
-| Different agents will work on different parts independently | Scope artifacts to their working areas |
-| The parent-level ethos is becoming too long | Split into child scopes |
+| A domain has unique constraints not applicable elsewhere | Create domain-level organon |
+| A feature requires specialized decision-making guidance | Create feature-level organon |
+| Different agents will work on different parts independently | Scope organons to their working areas |
+| The parent-level ethos is becoming too long | Split into child organons |
 
 ### Don't create a new scope when:
 
@@ -216,7 +216,7 @@ An agent tasked with "add a new resilience option" would read:
 
 ## Practical Example: Constellation Engine
 
-Constellation uses three active scopes:
+Constellation uses three active organon scopes:
 
 ### Product Scope (repo root)
 
@@ -279,12 +279,13 @@ All uppercase filenames signal "meta-documentation"—documents about how to wor
 
 | Concept | Description |
 |---------|-------------|
-| **Scope** | A level at which philosophy/ethos/protocol artifacts apply |
-| **Inheritance** | Child scopes inherit parent constraints |
-| **Override** | Child scopes can add (not contradict) constraints |
+| **Organon** | The complete guidance system (philosophy + ethos + protocol) |
+| **Scope** | A level at which an organon applies |
+| **Inheritance** | Child organons inherit parent constraints |
+| **Override** | Child organons can add (not contradict) constraints |
 | **Navigation** | LLMs read from product → domain → feature → component |
 
-**Key insight:** Scoped artifacts let you write focused, actionable guidance at each level without creating a single overwhelming document. An agent working on documentation doesn't need to wade through component implementation constraints, and vice versa.
+**Key insight:** Scoped organons let you write focused, actionable guidance at each level without creating a single overwhelming document. An agent working on documentation doesn't need to wade through component implementation constraints, and vice versa.
 
 ---
 
