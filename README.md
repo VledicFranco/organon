@@ -39,6 +39,13 @@ An **organon** is a complete guidance system for a project or domain. It encodes
 | [templates.md](./templates.md) | Copy-paste templates for each artifact |
 | [scopes.md](./scopes.md) | Hierarchical organons (product → domain → feature) |
 | [patterns.md](./patterns.md) | Documentation layers, inheritance, common structures |
+| [protocols/](./protocols/) | Specific procedures for common tasks |
+
+## Protocols
+
+| Protocol | Purpose |
+|----------|---------|
+| [semantic-mapping.md](./protocols/semantic-mapping.md) | Connect generated catalogs to organon meaning |
 
 ---
 
