@@ -41,18 +41,22 @@
 
 ## Principles (Prioritized)
 
-1. **Clarity over completeness.** A clear document beats a comprehensive but vague one. Applies to both methodology docs and code.
+1. **LLM-centric design.** This methodology is built for LLM consumption and execution. LLMs are the interface between human intent and automated enforcement. Every design decision — frontmatter, standardized sections, decision heuristics — optimizes for LLM parsing and action. Humans define "what" and "why"; LLMs execute "how."
 
-2. **Progressive disclosure over arbitrary limits.** Files can be any size as long as they support layered access. Token efficiency comes from *not loading what you don't need*, not from keeping files small. The mechanism:
+2. **Enforcement through automation.** Organons that aren't enforced become fiction. The enforcement loop — Define (organon) → Bind (workflow) → Execute (tools) → Verify (automated checks) → Evolve (update organon) — is what makes this methodology real. Every constraint should have a path to automated verification.
+
+3. **Clarity over completeness.** A clear document beats a comprehensive but vague one. Applies to both methodology docs and code.
+
+4. **Progressive disclosure over arbitrary limits.** Files can be any size as long as they support layered access. Token efficiency comes from *not loading what you don't need*, not from keeping files small. The mechanism:
    - **Frontmatter** (~25-50 tokens): type, scope, summary, token_estimate, relationships — enough to decide "should I load this?"
    - **Section structure** (standardized headings): agents can load specific sections (e.g., just `## Invariants`) without reading the whole file
    - **README-as-router**: directory-level navigation remains lightweight (<100 lines)
 
-3. **Constraints over explanations.** State what to do, not why. Put "why" in philosophy files or code comments.
+5. **Constraints over explanations.** State what to do, not why. Put "why" in philosophy files or code comments.
 
-4. **Specificity over generality.** Concrete examples beat abstract descriptions. Reference Agent Tavern patterns when illustrating.
+6. **Specificity over generality.** Concrete examples beat abstract descriptions. Reference Agent Tavern patterns when illustrating.
 
-5. **Protocols before skills, skills before tools.** Document the procedure (protocol) first. Only create a skill when the protocol is complex enough (≥5 steps, error-prone, frequent). Only create tools for atomic operations the skill orchestrates.
+7. **Protocols before workflows, workflows before tools.** Document the procedure (protocol) first. Only create a workflow when the protocol is complex enough (≥5 steps, error-prone, frequent). Only create tools for atomic operations the workflow orchestrates. Technology-agnostic: workflows can be Claude skills, Cursor rules, or any agent-native format.
 
 ---
 

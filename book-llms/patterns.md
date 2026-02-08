@@ -2,8 +2,8 @@
 type: rationale
 scope: meta
 name: patterns
-version: "2.0"
-summary: Common patterns and anti-patterns for organon creation — progressive disclosure, layered access, identity boundaries, and more
+version: "3.0"
+summary: Common patterns and anti-patterns — progressive disclosure, enforcement loop, LLM-centric design, identity boundaries, and more
 token_estimate: 5500
 decision_count: 12
 inherits_from: [meta-organon]
@@ -325,27 +325,35 @@ Protocols are invoked by name, not embedded:
 
 ---
 
-## Three-Layer Architecture Pattern
+## Enforcement Loop Pattern
 
-Bind declarative knowledge to executable workflows to atomic operations:
+The pattern that makes organons executable, not just readable. Three layers form a closed loop:
 
 ```
-Protocols (Knowledge)     →  "What to do" — documented in PROTOCOLS.md
+Protocols (Knowledge)     →  "What must happen" — PROTOCOLS.md in organon hierarchy
     ↓
-Skills (Workflows)        →  "How to orchestrate" — .claude/skills/<name>/skill.md
+Workflows (Agent Binding) →  "How to orchestrate" — agent-specific (skills, rules, workflow docs)
     ↓
-Tools (Operations)        →  "How to execute" — atomic npm scripts / CLI commands
+Tools (Operations)        →  "How to execute" — CLI commands, MCP tools, scripts
+    ↓
+Verification              →  "Did it work?" — automated checks close the loop
+    ↓
+    └──────────────────── back to Protocols (evolve)
 ```
 
-**Automation tiers:** Not every protocol needs a skill.
+**Technology-agnostic:** Protocols and tools are universal. The workflow layer is the only agent-specific part — it adapts to Claude Code skills, Cursor rules, generic workflow docs, or any LLM's native format.
 
-| Tier | Criteria | Has Skill? |
-|------|----------|------------|
+**Automation tiers:** Not every protocol needs a workflow.
+
+| Tier | Criteria | Has Workflow? |
+|------|----------|---------------|
 | Automated | ≥5 steps, cross-domain, error-prone, frequent | Yes |
 | Semi-Automated | 1-2 steps, single tool, infrequent | No (tool only) |
 | Manual | Judgment required, context-dependent | No (docs only) |
 
-**Bidirectional references:** If a protocol declares `automation_tier: automated`, the referenced skill must exist and reference back via `protocol_id`. See `three-layer-architecture.md` for full specification.
+**Bidirectional references:** If a protocol declares `automation_tier: automated`, the referenced workflow must exist and reference back via `protocol_id`. See `three-layer-architecture.md` for the full specification, universal contracts, and implementation guidance.
+
+**Why it matters:** Without this loop, organons are documentation. With it, they're enforced constraints. The LLM reads the organon, executes the workflow, invokes tools, and verification catches violations — automatically.
 
 ---
 

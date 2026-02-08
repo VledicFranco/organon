@@ -2,135 +2,216 @@
 type: rationale
 scope: meta
 name: three-layer-architecture
-version: "1.0"
-summary: Bind declarative knowledge (protocols) to executable workflows (skills) to atomic operations (tools) — the pattern for executable documentation
-token_estimate: 7000
-decision_count: 5
+version: "2.0"
+summary: The enforcement loop — how protocols, workflows, and tools bind the methodology to LLM execution, making organons executable and verifiable
+token_estimate: 8500
+decision_count: 8
 inherits_from: [meta-organon]
-load_priority: medium
+load_priority: high
 required_for:
   - protocol_creation
-  - skill_creation
+  - workflow_creation
+  - tool_creation
   - methodology_evolution
+  - methodology_enforcement
 audience: [llm, human, tooling]
 ---
 
-# Three-Layer Architecture: Protocols → Skills → Tools
+# The Enforcement Loop: Protocols → Workflows → Tools
 
-> Bind declarative knowledge (protocols) to executable workflows (skills) to atomic operations (tools).
-
----
-
-## Problem
-
-Organon files document **how to do things** (PROTOCOLS.md), but this knowledge sits disconnected from executable code:
-
-**Without a binding layer:**
-```
-PROTOCOLS.md (declarative)           package.json (imperative)
-┌──────────────────────────┐        ┌──────────────────────────┐
-│ Protocol 1: RFC Impl     │        │ npm run rfc:context      │
-│ 1. Load context          │   ???  │ npm run rfc:checklist    │
-│ 2. Implement code        │ -----> │ npm run rfc:verify       │
-│ 3. Update organons       │        │ npm run organon:generate │
-│ 4. Verify gates pass     │        │ npm run test:organon     │
-│ 5. Mark complete         │        │ ...                      │
-└──────────────────────────┘        └──────────────────────────┘
-     (what to do)                        (how to execute)
-         ↓                                       ↓
-     No executable binding                  No semantic context
-```
-
-**Consequences:**
-- **Knowledge gap:** Developers read protocols, manually translate to tool invocations
-- **Inconsistency:** Same protocol executed differently each time
-- **Error-prone:** Easy to skip steps, use wrong tools, violate invariants
-- **Low discoverability:** Tools exist but aren't surfaced at decision points
-- **No traceability:** Can't verify that code follows documented process
+> How the Organon methodology becomes executable. Protocols define what must happen, workflows bind protocols to LLM execution, tools perform atomic operations, and verification closes the loop.
 
 ---
 
-## Solution: Skills as Procedural Binding
+## The Problem
 
-Introduce **Skills** — executable implementations of protocols that orchestrate tools:
+Documentation that isn't enforced becomes fiction. Organon files can define constraints, principles, and procedures — but without a mechanism to execute and verify them, they drift:
+
+| Symptom | Cause |
+|---------|-------|
+| LLM ignores invariants during implementation | No binding between organon constraints and agent behavior |
+| Protocol steps skipped or reordered | Protocols are prose, not executable workflows |
+| Verification happens manually (or not at all) | No automated tools to check invariant compliance |
+| Methodology is "known" but not followed | No enforcement loop — knowledge exists but isn't actionable |
+| Each session reinvents the process | No persistent workflow that carries methodology across interactions |
+
+**The core problem:** Declarative knowledge (organons) sits disconnected from imperative execution (what the LLM actually does). Without a binding layer, methodology compliance depends on the LLM "remembering" to follow the rules.
+
+---
+
+## The Solution: Three Layers, One Loop
+
+Three layers bind declarative knowledge to executable behavior. Together they form a closed enforcement loop:
 
 ```
-┌─────────────────────────────────┐
-│  PROTOCOLS.md (Knowledge)       │  ← Declarative: "What to do"
-│  - RFC Implementation (5 phases)│     Organon files documenting procedures
-│  - Frontmatter Generation       │
-└─────────────────────────────────┘
-             ↓ (codifies as)
-┌─────────────────────────────────┐
-│  Skills (Workflows)             │  ← Procedural: "How to orchestrate"
-│  /implement-rfc                 │     Claude Code skills binding protocols to tools
-│  /maintain-organon              │
-└─────────────────────────────────┘
-             ↓ (invokes)
-┌─────────────────────────────────┐
-│  Tools (Operations)             │  ← Imperative: "How to execute"
-│  npm run rfc:verify             │     Atomic operations in package.json
-│  npm run organon:health         │
-└─────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│                                                                 │
+│   ┌───────────────────────┐                                     │
+│   │  PROTOCOLS            │  Layer 1: Declarative Knowledge     │
+│   │  (Organon Files)      │  "WHAT must happen"                 │
+│   │                       │  PROTOCOLS.md in organon hierarchy   │
+│   │  - Numbered steps     │  Technology: Markdown (universal)    │
+│   │  - Automation tier    │                                     │
+│   │  - Verification gates │                                     │
+│   └───────────┬───────────┘                                     │
+│               │ codifies as                                     │
+│               ▼                                                 │
+│   ┌───────────────────────┐                                     │
+│   │  WORKFLOWS            │  Layer 2: Agent Binding             │
+│   │  (Agent Config)       │  "HOW to orchestrate"               │
+│   │                       │  Agent-specific skill/workflow files │
+│   │  - Tool sequencing    │  Technology: Varies by agent        │
+│   │  - Error handling     │                                     │
+│   │  - Context loading    │                                     │
+│   └───────────┬───────────┘                                     │
+│               │ invokes                                         │
+│               ▼                                                 │
+│   ┌───────────────────────┐                                     │
+│   │  TOOLS                │  Layer 3: Atomic Operations         │
+│   │  (Project Infra)      │  "HOW to execute"                   │
+│   │                       │  CLI commands, MCP tools, scripts   │
+│   │  - Idempotent         │  Technology: Varies by project      │
+│   │  - Fast feedback      │                                     │
+│   │  - Composable         │                                     │
+│   └───────────┬───────────┘                                     │
+│               │ produces results                                │
+│               ▼                                                 │
+│   ┌───────────────────────┐                                     │
+│   │  VERIFICATION         │  The Loop Closer                    │
+│   │                       │  "DID it work?"                     │
+│   │  - Invariant checks   │  Tools verify organon compliance    │
+│   │  - Reference validity │  Results feed back to LLM + human   │
+│   │  - Freshness gates    │                                     │
+│   └───────────┬───────────┘                                     │
+│               │ feeds back to                                   │
+│               └──────────────────────────────────────── ↑ ──────┘
 ```
 
-### Layer 1: PROTOCOLS.md (Declarative Knowledge)
+**The enforcement loop is what makes organons real.** Without it, organons are suggestions. With it, they're enforced constraints.
 
-**Purpose:** Document procedural workflows in natural language
+---
 
-**Location:** `organon/methodology/<domain>/PROTOCOLS.md`
+## Layer 1: Protocols (Declarative Knowledge)
 
-**Structure:**
-- Protocol ID (e.g., `PROTO-RFC-1`)
-- Numbered steps (procedure)
-- Automation metadata (tier, skill, tools, complexity)
+**What they are:** Natural language procedures documented in PROTOCOLS.md files within the organon hierarchy. Technology-agnostic — they describe *what must happen*, not *how to execute it*.
 
-**Example (from Agent Tavern):**
+**Where they live:** `organon/methodology/<domain>/PROTOCOLS.md`, `organon/domains/<domain>/PROTOCOLS.md`
+
+**What they contain:**
+
 ```yaml
----
-protocols_count: 1
+# In PROTOCOLS.md frontmatter
 protocols:
   - id: PROTO-RFC-1
     name: RFC Implementation
     steps: 5
-    automation_tier: automated
-    skill: implement-rfc
-    tools: [rfc:context, rfc:checklist, rfc:verify, test:organon, organon:generate]
+    automation_tier: automated    # automated | semi-automated | manual
+    workflow: implement-rfc       # workflow binding name
+    tools: [rfc:context, rfc:verify, organon:generate]
     complexity: high
----
-
-# Protocol 1: RFC Implementation
-
-## Phase 0: Context Loading
-1. Read product organons (/ETHOS.md, /PHILOSOPHY.md)
-2. Read RFC Section 1 (Organon Impact)
-3. Run `npm run rfc:context -- --rfc=<N>` to load affected domain organons
-...
 ```
 
-**Key insight:** Protocols are the source of truth. They live in organon files, versioned with the codebase, and inherit invariants from the organon hierarchy.
+```markdown
+# In PROTOCOLS.md body
 
-### Layer 2: Skills (Procedural Binding)
+## Protocol 1: RFC Implementation
 
-**Purpose:** Executable implementations of protocols
+### Phase 0: Context Loading
+1. Read product organons (/ETHOS.md, /PHILOSOPHY.md)
+2. Read RFC Section 1 (Organon Impact)
+3. Load affected domain organons
 
-**Location:** `.claude/skills/<skill-name>/skill.md`
+### Phase 1: Code Changes
+1. Implement domain layer first
+2. Write tests proving invariants hold
 
-**Structure:**
-- Frontmatter with `protocol_id` and `protocol_file` (bidirectional reference)
-- Tools orchestration at each protocol step
-- Error handling guidance
-- Usage examples
+### Phase 2: Organon Updates
+1. Create/update organons declared in Section 1
+2. Regenerate auto-generated docs
 
-**Example (from Agent Tavern `/implement-rfc`):**
+### Phase 3: Verification
+1. Run all verification gates
+2. All gates must pass
+
+### Phase 4: Completion
+1. Update status, increment versions, commit
+```
+
+**Key properties:**
+- **Authoritative:** The protocol is the source of truth for the procedure. Workflows implement it; they don't redefine it.
+- **Technology-agnostic:** Protocols describe *what*, not *which npm script*. Tools are referenced by logical name, not by invocation syntax.
+- **Versioned:** Protocol changes are tracked via organon version markers.
+- **Automation-tiered:** Every protocol declares how much automation it supports.
+
+### Automation Tiers
+
+Not every protocol needs a workflow. Use these criteria:
+
+| Tier | Criteria | Workflow? | Tool? | Example |
+|------|----------|-----------|-------|---------|
+| **Automated** | ≥5 steps, cross-domain, error-prone, frequent | Yes | Yes | RFC implementation (5 phases, weekly) |
+| **Semi-automated** | 1-2 steps, single tool, infrequent | No | Yes | Regenerate components.md |
+| **Manual** | Judgment required, context-dependent | No | No | Emergency hotfix decisions |
+
+**Decision factors:**
+- **Complexity:** ≥5 steps → strong candidate for workflow
+- **Frequency:** Daily/weekly → automate; monthly → maybe; rare → no
+- **Error risk:** Many edge cases → automate for consistency
+- **Cross-domain:** Touches multiple systems → orchestration value is high
+- **Judgment:** Requires human context → keep manual
+
+---
+
+## Layer 2: Workflows (Agent Binding)
+
+**What they are:** Executable implementations of protocols that tell a specific LLM agent how to orchestrate tools. This is the binding layer — it translates "what must happen" (protocol) into "what the agent does" (tool invocations in sequence).
+
+**The universal contract:** Regardless of which LLM or agent system hosts them, all workflow bindings must:
+
+1. **Reference their protocol** — via protocol ID and file path (bidirectional traceability)
+2. **Specify tool orchestration** — which tools to run, in what order, with what arguments
+3. **Provide context loading guidance** — which organon files to read before execution
+4. **Handle errors** — what to do when tools fail or gates don't pass
+5. **Be invocable** — the agent can trigger the workflow (by command, slash command, or autonomous detection)
+
+### Agent-specific implementations
+
+The workflow layer is the only layer that varies by agent technology. The protocol and tool layers are universal.
+
+| Agent Technology | Workflow Location | Format |
+|------------------|-------------------|--------|
+| Claude Code | `.claude/skills/<name>/skill.md` | Markdown with YAML frontmatter |
+| Cursor | `.cursor/rules/<name>.md` or `.cursorrules` | Markdown rules |
+| Custom LLM agent | `workflows/<name>.md` or agent config | Varies |
+| OpenAI Assistants | Instructions or function definitions | JSON/text |
+| Any LLM (generic) | `organon/workflows/<name>.md` | Markdown (read by LLM directly) |
+
+### Workflow frontmatter contract
+
+Regardless of agent technology, workflow definitions should include:
+
 ```yaml
+---
+name: implement-rfc                    # Workflow identifier
+protocol_id: PROTO-RFC-1              # ← References protocol (REQUIRED)
+protocol_file: organon/methodology/rfcs/PROTOCOLS.md  # ← Protocol source (REQUIRED)
+tools: [rfc:context, rfc:verify, organon:generate]     # Tools orchestrated
+context:                               # Organon files to load before execution
+  - organon/methodology/rfcs/PROTOCOLS.md
+  - /ETHOS.md
+---
+```
+
+### Example: Claude Code skill binding
+
+```markdown
 ---
 name: implement-rfc
 invocation: /implement-rfc
 user-invocable: true
 protocol_id: PROTO-RFC-1
 protocol_file: organon/methodology/rfcs/PROTOCOLS.md
-tools: [rfc:context, rfc:checklist, rfc:verify, test:organon, organon:generate]
+tools: [rfc:context, rfc:verify, organon:generate]
 context:
   - organon/methodology/rfcs/PROTOCOLS.md
   - /ETHOS.md
@@ -139,426 +220,320 @@ context:
 
 # RFC Implementation Workflow
 
-Implements Protocol 1 from `organon/methodology/rfcs/PROTOCOLS.md`.
-
-## Usage
-```
-/implement-rfc --rfc=<number>
-```
+Implements PROTO-RFC-1 from `organon/methodology/rfcs/PROTOCOLS.md`.
 
 ## Phase 0: Context Loading
-Load minimum context to avoid token budget bloat:
-
-1. **Product organons:**
+1. Load product organons:
    ```bash
-   cat /ETHOS.md
-   cat /PHILOSOPHY.md
+   cat /ETHOS.md && cat /PHILOSOPHY.md
+   ```
+2. Load RFC context:
+   ```bash
+   npm run rfc:context -- --rfc=<N>
    ```
 
-2. **Load context tool:**
+## Phase 2: Organon Updates
+1. Regenerate docs:
    ```bash
-   npm run rfc:context -- --rfc=<N> --output=RFC-<N>-CONTEXT.md
+   npm run organon:generate
    ```
-   Review output (~10-15K tokens)
+2. Validate frontmatter:
+   ```bash
+   npm run organon:validate-frontmatter
+   ```
 ...
 ```
 
-**Key features:**
-- **Tool orchestration:** Specifies exact commands at each step
-- **Error handling:** Documents common failures and recovery
-- **Context loading:** Identifies what organons to read before execution
-- **Bidirectional traceability:** References protocol via `protocol_id`
+### Example: Generic LLM workflow (no specific agent)
 
-### Layer 3: Tools (Atomic Operations)
+For LLMs without a native skill system, a workflow can be a plain markdown file the LLM reads:
 
-**Purpose:** Individual commands that perform specific tasks
+```markdown
+---
+name: implement-rfc
+protocol_id: PROTO-RFC-1
+protocol_file: organon/methodology/rfcs/PROTOCOLS.md
+tools: [rfc:context, rfc:verify, organon:generate]
+---
 
-**Location:** `package.json` scripts (or custom CLI)
+# RFC Implementation Workflow
 
-**Naming Convention:** `<domain>:<action>` (e.g., `rfc:verify`, `organon:health`)
+When implementing an RFC, follow these steps exactly:
 
-**Example (from Agent Tavern):**
-```json
-{
-  "scripts": {
-    "rfc:context": "tsx scripts/rfc/context.ts",
-    "rfc:checklist": "tsx scripts/rfc/checklist.ts",
-    "rfc:verify": "tsx scripts/rfc/verify.ts",
-    "organon:generate": "tsx scripts/organon/generate-components.ts",
-    "organon:validate-frontmatter": "tsx scripts/organon/validate-frontmatter.ts",
-    "organon:health": "tsx scripts/organon/health.ts",
-    "test:organon": "vitest run src/__tests__/organon/"
-  }
-}
+## Phase 0: Context Loading
+Read: /ETHOS.md, /PHILOSOPHY.md, and the RFC file.
+Run: `rfc:context --rfc=<N>` to load affected domain organons.
+
+## Phase 2: Organon Updates
+Run: `organon:generate` to regenerate auto-generated docs.
+Run: `organon:validate-frontmatter` to check metadata.
+
+## Phase 3: Verification
+Run: `rfc:verify --rfc=<N>` to check all gates.
+If any gate fails, fix the issue and re-run.
 ```
 
-**Characteristics:**
-- **Atomic:** Each tool does ONE thing well
-- **Composable:** Tools combine via skills to form workflows
-- **Idempotent:** Safe to re-run (regenerate, validate, etc.)
-- **Fast feedback:** Most tools complete in <5s
+The LLM reads this file as part of its context and follows the instructions. No special agent framework needed.
 
 ---
 
-## Automation Tiers
+## Layer 3: Tools (Atomic Operations)
 
-Not every protocol needs a skill. Use these criteria to decide:
+**What they are:** Individual executable operations that perform specific tasks. Each tool does ONE thing. Workflows compose tools into procedures.
 
-| Tier | Criteria | Example | Has Skill? |
-|------|----------|---------|------------|
-| **Automated** | ≥3 steps, cross-domain, error-prone, frequent | RFC Implementation (5 phases, many tools, weekly) | ✅ Yes |
-| **Semi-Automated** | 1-2 steps, single tool, infrequent | Regenerate components.md (`organon:generate`) | ❌ No (tool only) |
-| **Manual** | Judgment required, context-dependent | Emergency hotfix (every situation unique) | ❌ No (docs only) |
+**The universal contract:** Regardless of implementation technology, all tools must:
 
-**Decision factors:**
-- **Complexity:** ≥5 steps → strong candidate for skill
-- **Frequency:** Daily/weekly → automate; monthly → maybe; rare → no
-- **Error-prone:** Many edge cases → automate for consistency
-- **Cross-domain:** Touches multiple systems → orchestration value high
-- **Judgment:** Requires human context → keep manual
+1. **Be atomic** — one tool, one operation
+2. **Be idempotent** — safe to re-run (regenerate, validate, verify)
+3. **Provide fast feedback** — most complete in <10 seconds
+4. **Be composable** — tools combine via workflows to form procedures
+5. **Use consistent naming** — `domain:action` pattern (e.g., `organon:verify`, `rfc:context`)
 
-**Trade-off:** Skills add maintenance overhead. Only create them for high-value workflows where automation ROI is clear.
+### Tool implementations by technology
+
+| Technology | Example | When to use |
+|------------|---------|-------------|
+| npm scripts | `"organon:verify": "tsx scripts/organon/verify.ts"` | Node.js projects |
+| CLI commands | `organon verify --gate=dual-mapping` | Published CLI tools |
+| MCP tools | MCP server exposing `organon_verify` | IDE integration |
+| Shell scripts | `./scripts/verify-organon.sh` | Polyglot projects |
+| Makefile targets | `make organon-verify` | C/C++/Go projects |
+| Python scripts | `python scripts/organon/verify.py` | Python projects |
+
+### Tool categories for Organon enforcement
+
+Any project using Organon should have tools for:
+
+| Category | Purpose | Example tools |
+|----------|---------|---------------|
+| **Generation** | Create/update derived files | `organon:generate`, `organon:generate-frontmatter` |
+| **Verification** | Check invariant compliance | `organon:verify`, `organon:validate-frontmatter` |
+| **Discovery** | Navigate the organon hierarchy | `organon:find`, `organon:query` |
+| **Health** | Monitor system integrity | `organon:health`, `organon:test-coverage` |
+| **Triplet integrity** | Verify protocol↔workflow↔tool bindings | `organon:verify-triplets` |
+| **Automation analysis** | Identify protocols that should be automated | `organon:suggest-tools` |
+
+---
+
+## The Enforcement Loop
+
+The three layers form a closed loop that makes the methodology self-enforcing:
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│  1. DEFINE                                                   │
+│     Human encodes intent as organon constraints + protocols  │
+│     → ETHOS.md, PROTOCOLS.md                                 │
+└──────────────────────┬───────────────────────────────────────┘
+                       ▼
+┌──────────────────────────────────────────────────────────────┐
+│  2. BIND                                                     │
+│     Workflow translates protocol into LLM-executable steps   │
+│     → Skill/workflow files reference protocol + tools         │
+└──────────────────────┬───────────────────────────────────────┘
+                       ▼
+┌──────────────────────────────────────────────────────────────┐
+│  3. EXECUTE                                                  │
+│     LLM reads workflow, orchestrates tools in sequence       │
+│     → Tool invocations: generate, verify, test               │
+└──────────────────────┬───────────────────────────────────────┘
+                       ▼
+┌──────────────────────────────────────────────────────────────┐
+│  4. VERIFY                                                   │
+│     Tools check organon compliance, invariants hold          │
+│     → Verification results: pass/fail per gate               │
+└──────────────────────┬───────────────────────────────────────┘
+                       ▼
+┌──────────────────────────────────────────────────────────────┐
+│  5. EVOLVE                                                   │
+│     Results inform organon updates, new invariants captured  │
+│     → Updated ETHOS.md, new protocols, refined heuristics    │
+└──────────────────────┬───────────────────────────────────────┘
+                       │
+                       └──────────────── back to DEFINE ───────→
+```
+
+### Why the loop matters
+
+**Without the loop:** Organons are documentation. LLMs read them, maybe follow them, maybe don't. No way to know. Drift accumulates silently.
+
+**With the loop:** Organons are enforced constraints. Every implementation goes through Define → Bind → Execute → Verify → Evolve. Violations are caught by tools, flagged by verification, and fed back to the LLM. The methodology gets stronger with each cycle because new invariants capture new learnings.
+
+### The LLM's role in the loop
+
+The LLM is the **runtime** that executes the enforcement loop. It is the interface between:
+
+- **Human intent** — captured in organons (ETHOS, PHILOSOPHY, PROTOCOLS)
+- **Automated enforcement** — performed by tools (verify, generate, test)
+- **Code changes** — the actual implementation work
+
+The human's job is to **define** (write organons) and **review** (approve results). The LLM's job is to **execute** (follow workflows, invoke tools) and **report** (surface verification results). The tools' job is to **enforce** (check invariants, validate references, gate merges).
+
+This is what makes Organon **LLM-centric**: the methodology is designed to be consumed and executed by LLMs, with humans as authors and reviewers, not as the execution engine.
 
 ---
 
 ## Bidirectional References (Invariant)
 
-Skills and protocols **must reference each other** to maintain traceability:
+Workflows and protocols **must reference each other**. This is a hard invariant — not optional.
 
-**Protocol → Skill (in frontmatter):**
+**Protocol → Workflow (in PROTOCOLS.md frontmatter):**
 ```yaml
 protocols:
   - id: PROTO-RFC-1
     automation_tier: automated
-    skill: implement-rfc  # ← References skill file
+    workflow: implement-rfc    # ← references workflow
 ```
 
-**Skill → Protocol (in frontmatter):**
+**Workflow → Protocol (in workflow frontmatter):**
 ```yaml
-protocol_id: PROTO-RFC-1  # ← References protocol ID
-protocol_file: organon/methodology/rfcs/PROTOCOLS.md  # ← References protocol file
+protocol_id: PROTO-RFC-1                              # ← references protocol ID
+protocol_file: organon/methodology/rfcs/PROTOCOLS.md   # ← references protocol file
 ```
 
 **Validation rules:**
-1. If `automation_tier == "automated"`, `skill` field is required
-2. Skill file must exist at `.claude/skills/{skill}/skill.md`
-3. Skill must include `protocol_id` matching protocol ID
-4. Skill must include `protocol_file` pointing to PROTOCOLS.md
-5. Automated scripts verify references during CI
+1. If `automation_tier == "automated"`, `workflow` field is required
+2. Workflow file must exist (in agent-specific location)
+3. Workflow must include `protocol_id` matching protocol ID
+4. Workflow must include `protocol_file` pointing to PROTOCOLS.md
+5. Orphaned workflows (no protocol) are validation errors
+6. Phantom automation (protocol claims automated but workflow doesn't exist) are validation errors
 
-**Rationale:** Bidirectional references prevent:
-- **Orphaned skills:** Skills without documented protocols
-- **Incomplete protocols:** Protocols claiming automation without implementation
-- **Drift:** Protocol changes not reflected in skill execution
-- **Discovery failures:** Can't find skill from protocol or vice versa
+**Why bidirectional:** Prevents orphaned workflows, incomplete protocols, and silent drift between what the protocol says and what the workflow does.
 
 ---
 
-## Example: RFC Implementation Workflow
+## Verification: The Loop Closer
 
-Full walkthrough of how three layers work together:
+Verification is what distinguishes an enforcement loop from wishful thinking. Without automated verification, the loop is open — protocols say what should happen, but nothing checks whether it did.
 
-### 1. Protocol Definition (Layer 1)
+### Verification categories
 
-In `organon/methodology/rfcs/PROTOCOLS.md`:
+| Category | What it checks | Example |
+|----------|----------------|---------|
+| **Reference integrity** | File paths, RFC references, event references in organons | `organon:verify` |
+| **Frontmatter truthfulness** | Counts match actual content, token estimates are accurate | `organon:validate-frontmatter` |
+| **Triplet integrity** | Protocol ↔ workflow ↔ tool bindings are complete | `organon:verify-triplets` |
+| **Freshness** | Auto-generated files are not stale | Timestamp checks on components.md |
+| **Invariant coverage** | Every invariant in ETHOS.md has a corresponding test | `organon:test-coverage` |
+| **Health** | Overall system integrity score | `organon:health` |
 
-```markdown
-## Protocol 1: RFC Implementation
+### Verification as CI gate
 
-Five-phase workflow for implementing an RFC:
+Verification should fail builds, not just warn:
 
-### Phase 0: Context Loading
-1. Read product organons (/ETHOS.md, /PHILOSOPHY.md)
-2. Read RFC Section 1 (Organon Impact)
-3. Run context loader tool
-4. Load affected domain organons
-
-### Phase 1: Code Changes
-1. Implement domain layer first
-2. Write tests proving invariants hold
-3. Follow principles in priority order
-
-### Phase 2: Organon Updates
-1. Create/update organons declared in Section 1
-2. Add invariants with code references
-3. Regenerate auto-generated docs
-
-### Phase 3: Verification
-1. Run full verification suite
-2. All 8 gates must pass
-
-### Phase 4: Mark Complete
-1. Update RFC status to "Implemented"
-2. Increment organon versions
-3. Commit everything together
+```
+PR opened → CI runs verification tools → Pass: merge allowed. Fail: merge blocked.
 ```
 
-### 2. Skill Implementation (Layer 2)
-
-In `.claude/skills/implement-rfc/skill.md`:
-
-```markdown
-## Phase 0: Context Loading
-
-1. **Product organons:**
-   ```bash
-   cat /ETHOS.md
-   cat /PHILOSOPHY.md
-   ```
-
-2. **Load context tool:**
-   ```bash
-   npm run rfc:context -- --rfc=<N> --output=RFC-<N>-CONTEXT.md
-   ```
-
-3. **Domain organons:**
-   ```bash
-   # For each domain mentioned in Section 1
-   cat organon/domains/<domain>/ETHOS.md
-   ```
-
-## Phase 2: Organon Updates
-
-1. **Regenerate auto-generated docs:**
-   ```bash
-   npm run organon:generate
-   ```
-
-2. **Add frontmatter:**
-   ```bash
-   npm run organon:generate-frontmatter -- organon/domains/<domain>/ETHOS.md --update
-   ```
-
-3. **Validate:**
-   ```bash
-   npm run organon:validate-frontmatter
-   ```
-```
-
-### 3. Tool Invocation (Layer 3)
-
-Tools executed by the skill:
-
-```bash
-# Context loading
-npm run rfc:context -- --rfc=18 --output=RFC-018-CONTEXT.md
-
-# Organon maintenance
-npm run organon:generate
-npm run organon:generate-frontmatter -- organon/domains/genesis/ETHOS.md --update
-npm run organon:validate-frontmatter
-
-# Verification
-npm run rfc:verify -- --rfc=18
-npm run test:organon
-```
-
-### 4. Developer Experience
-
-**Before skills:**
-```
-Developer: "I need to implement RFC 018"
-→ Read PROTOCOLS.md
-→ Manually figure out which tools to run
-→ Guess at the right order
-→ Forget to regenerate components.md
-→ Skip frontmatter validation
-→ PR fails verification
-```
-
-**With skills:**
-```
-Developer: "I need to implement RFC 018"
-→ /implement-rfc --rfc=018
-→ Skill loads context automatically
-→ Skill guides through each phase
-→ Skill runs all tools in correct order
-→ Skill catches missing steps
-→ PR passes verification
-```
-
----
-
-## Benefits
-
-### For Consistency
-- **Same process every time:** Skills eliminate "tribal knowledge" variability
-- **No skipped steps:** Automation ensures completeness
-- **Correct tool order:** Orchestration prevents dependency violations
-
-### For Discoverability
-- **Slash commands:** `/implement-rfc` surfaces the workflow at decision point
-- **Context hints:** Skills document which organons to load
-- **Tool awareness:** Developers discover tools via skills, not manual search
-
-### For Error Reduction
-- **Validation gates:** Skills enforce verification before proceeding
-- **Error recovery:** Skills document common failures and fixes
-- **Invariant preservation:** Skills check constraints automatically
-
-### For Traceability
-- **Audit trail:** Skill invocations logged (who, when, what RFC)
-- **Code → Protocol mapping:** Find which protocol governs a workflow
-- **Protocol → Code mapping:** Find which skill implements a protocol
-
-### For Evolution
-- **Single source of truth:** Update protocol, skill inherits changes
-- **Versioning:** Protocol version tracks methodology evolution
-- **Metrics:** Skill usage → prioritize automation investments
+This is the ultimate enforcement: code cannot land if the organon is violated.
 
 ---
 
 ## Implementation Guidance
 
-### 1. Start with Protocols
+### 1. Start with protocols
 
-Document procedures in `PROTOCOLS.md` BEFORE creating skills:
+Document procedures in PROTOCOLS.md BEFORE creating workflows or tools:
 
 ```yaml
----
-protocols_count: 1
 protocols:
   - id: PROTO-EXAMPLE-1
     name: Example Procedure
     steps: 3
-    automation_tier: manual  # Start manual, automate later
+    automation_tier: manual    # Start manual, promote later
     tools: []
     complexity: low
----
-
-## Protocol 1: Example Procedure
-1. Step one
-2. Step two
-3. Step three
 ```
 
-### 2. Build Tools Incrementally
+### 2. Build tools incrementally
 
-Create npm scripts for frequently repeated operations:
+Create tools for frequently repeated operations:
 
-```json
-{
-  "scripts": {
-    "example:step1": "tsx scripts/example/step1.ts",
-    "example:step2": "tsx scripts/example/step2.ts"
-  }
-}
+```bash
+# Whatever your project's tool technology is
+npm run organon:verify          # Node.js
+make organon-verify             # Makefile
+./scripts/organon-verify.sh     # Shell
+python -m organon.verify        # Python
 ```
 
-### 3. Promote to Skill When Criteria Met
+### 3. Promote to workflow when criteria met
 
-Once protocol is complex enough (≥5 steps, error-prone, frequent):
+Once a protocol is complex enough (≥5 steps, error-prone, frequent):
 
 ```yaml
 protocols:
   - id: PROTO-EXAMPLE-1
-    automation_tier: automated  # ← Promote
-    skill: example-workflow      # ← Add skill
+    automation_tier: automated   # ← promote
+    workflow: example-workflow    # ← add binding
     tools: [example:step1, example:step2]
 ```
 
-Create `.claude/skills/example-workflow/skill.md`:
+Then create the workflow in your agent's configuration.
 
-```yaml
----
-name: example-workflow
-protocol_id: PROTO-EXAMPLE-1
-protocol_file: organon/methodology/example/PROTOCOLS.md
-tools: [example:step1, example:step2]
----
+### 4. Close the loop with verification
 
-## Step 1
-```bash
-npm run example:step1
-```
-
-## Step 2
-```bash
-npm run example:step2
-```
-```
-
-### 4. Validate Bidirectional References
-
-Add validation to CI:
-
-```typescript
-// scripts/organon/validate-protocol-skills.ts
-for (const protocol of protocols) {
-  if (protocol.automation_tier === 'automated') {
-    const skillPath = `.claude/skills/${protocol.skill}/skill.md`;
-    assert(fs.existsSync(skillPath), `Skill ${protocol.skill} not found`);
-
-    const skillFrontmatter = parseSkillFrontmatter(skillPath);
-    assert(skillFrontmatter.protocol_id === protocol.id, 'Protocol ID mismatch');
-    assert(skillFrontmatter.protocol_file === protocolFilePath, 'Protocol file mismatch');
-  }
-}
-```
-
----
-
-## Reference Implementation
-
-**Agent Tavern** (first implementation of three-layer architecture):
-
-| Layer | Files | Count | Status |
-|-------|-------|-------|--------|
-| **Protocols** | `organon/methodology/*/PROTOCOLS.md` | 8 files | 100% documented |
-| **Skills** | `.claude/skills/*/skill.md` | 1 skill | Growing |
-| **Tools** | `package.json` scripts | 47 tools | Stable |
-
-**Key files:**
-- **Schema:** `docs/organon-frontmatter-schema.md` (protocol automation fields)
-- **Invariant:** `organon/ETHOS.md` Invariant 13 (bidirectional references)
-- **Example protocol:** `organon/methodology/rfcs/PROTOCOLS.md` (PROTO-RFC-1)
-- **Example skill:** `.claude/skills/implement-rfc/skill.md` (5-phase workflow)
-- **Validation:** `packages/server/src/__tests__/organon/frontmatter.test.ts` (bidirectional reference tests)
-
-**Results:**
-- RFC implementation time reduced by ~40% (less manual tool discovery)
-- Zero protocol violations since skill introduction (was 2-3 per month)
-- New contributors onboard faster (slash commands guide workflows)
+Add verification tools that check the binding integrity:
+- Do all automated protocols have workflows?
+- Do all workflows reference valid protocols?
+- Do all referenced tools exist?
 
 ---
 
 ## Trade-offs
 
-**Pros:**
-- ✅ Consistency: Same workflow every time
-- ✅ Discoverability: Protocols visible at decision points
-- ✅ Error reduction: Automation catches mistakes
-- ✅ Traceability: Code ↔ protocol ↔ skill mapping
-- ✅ Evolution: Update protocol, skill inherits
+| Decision | Benefit | Cost |
+|----------|---------|------|
+| Three-layer separation | Clear responsibility boundaries | Three artifacts to maintain per procedure |
+| Agent-specific workflow layer | Works with any LLM technology | Workflow must be reimplemented per agent |
+| Bidirectional references | Full traceability, no orphans | Reference maintenance overhead |
+| Verification as CI gate | Hard enforcement, not suggestions | Slower CI, potential false positives |
+| Automation tiers | Prevents over-engineering | Requires periodic tier reassessment |
+| LLM as execution runtime | Consistent behavior, scalable | Dependent on LLM understanding the workflow |
 
-**Cons:**
-- ❌ Maintenance overhead: Three files to keep synchronized (protocol, skill, tools)
-- ❌ Over-engineering risk: Simple workflows don't need skills
-- ❌ Claude Code dependency: Skills require Claude Code CLI
-- ❌ Learning curve: Developers must understand three layers
+**Key trade-off:** The workflow layer is the only non-universal layer. Protocols and tools are technology-agnostic, but each LLM agent technology needs its own workflow format. This is intentional — the binding must be native to the agent to be effective.
 
-**Mitigation:**
-- Use automation tiers to avoid unnecessary skills
-- Validation scripts catch drift early (CI enforcement)
-- Document architecture clearly (this file!)
-- Start with 1-2 high-value skills, expand incrementally
+---
+
+## Reference Implementation
+
+**Agent Tavern** (first full implementation of the enforcement loop):
+
+| Layer | Implementation | Count |
+|-------|---------------|-------|
+| **Protocols** | `organon/methodology/*/PROTOCOLS.md` | 8 protocol files, 15+ individual protocols |
+| **Workflows** | `.claude/skills/*/skill.md` (Claude Code) | 5 skills |
+| **Tools** | `package.json` npm scripts | 47 tools |
+| **Verification** | 8-gate system via `rfc:verify` | 100% invariant coverage |
+
+**Results:**
+- RFC implementation time reduced ~40%
+- Zero protocol violations since workflow introduction
+- New contributors onboard faster (workflows guide execution)
+- 100% frontmatter coverage across 49 organon files
+
+**Key tools from reference implementation:**
+
+| Tool | Purpose |
+|------|---------|
+| `organon:generate` | Auto-generate components.md (dual mapping) |
+| `organon:verify` | Check file/RFC/event references |
+| `organon:validate-frontmatter` | Validate YAML frontmatter truthfulness |
+| `organon:generate-frontmatter` | Auto-generate frontmatter from content |
+| `organon:query` | Query frontmatter for context budget planning |
+| `organon:health` | Health dashboard (coverage, freshness, validation) |
+| `organon:verify-triplets` | Check protocol↔workflow↔tool binding integrity |
+| `organon:suggest-tools` | Identify protocols that should be automated |
+| `rfc:context` | Load relevant organon context for RFC work |
+| `rfc:verify` | Run 8-gate verification before merge |
 
 ---
 
 ## Related Patterns
 
-- **[Frontmatter System](./frontmatter-system.md)** — Metadata for progressive disclosure
-- **Progressive Automation** — Manual → Tools → Skills as workflows mature
-- **Bidirectional Traceability** — Every skill references protocol, every protocol references skill
-- **Single Source of Truth** — Protocols live in organon files, not scattered across wikis
-- **Executable Documentation** — Documentation that runs code
-
----
-
-## Changelog
-
-- **v1.0** (2026-02-08): Initial documentation
-  - Three-layer architecture pattern
-  - Automation tier criteria
-  - Bidirectional reference invariant
-  - Agent Tavern reference implementation
+- **[Progressive Disclosure](./patterns.md)** — Frontmatter enables discovery without loading
+- **[Frontmatter System](./frontmatter-system.md)** — YAML metadata schema for organon files
+- **Bidirectional Traceability** — Protocol ↔ workflow ↔ tool, fully linked
+- **Progressive Automation** — Manual → tools → workflows as procedures mature
+- **Executable Documentation** — Documentation that drives code execution, not just describes it

@@ -2,12 +2,12 @@
 type: constraints
 scope: meta
 name: meta-organon
-version: "2.0"
+version: "3.0"
 summary: Core invariants, principles, and heuristics for creating organons — the foundational rules every organon must follow
-token_estimate: 3200
-invariants_count: 8
-principles_count: 5
-heuristics_count: 12
+token_estimate: 4000
+invariants_count: 10
+principles_count: 7
+heuristics_count: 15
 inherits_from: []
 load_priority: high
 required_for:
@@ -28,10 +28,11 @@ audience: [llm, human]
 ### What an Organon IS
 
 - A complete guidance system (philosophy + ethos + protocol)
-- Behavioral constraints encoded for LLM consumption
+- Behavioral constraints encoded for LLM consumption — LLMs are the primary audience
 - Scoped to a project, domain, feature, or component
 - Persistent context, not per-request instructions
 - A progressively-disclosable document — navigable by metadata before content
+- An enforceable system — protocols bind to workflows and tools, creating a closed loop
 
 ### What an Organon IS NOT
 
@@ -40,6 +41,7 @@ audience: [llm, human]
 - Not a tutorial or learning path
 - Not a development methodology (Agile, Scrum)
 - Not prompt engineering
+- Not passive documentation — organons are designed to be executed, not just read
 
 ---
 
@@ -61,19 +63,27 @@ audience: [llm, human]
 
 8. **Progressive disclosure over arbitrary limits.** There are no hard line limits on organon files. Token efficiency is achieved through layered access (frontmatter → section → full file), not by truncating content. Quality and completeness of content must never be sacrificed for brevity.
 
+9. **The enforcement loop must be closable.** Every protocol with `automation_tier: automated` must have a corresponding workflow binding and tools that can verify compliance. Protocols without enforcement mechanisms are suggestions, not constraints. The loop: Define (organon) → Bind (workflow) → Execute (tools) → Verify (automated checks) → Evolve (update organon). See `three-layer-architecture.md`.
+
+10. **LLMs are the primary interface.** Organons are written for LLM consumption first. LLMs read the organon, execute protocols via workflows, orchestrate tools, and surface results to humans. Humans author and review; LLMs execute and enforce. Every organon design decision must optimize for LLM parsing, LLM action, and LLM-human feedback.
+
 ---
 
 ## Principles (Prioritized)
 
-1. **Clarity over completeness.** A short, clear ethos beats a comprehensive but vague one.
+1. **LLM-centric design.** Organons exist to be consumed and executed by LLMs. Every design decision — frontmatter, standardized sections, decision heuristics, protocol bindings — optimizes for LLM parsing and action. LLMs are the interface between human intent and automated enforcement. Humans define the "what" and "why"; LLMs execute the "how."
 
-2. **Progressive disclosure over monolithic loading.** Structure every file so agents can access it in layers — frontmatter for discovery, sections for targeted loading, full file only when needed. This is how token efficiency is achieved at scale.
+2. **Enforcement through automation.** Organons that aren't enforced become fiction. Every constraint should have a path to automated verification. Protocols bind to workflows that orchestrate tools that check invariants. The enforcement loop (Define → Bind → Execute → Verify → Evolve) is what makes organons real. A constraint without an enforcement path is a suggestion.
 
-3. **Constraints over explanations.** State what to do, not why. Put "why" in philosophy.
+3. **Clarity over completeness.** A short, clear ethos beats a comprehensive but vague one.
 
-4. **Specificity over generality.** "Never force-push to master" beats "Be careful with git."
+4. **Progressive disclosure over monolithic loading.** Structure every file so agents can access it in layers — frontmatter for discovery, sections for targeted loading, full file only when needed. This is how token efficiency is achieved at scale.
 
-5. **Actionable over aspirational.** "Run tests before merging" beats "Maintain code quality."
+5. **Constraints over explanations.** State what to do, not why. Put "why" in philosophy.
+
+6. **Specificity over generality.** "Never force-push to master" beats "Be careful with git."
+
+7. **Actionable over aspirational.** "Run tests before merging" beats "Maintain code quality."
 
 ---
 
@@ -141,6 +151,14 @@ Progressive disclosure achieves the same goal (token efficiency) without sacrifi
 | Task must be done the same way every time | Write protocol. |
 | Errors in execution have significant consequences | Write protocol with verification steps. |
 | Task requires judgment calls | Don't write protocol; put guidance in ethos. |
+
+### When enforcing methodology
+
+| Situation | Action |
+|-----------|--------|
+| New invariant added to ETHOS.md | Ask: "Can this be verified by a tool?" If yes, create or update a verification tool. If not, document how humans should review it. |
+| Protocol has ≥5 steps and is used frequently | Promote to `automation_tier: automated`, create a workflow binding. |
+| Protocol is used rarely or requires judgment | Keep at `manual` tier. Not everything needs automation. |
 
 ### When to split a file
 
@@ -276,6 +294,9 @@ audience: [llm, human, tooling]
 | Splitting files just for size | Breaks coherence, creates navigation overhead | Keep cohesive content together. Use frontmatter + sections for efficiency. |
 | Non-standard section headings | Agents can't do section-level loading | Use the standardized headings from Structure Templates |
 | Duplicating constraints across scopes | Maintenance burden, divergence | Child inherits from parent |
+| Open enforcement loop | Protocol exists but no workflow or tool verifies it | Close the loop: add workflow binding + verification tool |
+| Human-optimized organon | Prose-heavy, no structured sections, no frontmatter | Restructure for LLM consumption: frontmatter, standardized headings, decision heuristic tables |
+| Orphaned workflow | Workflow exists without protocol reference | Add `protocol_id` and `protocol_file`, or delete the orphan |
 
 ---
 
