@@ -225,6 +225,94 @@ After completion:
 
 ---
 
+## Meta-Organon Pattern
+
+A **meta-organon** documents the organon system itself. It's an organon about organons.
+
+```
+organon/
+  ├── ETHOS.md        ← Meta-level: "How to write organons"
+  ├── PHILOSOPHY.md   ← Meta-level: "Why organons work this way"
+  ├── README.md       ← Navigation guide
+  └── ...             ← Domain/feature organons
+```
+
+**Purpose:**
+- Self-documenting methodology
+- Teaches new contributors how to extend the organon system
+- Prevents organon drift by codifying the rules
+
+**Meta-Organon Contents:**
+
+| Section | Content |
+|---------|---------|
+| Identity | "This organon system IS/IS NOT..." |
+| Invariants | File size limits, required sections, version markers |
+| Principles | Token efficiency, accuracy over coverage, etc. |
+| Heuristics | When to create domain vs feature organon |
+
+**Strong Recommendation:** Every project with organons should have a meta-organon. Without it, the methodology itself becomes tribal knowledge.
+
+**Example Meta-Organon Identity:**
+```markdown
+## Identity
+
+### What This Organon System IS
+- Token-efficient constraint system
+- LLM-optimized guidance
+- Hierarchical (product → domain → feature)
+
+### What This Organon System IS NOT
+- Not tutorials or how-to guides
+- Not API reference
+- Not version-controlled narrative
+```
+
+---
+
+## Organon Directory Structure
+
+Two primary patterns for organizing organon directories:
+
+### Pattern A: Dedicated `organon/` Directory
+
+```
+/ETHOS.md                 ← Product-level (root visibility)
+/PHILOSOPHY.md            ← Product-level
+/organon/
+  ├── ETHOS.md            ← Meta-organon
+  ├── README.md           ← Navigation
+  ├── domains/            ← Business domains (DDD)
+  ├── features/           ← User capabilities
+  ├── components/         ← Implementation units
+  └── protocols/          ← Operational procedures
+```
+
+**Recommended when:**
+- Project has both LLM docs and human docs
+- Clear separation between constraints and documentation needed
+- Multiple documentation surfaces exist
+
+### Pattern B: Embedded in `docs/`
+
+```
+/docs/
+  ├── ETHOS.md            ← Product-level
+  ├── PHILOSOPHY.md       ← Product-level
+  ├── features/           ← Feature organons
+  ├── components/         ← Component organons
+  └── protocols/          ← Protocols
+```
+
+**Acceptable when:**
+- No separate human documentation
+- Simpler project structure preferred
+- Single documentation surface
+
+**Strong Recommendation:** Place product-level `ETHOS.md` and `PHILOSOPHY.md` at **repository root** for maximum visibility. The first thing any agent (human or LLM) sees should be the constraints.
+
+---
+
 ## Anti-Pattern Reference
 
 | Anti-Pattern | Description | Fix |
@@ -235,3 +323,5 @@ After completion:
 | Vague boundaries | "Be reasonable" | Specify concrete actions |
 | Duplicate content | Same constraint in multiple places | Single source, link elsewhere |
 | Stale organon | Contradicts current code | Update organon or code |
+| Missing meta-organon | Organon methodology is undocumented | Create `organon/ETHOS.md` for the system itself |
+| Buried product ethos | ETHOS.md hidden in subdirectory | Move to repository root |

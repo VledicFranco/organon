@@ -8,6 +8,8 @@
 
 An **organon** is a complete guidance system for a project or domain. It encodes taste, judgment, and behavioral constraints that enable any agent (human or LLM) to make decisions aligned with the system's character.
 
+A **meta-organon** documents the organon system itself — an organon about organons. Every project with multiple organons should have a meta-organon (typically at `organon/ETHOS.md`) that defines how to write and maintain organons within that project.
+
 | Artifact | Question | Character | File |
 |----------|----------|-----------|------|
 | **Philosophy** | Why? | Explanatory | `PHILOSOPHY.md` |

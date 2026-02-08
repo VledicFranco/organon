@@ -35,9 +35,83 @@
 | Scope | Location | Governs | Example Content |
 |-------|----------|---------|-----------------|
 | **Product** | Repo root | Entire project | "This is a type-safe pipeline framework" |
-| **Domain** | `docs/`, `src/`, `deploy/` | A major area | "Documentation uses two surfaces" |
-| **Feature** | `features/X/`, `docs/features/X/` | A capability | "Caching has max 24h TTL" |
-| **Component** | `src/components/X/` | An implementation | "Parser must not depend on runtime" |
+| **Domain** | `organon/domains/X/` | A business bounded context | "Agents emit events, quests track work" |
+| **Feature** | `organon/features/X/` | A user capability | "Caching has max 24h TTL" |
+| **Component** | `organon/components/X/` | An implementation unit | "Parser must not depend on runtime" |
+
+---
+
+## Domains vs Components vs Features
+
+Three distinct scope types serve different purposes:
+
+| Scope Type | Question Answered | Mental Model | Best For |
+|------------|-------------------|--------------|----------|
+| **Domain** | "What business concepts exist?" | DDD bounded contexts | Business applications |
+| **Component** | "Where is the code?" | Code modules | Frameworks, libraries |
+| **Feature** | "What can users do?" | User capabilities | Both |
+
+### When to Use Domains
+
+Use **domains** when your project has rich business logic with distinct bounded contexts:
+
+```
+organon/domains/
+  ├── agents/      ← "What agents are and how they behave"
+  ├── quests/      ← "What work items are and their lifecycle"
+  ├── billing/     ← "How billing and subscriptions work"
+  └── tenants/     ← "Multi-tenancy concepts"
+```
+
+**Signals for domains:**
+- Project has distinct business entities (users, orders, agents)
+- Entities have lifecycle states and events
+- Different teams own different domains
+- DDD terminology is already in use
+
+### When to Use Components
+
+Use **components** when your project is a framework/library where code structure matters:
+
+```
+organon/components/
+  ├── core/        ← "modules/core/ - type system"
+  ├── runtime/     ← "modules/runtime/ - execution"
+  ├── compiler/    ← "modules/lang-compiler/ - parsing"
+  └── http-api/    ← "modules/http-api/ - REST server"
+```
+
+**Signals for components:**
+- Users think in code terms ("the compiler", "the runtime")
+- Clear module boundaries exist in codebase
+- Components have dependency relationships
+- LLMs need direct organon → code navigation
+
+### Using Both
+
+Some projects need both:
+
+```
+organon/
+  ├── domains/        ← Business concepts
+  │   ├── tenants/
+  │   └── billing/
+  ├── components/     ← Code modules
+  │   ├── api/
+  │   └── database/
+  └── features/       ← User capabilities
+      ├── auth/
+      └── caching/
+```
+
+**Decision guide:**
+
+| Project Type | Primary Structure |
+|--------------|-------------------|
+| Business application (SaaS, platform) | Domains + Features |
+| Framework or library | Components + Features |
+| Complex business + technical depth | Domains + Components + Features |
+| Simple project | Features only |
 
 ---
 
