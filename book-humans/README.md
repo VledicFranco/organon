@@ -68,7 +68,7 @@ Interested in helping write the human-friendly book? We're looking for:
 - Illustrators (for diagrams)
 - Early readers for feedback
 
-Reach out: [VledicFranco/ethos/issues](https://github.com/VledicFranco/ethos/issues)
+Reach out: [VledicFranco/organon/issues](https://github.com/VledicFranco/organon/issues)
 
 ## License
 
