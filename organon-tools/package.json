@@ -1,0 +1,48 @@
+{
+  "name": "@organon/tools",
+  "version": "0.1.0",
+  "description": "CLI tools and MCP server for the Organon Methodology - auto-generation, verification, and discovery",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "organon": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build",
+    "organon:generate": "tsx src/cli.ts generate",
+    "organon:verify": "tsx src/cli.ts verify",
+    "organon:find": "tsx src/cli.ts find"
+  },
+  "keywords": [
+    "organon",
+    "documentation",
+    "codebase-navigation",
+    "auto-generation",
+    "architecture",
+    "methodology"
+  ],
+  "author": "Organon Methodology Contributors",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/VledicFranco/ethos.git",
+    "directory": "organon-tools"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "glob": "^13.0.1",
+    "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/yargs": "^17.0.32",
+    "tsx": "^4.21.0",
+    "typescript": "^5.3.0"
+  }
+}

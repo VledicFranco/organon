@@ -1,145 +1,241 @@
-# The Organon
+# Organon Methodology
 
-> The meta-organon: guidance for creating guidance systems in human-machine collaborative projects.
+**A documentation system that treats code as the single source of truth and uses auto-generation to prevent drift.**
 
----
-
-## Definition
-
-An **organon** is a complete guidance system for a project or domain. It encodes taste, judgment, and behavioral constraints that enable any agent (human or LLM) to make decisions aligned with the system's character.
-
-A **meta-organon** documents the organon system itself — an organon about organons. Every project with multiple organons should have a meta-organon (typically at `organon/ETHOS.md`) that defines how to write and maintain organons within that project.
-
-| Artifact | Question | Character | File |
-|----------|----------|-----------|------|
-| **Philosophy** | Why? | Explanatory | `PHILOSOPHY.md` |
-| **Ethos** | What? | Normative | `ETHOS.md` |
-| **Protocol** | How? | Procedural | `PROTOCOL.md` or `protocols/*.md` |
-
-**Etymology:** From Aristotle's *Organon* (Greek: ὄργανον, "instrument") — tools for correct reasoning.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue)](https://www.typescriptlang.org/)
 
 ---
 
-## When to Create an Organon
+## What is Organon?
 
-| Signal | Action |
-|--------|--------|
-| Multiple agents (human or LLM) work on the same system | Create organon |
-| Decisions require "taste" or "judgment" | Create organon |
-| Behavioral consistency matters more than local optimization | Create organon |
-| Onboarding should transfer character, not just knowledge | Create organon |
-| Single person, simple project, no LLM collaboration | Skip organon |
+**Organon** (from Greek ὄργανον, "tool" or "instrument") is a methodology for keeping architectural documentation synchronized with code through:
 
----
+### Core Principles
 
-## Contents
+1. **Code as Single Source of Truth**
+   - Code structure IS the metadata
+   - Documentation DESCRIBES code, never prescribes it
+   - When code changes, regenerate docs (not vice versa)
 
-| Document | Purpose |
-|----------|---------|
-| [PHILOSOPHY.md](./PHILOSOPHY.md) | Why this methodology exists |
-| [ETHOS.md](./ETHOS.md) | Constraints for creating organons |
-| [templates.md](./templates.md) | Copy-paste templates for each artifact |
-| [scopes.md](./scopes.md) | Hierarchical organons (product → domain → feature) |
-| [patterns.md](./patterns.md) | Documentation layers, inheritance, common structures |
-| [protocols/](./protocols/) | Specific procedures for common tasks |
+2. **Auto-Generation Over Manual Maintenance**
+   - Components are generated from code structure
+   - Eliminates drift (docs always match reality)
+   - Scales to large codebases (100+ domains)
 
-## Protocols
+3. **Dual Mapping for Flexible Navigation**
+   - Navigate by **layer** (domain → application → transport)
+   - Navigate by **feature** (cross-cutting concerns)
+   - Both views generated automatically
 
-| Protocol | Purpose |
-|----------|---------|
-| [semantic-mapping.md](./protocols/semantic-mapping.md) | Connect generated catalogs to organon meaning |
+4. **Verification Gates Ensure Freshness**
+   - Automated checks: file refs, RFC refs, event refs, staleness
+   - CI fails if docs >24 hours stale after code changes
+   - Fail visible: red warnings, blocked PRs
 
----
+### The Problem It Solves
 
-## Quick Reference
+Traditional documentation fails because:
+- ❌ Manual updates lag behind code changes
+- ❌ Developers forget to update docs
+- ❌ Documentation becomes aspirational fiction
+- ❌ No automated freshness checks
+- ❌ Single navigation paradigm (layer OR feature, not both)
 
-### Creating an Organon
-
-```
-1. Identify the scope (product, domain, feature, component)
-2. Write ETHOS.md first (most critical for LLM behavior)
-3. Write PHILOSOPHY.md (explains reasoning to humans)
-4. Write protocols as needed (specific repeatable tasks)
-```
-
-### Ethos Structure (Critical)
-
-```markdown
-# [Scope] Ethos
-
-## Identity
-- **IS:** [what this is]
-- **IS NOT:** [what this is not]
-
-## Invariants
-1. [rule that must never be violated]
-2. [another inviolable rule]
-
-## Principles (Prioritized)
-1. [highest priority principle]
-2. [second priority principle]
-
-## Decision Heuristics
-- When [situation], do [action]
-- When uncertain, prefer [default]
-
-## Out of Scope
-- [explicitly not our concern]
-```
-
-### Philosophy Structure
-
-```markdown
-# [Scope] Philosophy
-
-## The Problem
-[What challenge does this address?]
-
-## The Bet
-[What approach did we choose?]
-
-## Trade-offs
-| Decision | Benefit | Cost |
-|----------|---------|------|
-| [choice] | [gain]  | [loss] |
-```
-
-### Protocol Structure
-
-```markdown
-# Protocol: [Task Name]
-
-## Goal
-[What this accomplishes]
-
-## Preconditions
-- [what must be true before starting]
-
-## Steps
-1. [first step]
-2. [second step]
-
-## Verification
-[how to confirm success]
-```
+Organon fixes this by:
+- ✅ Auto-generating docs from code structure
+- ✅ Making staleness a CI failure
+- ✅ Treating code as ground truth
+- ✅ Providing dual mapping (layer + feature)
+- ✅ Fast cross-domain discovery (<1s searches)
 
 ---
 
-## For LLMs
+## Repository Structure
 
-**Reading organons:**
-1. Always read ETHOS.md first — it constrains your behavior
-2. Read PHILOSOPHY.md for context when decisions seem arbitrary
-3. Follow protocols literally when they exist
+This repository contains three resources for implementing Organon:
 
-**Creating organons:**
-1. See [ETHOS.md](./ETHOS.md) for constraints on writing organons
-2. See [templates.md](./templates.md) for copy-paste starting points
-3. Prioritize token efficiency — ethos docs are injected repeatedly
-
-**Navigation in projects with organons:**
 ```
-Product ethos (repo root) → Domain ethos (docs/, src/) → Feature ethos (features/X/)
+ethos/
+├── book-llms/          # Technical reference for LLMs and developers
+│   ├── ETHOS.md        # Immutable invariants
+│   ├── PHILOSOPHY.md   # Design decisions and trade-offs
+│   ├── patterns.md     # Common patterns and anti-patterns
+│   ├── scopes.md       # Scope hierarchy (product → domain → feature)
+│   ├── templates.md    # Templates for ETHOS/PHILOSOPHY/PROTOCOLS
+│   └── protocols/      # Operational procedures
+│
+├── book-humans/        # Narrative guide (planned)
+│   └── README.md       # Coming soon
+│
+└── organon-tools/      # CLI tools and future MCP server
+    ├── src/
+    │   ├── commands/   # generate, verify, find
+    │   └── lib/        # Shared utilities
+    └── README.md       # Tool documentation
 ```
 
-Each level inherits from parent. Child scopes add constraints, never contradict.
+### 1. book-llms/ — Technical Reference
+
+**Audience:** LLMs (Claude, GPT-4) and developers who want technical depth
+
+**Content:**
+- Invariants: Immutable constraints that must hold
+- Patterns: Common implementation patterns
+- Templates: Copy-paste-modify templates for new organons
+- Protocols: Step-by-step operational procedures
+
+**Use Case:** Load into LLM context when implementing Organon in a new codebase
+
+**Token Budget:** ~14,000 tokens (core content)
+
+[Read the LLM book →](./book-llms/)
+
+### 2. book-humans/ — Narrative Guide (Planned)
+
+**Audience:** All developers, especially those new to Organon
+
+**Content (Planned):**
+- **Chapter 1:** The documentation drift problem
+- **Chapter 2:** The Organon solution
+- **Chapter 3:** Getting started tutorial
+- **Chapter 4:** Advanced patterns
+- **Chapter 5:** Case study (Agent Tavern)
+
+**Status:** 🚧 Outline phase, Q1 2026
+
+[Learn more →](./book-humans/)
+
+### 3. organon-tools/ — CLI Tools
+
+**Audience:** Developers using Organon in their codebase
+
+**Commands:**
+```bash
+# Auto-generate components.md from codebase
+organon generate --all
+
+# Verify organon integrity (4 gates)
+organon verify
+
+# Cross-domain discovery
+organon find --file=MyFile.ts
+organon find --feature=auth
+organon find --domain=api
+```
+
+**Status:** 🚧 Scaffolding complete, migrating from Agent Tavern
+
+**Future:** MCP server for IDE integration (LSP-like features)
+
+[Install organon-tools →](./organon-tools/)
+
+---
+
+## Quick Start
+
+### For LLMs Implementing Organon
+
+Load the technical reference into context:
+
+```bash
+# Read core methodology
+cat book-llms/ETHOS.md        # Invariants
+cat book-llms/patterns.md     # Common patterns
+cat book-llms/templates.md    # Templates
+
+# Use tools to bootstrap
+cd your-project
+npx @organon/tools generate --all
+npx @organon/tools verify
+```
+
+### For Human Developers
+
+1. **Read the reference implementation:** [Agent Tavern](https://github.com/VledicFranco/agent-tavern)
+2. **Explore the organon hierarchy:** `agent-tavern/organon/`
+3. **Install tools:** `npm install @organon/tools`
+4. **Generate your first organon:** `organon generate --all`
+
+---
+
+## Reference Implementation
+
+**[Agent Tavern](https://github.com/VledicFranco/agent-tavern)** is the canonical Organon implementation.
+
+### Organon Hierarchy
+
+```
+agent-tavern/organon/
+├── README.md                # Navigation guide
+├── ETHOS.md                # Product-level invariants
+├── PHILOSOPHY.md           # Product-level design decisions
+│
+├── domains/                # Business domains
+│   ├── genesis/           # AI orchestrator
+│   │   ├── ETHOS.md
+│   │   ├── PHILOSOPHY.md
+│   │   └── components.md  # Auto-generated (dual mapping)
+│   ├── agents/            # Agent lifecycle
+│   ├── quests/            # Work item state machines
+│   └── ...
+│
+├── features/              # Cross-cutting concerns
+│   ├── tool-registry/     # Genesis tools with trust tiers
+│   ├── context-management/ # Token budgets, summarization
+│   ├── agent-communication/ # Reports, signals
+│   └── ...
+│
+└── methodology/           # Meta-level (how we build)
+    ├── architecture/      # Domain structure patterns
+    ├── coding/            # Generic development workflow
+    ├── discoverability/   # Cross-domain search
+    ├── maintenance/       # Auto-generation, drift detection
+    ├── rfcs/              # RFC lifecycle
+    └── testing/           # 4-tier testing strategy
+```
+
+### Key Features
+
+- **30+ domain organons** (genesis, agents, quests, epics, protocols, containers, etc.)
+- **12+ feature organons** (tool-registry, context-management, agent-communication, etc.)
+- **8 methodology organons** (architecture, coding, discoverability, maintenance, etc.)
+- **Auto-generated components.md** for all domains (dual mapping)
+- **CI verification** (4 gates, fails on staleness >24 hours)
+- **YAML frontmatter** for metadata (token estimates, load priority, audience)
+
+---
+
+## Contributing
+
+We welcome contributions to:
+- **book-llms/** — Patterns, templates, examples
+- **book-humans/** — Narrative chapters, tutorials
+- **organon-tools/** — CLI features, MCP server
+
+### How to Contribute
+
+1. **Fork the repository**
+2. **Create a feature branch** (`git checkout -b feature/new-pattern`)
+3. **Make your changes** (follow existing patterns)
+4. **Test locally** (if changing organon-tools/)
+5. **Submit a PR** with clear description
+
+---
+
+## License
+
+MIT © Organon Methodology Contributors
+
+---
+
+## See Also
+
+- **[Agent Tavern](https://github.com/VledicFranco/agent-tavern)** — Reference implementation
+- **[RFC 027](https://github.com/VledicFranco/agent-tavern/blob/master/rfcs/027-organon-maintenance-tooling.md)** — Tooling design
+- **[RFC 028](https://github.com/VledicFranco/agent-tavern/blob/master/rfcs/028-comprehensive-testing-strategy.md)** — Testing strategy
+- **[RFC 029](https://github.com/VledicFranco/agent-tavern/blob/master/rfcs/029-path-to-self-improvement.md)** — Methodology evolution
+
+---
+
+**⚙️ Built with code as truth, documented with Organon.**
