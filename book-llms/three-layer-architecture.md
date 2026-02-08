@@ -1,8 +1,23 @@
+---
+type: rationale
+scope: meta
+name: three-layer-architecture
+version: "1.0"
+summary: Bind declarative knowledge (protocols) to executable workflows (skills) to atomic operations (tools) — the pattern for executable documentation
+token_estimate: 7000
+decision_count: 5
+inherits_from: [meta-organon]
+load_priority: medium
+required_for:
+  - protocol_creation
+  - skill_creation
+  - methodology_evolution
+audience: [llm, human, tooling]
+---
+
 # Three-Layer Architecture: Protocols → Skills → Tools
 
-> **Version:** 1.0
-> **Status:** Implemented in [Agent Tavern](https://github.com/VledicFranco/agent-tavern)
-> **Purpose:** Bind declarative knowledge (protocols) to executable workflows (skills) to atomic operations (tools)
+> Bind declarative knowledge (protocols) to executable workflows (skills) to atomic operations (tools).
 
 ---
 

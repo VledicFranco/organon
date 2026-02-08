@@ -1,3 +1,19 @@
+---
+type: rationale
+scope: meta
+name: patterns
+version: "2.0"
+summary: Common patterns and anti-patterns for organon creation — progressive disclosure, layered access, identity boundaries, and more
+token_estimate: 5500
+decision_count: 12
+inherits_from: [meta-organon]
+load_priority: medium
+required_for:
+  - organon_creation
+  - organon_review
+audience: [llm, human]
+---
+
 # Organon Patterns
 
 > Common patterns for human-machine collaborative projects.
@@ -36,10 +52,62 @@ Three documentation layers serve different consumers:
 | Layer | Optimization | Key Constraint |
 |-------|--------------|----------------|
 | Code | Correctness | Must compile/run |
-| LLM docs | Token efficiency | Small files, navigable tree |
+| LLM docs | Progressive disclosure | Frontmatter + sections for layered access |
 | Human docs | Understanding | Progressive disclosure, visuals |
 
 **Consistency rule:** When layers conflict, code wins. Fix docs to match code.
+
+---
+
+## Progressive Disclosure Pattern
+
+**The core pattern for token-efficient organons.** Replaces hard line limits with layered access.
+
+### The Problem
+
+LLMs have finite context windows. Loading entire organon files wastes tokens on irrelevant content. But hard line limits (e.g., "max 200 lines") sacrifice content quality for brevity — important invariants get omitted, examples get cut, coherent documents get split artificially.
+
+### The Solution
+
+Structure every file so agents can access it in progressively deeper layers:
+
+```
+Layer 0: README-as-Router        ~50 tokens    "What files exist in this directory?"
+    ↓
+Layer 1: Frontmatter             ~25-50 tokens "What is this file? Should I load it?"
+    ↓
+Layer 2: Section Headings        ~100 tokens   "What sections does it contain?"
+    ↓
+Layer 3: Specific Section        variable      "Load just ## Invariants"
+    ↓
+Layer 4: Full File               full cost     "Load everything"
+```
+
+### How it works
+
+**Layer 0 — README-as-Router:** Every directory has a README.md that lists contents with one-line descriptions. An agent reads this first to decide which files to explore. READMEs are the only files with a soft size guideline (~100 lines) because they serve purely as navigation.
+
+**Layer 1 — Frontmatter:** YAML frontmatter at the top of every file provides metadata: `type`, `scope`, `name`, `summary`, `token_estimate`, `relationships`. Costs ~25-50 tokens. An agent can query frontmatter across dozens of files in one pass and select only the relevant ones.
+
+**Layer 2 — Section Headings:** Standardized `## Heading` structure lets agents scan the table of contents without reading content. An agent that sees `## Identity`, `## Invariants`, `## Principles`, `## Decision Heuristics` knows exactly what's available.
+
+**Layer 3 — Specific Section:** Agents load only the section they need. Working on a tool implementation? Load `## Decision Heuristics`. Reviewing a PR? Load `## Invariants`. This is where the real savings happen — a 500-line file costs ~40 lines to get just the invariants.
+
+**Layer 4 — Full File:** Load entire content. Rare — usually only during organon creation, review, or methodology evolution.
+
+### Token savings example
+
+A project with 49 organon files (~112K total tokens):
+
+| Approach | Tokens loaded | Savings |
+|----------|---------------|---------|
+| Load all files | 112,000 | 0% |
+| Frontmatter filter → load 3 relevant files | ~8,000 | 93% |
+| Frontmatter filter → section-level load | ~2,000 | 98% |
+
+### Key principle
+
+**Files can be any size.** A 550-line file with good frontmatter and standardized sections is more token-efficient than a 150-line file without either, because the agent loads only what it needs. Quality and completeness of content must never be sacrificed for brevity.
 
 ---
 
@@ -48,6 +116,17 @@ Three documentation layers serve different consumers:
 Every directory has a `README.md` that serves as navigation:
 
 ```markdown
+---
+type: navigation
+scope: [scope]
+name: [directory-name]
+version: "1.0"
+summary: Navigation for [directory-name]
+token_estimate: 200
+provides: [list of what this directory contains]
+parent: [parent-directory]
+---
+
 # Directory Name
 
 Brief summary (1-2 sentences).
@@ -60,9 +139,72 @@ Brief summary (1-2 sentences).
 | [child-b.md](./child-b.md) | What child-b covers |
 ```
 
-**Purpose:** LLMs navigate by reading READMEs to decide which child to explore. Minimizes tokens loaded.
+**Purpose:** LLMs navigate by reading READMEs to decide which child to explore. This is Layer 0 of progressive disclosure.
 
-**Constraint:** README files < 100 lines.
+**Guideline:** READMEs are routers, not content. Keep them focused on navigation (~100 lines). If a README is growing, the content belongs in a dedicated file.
+
+---
+
+## Frontmatter-First Pattern
+
+Every organon file starts with YAML frontmatter. This is Layer 1 of progressive disclosure.
+
+```yaml
+---
+type: constraints          # What kind of file
+scope: domain              # Where in the hierarchy
+name: genesis              # Unique identifier
+version: "1.0"             # Semantic version
+summary: Invariants...     # One-sentence preview (max 200 chars)
+token_estimate: 2800       # Full file token cost
+inherits_from: [product]   # Parent scope
+load_priority: high        # Triage importance
+required_for:              # Task-specific filtering
+  - genesis_tool_implementation
+audience: [llm, human]     # Who consumes this
+---
+```
+
+**Purpose:** Agents spend ~25-50 tokens to decide whether to load ~2,500 tokens. 98% token savings on files that aren't needed.
+
+**Required fields:** `type`, `scope`, `name`, `version`, `summary`, `token_estimate`. See `frontmatter-system.md` for the full schema and type-specific fields.
+
+---
+
+## Standardized Section Headings Pattern
+
+Each artifact type uses predictable headings so agents can do section-level loading (Layer 3).
+
+### ETHOS.md headings
+
+```markdown
+## Identity          ← IS/IS NOT boundaries
+## Invariants        ← Rules that must never be violated
+## Principles        ← Prioritized guidelines (higher number = higher priority)
+## Decision Heuristics  ← "When X, do Y" tables
+```
+
+### PHILOSOPHY.md headings
+
+```markdown
+## The Problem       ← What pain exists
+## The Bet           ← Core approach chosen
+## Design Decisions  ← Numbered decisions with rationale
+## Trade-offs        ← What we gained vs sacrificed
+```
+
+### PROTOCOL.md headings
+
+```markdown
+## Goal              ← What success looks like
+## Preconditions     ← What must be true before starting
+## Steps             ← Numbered actions
+## Verification      ← How to confirm completion
+```
+
+**Purpose:** An agent that needs only invariants reads from `## Invariants` to the next `##`. It never pays the token cost of sections it doesn't need, regardless of file size.
+
+**Invariant:** These headings must not be renamed, reordered, or nested differently. They are a contract between file authors and consuming agents.
 
 ---
 
@@ -83,28 +225,12 @@ Feature docs link to implementation without duplicating:
 
 ---
 
-## Small File Pattern
-
-| File Type | Target Lines | Max Lines |
-|-----------|--------------|-----------|
-| README (router) | 50-80 | 100 |
-| Content file | 100-150 | 200 |
-| Philosophy | 80-120 | 200 |
-| Ethos | 80-120 | 150 |
-| Protocol | 50-80 | 100 |
-
-**Rationale:** Token efficiency. LLMs load only what's needed.
-
-**Action when exceeded:** Split into child files or tighten language.
-
----
-
 ## Ethos-First Development
 
 When starting a new feature or domain:
 
 ```
-1. Write ETHOS.md first
+1. Write ETHOS.md first (with frontmatter)
    - Forces clarity about constraints
    - Defines identity boundaries
    - Establishes decision heuristics
@@ -113,7 +239,7 @@ When starting a new feature or domain:
    - Ethos guides decisions
    - Violations surface early
 
-3. Write PHILOSOPHY.md
+3. Write PHILOSOPHY.md (with frontmatter)
    - Explains decisions made during implementation
    - Documents trade-offs discovered
 
@@ -199,6 +325,30 @@ Protocols are invoked by name, not embedded:
 
 ---
 
+## Three-Layer Architecture Pattern
+
+Bind declarative knowledge to executable workflows to atomic operations:
+
+```
+Protocols (Knowledge)     →  "What to do" — documented in PROTOCOLS.md
+    ↓
+Skills (Workflows)        →  "How to orchestrate" — .claude/skills/<name>/skill.md
+    ↓
+Tools (Operations)        →  "How to execute" — atomic npm scripts / CLI commands
+```
+
+**Automation tiers:** Not every protocol needs a skill.
+
+| Tier | Criteria | Has Skill? |
+|------|----------|------------|
+| Automated | ≥5 steps, cross-domain, error-prone, frequent | Yes |
+| Semi-Automated | 1-2 steps, single tool, infrequent | No (tool only) |
+| Manual | Judgment required, context-dependent | No (docs only) |
+
+**Bidirectional references:** If a protocol declares `automation_tier: automated`, the referenced skill must exist and reference back via `protocol_id`. See `three-layer-architecture.md` for full specification.
+
+---
+
 ## Verification Checklist Pattern
 
 Both ethos and protocols end with verification:
@@ -208,9 +358,12 @@ Both ethos and protocols end with verification:
 ## Verification Checklist
 
 Before publishing changes:
+- [ ] Frontmatter present with all required fields
+- [ ] Frontmatter counts match actual content
 - [ ] Identity boundaries respected
 - [ ] Invariants not violated
 - [ ] Principles applied in priority order
+- [ ] Section headings follow standardized structure
 ```
 
 **Protocol verification:**
@@ -242,31 +395,7 @@ organon/
 - Teaches new contributors how to extend the organon system
 - Prevents organon drift by codifying the rules
 
-**Meta-Organon Contents:**
-
-| Section | Content |
-|---------|---------|
-| Identity | "This organon system IS/IS NOT..." |
-| Invariants | File size limits, required sections, version markers |
-| Principles | Token efficiency, accuracy over coverage, etc. |
-| Heuristics | When to create domain vs feature organon |
-
 **Strong Recommendation:** Every project with organons should have a meta-organon. Without it, the methodology itself becomes tribal knowledge.
-
-**Example Meta-Organon Identity:**
-```markdown
-## Identity
-
-### What This Organon System IS
-- Token-efficient constraint system
-- LLM-optimized guidance
-- Hierarchical (product → domain → feature)
-
-### What This Organon System IS NOT
-- Not tutorials or how-to guides
-- Not API reference
-- Not version-controlled narrative
-```
 
 ---
 
@@ -317,7 +446,9 @@ Two primary patterns for organizing organon directories:
 
 | Anti-Pattern | Description | Fix |
 |--------------|-------------|-----|
-| Monolithic ethos | Single 500-line ethos | Split into scoped organons |
+| Missing frontmatter | Forces all-or-nothing loading | Add YAML frontmatter with required fields |
+| Non-standard headings | Breaks section-level loading | Use standardized headings from ETHOS.md |
+| Splitting for size alone | Breaks coherence, adds navigation cost | Keep cohesive content together. Use frontmatter + sections. |
 | Philosophy without ethos | Explains but doesn't constrain | Write ethos first |
 | Ethos with explanations | "Do X because Y" everywhere | Move "because Y" to philosophy |
 | Vague boundaries | "Be reasonable" | Specify concrete actions |
@@ -325,3 +456,5 @@ Two primary patterns for organizing organon directories:
 | Stale organon | Contradicts current code | Update organon or code |
 | Missing meta-organon | Organon methodology is undocumented | Create `organon/ETHOS.md` for the system itself |
 | Buried product ethos | ETHOS.md hidden in subdirectory | Move to repository root |
+| Orphaned skill | Skill exists without protocol reference | Add `protocol_id` and `protocol_file` to skill |
+| Phantom automation | Protocol claims `automated` but skill doesn't exist | Create skill or change tier to `manual` |

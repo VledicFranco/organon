@@ -1,3 +1,22 @@
+---
+type: procedures
+scope: meta
+name: semantic-mapping
+version: "1.0"
+summary: How to connect generated Scala catalogs to organon meaning — bridging raw type info to domain concepts
+token_estimate: 1800
+protocols_count: 1
+protocols:
+  - id: PROTO-SEMMAP-1
+    name: Semantic Mapping
+    steps: 4
+    automation_tier: manual
+    tools: []
+    complexity: medium
+inherits_from: [meta-organon]
+audience: [llm, human]
+---
+
 # Protocol: Semantic Mapping
 
 > How to connect generated Scala catalogs to organon meaning.

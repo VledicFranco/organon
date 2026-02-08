@@ -1,13 +1,48 @@
+---
+type: rationale
+scope: meta
+name: templates
+version: "2.0"
+summary: Copy-paste templates for ETHOS, PHILOSOPHY, and PROTOCOL files — all with frontmatter and standardized sections
+token_estimate: 4200
+decision_count: 0
+inherits_from: [meta-organon]
+load_priority: medium
+required_for:
+  - organon_creation
+audience: [llm, human]
+---
+
 # Organon Templates
 
-> Copy-paste starting points for each artifact.
+> Copy-paste starting points for each artifact type. All templates include YAML frontmatter and standardized section headings.
 
 ---
 
 ## Ethos Template
 
 ```markdown
-# [Project/Domain/Feature] Ethos
+---
+type: constraints
+scope: [product|domain|feature|component|meta|methodology]
+name: [kebab-case-name]
+version: "1.0"
+summary: [One-sentence description, max 200 chars]
+token_estimate: [number]
+invariants_count: [number]
+principles_count: [number]
+heuristics_count: [number]
+inherits_from: [parent-scope-names]
+related_domains: [domain-names]
+related_features: [feature-names]
+load_priority: [high|medium|low]
+required_for:
+  - [task_type_1]
+  - [task_type_2]
+audience: [llm, human]
+---
+
+# [Scope Name] Ethos
 
 > Behavioral constraints for [agents/LLMs/contributors] working on [scope].
 
@@ -47,10 +82,6 @@
 
 3. **[Third priority].** [Principle description.]
 
-4. **[Fourth priority].** [Principle description.]
-
-5. **[Fifth priority].** [Principle description.]
-
 ---
 
 ## Decision Heuristics
@@ -69,6 +100,16 @@ Do not [action] in this [scope]:
 
 - [Thing that belongs elsewhere]
 - [Another thing that belongs elsewhere]
+
+---
+
+## Verification Checklist
+
+- [ ] Frontmatter present with all required fields
+- [ ] Frontmatter counts match actual content
+- [ ] Identity boundaries are specific and testable
+- [ ] Principles are numbered by priority
+- [ ] No conflicts with parent scope constraints
 ```
 
 ---
@@ -76,7 +117,20 @@ Do not [action] in this [scope]:
 ## Philosophy Template
 
 ```markdown
-# [Project/Domain/Feature] Philosophy
+---
+type: rationale
+scope: [product|domain|feature|component|meta|methodology]
+name: [kebab-case-name]
+version: "1.0"
+summary: [One-sentence description, max 200 chars]
+token_estimate: [number]
+decision_count: [number]
+explains_invariants: [invariant-ids]
+inherits_from: [parent-scope-names]
+audience: [llm, human]
+---
+
+# [Scope Name] Philosophy
 
 > Why [this] exists and the thinking behind its design.
 
@@ -96,8 +150,6 @@ Do not [action] in this [scope]:
 ## The Bet
 
 [What approach did we choose? What's the core insight?]
-
-[Optional: diagram or key concept illustration]
 
 ---
 
@@ -137,6 +189,26 @@ Do not [action] in this [scope]:
 ## Protocol Template
 
 ```markdown
+---
+type: procedures
+scope: [product|domain|feature|component|meta|methodology]
+name: [kebab-case-name]
+version: "1.0"
+summary: [One-sentence description, max 200 chars]
+token_estimate: [number]
+protocols_count: [number]
+protocols:
+  - id: [PROTO-SCOPE-N]
+    name: [Protocol Name]
+    steps: [number]
+    automation_tier: [automated|semi-automated|manual]
+    skill: [skill-name]        # only if automated
+    tools: [tool-list]         # only if automated or semi-automated
+    complexity: [high|medium|low]
+inherits_from: [parent-scope-names]
+audience: [llm, human, tooling]
+---
+
 # Protocol: [Task Name]
 
 > [One-sentence description of what this protocol accomplishes.]
@@ -171,8 +243,6 @@ Before starting, verify:
 
 4. **[Step name].** [Exact action to take.]
 
-5. **[Step name].** [Exact action to take.]
-
 ---
 
 ## Verification
@@ -197,9 +267,55 @@ If something goes wrong:
 
 ---
 
-## Minimal Ethos (Smallest Valid Organon)
+## README Router Template
 
 ```markdown
+---
+type: navigation
+scope: [scope]
+name: [directory-name]
+version: "1.0"
+summary: Navigation for [directory-name] — [brief description]
+token_estimate: [number]
+provides: [list of what this directory contains]
+parent: [parent-directory-name]
+---
+
+# [Directory Name]
+
+[One-sentence purpose of this directory.]
+
+## Contents
+
+| Path | Type | Description |
+|------|------|-------------|
+| [ETHOS.md](./ETHOS.md) | constraints | [What it constrains] |
+| [PHILOSOPHY.md](./PHILOSOPHY.md) | rationale | [What it explains] |
+| [child-dir/](./child-dir/) | [scope] | [What it covers] |
+```
+
+---
+
+## Minimal Ethos (Smallest Valid Organon)
+
+The absolute minimum for a valid organon. Use when bootstrapping — expand as the scope matures.
+
+```markdown
+---
+type: constraints
+scope: [scope]
+name: [kebab-case-name]
+version: "1.0"
+summary: [One-sentence, max 200 chars]
+token_estimate: 300
+invariants_count: 1
+principles_count: 1
+heuristics_count: 1
+inherits_from: [parent]
+load_priority: [priority]
+audience: [llm]
+---
+
 # [Scope] Ethos
 
 ## Identity
@@ -209,28 +325,58 @@ If something goes wrong:
 
 ## Invariants
 
-1. [Most critical rule]
+1. **[Most critical rule].** [Description.]
 
 ## Principles
 
-1. [Most important principle]
+1. **[Most important principle].** [Description.]
 
-## Heuristics
+## Decision Heuristics
 
-- When uncertain, [default action]
+| Situation | Action |
+|-----------|--------|
+| When uncertain | [default action] |
 ```
 
 ---
 
 ## Feature Organon Example
 
+A concrete example showing all patterns applied — frontmatter, standardized sections, identity boundaries, prioritized principles, and heuristics.
+
 ```markdown
+---
+type: constraints
+scope: feature
+name: caching
+version: "1.0"
+summary: Behavioral constraints for the caching feature — resilience option that stores module results for reuse
+token_estimate: 800
+invariants_count: 3
+principles_count: 2
+heuristics_count: 3
+inherits_from: [product]
+related_domains: [runtime, compiler]
+related_features: [resilience, performance]
+load_priority: medium
+required_for:
+  - cache_implementation
+  - cache_configuration
+audience: [llm, human]
+---
+
 # Caching Ethos
+
+> Behavioral constraints for the caching feature.
+
+---
 
 ## Identity
 
 - **IS:** A resilience option that stores module results for reuse
 - **IS NOT:** A distributed cache, persistence layer, or session store
+
+---
 
 ## Invariants
 
@@ -240,15 +386,47 @@ If something goes wrong:
 
 3. **Cache misses execute normally.** Caching is optimization, not correctness.
 
-## Principles
+---
+
+## Principles (Prioritized)
 
 1. **Correctness over performance.** Never serve stale data that could cause incorrect behavior.
 
 2. **Explicit over implicit.** Cache behavior must be declared in pipeline, never automatic.
 
-## Heuristics
+---
 
-- When unsure about TTL, use 5 minutes
-- When cache backend is unspecified, use in-memory
-- When cache fails, execute without cache (don't fail the request)
+## Decision Heuristics
+
+| Situation | Action |
+|-----------|--------|
+| When unsure about TTL | Use 5 minutes |
+| When cache backend is unspecified | Use in-memory |
+| When cache fails | Execute without cache (don't fail the request) |
+
+---
+
+## Verification Checklist
+
+- [ ] Frontmatter counts match (3 invariants, 2 principles, 3 heuristics)
+- [ ] Cache keys are deterministic and include all inputs
+- [ ] TTL is set and ≤ 24 hours
+- [ ] Cache miss path works identically to non-cached path
 ```
+
+---
+
+## Frontmatter Quick Reference
+
+Required fields for every organon file:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `type` | enum | `navigation`, `constraints`, `rationale`, `procedures`, `mapping` |
+| `scope` | enum | `product`, `domain`, `feature`, `component`, `meta`, `methodology` |
+| `name` | string | Kebab-case identifier matching directory name |
+| `version` | string | Semantic version `"X.Y"` |
+| `summary` | string | One-sentence description, max 200 chars |
+| `token_estimate` | number | Approximate full file token count |
+
+See `frontmatter-system.md` for the complete schema including type-specific and relationship fields.

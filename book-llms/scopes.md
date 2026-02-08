@@ -1,3 +1,19 @@
+---
+type: rationale
+scope: meta
+name: scopes
+version: "2.0"
+summary: How organons apply at different levels — product, domain, feature, component — with inheritance rules and navigation patterns
+token_estimate: 3500
+decision_count: 4
+inherits_from: [meta-organon]
+load_priority: medium
+required_for:
+  - organon_creation
+  - scope_decisions
+audience: [llm, human]
+---
+
 # Organon Scopes
 
 > How organons apply at different levels of a project.
@@ -161,10 +177,12 @@ When an LLM starts work:
 
 | Scope | Files |
 |-------|-------|
-| Product | `/PHILOSOPHY.md`, `/ETHOS.md` |
-| Domain | `/docs/PHILOSOPHY.md`, `/docs/ETHOS.md` |
-| Feature | `/docs/features/X/PHILOSOPHY.md`, `/docs/features/X/ETHOS.md` |
-| Component | `/src/components/X/ETHOS.md` (philosophy usually unnecessary) |
+| Product | `/ETHOS.md`, `/PHILOSOPHY.md` |
+| Domain | `/organon/domains/X/ETHOS.md`, `/organon/domains/X/PHILOSOPHY.md` |
+| Feature | `/organon/features/X/ETHOS.md`, `/organon/features/X/PHILOSOPHY.md` |
+| Component | `/organon/components/X/ETHOS.md` (philosophy usually unnecessary) |
+
+**All files require YAML frontmatter.** See `frontmatter-system.md` for the schema.
 
 ---
 
