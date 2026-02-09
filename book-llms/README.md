@@ -5,7 +5,7 @@ name: book-llms
 version: "3.0"
 summary: Navigation for the Organon technical reference — methodology spec optimized for LLM consumption
 token_estimate: 850
-provides: [ethos, philosophy, patterns, scopes, templates, frontmatter-system, three-layer-architecture, protocols]
+provides: [overview, ethos, philosophy, patterns, scopes, templates, frontmatter-system, three-layer-architecture, protocols]
 parent: organon-root
 ---
 
@@ -26,7 +26,8 @@ Organon is a documentation methodology built on five pillars:
 
 | Path | Type | Description |
 |------|------|-------------|
-| [ETHOS.md](./ETHOS.md) | constraints | Core invariants and principles — **read this first** |
+| [overview.md](./overview.md) | rationale | What problems does this methodology solve? **Start here.** |
+| [ETHOS.md](./ETHOS.md) | constraints | Core invariants and principles |
 | [PHILOSOPHY.md](./PHILOSOPHY.md) | rationale | Design decisions and trade-offs (why the methodology works this way) |
 | [patterns.md](./patterns.md) | rationale | Common patterns: progressive disclosure, enforcement loop, RFC-driven evolution, methodology scope, and more |
 | [scopes.md](./scopes.md) | rationale | Scope hierarchy (product → domain → feature → component → methodology) |
@@ -39,6 +40,7 @@ Organon is a documentation methodology built on five pillars:
 
 When implementing Organon in a new codebase:
 
+0. **overview.md** — What problems does this methodology solve? Start here.
 1. **ETHOS.md** — Core rules. Understand invariants, principles, and the progressive disclosure model.
 2. **patterns.md** — See how the rules manifest as concrete patterns.
 3. **templates.md** — Get copy-paste scaffolds with frontmatter for each artifact type.
