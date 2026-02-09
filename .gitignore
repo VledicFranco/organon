@@ -1,0 +1,6 @@
+# Claude Code local settings (personal permission overrides)
+.claude/settings.local.json
+
+# Node
+node_modules/
+dist/
