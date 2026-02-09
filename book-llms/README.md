@@ -28,7 +28,7 @@ Organon is a documentation methodology built on three pillars:
 | [PHILOSOPHY.md](./PHILOSOPHY.md) | rationale | Design decisions and trade-offs (why the methodology works this way) |
 | [patterns.md](./patterns.md) | rationale | Common patterns: progressive disclosure, identity boundaries, section headings, and more |
 | [scopes.md](./scopes.md) | rationale | Scope hierarchy (product → domain → feature → component) |
-| [templates.md](./templates.md) | rationale | Copy-paste templates for ETHOS, PHILOSOPHY, PROTOCOL (all with frontmatter) |
+| [templates.md](./templates.md) | rationale | Copy-paste templates for ETHOS, PHILOSOPHY, PROTOCOL, WORKFLOW (all with frontmatter) |
 | [frontmatter-system.md](./frontmatter-system.md) | rationale | YAML frontmatter specification — the mechanism for progressive disclosure |
 | [three-layer-architecture.md](./three-layer-architecture.md) | rationale | Protocols → Workflows → Tools enforcement loop |
 | [protocols/](./protocols/) | procedures | Operational procedures (semantic mapping, etc.) |

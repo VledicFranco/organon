@@ -180,7 +180,7 @@ Each artifact type uses predictable headings so agents can do section-level load
 ```markdown
 ## Identity          ← IS/IS NOT boundaries
 ## Invariants        ← Rules that must never be violated
-## Principles        ← Prioritized guidelines (higher number = higher priority)
+## Principles        ← Prioritized guidelines (lower number = higher priority)
 ## Decision Heuristics  ← "When X, do Y" tables
 ```
 

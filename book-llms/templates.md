@@ -3,8 +3,8 @@ type: rationale
 scope: meta
 name: templates
 version: "3.0"
-summary: Copy-paste templates for ETHOS, PHILOSOPHY, and PROTOCOL files — all with frontmatter and standardized sections
-token_estimate: 4200
+summary: Copy-paste templates for ETHOS, PHILOSOPHY, PROTOCOL, and WORKFLOW files — all with frontmatter and standardized sections
+token_estimate: 3000
 decision_count: 0
 inherits_from: [meta-organon]
 load_priority: medium

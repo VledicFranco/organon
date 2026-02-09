@@ -4,7 +4,7 @@ scope: meta
 name: scopes
 version: "3.0"
 summary: How organons apply at different levels — product, domain, feature, component — with inheritance rules and navigation patterns
-token_estimate: 3500
+token_estimate: 2600
 decision_count: 4
 inherits_from: [meta-organon]
 load_priority: medium
@@ -215,7 +215,7 @@ When an LLM starts work:
 (Inherits: no runtime type errors, modules are pure, API compatibility)
 ```
 
-**Feature Organon (`/docs/features/caching/ETHOS.md`):**
+**Feature Organon (`/organon/features/caching/ETHOS.md`):**
 ```markdown
 ## Identity
 - IS: Resilience option for result reuse

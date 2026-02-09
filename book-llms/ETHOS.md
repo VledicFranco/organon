@@ -51,7 +51,7 @@ audience: [llm, human]
 
 2. **Identity comes first.** Every ethos begins with IS/IS NOT statements.
 
-3. **Principles are prioritized.** Numbered list, highest priority first. When principles conflict, higher wins.
+3. **Principles are prioritized.** Numbered list, highest priority first. When principles conflict, lower number wins.
 
 4. **Child scopes inherit, never contradict.** A feature ethos can add constraints beyond the product ethos, but cannot relax them.
 
