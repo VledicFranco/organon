@@ -155,6 +155,10 @@ secondary_rfcs: number[]      # Supporting RFCs
 load_priority: high | medium | low
 required_for: string[]        # Task types that need this organon
 audience: [llm, human, tooling]
+
+# Freshness tracking
+last_reviewed: string          # ISO 8601 date when a human last confirmed organon accuracy
+methodology_version: string    # Organon methodology version this project follows (e.g., "3.0")
 ```
 
 ### How agents use relationship fields

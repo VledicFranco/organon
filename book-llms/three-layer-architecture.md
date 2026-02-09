@@ -4,7 +4,7 @@ scope: meta
 name: three-layer-architecture
 version: "3.0"
 summary: The enforcement loop — how protocols, workflows, and tools bind the methodology to LLM execution, making organons executable and verifiable
-token_estimate: 9500
+token_estimate: 10500
 inherits_from: [meta-organon]
 load_priority: high
 required_for:
@@ -461,14 +461,26 @@ A universal 4-tier model, technology-agnostic:
 | **Tier 3: End-to-end** | Critical user paths | Key paths covered | System behavior from external perspective |
 | **Tier 4: Organon** | Invariant compliance | 100% invariant coverage | That organon constraints hold in code |
 
-**Tier 4 is the novel concept.** Organon tests are structure and constraint tests, not behavior tests. They verify that the codebase satisfies the invariants declared in ETHOS.md files. Examples:
+**Tier 4 is the novel concept.** Organon tests verify that the codebase satisfies the invariants declared in ETHOS.md files. They come in two sub-types:
+
+**Structural organon tests** — verify metadata, references, and file organization. Automatable from frontmatter and directory structure alone. Universal across projects.
 
 - "Every domain has an ETHOS.md" → test scans directory structure
 - "All automated protocols have workflow bindings" → test checks frontmatter cross-references
 - "No orphaned workflows" → test validates bidirectional references
 - "Frontmatter counts match actual content" → test parses and counts
 
-**Language-agnostic annotation:** Mark tier-4 tests with an `@organon-invariant` annotation (or language-equivalent: decorator, tag, comment convention) referencing the specific invariant they verify. This enables coverage tracking — every invariant in ETHOS.md should map to at least one test.
+**Semantic organon tests** — verify that code *behavior* satisfies declared invariants. Require understanding what the invariant means in code. Project-specific — someone must write the mapping from invariant to code assertion.
+
+- "Cache TTL max 24h" → test asserts no config value exceeds 86400
+- "Modules are pure functions" → test asserts no side-effect imports in module files
+- "All public APIs are backwards-compatible" → test compares exported signatures against baseline
+
+Structural tests are cheap and universal. Semantic tests are expensive and project-specific. But semantic tests are the only defense against behavioral drift — where code changes violate an invariant without any structural signal.
+
+**Heuristic:** When writing a new invariant, ask: "Can a test verify this against code?" If yes, write the semantic test. If no, it's a judgment-call invariant — document how humans should review it.
+
+**Language-agnostic annotation:** Mark tier-4 tests with an `@organon-invariant` annotation (or language-equivalent: decorator, tag, comment convention) referencing the specific invariant they verify. This enables coverage tracking — every invariant in ETHOS.md should map to at least one test (structural or semantic).
 
 ### Verification gates (pre-merge)
 
@@ -502,6 +514,32 @@ CI step: regenerate → diff → pass/fail
 **Freshness window:** Some projects allow a configurable staleness threshold (e.g., 24 hours) before failing. This is a tunable parameter — strict projects set it to zero (no staleness allowed), pragmatic projects allow a buffer.
 
 **Key property:** The committed file is always the source of comparison. The tool regenerates and diffs, never overwrites silently.
+
+### Organon staleness
+
+Drift detection (above) covers auto-generated files. But manual organon files (ETHOS.md, PHILOSOPHY.md) can also go stale — when the codebase evolves around them without anyone updating the constraints.
+
+**Two complementary mechanisms:**
+
+**1. `last_reviewed` frontmatter field** — An optional field recording when a human last confirmed the organon still reflects reality.
+
+```yaml
+last_reviewed: "2025-03-15"   # ISO 8601 date
+```
+
+CI can warn when an organon hasn't been reviewed in >N months (configurable per project). Simple, explicit, no false positives — but calendar-based, not change-aware.
+
+**2. Code churn detection** — Correlate git history against organon scope. When files in a domain's scope change significantly (new exports, renamed files, components.md regenerated with new entries) but the domain's organon wasn't updated, surface a review advisory.
+
+```
+Tool reads: git log for domain's source files (via code-to-organon mapping)
+Compares:   last organon modification date vs code churn volume
+Surfaces:   "Domain X: 23 files changed since last organon update — review recommended"
+```
+
+**Why both:** `last_reviewed` catches dormant organons forgotten entirely. Churn detection catches active domains where the organon is falling behind code evolution. Together they cover calendar-based and change-based staleness.
+
+**Advisory, not blocking.** Most code changes genuinely don't require organon updates. A blocking check would create noise that erodes trust in the verification system. Surface staleness as a warning in health checks, not as a merge gate.
 
 ### Violation handling
 

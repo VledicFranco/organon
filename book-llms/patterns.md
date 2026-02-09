@@ -4,8 +4,8 @@ scope: meta
 name: patterns
 version: "3.0"
 summary: Common patterns and anti-patterns — progressive disclosure, enforcement loop, RFC-driven evolution, methodology scope, and more
-token_estimate: 8200
-pattern_count: 20
+token_estimate: 8800
+pattern_count: 21
 inherits_from: [meta-organon]
 load_priority: medium
 required_for:
@@ -707,6 +707,37 @@ The same pattern compressed to context loading:
 ```
 
 **Why it works:** Onboarding is scoped by the organon hierarchy. New contributors don't need to read everything — they read product organon first, then progressively deeper scopes as they take on more specialized work.
+
+---
+
+## Methodology Version Pinning Pattern
+
+Projects that adopt Organon should declare which version of the methodology they follow.
+
+### The problem
+
+The Organon methodology evolves (v1.0 → v2.0 → v3.0). Projects adopt it at a point in time and may not track upstream changes. Without a version declaration, there's no way to know whether a project's organon structure follows current methodology or an older version — drift is invisible.
+
+### The mechanism
+
+Declare `methodology_version` in the project's root organon frontmatter:
+
+```yaml
+# In /ETHOS.md or /organon/ETHOS.md
+methodology_version: "3.0"
+```
+
+**That's it.** No sync tooling, no automatic migration. Version pinning makes drift *visible* — when the methodology advances to v4.0, a project pinned to v3.0 knows it's behind. The decision to upgrade is deliberate, not accidental.
+
+### When to upgrade
+
+| Signal | Action |
+|--------|--------|
+| New methodology version introduces features you need | Upgrade, follow migration guide |
+| New version changes invariants your project relies on | Evaluate impact via RFC before upgrading |
+| Project is working fine on current version | No urgency — version pinning is not version pressure |
+
+**Methodology versions follow the same evolution rules as organon changes:** upgrades that modify constraints should go through the project's RFC process. Maintenance-level updates (new optional patterns, clarifications) can be adopted directly.
 
 ---
 
