@@ -91,7 +91,7 @@ Every ethos includes "When X, do Y" statements.
 
 ### 6. Progressive Disclosure Over Line Limits
 
-Version 1.0 of this methodology used hard line limits (ETHOS.md max 150 lines, content files max 200 lines) as a proxy for token efficiency. Version 2.0 replaces this with progressive disclosure via YAML frontmatter and standardized section headings.
+Version 1.0 of this methodology used hard line limits (ETHOS.md max 150 lines, content files max 200 lines) as a proxy for token efficiency. Version 2.0 replaced this with progressive disclosure via YAML frontmatter and standardized section headings.
 
 **Rationale:** Line limits optimized the wrong thing. They forced authors to cut important content and split cohesive documents artificially. The real goal is token efficiency — agents should load only what they need. Progressive disclosure achieves this without sacrificing content quality:
 - Frontmatter costs ~50 tokens and tells agents whether to load the file at all

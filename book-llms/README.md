@@ -4,7 +4,7 @@ scope: meta
 name: book-llms
 version: "3.0"
 summary: Navigation for the Organon technical reference — methodology spec optimized for LLM consumption
-token_estimate: 250
+token_estimate: 850
 provides: [ethos, philosophy, patterns, scopes, templates, frontmatter-system, three-layer-architecture, protocols]
 parent: organon-root
 ---

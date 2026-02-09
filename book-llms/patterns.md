@@ -5,7 +5,7 @@ name: patterns
 version: "3.0"
 summary: Common patterns and anti-patterns — progressive disclosure, enforcement loop, LLM-centric design, identity boundaries, and more
 token_estimate: 5500
-decision_count: 12
+pattern_count: 15
 inherits_from: [meta-organon]
 load_priority: medium
 required_for:

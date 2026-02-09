@@ -5,7 +5,6 @@ name: three-layer-architecture
 version: "3.0"
 summary: The enforcement loop — how protocols, workflows, and tools bind the methodology to LLM execution, making organons executable and verifiable
 token_estimate: 8500
-decision_count: 8
 inherits_from: [meta-organon]
 load_priority: high
 required_for:
@@ -249,6 +248,9 @@ Implements PROTO-RFC-1 from `organon/methodology/rfcs/PROTOCOLS.md`.
    npm run rfc:context -- --rfc=<N>
    ```
 
+## Phase 1: Code Changes
+(Project-specific — implement domain layer, write tests proving invariants hold)
+
 ## Phase 2: Organon Updates
 1. Regenerate docs:
    ```bash
@@ -280,6 +282,9 @@ When implementing an RFC, follow these steps exactly:
 ## Phase 0: Context Loading
 Read: /ETHOS.md, /PHILOSOPHY.md, and the RFC file.
 Run: `rfc:context --rfc=<N>` to load affected domain organons.
+
+## Phase 1: Code Changes
+Implement domain layer first. Write tests proving invariants hold.
 
 ## Phase 2: Organon Updates
 Run: `organon:generate` to regenerate auto-generated docs.

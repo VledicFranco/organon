@@ -5,7 +5,6 @@ name: scopes
 version: "3.0"
 summary: How organons apply at different levels — product, domain, feature, component — with inheritance rules and navigation patterns
 token_estimate: 2600
-decision_count: 4
 inherits_from: [meta-organon]
 load_priority: medium
 required_for:
@@ -39,10 +38,11 @@ audience: [llm, human]
          │
          ├─────────────────────┬─────────────────────┐
          ▼                     ▼                     ▼
-┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐
-│ FEATURE ORGANON │  │ FEATURE ORGANON │  │ FEATURE ORGANON │
-│ features/auth/  │  │ features/cache/ │  │ features/api/   │
-└─────────────────┘  └─────────────────┘  └─────────────────┘
+┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐
+│ FEATURE ORGANON  │  │ FEATURE ORGANON  │  │ FEATURE ORGANON  │
+│ organon/features │  │ organon/features │  │ organon/features │
+│ /auth/           │  │ /cache/          │  │ /api/            │
+└──────────────────┘  └──────────────────┘  └──────────────────┘
 ```
 
 ---

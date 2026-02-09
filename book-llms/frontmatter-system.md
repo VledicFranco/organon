@@ -5,7 +5,6 @@ name: frontmatter-system
 version: "3.0"
 summary: YAML frontmatter specification for progressive disclosure — the mechanism that makes token-efficient big organons possible
 token_estimate: 3100
-decision_count: 6
 inherits_from: [meta-organon]
 load_priority: high
 required_for:
