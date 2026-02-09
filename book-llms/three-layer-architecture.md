@@ -164,7 +164,7 @@ Not every protocol needs a workflow. Use these criteria:
 
 ## Layer 2: Workflows (Agent Binding)
 
-**What they are:** Easily discoverable mechanisms that guide an LLM in instantiating a protocol. This is the binding layer — it translates "what must happen" (protocol) into "what the agent does" (tool invocations in sequence). A workflow can be an agent skill, a system prompt directive, a runbook, a CI/CD pipeline, or any other mechanism the agent can find and follow.
+**What they are:** The binding layer that translates "what must happen" (protocol) into "what the agent does" (tool invocations in sequence). A workflow can be an agent skill, a system prompt directive, a runbook, a CI/CD pipeline, or any other discoverable mechanism.
 
 ### What counts as a workflow
 

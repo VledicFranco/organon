@@ -15,10 +15,12 @@ Technical reference for the Organon Methodology, optimized for LLM consumption.
 
 ## Core Concepts
 
-Organon is a documentation methodology built on three pillars:
-1. **Code as single source of truth** — documentation derives from code, never prescribes it
-2. **Progressive disclosure** — agents access files in layers (frontmatter → sections → full file), never paying for content they don't need
-3. **Three-layer architecture** — protocols (knowledge) → workflows (agent bindings) → tools (operations)
+Organon is a documentation methodology built on five pillars:
+1. **LLM-centric design** — organons are written for LLM consumption first; LLMs execute, humans author and review
+2. **Enforcement through automation** — protocols bind to workflows that orchestrate tools that verify constraints (Define → Bind → Execute → Verify → Evolve)
+3. **Progressive disclosure** — agents access files in layers (frontmatter → sections → full file), never paying for content they don't need
+4. **Three-layer architecture** — protocols (knowledge) → workflows (agent bindings) → tools (operations)
+5. **Code as single source of truth** — documentation derives from code, never prescribes it
 
 ## Contents
 

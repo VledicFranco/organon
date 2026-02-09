@@ -7,7 +7,7 @@ summary: Core invariants, principles, and heuristics for creating organons — t
 token_estimate: 4000
 invariants_count: 10
 principles_count: 7
-heuristics_count: 15
+heuristics_count: 17
 inherits_from: []
 load_priority: high
 required_for:
@@ -297,6 +297,7 @@ audience: [llm, human, tooling]
 | Open enforcement loop | Protocol exists but no workflow or tool verifies it | Close the loop: add workflow binding + verification tool |
 | Human-optimized organon | Prose-heavy, no structured sections, no frontmatter | Restructure for LLM consumption: frontmatter, standardized headings, decision heuristic tables |
 | Orphaned workflow | Workflow exists without protocol reference | Add `protocol_id` and `protocol_file`, or delete the orphan |
+| Phantom automation | Protocol claims `automated` but workflow doesn't exist | Create workflow or change tier to `manual` |
 
 ---
 
