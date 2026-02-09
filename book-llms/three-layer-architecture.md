@@ -626,8 +626,10 @@ Add verification tools that check the binding integrity:
 
 ## Related Patterns
 
-- **[Progressive Disclosure](./patterns.md)** — Frontmatter enables discovery without loading
+- **[Progressive Disclosure](./patterns.md#progressive-disclosure-pattern)** — Frontmatter enables discovery without loading
 - **[Frontmatter System](./frontmatter-system.md)** — YAML metadata schema for organon files
+- **[Code-to-Organon Mapping](./patterns.md#code-to-organon-mapping-pattern)** — Auto-generated `components.md` for bidirectional code↔organon navigation (drift detection verifies these)
+- **[Context Loading Strategy](./patterns.md#context-loading-strategy-pattern)** — Token-budget-aware organon loading for LLM sessions
 - **Bidirectional Traceability** — Protocol ↔ workflow ↔ tool, fully linked
 - **Progressive Automation** — Manual → tools → workflows as procedures mature
 - **Executable Documentation** — Documentation that drives code execution, not just describes it
