@@ -3,9 +3,9 @@ type: rationale
 scope: meta
 name: patterns
 version: "3.0"
-summary: Common patterns and anti-patterns — progressive disclosure, enforcement loop, LLM-centric design, identity boundaries, and more
-token_estimate: 5500
-pattern_count: 15
+summary: Common patterns and anti-patterns — progressive disclosure, enforcement loop, RFC-driven evolution, methodology scope, and more
+token_estimate: 6300
+pattern_count: 17
 inherits_from: [meta-organon]
 load_priority: medium
 required_for:
@@ -450,6 +450,162 @@ Two primary patterns for organizing organon directories:
 
 ---
 
+## RFC-Driven Evolution Pattern
+
+Organons must evolve as the system evolves. Without a formal evolution mechanism, organon changes are ad-hoc — constraints drift, rationale is lost, and the gap between "should be" and "what is" widens silently.
+
+### The three-way relationship
+
+```
+┌─────────────┐         ┌─────────────┐         ┌─────────────┐
+│   ORGANON   │         │     RFC     │         │    CODE     │
+│ "should be" │ ◄─────► │ "will be"   │ ────────► │  "what is"  │
+│             │  cites  │             │ implements│             │
+│ Constraints │         │ Proposals   │           │ Reality     │
+└─────────────┘         └─────────────┘           └─────────────┘
+       ↑                                                │
+       └────────────────────────────────────────────────┘
+              (implementation updates organon)
+```
+
+**Organons** define current constraints. **RFCs** (Request for Comments) propose changes. **Code** implements reality. The loop closes when implementation updates the organon to reflect new constraints.
+
+### RFC lifecycle
+
+RFCs transition through defined states:
+
+| State | Meaning |
+|-------|---------|
+| **Draft** | RFC is being written |
+| **Review** | Complete, awaiting team approval |
+| **Accepted** | Team approved design, ready to implement |
+| **Implementing** | Code is being written |
+| **Implemented** | Code merged, tests passing, organon updated |
+| **Superseded** | Replaced by newer RFC |
+| **Withdrawn** | Abandoned (with explanation) |
+
+| Transition | Criteria |
+|------------|----------|
+| Draft → Review | Author declares RFC complete |
+| Review → Accepted | Team approves design, organon impact validated |
+| Accepted → Implementing | Implementation begins |
+| Implementing → Implemented | Code merged + tests passing + organon updated + RFC status updated |
+
+### Organon Impact Declaration
+
+Every RFC declares its organon impact upfront — what organon files it will **Create**, **Update**, or **Delete**:
+
+```markdown
+## Organon Impact
+
+### Create
+- `organon/domains/new-domain/ETHOS.md` — New domain for X capability
+  - Invariant: Y constraint (enforced by Z)
+
+### Update
+- `organon/domains/existing/ETHOS.md` — Add invariant N: description
+
+### Delete
+- None
+```
+
+**Why this matters:** Forces upfront thinking about architectural constraints. Makes organon evolution explicit and auditable. Prevents drift — if code changes but no RFC declared impact, something is missing.
+
+### Same-PR principle
+
+**Organon changes happen in the same PR as implementation, never deferred.** When an RFC lands, the implementing PR includes both code changes and organon updates. This prevents:
+- Organon lag (constraints behind code)
+- "I'll update the docs later" (which means never)
+- Drift between what the organon says and what the code does
+
+### When to RFC vs direct edit
+
+| Change Type | Mechanism |
+|-------------|-----------|
+| New product-level invariant | RFC required (high bar, team consensus) |
+| New domain or feature organon | RFC for the capability |
+| Constraint evolution (same identity) | RFC for the capability |
+| Clarifications, typos, reference updates | Direct commit (no RFC) |
+| File path updates after refactor | Direct commit (no RFC) |
+
+**Rule of thumb:** If the change introduces new constraints or modifies existing ones, use an RFC. If it's maintenance, commit directly.
+
+### Why RFCs close the "Evolve" step
+
+The enforcement loop (Define → Bind → Execute → Verify → **Evolve**) requires a mechanism for the final step. RFCs are that mechanism:
+- **Define:** Human writes organon constraints
+- **Bind:** Workflow translates protocol to agent steps
+- **Execute:** LLM invokes tools
+- **Verify:** Tools check compliance
+- **Evolve:** RFC proposes new constraints based on what was learned → loop restarts
+
+Without RFCs (or an equivalent), "Evolve" is informal — someone edits an organon file ad-hoc. With RFCs, evolution is deliberate, reviewed, and traceable.
+
+---
+
+## Methodology Scope Pattern
+
+Projects that use organons to govern their own development process need a separate scope for **methodology** — process documentation distinct from product domains and features.
+
+### The distinction
+
+| Scope | Location | Documents | Example |
+|-------|----------|-----------|---------|
+| Product domains | `organon/domains/` | What the system does | Billing, agents, tenants |
+| Product features | `organon/features/` | Cross-domain capabilities | Auth, caching, API |
+| Methodology | `organon/methodology/` | How we build the system | RFC process, testing, quality |
+
+**Product organons** describe the system. **Methodology organons** describe the development process. Both use the same artifact types (ETHOS, PHILOSOPHY, PROTOCOL) but serve different scopes.
+
+### Why separate?
+
+Without separation, process documentation mixes with product documentation:
+
+```
+organon/domains/rfcs/       ← Is this about RFCs in the product or our RFC process?
+organon/domains/testing/    ← Does this govern the product's test features or our testing strategy?
+```
+
+With separation:
+
+```
+organon/methodology/rfcs/          ← Our internal RFC process
+organon/features/rfc-lifecycle/    ← RFC as a product feature (if applicable)
+```
+
+### Common methodology domains
+
+| Domain | Purpose |
+|--------|---------|
+| Architecture | Domain structure patterns, new domain procedures |
+| Coding | Generic development guidance for non-RFC work |
+| Testing | Testing strategy, coverage thresholds, test tiers |
+| Quality | Invariant violation handling, release verification |
+| Operations | Emergency procedures, hotfix workflows |
+| Maintenance | Organon freshness, auto-generation, drift detection |
+| Onboarding | New contributor ramp-up |
+| RFCs | Design proposal lifecycle and governance |
+| Discoverability | Codebase navigation and search tools |
+
+Not all projects need all of these. Start with the domains that reflect your team's actual processes.
+
+### When to use methodology scope
+
+**Create methodology organon when:**
+- Defining a repeatable development process
+- Establishing quality gates or verification procedures
+- Documenting tooling philosophy
+- Making meta-decisions about organon itself
+
+**Don't create methodology organon for:**
+- Product features (use `organon/features/`)
+- Domain logic (use `organon/domains/`)
+- User-facing capabilities (use product organons)
+
+**Rule of thumb:** If it affects how developers work on the project (not what users get), it's methodology.
+
+---
+
 ## Anti-Pattern Reference
 
 | Anti-Pattern | Description | Fix |
@@ -466,3 +622,6 @@ Two primary patterns for organizing organon directories:
 | Buried product ethos | ETHOS.md hidden in subdirectory | Move to repository root |
 | Orphaned workflow | Workflow exists without protocol reference | Add `protocol_id` and `protocol_file` to workflow |
 | Phantom automation | Protocol claims `automated` but workflow doesn't exist | Create workflow or change tier to `manual` |
+| Ad-hoc organon evolution | Constraints added/changed without RFC or review | Use RFC process for constraint changes; direct commits only for maintenance |
+| Deferred organon update | "I'll update the organon later" after code lands | Same-PR principle: organon changes in the same PR as implementation |
+| Mixed methodology and product | Process docs in `organon/domains/`, product docs in `organon/methodology/` | Separate: methodology for how-we-build, domains/features for what-it-does |

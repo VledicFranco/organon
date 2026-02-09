@@ -7,7 +7,7 @@ summary: Core invariants, principles, and heuristics for creating organons — t
 token_estimate: 4000
 invariants_count: 10
 principles_count: 7
-heuristics_count: 17
+heuristics_count: 23
 inherits_from: []
 load_priority: high
 required_for:
@@ -160,6 +160,17 @@ Progressive disclosure achieves the same goal (token efficiency) without sacrifi
 | Protocol has ≥5 steps and is used frequently | Promote to `automation_tier: automated`, create a workflow binding. |
 | Protocol is used rarely or requires judgment | Keep at `manual` tier. Not everything needs automation. |
 
+### When evolving organons
+
+| Situation | Action |
+|-----------|--------|
+| New product-level invariant | RFC required — high bar, team consensus needed. |
+| New domain or feature organon | RFC for the capability; organon created in same PR as implementation. |
+| Constraint modified or removed | RFC required — document rationale for change and impact. |
+| Clarification, typo, or reference fix | Direct commit, no RFC needed. |
+| File paths changed after refactor | Direct commit, no RFC needed. |
+| Unsure whether RFC is needed | If the change introduces or modifies constraints, use an RFC. If it's maintenance, commit directly. |
+
 ### When to split a file
 
 | Situation | Action |
@@ -298,6 +309,9 @@ audience: [llm, human, tooling]
 | Human-optimized organon | Prose-heavy, no structured sections, no frontmatter | Restructure for LLM consumption: frontmatter, standardized headings, decision heuristic tables |
 | Orphaned workflow | Workflow exists without protocol reference | Add `protocol_id` and `protocol_file`, or delete the orphan |
 | Phantom automation | Protocol claims `automated` but workflow doesn't exist | Create workflow or change tier to `manual` |
+| Ad-hoc organon evolution | Constraints added without RFC or review | Use RFC process for constraint changes; direct commits only for maintenance |
+| Deferred organon update | Code lands but organon update is "done later" | Same-PR principle: organon changes in the same PR as implementation |
+| Mixed methodology and product | Process docs in product scopes, product docs in methodology | Methodology for how-we-build; domains/features for what-it-does |
 
 ---
 

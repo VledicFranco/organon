@@ -4,7 +4,7 @@ scope: meta
 name: scopes
 version: "3.0"
 summary: How organons apply at different levels — product, domain, feature, component — with inheritance rules and navigation patterns
-token_estimate: 2600
+token_estimate: 2900
 inherits_from: [meta-organon]
 load_priority: medium
 required_for:
@@ -55,6 +55,7 @@ audience: [llm, human]
 | **Domain** | `organon/domains/X/` | A business bounded context | "Agents emit events, quests track work" |
 | **Feature** | `organon/features/X/` | A user capability | "Caching has max 24h TTL" |
 | **Component** | `organon/components/X/` | An implementation unit | "Parser must not depend on runtime" |
+| **Methodology** | `organon/methodology/X/` | A development process | "RFCs require organon impact declaration" |
 
 ---
 
@@ -121,13 +122,35 @@ organon/
       └── caching/
 ```
 
-**Decision guide:**
+### When to Use Methodology
+
+Use **methodology** when your project governs its own development process with organons:
+
+```
+organon/methodology/
+  ├── rfcs/           ← "How we propose and implement changes"
+  ├── testing/        ← "How we ensure quality"
+  ├── architecture/   ← "How we structure code"
+  ├── operations/     ← "How we handle emergencies"
+  └── maintenance/    ← "How we keep organons fresh"
+```
+
+**Signals for methodology:**
+- Team has repeatable development processes worth documenting
+- Quality gates or verification procedures exist
+- RFC or design-proposal workflow is in use
+- The organon system itself needs governance (meta-organon)
+
+**Key distinction:** Product scopes (domains, features, components) document **what the system does**. Methodology documents **how the team builds it**. See `patterns.md` (Methodology Scope Pattern) for the full pattern.
+
+### Decision guide
 
 | Project Type | Primary Structure |
 |--------------|-------------------|
 | Business application (SaaS, platform) | Domains + Features |
 | Framework or library | Components + Features |
 | Complex business + technical depth | Domains + Components + Features |
+| Team with formal processes | Add Methodology to any of the above |
 | Simple project | Features only |
 
 ---
@@ -182,6 +205,7 @@ When an LLM starts work:
 | Domain | `/organon/domains/X/ETHOS.md`, `/organon/domains/X/PHILOSOPHY.md` |
 | Feature | `/organon/features/X/ETHOS.md`, `/organon/features/X/PHILOSOPHY.md` |
 | Component | `/organon/components/X/ETHOS.md` (philosophy usually unnecessary) |
+| Methodology | `/organon/methodology/X/ETHOS.md`, `/organon/methodology/X/PROTOCOLS.md` |
 
 **All files require YAML frontmatter.** See `frontmatter-system.md` for the schema.
 
