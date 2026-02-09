@@ -312,6 +312,8 @@ audience: [llm, human, tooling]
 | Ad-hoc organon evolution | Constraints added without RFC or review | Use RFC process for constraint changes; direct commits only for maintenance |
 | Deferred organon update | Code lands but organon update is "done later" | Same-PR principle: organon changes in the same PR as implementation |
 | Mixed methodology and product | Process docs in product scopes, product docs in methodology | Methodology for how-we-build; domains/features for what-it-does |
+| Untested invariant | Invariant in ETHOS.md but no tier-4 test verifies it | Add organon test with `@organon-invariant` annotation referencing the invariant |
+| Stale code mapping | components.md doesn't match current code | Regenerate via idempotent tool and enforce freshness in CI |
 
 ---
 

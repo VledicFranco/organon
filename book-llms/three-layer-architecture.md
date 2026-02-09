@@ -4,7 +4,7 @@ scope: meta
 name: three-layer-architecture
 version: "3.0"
 summary: The enforcement loop — how protocols, workflows, and tools bind the methodology to LLM execution, making organons executable and verifiable
-token_estimate: 8500
+token_estimate: 9500
 inherits_from: [meta-organon]
 load_priority: high
 required_for:
@@ -449,6 +449,78 @@ PR opened → CI runs verification tools → Pass: merge allowed. Fail: merge bl
 ```
 
 This is the ultimate enforcement: code cannot land if the organon is violated.
+
+### Tiered testing
+
+A universal 4-tier model, technology-agnostic:
+
+| Tier | Scope | Coverage Target | What It Tests |
+|------|-------|-----------------|---------------|
+| **Tier 1: Unit** | Individual functions | >90% | Behavior of isolated units |
+| **Tier 2: Integration** | Cross-module interactions | >80% | Module boundaries and contracts |
+| **Tier 3: End-to-end** | Critical user paths | Key paths covered | System behavior from external perspective |
+| **Tier 4: Organon** | Invariant compliance | 100% invariant coverage | That organon constraints hold in code |
+
+**Tier 4 is the novel concept.** Organon tests are structure and constraint tests, not behavior tests. They verify that the codebase satisfies the invariants declared in ETHOS.md files. Examples:
+
+- "Every domain has an ETHOS.md" → test scans directory structure
+- "All automated protocols have workflow bindings" → test checks frontmatter cross-references
+- "No orphaned workflows" → test validates bidirectional references
+- "Frontmatter counts match actual content" → test parses and counts
+
+**Language-agnostic annotation:** Mark tier-4 tests with an `@organon-invariant` annotation (or language-equivalent: decorator, tag, comment convention) referencing the specific invariant they verify. This enables coverage tracking — every invariant in ETHOS.md should map to at least one test.
+
+### Verification gates (pre-merge)
+
+A universal checklist for CI gates. Adapt per project:
+
+| Gate | What It Checks | Blocks Merge? |
+|------|----------------|---------------|
+| **All tests pass** | Tiers 1-4 | Yes |
+| **Coverage targets met** | Per-tier thresholds | Yes |
+| **Invariant coverage** | Every ETHOS.md invariant has ≥1 tier-4 test | Yes |
+| **Reference integrity** | File paths, RFC refs, event refs exist | Yes |
+| **Freshness** | Auto-generated files match current state | Yes |
+| **Frontmatter truthfulness** | Counts, token estimates, relationships are accurate | Yes |
+| **RFC status** | If RFC-driven, RFC state matches implementation state | Yes |
+
+**Principle:** Verification gates **fail builds**, not just warn. A warning is an invitation to ignore. A failed build is a constraint.
+
+### Drift detection
+
+Auto-generated files (e.g., `components.md`, mapping files) are derived from code. They drift when code changes but the file isn't regenerated.
+
+**Detection pattern:**
+1. CI regenerates the file from current code (idempotent tool)
+2. CI compares generated output with the committed version
+3. Any diff = drift. Build fails.
+
+```
+CI step: regenerate → diff → pass/fail
+```
+
+**Freshness window:** Some projects allow a configurable staleness threshold (e.g., 24 hours) before failing. This is a tunable parameter — strict projects set it to zero (no staleness allowed), pragmatic projects allow a buffer.
+
+**Key property:** The committed file is always the source of comparison. The tool regenerates and diffs, never overwrites silently.
+
+### Violation handling
+
+When verification detects a violation, severity determines response:
+
+| Severity | Condition | Response |
+|----------|-----------|----------|
+| **Critical** | Code violates an ETHOS.md invariant | Stop. Fix immediately. No workarounds. |
+| **High** | Organon out of sync > freshness threshold | Block PR. Regenerate and recommit. |
+| **Medium** | Broken references (file paths, RFC refs) | Block PR. Update references. |
+| **Low** | Documentation gaps, missing optional sections | Warn. Create follow-up issue. |
+
+**Escalation path:**
+1. CI blocks the merge
+2. Author fixes the violation
+3. Reviewer validates the fix
+4. If the violation reveals an architectural issue → escalate to RFC
+
+**Principle:** Critical and high violations are never deferred. They block merges. Low violations create tracked follow-ups so they don't accumulate silently.
 
 ---
 

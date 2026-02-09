@@ -4,8 +4,8 @@ scope: meta
 name: patterns
 version: "3.0"
 summary: Common patterns and anti-patterns — progressive disclosure, enforcement loop, RFC-driven evolution, methodology scope, and more
-token_estimate: 6300
-pattern_count: 17
+token_estimate: 8200
+pattern_count: 20
 inherits_from: [meta-organon]
 load_priority: medium
 required_for:
@@ -606,6 +606,108 @@ Not all projects need all of these. Start with the domains that reflect your tea
 
 ---
 
+## Code-to-Organon Mapping Pattern
+
+Auto-generated mapping files that connect source code to their owning organon. The mapping is derived from code — never manually edited.
+
+### The problem
+
+In a codebase governed by organons, two navigation questions arise constantly:
+- **Code → Organon:** "Which domain owns this file? What constraints govern it?"
+- **Organon → Code:** "What files implement this invariant? What code does this domain contain?"
+
+Without a mapping, these questions require manual exploration every time.
+
+### The solution
+
+A `components.md` file per domain, auto-generated from code, providing dual navigation:
+
+```markdown
+# Domain: [Name] — Component Map
+
+## By Architectural Layer
+| Layer | Files | Exports |
+|-------|-------|---------|
+| Domain | src/domain/billing/*.ts | BillingService, Invoice |
+| Infrastructure | src/infra/billing/*.ts | BillingRepository |
+
+## By Feature
+| Feature | Key Files | Events |
+|---------|-----------|--------|
+| Invoice Generation | src/domain/billing/invoice.ts | InvoiceCreated |
+```
+
+**Key properties:**
+- **Generated from code** — idempotent regeneration tool (e.g., `organon:generate`)
+- **Co-located** — lives alongside the domain's `ETHOS.md`
+- **Dual mapping** — navigate by architectural layer OR by feature
+- **Bidirectional** — code→organon ("who owns this file?") and organon→code ("what implements this?")
+- **Freshness-enforced** — drift detection in CI ensures the mapping matches current code
+
+### When to use
+
+Create a mapping file when a domain has ≥5 source files. Smaller domains don't need the indirection.
+
+---
+
+## Context Loading Strategy Pattern
+
+Token-budget-aware organon loading for LLMs entering a work session.
+
+### The problem
+
+An LLM starting a task doesn't know which organon files to load. Loading all of them wastes context budget. Loading none risks violating constraints.
+
+### The strategy
+
+```
+1. ALWAYS load:     Product ETHOS.md              (~400 tokens)
+                    Constraints are non-negotiable. Load first.
+
+2. ON-DEMAND load:  Domain organon                 (~300-500 tokens)
+                    When entering a specific domain for implementation.
+
+                    Feature organon                (~200-400 tokens)
+                    When implementing a cross-cutting feature.
+
+3. FRONTMATTER-FIRST: Query frontmatter before loading
+                    Use token_estimate to budget. Use required_for to filter.
+                    Use load_priority to triage when budget is tight.
+```
+
+**Budget guideline:** Reserve 8-15K tokens for organon context, leaving the majority of the context window for code and conversation. This fits comfortably even in smaller context windows.
+
+**Progressive disclosure in action:** An agent working on billing doesn't load the auth domain organon. It queries frontmatter, finds `scope: billing`, and loads only relevant files.
+
+---
+
+## Structured Onboarding Pattern
+
+A phased ramp-up pattern for both human contributors and LLM sessions entering a project.
+
+### For human contributors
+
+| Phase | Focus | Duration | What to Read |
+|-------|-------|----------|-------------|
+| **Phase 1: Identity** | Understand project constraints | ~1 week | Product ETHOS.md, PHILOSOPHY.md |
+| **Phase 2: Domain** | Understand assigned area | ~1 week | Domain ETHOS.md, components.md |
+| **Phase 3: Execution** | First real task with organon guidance | ~1 week | Relevant protocols, decision heuristics |
+
+### For LLM sessions
+
+The same pattern compressed to context loading:
+
+```
+1. Load product ETHOS.md           → Understand identity and constraints
+2. Load domain organon             → Understand specific constraints for task area
+3. Load relevant protocols         → Follow procedures for the task type
+4. Begin work                      → Heuristics guide ambiguous decisions
+```
+
+**Why it works:** Onboarding is scoped by the organon hierarchy. New contributors don't need to read everything — they read product organon first, then progressively deeper scopes as they take on more specialized work.
+
+---
+
 ## Anti-Pattern Reference
 
 | Anti-Pattern | Description | Fix |
@@ -625,3 +727,5 @@ Not all projects need all of these. Start with the domains that reflect your tea
 | Ad-hoc organon evolution | Constraints added/changed without RFC or review | Use RFC process for constraint changes; direct commits only for maintenance |
 | Deferred organon update | "I'll update the organon later" after code lands | Same-PR principle: organon changes in the same PR as implementation |
 | Mixed methodology and product | Process docs in `organon/domains/`, product docs in `organon/methodology/` | Separate: methodology for how-we-build, domains/features for what-it-does |
+| Untested invariant | Invariant in ETHOS.md but no tier-4 test verifies it | Add organon test with `@organon-invariant` annotation referencing the invariant |
+| Stale code mapping | components.md doesn't match current code | Regenerate via idempotent tool and enforce freshness in CI |
