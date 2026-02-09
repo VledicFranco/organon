@@ -21,7 +21,7 @@ audience: [llm, human]
 
 ## The Challenges
 
-When humans collaborate with LLMs on complex systems, a predictable set of problems emerges: decisions drift from intent, documentation goes stale, new sessions start from scratch, and constraints exist on paper but not in practice. The Organon methodology addresses 13 of these challenges directly. Each solution below links to the file that specifies it.
+When humans collaborate with LLMs on complex systems, a predictable set of problems emerges: decisions drift from intent, documentation goes stale, new sessions start from scratch, and constraints exist on paper but not in practice. The Organon methodology addresses each of these challenges directly. Each solution below links to the file that specifies it.
 
 ---
 
@@ -31,17 +31,14 @@ When humans collaborate with LLMs on complex systems, a predictable set of probl
 |---|-----------|-------------|---------------------|--------|
 | 1 | **Reality drift** | Code diverges from organon spec over time | Enforcement loop ([three-layer-architecture.md](./three-layer-architecture.md)), same-PR principle ([patterns.md](./patterns.md)), drift detection, verification as CI gate | Solved |
 | 2 | **Design & implementation guidance** | Ad-hoc changes without architectural thinking | RFC-driven evolution, organon impact declaration, RFC lifecycle states ([patterns.md](./patterns.md)) | Solved |
-| 3 | **Context building** | LLMs waste tokens loading irrelevant content | 5-layer progressive disclosure, frontmatter metadata, standardized section headings ([ETHOS.md](./ETHOS.md), [frontmatter-system.md](./frontmatter-system.md), [patterns.md](./patterns.md)) | Solved |
-| 4 | **Fresh agent problem** | Each LLM session starts from scratch with no methodology awareness | Persistent workflow bindings, context loading strategy, structured onboarding pattern ([patterns.md](./patterns.md), [three-layer-architecture.md](./three-layer-architecture.md)) | Solved |
-| 5 | **Behavioral inconsistency** | Locally reasonable but globally inconsistent decisions | Prioritized principles, decision heuristic tables, identity boundaries ([ETHOS.md](./ETHOS.md)) | Solved |
+| 3 | **Context efficiency** | LLMs waste tokens loading irrelevant content because they can't efficiently find and filter the right organons | Progressive disclosure, frontmatter-first querying, standardized section headings, README-as-router, code-to-organon mapping ([ETHOS.md](./ETHOS.md), [frontmatter-system.md](./frontmatter-system.md), [patterns.md](./patterns.md)) | Solved |
+| 4 | **Fresh agent onboarding** | Each LLM session starts from scratch — no methodology awareness and no guidance on what to read first | Persistent workflow bindings, context loading strategy, structured onboarding pattern, scope-based navigation, identity boundaries ([patterns.md](./patterns.md), [three-layer-architecture.md](./three-layer-architecture.md)) | Solved |
+| 5 | **Behavioral & decision inconsistency** | Different agents making locally reasonable but globally inconsistent decisions in the same situations | Prioritized principles, decision heuristic tables, identity boundaries ([ETHOS.md](./ETHOS.md)) | Solved |
 | 6 | **Separation of concerns** | Constraints, reasoning, and procedures get mixed together | Three artifact types (ETHOS, PHILOSOPHY, PROTOCOL), methodology vs product scope separation ([PHILOSOPHY.md](./PHILOSOPHY.md), [patterns.md](./patterns.md)) | Solved |
 | 7 | **Enforcement gap** | Documentation exists but isn't followed | Three-layer architecture, automation tiers, bidirectional references, verification gates ([three-layer-architecture.md](./three-layer-architecture.md)) | Solved |
-| 8 | **Discoverability** | Finding the right organon across many files | Frontmatter-first querying, README-as-router, code-to-organon mapping ([frontmatter-system.md](./frontmatter-system.md), [patterns.md](./patterns.md)) | Solved |
-| 9 | **Constraint inheritance** | Inconsistent rules across project levels | Scope hierarchy, inheritance rules, methodology scope ([scopes.md](./scopes.md)) | Solved |
-| 10 | **Decision consistency** | Different agents making different choices in the same situation | Decision heuristic tables, prioritized principles, identity boundaries ([ETHOS.md](./ETHOS.md)) | Solved |
-| 11 | **Over/under-automation** | Not knowing what to automate vs keep manual | Automation tiers, decision factors, progressive automation ([three-layer-architecture.md](./three-layer-architecture.md)) | Solved |
-| 12 | **Methodology evolution** | How the methodology itself changes without drift | RFC-driven evolution, methodology version pinning, meta-organon pattern ([patterns.md](./patterns.md)) | Solved |
-| 13 | **Onboarding** | New contributors/agents don't know what to read first | Structured onboarding pattern, scope-based navigation, identity boundaries ([patterns.md](./patterns.md)) | Solved |
+| 8 | **Constraint inheritance** | Inconsistent rules across project levels | Scope hierarchy, inheritance rules, methodology scope ([scopes.md](./scopes.md)) | Solved |
+| 9 | **Over/under-automation** | Not knowing what to automate vs keep manual | Automation tiers, decision factors, progressive automation ([three-layer-architecture.md](./three-layer-architecture.md)) | Solved |
+| 10 | **Methodology evolution** | How the methodology itself changes without drift | RFC-driven evolution, methodology version pinning, meta-organon pattern ([patterns.md](./patterns.md)) | Solved |
 
 ---
 
