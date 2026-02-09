@@ -1,154 +1,130 @@
 # Organon Tools
 
-CLI tools and MCP server for the **Organon Methodology** — a documentation system that treats code as the single source of truth and uses auto-generation to prevent drift.
+CLI tools and MCP server for the **Organon Methodology** — enforce documentation constraints, validate frontmatter, and give agents immediate methodology context.
 
-## What is Organon?
+## Architecture
 
-Organon is a methodology for keeping architectural documentation synchronized with code through:
-- **Auto-generation**: Components are generated from code structure, never manually edited
-- **Dual mapping**: Navigate by layer (domain/application/transport) OR by feature (cross-cutting concerns)
-- **Verification**: Automated checks ensure documentation stays fresh (<24 hours after code changes)
-- **Discovery**: Fast cross-domain search to find files, features, and domains
-
-See [../book-llms/](../book-llms/) for the full methodology documentation.
-
-## Installation
-
-```bash
-npm install @organon/tools
+```
+organon-tools/src/
+├── core/               ← Pure logic (no I/O, no console, no process.exit)
+│   ├── types.ts        ← FileSystem interface, result types, config
+│   ├── config.ts       ← Convention-based config discovery
+│   ├── frontmatter-parser.ts
+│   ├── node-fs.ts      ← NodeFileSystem implementation
+│   ├── validate-frontmatter.ts   ← 4-stage validation
+│   ├── generate-frontmatter.ts   ← Auto-generate from content
+│   ├── query.ts        ← Filter by scope/type/priority/budget
+│   ├── health.ts       ← Coverage, validation, tokens, freshness
+│   ├── find.ts         ← Cross-domain discovery
+│   ├── verify-triplets.ts  ← Protocol↔workflow↔tool bindings
+│   ├── suggest-tools.ts    ← Automation tier suggestions
+│   └── verify.ts       ← Gate registry orchestrator
+├── cli/                ← Thin yargs adapter
+│   └── commands/       ← validate, generate, query, health, find, verify, mcp
+├── mcp/                ← Thin MCP adapter
+│   ├── server.ts       ← stdio transport
+│   ├── tools.ts        ← 8 MCP tools
+│   ├── resources.ts    ← 4 MCP resources
+│   └── prompts.ts      ← 4 MCP prompts
+└── index.ts            ← Public API
 ```
 
-Or use directly with `npx`:
-```bash
-npx @organon/tools generate --all
-```
-
-## Commands
-
-### Generate
-
-Auto-generate `components.md` from codebase structure:
+## CLI Commands
 
 ```bash
-# Regenerate all domains
-organon generate --all
+# Validate frontmatter (schema, references, truthfulness, consistency)
+organon validate
+organon validate book-llms/ETHOS.md
+organon validate --stages 1 3
 
-# Regenerate specific domain
-organon generate genesis
+# Generate frontmatter from file content
+organon generate book-llms/ETHOS.md
+organon generate book-llms/ETHOS.md --update
 
-# Regenerate single domain
-organon generate --domain=agents
-```
+# Query organon files by metadata
+organon query --scope=meta
+organon query --budget=20000
+organon query --task=genesis_tool_impl
 
-**What it does:**
-- Scans domain directories (domain/, application/, transport/)
-- Detects features via directory naming conventions (fuzzy matching)
-- Generates dual-mapped components.md (By Layer + By Feature)
-- Adds auto-generated header warning
+# Health dashboard
+organon health
+organon health --detailed --fix-suggestions
 
-**Output:** `organon/domains/<domain>/components.md`
+# Cross-domain discovery
+organon find --file=src/domain/genesis/Store.ts
+organon find --scope=domain
+organon find --name=frontmatter
 
-### Verify
-
-Verify organon integrity across the codebase:
-
-```bash
-# Run all verification gates
+# Run verification gates
 organon verify
+organon verify --gate frontmatter triplets
 
-# Run specific gate
-organon verify --gate=dual-mapping
+# Start MCP server
+organon mcp
 ```
 
-**Verification Gates:**
-1. **File References**: All file paths in organons exist
-2. **RFC References**: All RFC references resolve
-3. **Event References**: All EventBus event types exist
-4. **Dual Mapping**: components.md has correct structure and freshness (<24 hours)
+## MCP Server
 
-**Exit codes:**
-- `0`: All gates passed ✅
-- `1`: One or more gates failed ❌
+Start with `organon mcp`. Exposes:
 
-### Find
+**8 Tools:** `organon_validate_frontmatter`, `organon_generate_frontmatter`, `organon_query`, `organon_health`, `organon_find`, `organon_verify_triplets`, `organon_suggest_tools`, `organon_verify`
 
-Cross-domain discovery and navigation:
+**4 Resources:** `organon://index`, `organon://file/{path}`, `organon://scope/{scope}`, `organon://health`
 
-```bash
-# Find which domain owns a file
-organon find --file=GenesisStore.ts
+**4 Prompts:** `implement-feature`, `review-changes`, `create-organon`, `evolve-organon`
 
-# Find which domains implement a feature
-organon find --feature=tool-registry
+### Claude Code Integration
 
-# Show domain overview (layer + feature breakdown)
-organon find --domain=genesis
+```json
+{
+  "mcpServers": {
+    "organon": {
+      "command": "npx",
+      "args": ["tsx", "organon-tools/src/cli/index.ts", "mcp", "--project-root", "."]
+    }
+  }
+}
 ```
 
-**Search Performance:**
-- Target: <500ms for file/feature search
-- Strategy: Scans pre-generated components.md files (not source code)
-- Scales: Sub-linear performance regardless of codebase size
+## Configuration
 
-## Migration from agent-tavern
+Place `organon.config.json` at your project root:
 
-This package extracts organon tooling from [agent-tavern](https://github.com/VledicFranco/agent-tavern) to make it reusable across projects.
-
-**Current status:** Scaffolding complete, implementation in progress
-
-**Source files to migrate:**
-```
-agent-tavern/scripts/organon/
-├── generate-components.ts    → src/commands/generate.ts
-├── verify.ts                 → src/commands/verify.ts
-├── find.ts                   → src/commands/find.ts
-├── lib/
-│   ├── file-scanner.ts       → src/lib/file-scanner.ts
-│   ├── feature-detector.ts   → src/lib/feature-detector.ts
-│   ├── dual-mapper.ts        → src/lib/dual-mapper.ts
-│   └── dual-template.ts      → src/lib/dual-template.ts
-└── verify-*.ts               → src/lib/verifiers/
+```json
+{
+  "organonPaths": ["book-llms", "organon", "."],
+  "organonGlobs": ["**/ETHOS.md", "**/PHILOSOPHY.md", "**/PROTOCOL.md", "**/README.md"],
+  "ignorePatterns": ["node_modules/**", "dist/**"],
+  "workflowPaths": {
+    "claudeCode": ".claude/skills",
+    "cursor": ".cursor/rules"
+  },
+  "freshnessThresholdHours": 720
+}
 ```
 
-## Future: MCP Server
+Without a config file, conventions are used: scans for `organon/` and `book-llms/` directories automatically.
 
-Planned MCP server for IDE integration:
+## Programmatic API
 
-```bash
-# Start MCP server (future)
-organon mcp --port 3000
+```typescript
+import { validateFrontmatter, resolveConfig, NodeFileSystem } from '@organon/tools';
+
+const fs = new NodeFileSystem();
+const config = await resolveConfig('.', fs);
+const result = await validateFrontmatter({ projectRoot: '.', config, fs });
 ```
-
-**Capabilities:**
-- Real-time organon verification on file save
-- Auto-complete for domain/feature names
-- Jump-to-definition for organon references
-- Inline warnings for stale documentation
 
 ## Development
 
 ```bash
-# Install dependencies
 npm install
-
-# Build
 npm run build
-
-# Development (watch mode)
-npm run dev
-
-# Run locally
-npm run organon:generate
-npm run organon:verify
-npm run organon:find -- --file=MyFile.ts
+npm run dev          # watch mode
+npm test             # vitest
+npm run organon      # run CLI locally
 ```
 
 ## License
 
 MIT
-
-## References
-
-- **[Organon Book (LLMs)](../book-llms/)** — Full methodology documentation
-- **[Agent Tavern](https://github.com/VledicFranco/agent-tavern)** — Reference implementation
-- **[Organon Methodology RFC 027](https://github.com/VledicFranco/agent-tavern/blob/master/rfcs/027-organon-maintenance-tooling.md)** — Tooling design

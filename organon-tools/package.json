@@ -5,16 +5,27 @@
   "type": "module",
   "main": "dist/index.js",
   "bin": {
-    "organon": "dist/cli.js"
+    "organon": "dist/cli/index.js"
+  },
+  "exports": {
+    ".": "./dist/index.js",
+    "./core/*": "./dist/core/*.js"
   },
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
     "clean": "rm -rf dist",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "prepublishOnly": "npm run clean && npm run build",
-    "organon:generate": "tsx src/cli.ts generate",
-    "organon:verify": "tsx src/cli.ts verify",
-    "organon:find": "tsx src/cli.ts find"
+    "organon": "tsx src/cli/index.ts",
+    "organon:validate": "tsx src/cli/index.ts validate",
+    "organon:generate": "tsx src/cli/index.ts generate",
+    "organon:query": "tsx src/cli/index.ts query",
+    "organon:health": "tsx src/cli/index.ts health",
+    "organon:find": "tsx src/cli/index.ts find",
+    "organon:verify": "tsx src/cli/index.ts verify",
+    "organon:mcp": "tsx src/cli/index.ts mcp"
   },
   "keywords": [
     "organon",
@@ -35,14 +46,18 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.26.0",
     "chalk": "^5.3.0",
     "glob": "^13.0.1",
-    "yargs": "^17.7.2"
+    "yaml": "^2.8.2",
+    "yargs": "^17.7.2",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
     "@types/yargs": "^17.0.32",
     "tsx": "^4.21.0",
-    "typescript": "^5.3.0"
+    "typescript": "^5.3.0",
+    "vitest": "^4.0.18"
   }
 }
