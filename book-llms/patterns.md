@@ -3,7 +3,7 @@ type: rationale
 scope: meta
 name: patterns
 version: "3.0"
-summary: Common patterns and anti-patterns — progressive disclosure, enforcement loop, RFC-driven evolution, methodology scope, and more
+summary: Common patterns and anti-patterns — progressive disclosure, enforcement loop, code mapping, verification, onboarding, and more
 token_estimate: 8800
 pattern_count: 21
 inherits_from: [meta-organon]
