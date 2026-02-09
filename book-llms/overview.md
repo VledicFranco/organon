@@ -46,16 +46,10 @@ When humans collaborate with LLMs on complex systems, a predictable set of probl
 
 | ID | Gap | Problem | Current State | Suggested Priority |
 |----|-----|---------|---------------|--------------------|
-| G1 | **Cross-project methodology sharing** | Multiple projects adopt Organon but have no way to share patterns, sync methodology updates, or contribute back | Version pinning exists but there is no sync mechanism, shared registry, or migration tooling | v2 |
-| G2 | **Sibling scope conflict resolution** | Two organons at the same scope level give contradictory guidance | Parent-child inheritance is specified; sibling conflicts have no resolution rule | Later |
-| G3 | **Invariant-to-test tracking** | No concrete mechanism to track which invariants have tier-4 tests and which don't | `@organon-invariant` annotation is mentioned but not specified; no coverage report format | v1 |
-| G4 | **Human review workflow** | When manual-tier protocols need human judgment, there is no structured pattern for how that review happens | Methodology focuses on automation; human review is "keep at manual tier" with no further guidance | Later |
-| G5 | **Multi-agent coordination** | Multiple LLM sessions working concurrently on the same project may produce conflicting changes | No concurrency model, no lock/claim mechanism, no conflict avoidance pattern | v2 |
-| G6 | **Rollback / recovery** | When an organon change turns out to be wrong, what is the recovery process? | RFCs handle forward evolution; no explicit rollback pattern | Later |
-| G7 | **Methodology effectiveness metrics** | No way to track whether the methodology is actually working over time | Health dashboard exists for point-in-time checks; no longitudinal tracking | v2 |
-| G8 | **Workflow authoring guidance** | What makes a good workflow vs a bad one? | Universal contract defines required fields but not quality attributes, error handling patterns, or common workflow shapes | v1 |
-| G9 | **Tool composition patterns** | Tools must be "composable" but there is no pattern for how they compose | Workflows orchestrate tools, but no composition primitives are defined | Later |
-| G10 | **Emergency override** | What happens when you need to bypass the enforcement loop? (hotfix, CI down) | No documented escape hatch or override mechanism | v1 |
+| G1 | **Invariant-to-test tracking** | No concrete mechanism to track which invariants have tier-4 tests and which don't | `@organon-invariant` annotation is mentioned but not specified; no coverage report format | v1 |
+| G2 | **Methodology effectiveness metrics** | No way to track whether the methodology is actually working over time | Health dashboard exists for point-in-time checks; no longitudinal tracking | v1 |
+| G3 | **Workflow authoring guidance** | What makes a good workflow vs a bad one? | Universal contract defines required fields but not quality attributes, error handling patterns, or common workflow shapes | v1 |
+| G4 | **Sibling scope conflict resolution** | Two organons at the same scope level give contradictory guidance | Parent-child inheritance is specified; sibling conflicts have no resolution rule | Later |
 
 ---
 
@@ -63,22 +57,22 @@ When humans collaborate with LLMs on complex systems, a predictable set of probl
 
 **v1 candidates** — address these to close the most impactful specification gaps:
 
-- **G3 (Invariant-to-test tracking):** Core to the enforcement promise. Without a concrete tracking mechanism, "100% invariant coverage" is aspirational.
-- **G8 (Workflow authoring guidance):** Workflows are what users actually create most. The universal contract says *what fields* are required but not *what good looks like*.
-- **G10 (Emergency override):** Every enforcement system needs a documented escape hatch. Without one, teams bypass the system ad-hoc.
+- **G1 (Invariant-to-test tracking):** Core to the enforcement promise. Without a concrete tracking mechanism, "100% invariant coverage" is aspirational.
+- **G2 (Methodology effectiveness metrics):** "Is the methodology working?" is a meta question the methodology should answer, not leave to implementers.
+- **G3 (Workflow authoring guidance):** Workflows are what users actually create most. The universal contract says *what fields* are required but not *what good looks like*.
 
-**v2 candidates** — address once there is real multi-project or multi-team usage data:
+**Later** — rare in practice:
 
-- **G1 (Cross-project sharing):** Requires registry infrastructure and migration tooling.
-- **G5 (Multi-agent coordination):** Requires concurrency patterns that depend on real collision data.
-- **G7 (Methodology effectiveness metrics):** Requires longitudinal data to design meaningful metrics.
+- **G4 (Sibling scope conflicts):** Parent-child inheritance covers most cases; same-level conflicts are uncommon.
 
-**Later** — edge cases that can wait for maturity:
+**Out of scope** — concerns left to implementers, just as Agile leaves sprint logistics to teams:
 
-- **G2 (Sibling scope conflicts):** Rare in practice; parent-child covers most cases.
-- **G4 (Human review workflow):** Low frequency; manual-tier protocols are inherently judgment-heavy.
-- **G6 (Rollback/recovery):** Git revert is the implicit mechanism; explicit documentation is nice-to-have.
-- **G9 (Tool composition):** Workflow orchestration handles most cases; primitives can emerge from usage patterns.
+- Cross-project sharing (tooling/ecosystem concern; version pinning is the methodology's answer)
+- Multi-agent coordination (infrastructure concern)
+- Emergency override (operational decision)
+- Rollback/recovery (git operations; RFCs cover forward evolution)
+- Tool composition (tech-stack specific)
+- Human review workflow (team-specific process)
 
 ---
 
