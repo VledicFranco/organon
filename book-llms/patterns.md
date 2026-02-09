@@ -642,7 +642,9 @@ A `components.md` file per domain, auto-generated from code, providing dual navi
 - **Co-located** — lives alongside the domain's `ETHOS.md`
 - **Dual mapping** — navigate by architectural layer OR by feature
 - **Bidirectional** — code→organon ("who owns this file?") and organon→code ("what implements this?")
-- **Freshness-enforced** — drift detection in CI ensures the mapping matches current code
+- **Freshness-enforced** — drift detection in CI ensures the mapping matches current code (see [drift detection](./three-layer-architecture.md#drift-detection))
+
+**Frontmatter schema:** Mapping files use `type: mapping` with `file_count` and `last_generated` fields. See [frontmatter-system.md](./frontmatter-system.md#componentsmd-type-mapping) for the full schema.
 
 ### When to use
 

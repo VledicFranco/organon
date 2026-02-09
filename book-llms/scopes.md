@@ -183,6 +183,8 @@ When an LLM starts work:
 
 **Accumulative:** Each level adds constraints. By step 4, the LLM has internalized product + domain + feature constraints.
 
+**For token-budget-aware loading** (frontmatter-first filtering, budget guidelines): see the [Context Loading Strategy](./patterns.md#context-loading-strategy-pattern) pattern.
+
 ---
 
 ## When to Create Scopes
