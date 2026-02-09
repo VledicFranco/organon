@@ -266,7 +266,7 @@ protocols:
     name: [protocol-name]
     steps: [number]
     automation_tier: [automated|semi-automated|manual]
-    skill: [skill-name]        # if automated
+    workflow: [workflow-name]   # if automated
     tools: [tool-list]
     complexity: [high|medium|low]
 inherits_from: [parent-scope-names]

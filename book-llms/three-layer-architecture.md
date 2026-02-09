@@ -2,7 +2,7 @@
 type: rationale
 scope: meta
 name: three-layer-architecture
-version: "2.0"
+version: "3.0"
 summary: The enforcement loop — how protocols, workflows, and tools bind the methodology to LLM execution, making organons executable and verifiable
 token_estimate: 8500
 decision_count: 8
@@ -59,7 +59,7 @@ Three layers bind declarative knowledge to executable behavior. Together they fo
 │   ┌───────────────────────┐                                     │
 │   │  WORKFLOWS            │  Layer 2: Agent Binding             │
 │   │  (Agent Config)       │  "HOW to orchestrate"               │
-│   │                       │  Agent-specific skill/workflow files │
+│   │                       │  Agent-specific workflow bindings     │
 │   │  - Tool sequencing    │  Technology: Varies by agent        │
 │   │  - Error handling     │                                     │
 │   │  - Context loading    │                                     │
@@ -164,17 +164,34 @@ Not every protocol needs a workflow. Use these criteria:
 
 ## Layer 2: Workflows (Agent Binding)
 
-**What they are:** Executable implementations of protocols that tell a specific LLM agent how to orchestrate tools. This is the binding layer — it translates "what must happen" (protocol) into "what the agent does" (tool invocations in sequence).
+**What they are:** Easily discoverable mechanisms that guide an LLM in instantiating a protocol. This is the binding layer — it translates "what must happen" (protocol) into "what the agent does" (tool invocations in sequence). A workflow can be an agent skill, a system prompt directive, a runbook, a CI/CD pipeline, or any other mechanism the agent can find and follow.
 
-**The universal contract:** Regardless of which LLM or agent system hosts them, all workflow bindings must:
+### What counts as a workflow
+
+A workflow is any **easily discoverable mechanism** that guides an LLM in instantiating a protocol. The key properties: the agent can find it, it references a protocol, and it orchestrates tools. Different environments offer different workflow mechanisms:
+
+| Workflow Mechanism | Example | Discovery Method | Best For |
+|--------------------|---------|------------------|----------|
+| **Agent skills** | Claude Code `.claude/skills/`, Cursor `.cursor/rules/` | Loaded by agent framework | Structured, multi-step protocols |
+| **System prompt directives** | `CLAUDE.md`, `.cursorrules`, `.github/copilot-instructions.md` | Auto-loaded at session start | Always-on constraints and simple protocols |
+| **Runbooks** | `organon/workflows/<name>.md` | Agent reads as context | Any LLM, no framework dependency |
+| **Custom assistants** | OpenAI Assistants, Custom GPTs | Pre-configured in platform | Dedicated single-purpose agents |
+| **CI/CD pipeline definitions** | GitHub Actions, GitLab CI jobs | Triggered by events | Enforcement outside the agent session |
+| **Git hooks** | pre-commit, pre-push scripts | Triggered by git operations | Automated gate enforcement |
+
+**Agent skills are the most common workflow mechanism** because they are the most structured and discoverable form. But a plain markdown runbook that an LLM reads and follows is equally valid — the universal contract applies regardless of mechanism.
+
+### The universal contract
+
+Regardless of which mechanism hosts them, all workflow bindings must:
 
 1. **Reference their protocol** — via protocol ID and file path (bidirectional traceability)
 2. **Specify tool orchestration** — which tools to run, in what order, with what arguments
 3. **Provide context loading guidance** — which organon files to read before execution
 4. **Handle errors** — what to do when tools fail or gates don't pass
-5. **Be invocable** — the agent can trigger the workflow (by command, slash command, or autonomous detection)
+5. **Be discoverable** — the agent can find and invoke the workflow (by command, auto-load, slash command, or autonomous detection)
 
-### Agent-specific implementations
+### Agent-specific locations
 
 The workflow layer is the only layer that varies by agent technology. The protocol and tool layers are universal.
 
@@ -329,7 +346,7 @@ The three layers form a closed loop that makes the methodology self-enforcing:
 ┌──────────────────────────────────────────────────────────────┐
 │  2. BIND                                                     │
 │     Workflow translates protocol into LLM-executable steps   │
-│     → Skill/workflow files reference protocol + tools         │
+│     → Workflow bindings reference protocol + tools             │
 └──────────────────────┬───────────────────────────────────────┘
                        ▼
 ┌──────────────────────────────────────────────────────────────┐

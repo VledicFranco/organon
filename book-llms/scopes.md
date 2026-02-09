@@ -2,7 +2,7 @@
 type: rationale
 scope: meta
 name: scopes
-version: "2.0"
+version: "3.0"
 summary: How organons apply at different levels — product, domain, feature, component — with inheritance rules and navigation patterns
 token_estimate: 3500
 decision_count: 4
@@ -33,7 +33,8 @@ audience: [llm, human]
          ▼                    ▼                    ▼
 ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐
 │ DOMAIN ORGANON  │  │ DOMAIN ORGANON  │  │ DOMAIN ORGANON  │
-│ docs/           │  │ src/            │  │ deploy/         │
+│ organon/domains │  │ organon/domains │  │ organon/domains │
+│ /billing/       │  │ /agents/        │  │ /tenants/       │
 └─────────────────┘  └─────────────────┘  └─────────────────┘
          │
          ├─────────────────────┬─────────────────────┐
@@ -168,7 +169,7 @@ When an LLM starts work:
 | Domain has unique constraints not applicable elsewhere | Create domain organon |
 | Feature requires specialized decision guidance | Create feature organon |
 | Different agents work on different parts independently | Scope organons to their areas |
-| Parent ethos exceeds 150 lines | Split into child scopes |
+| Parent ethos covers multiple distinct domains | Split into child scopes |
 | Constraints apply project-wide | Keep in product organon (don't split) |
 
 ---
@@ -200,16 +201,16 @@ When an LLM starts work:
 3. All public APIs are backwards-compatible within major version
 ```
 
-**Documentation Organon (`/docs/ETHOS.md`):**
+**Documentation Organon (`/organon/domains/docs/ETHOS.md`):**
 ```markdown
 ## Identity
-- IS: LLM-optimized documentation
+- IS: LLM-optimized documentation with progressive disclosure
 - IS NOT: Tutorials, marketing, API reference
 
 ## Invariants
 1. Code is source of truth
 2. README as router (every directory has README.md)
-3. File size limits (content < 200 lines)
+3. Every file has YAML frontmatter for progressive disclosure
 
 (Inherits: no runtime type errors, modules are pure, API compatibility)
 ```
@@ -227,6 +228,20 @@ When an LLM starts work:
 
 (Inherits: all product + documentation constraints)
 ```
+
+---
+
+## Scopes and the Enforcement Loop
+
+Each scope level can have its own protocols, workflows, and tools. The enforcement loop operates at every scope:
+
+- **Product scope:** Project-wide protocols (e.g., pre-merge verification) bind to workflows that enforce product-level invariants
+- **Domain scope:** Domain-specific protocols (e.g., event schema validation) bind to workflows that enforce domain invariants
+- **Feature scope:** Feature-specific protocols (e.g., cache TTL validation) bind to tools that verify feature constraints
+
+**Progressive disclosure applies to scope navigation.** An LLM uses frontmatter fields (`scope`, `required_for`, `load_priority`) to filter organons by scope before loading. This means a 50-organon project costs ~2,500 tokens to discover — the LLM loads only the scopes relevant to the current task.
+
+**LLM-centric scope loading order:** The LLM reads product organon first (always), then domain (if entering that domain), then feature (if working on that feature). Each level adds constraints. By the time the LLM begins work, it has internalized the full constraint hierarchy without loading irrelevant scopes.
 
 ---
 

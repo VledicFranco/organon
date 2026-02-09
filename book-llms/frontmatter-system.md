@@ -2,7 +2,7 @@
 type: rationale
 scope: meta
 name: frontmatter-system
-version: "2.0"
+version: "3.0"
 summary: YAML frontmatter specification for progressive disclosure — the mechanism that makes token-efficient big organons possible
 token_estimate: 5000
 decision_count: 6
@@ -117,7 +117,7 @@ protocols:                    # Protocol metadata array
     name: string              # Human-readable name
     steps: number             # Number of steps
     automation_tier: string   # automated | semi-automated | manual
-    skill: string             # Skill name (if automation_tier == automated)
+    workflow: string           # Workflow binding name (if automation_tier == automated)
     tools: string[]           # Required tools/scripts
     complexity: string        # high | medium | low
 ```
@@ -264,7 +264,7 @@ Frontmatter must be **truthful** — automated tests enforce accuracy.
 - `name` matches parent directory name
 - `scope` matches directory structure (`domains/` → `scope: domain`)
 - Related references are bidirectional (if A references B, B references A)
-- If `automation_tier == "automated"`, skill file exists and references back
+- If `automation_tier == "automated"`, workflow binding exists and references back
 
 ---
 

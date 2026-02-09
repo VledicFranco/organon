@@ -2,7 +2,7 @@
 type: navigation
 scope: meta
 name: book-llms
-version: "2.0"
+version: "3.0"
 summary: Navigation for the Organon technical reference — methodology spec optimized for LLM consumption
 token_estimate: 250
 provides: [ethos, philosophy, patterns, scopes, templates, frontmatter-system, three-layer-architecture, protocols]
@@ -18,7 +18,7 @@ Technical reference for the Organon Methodology, optimized for LLM consumption.
 Organon is a documentation methodology built on three pillars:
 1. **Code as single source of truth** — documentation derives from code, never prescribes it
 2. **Progressive disclosure** — agents access files in layers (frontmatter → sections → full file), never paying for content they don't need
-3. **Three-layer architecture** — protocols (knowledge) → skills (workflows) → tools (operations)
+3. **Three-layer architecture** — protocols (knowledge) → workflows (agent bindings) → tools (operations)
 
 ## Contents
 
@@ -30,7 +30,7 @@ Organon is a documentation methodology built on three pillars:
 | [scopes.md](./scopes.md) | rationale | Scope hierarchy (product → domain → feature → component) |
 | [templates.md](./templates.md) | rationale | Copy-paste templates for ETHOS, PHILOSOPHY, PROTOCOL (all with frontmatter) |
 | [frontmatter-system.md](./frontmatter-system.md) | rationale | YAML frontmatter specification — the mechanism for progressive disclosure |
-| [three-layer-architecture.md](./three-layer-architecture.md) | rationale | Protocols → Skills → Tools binding pattern |
+| [three-layer-architecture.md](./three-layer-architecture.md) | rationale | Protocols → Workflows → Tools enforcement loop |
 | [protocols/](./protocols/) | procedures | Operational procedures (semantic mapping, etc.) |
 
 ## Reading Order for LLMs
@@ -42,7 +42,7 @@ When implementing Organon in a new codebase:
 3. **templates.md** — Get copy-paste scaffolds with frontmatter for each artifact type.
 4. **frontmatter-system.md** — Deep dive on YAML frontmatter schema and validation.
 5. **scopes.md** — Understand the scope hierarchy and inheritance rules.
-6. **three-layer-architecture.md** — Bind protocols to executable skills and tools.
+6. **three-layer-architecture.md** — Bind protocols to executable workflows and tools.
 7. **PHILOSOPHY.md** — Optional. Read when you need to understand *why* a decision was made.
 
 ## Audience

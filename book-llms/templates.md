@@ -2,7 +2,7 @@
 type: rationale
 scope: meta
 name: templates
-version: "2.0"
+version: "3.0"
 summary: Copy-paste templates for ETHOS, PHILOSOPHY, and PROTOCOL files — all with frontmatter and standardized sections
 token_estimate: 4200
 decision_count: 0
@@ -202,7 +202,7 @@ protocols:
     name: [Protocol Name]
     steps: [number]
     automation_tier: [automated|semi-automated|manual]
-    skill: [skill-name]        # only if automated
+    workflow: [workflow-name]   # only if automated
     tools: [tool-list]         # only if automated or semi-automated
     complexity: [high|medium|low]
 inherits_from: [parent-scope-names]
@@ -264,6 +264,72 @@ If something goes wrong:
 | [Failure mode 1] | [How to recover] |
 | [Failure mode 2] | [How to recover] |
 ```
+
+---
+
+## Workflow Template
+
+A workflow binds a protocol to LLM-executable steps. This template follows the universal contract from `three-layer-architecture.md`. Adapt the format to your agent technology (skill file, runbook, system prompt directive, etc.).
+
+```markdown
+---
+name: [workflow-name]
+protocol_id: [PROTO-SCOPE-N]              # ← References protocol (REQUIRED)
+protocol_file: [path/to/PROTOCOLS.md]     # ← Protocol source (REQUIRED)
+tools: [tool-list]                        # Tools orchestrated by this workflow
+context:                                  # Organon files to load before execution
+  - [/ETHOS.md]
+  - [path/to/domain/ETHOS.md]
+---
+
+# Workflow: [Task Name]
+
+> Implements [PROTO-SCOPE-N] from `[path/to/PROTOCOLS.md]`.
+
+## Context Loading
+
+1. Load product organons:
+   - Read `/ETHOS.md`, `/PHILOSOPHY.md`
+2. Load domain organons:
+   - Read `[domain/ETHOS.md]`
+3. Load protocol-specific context:
+   - Run `[context-tool]`
+
+## Steps
+
+1. **[Step name].** [What the agent does — which tool to invoke, what to check.]
+
+2. **[Step name].** [Next action.]
+
+   **Decision point:** If [condition], [action A]. Otherwise, [action B].
+
+3. **[Step name].** [Next action.]
+
+## Verification
+
+Run verification tools:
+- `[verify-tool]` — check [what it checks]
+- `[validate-tool]` — check [what it checks]
+
+If any gate fails, fix the issue and re-run verification.
+
+## Error Recovery
+
+| Failure | Recovery Action |
+|---------|-----------------|
+| [Tool fails] | [How to recover] |
+| [Verification fails] | [How to recover] |
+```
+
+**Adapting to your agent technology:**
+
+| Mechanism | How to adapt |
+|-----------|--------------|
+| Claude Code skill | Add `invocation:` and `user-invocable:` to frontmatter, place in `.claude/skills/<name>/skill.md` |
+| System prompt directive | Embed key steps directly in `CLAUDE.md` or `.cursorrules`, reference protocol by link |
+| Runbook | Place in `organon/workflows/`, agent reads as context when the protocol is triggered |
+| CI/CD pipeline | Translate steps to pipeline stages, tools become job commands |
+| Git hook | Translate verification steps to hook script, triggered automatically |
 
 ---
 

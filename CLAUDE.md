@@ -12,7 +12,7 @@
 - A meta-organon: it documents itself using its own rules
 - Three deliverables: `book-llms/` (LLM reference), `book-humans/` (narrative guide), `organon-tools/` (CLI)
 - The canonical definition of the Organon methodology
-- A three-layer system: protocols (knowledge) → skills (workflows) → tools (operations)
+- A three-layer system: protocols (knowledge) → workflows (agent bindings) → tools (operations)
 
 ### What This Project IS NOT
 
@@ -35,7 +35,7 @@
 
 5. **Backward-compatible methodology.** Changes to core methodology must not break existing organon implementations in other projects.
 
-6. **Bidirectional references.** When a protocol declares `automation_tier: automated`, the referenced skill must exist and reference back. No orphans in either direction.
+6. **Bidirectional references.** When a protocol declares `automation_tier: automated`, the referenced workflow must exist and reference back. No orphans in either direction.
 
 ---
 
@@ -73,7 +73,7 @@
 | Unsure if something belongs here vs Agent Tavern | Specification and methodology go here. Implementation-specific patterns stay in Agent Tavern. |
 | README exceeds 100 lines | READMEs are still routers, not content. Split content into dedicated files. |
 | Adding a new scope/directory | Include a README.md as router. Follow Pattern A (dedicated `organon/` directory). |
-| Deciding automation tier for a protocol | Manual: judgment required. Semi-automated: 1-2 steps, single tool. Automated (skill): ≥5 steps, cross-domain, error-prone, frequent. |
+| Deciding automation tier for a protocol | Manual: judgment required. Semi-automated: 1-2 steps, single tool. Automated (workflow): ≥5 steps, cross-domain, error-prone, frequent. |
 
 ---
 
@@ -115,7 +115,7 @@ organon/
 │   ├── scopes.md                     ← Scope hierarchy
 │   ├── templates.md                  ← Copy-paste scaffolds
 │   ├── frontmatter-system.md         ← YAML frontmatter specification
-│   ├── three-layer-architecture.md   ← Protocols → Skills → Tools
+│   ├── three-layer-architecture.md   ← Protocols → Workflows → Tools
 │   └── protocols/                    ← Step-by-step procedures
 ├── book-humans/                      ← Narrative guide (planned, outline only)
 ├── organon/                          ← This project's own organon hierarchy

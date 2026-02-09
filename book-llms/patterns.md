@@ -284,9 +284,9 @@ Principles are numbered by priority:
 3. **Simple over complete.** Solve the common case well before edge cases.
 ```
 
-**Conflict resolution:** When principles conflict, higher number wins.
+**Conflict resolution:** When principles conflict, lower number wins (higher priority).
 
-**Example conflict:** "Make it fast" vs "Make it safe" → Safety wins (principle 1).
+**Example conflict:** "Make it fast" vs "Make it safe" → Safety wins (principle 1 beats principle 3).
 
 ---
 
@@ -464,5 +464,5 @@ Two primary patterns for organizing organon directories:
 | Stale organon | Contradicts current code | Update organon or code |
 | Missing meta-organon | Organon methodology is undocumented | Create `organon/ETHOS.md` for the system itself |
 | Buried product ethos | ETHOS.md hidden in subdirectory | Move to repository root |
-| Orphaned skill | Skill exists without protocol reference | Add `protocol_id` and `protocol_file` to skill |
-| Phantom automation | Protocol claims `automated` but skill doesn't exist | Create skill or change tier to `manual` |
+| Orphaned workflow | Workflow exists without protocol reference | Add `protocol_id` and `protocol_file` to workflow |
+| Phantom automation | Protocol claims `automated` but workflow doesn't exist | Create workflow or change tier to `manual` |
