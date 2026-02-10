@@ -252,6 +252,23 @@ export interface TripletBinding {
   issues: DiagnosticMessage[];
 }
 
+export interface WorkflowValidationResult {
+  success: boolean;
+  workflowsChecked: number;
+  workflowsWithErrors: number;
+  workflowsWithWarnings: number;
+  results: WorkflowFileResult[];
+  errors: DiagnosticMessage[];
+  warnings: DiagnosticMessage[];
+}
+
+export interface WorkflowFileResult {
+  file: string;
+  valid: boolean;
+  errors: DiagnosticMessage[];
+  warnings: DiagnosticMessage[];
+}
+
 export interface SuggestToolsResult {
   success: boolean;
   suggestions: ToolSuggestion[];

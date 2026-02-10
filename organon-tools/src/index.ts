@@ -31,6 +31,8 @@ export type {
   FindMatch,
   VerifyTripletsResult,
   TripletBinding,
+  WorkflowValidationResult,
+  WorkflowFileResult,
   SuggestToolsResult,
   ToolSuggestion,
   VerifyResult,
@@ -84,6 +86,10 @@ export type { VerifyOptions } from './core/verify.js';
 
 // Invariant coverage
 export { computeInvariantCoverage, extractInvariants, scanTestAnnotations, computeCoverage } from './core/invariant-coverage.js';
+
+// Workflow validation
+export { validateWorkflow } from './core/validate-workflow.js';
+export type { ValidateWorkflowOptions } from './core/validate-workflow.js';
 
 // Protocol parsing
 export { parseProtocols } from './core/add-protocols-array.js';

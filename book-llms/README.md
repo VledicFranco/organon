@@ -5,7 +5,7 @@ name: book-llms
 version: "3.0"
 summary: Navigation for the Organon technical reference — methodology spec optimized for LLM consumption
 token_estimate: 850
-provides: [overview, ethos, philosophy, patterns, scopes, templates, frontmatter-system, three-layer-architecture, invariant-tracking, protocols]
+provides: [overview, ethos, philosophy, patterns, scopes, templates, frontmatter-system, three-layer-architecture, invariant-tracking, workflow-authoring, protocols]
 parent: organon-root
 ---
 
@@ -35,6 +35,7 @@ Organon is a documentation methodology built on five pillars:
 | [frontmatter-system.md](./frontmatter-system.md) | rationale | YAML frontmatter specification — the mechanism for progressive disclosure |
 | [three-layer-architecture.md](./three-layer-architecture.md) | rationale | Protocols → Workflows → Tools enforcement loop — includes tiered testing, verification gates, drift detection |
 | [invariant-tracking.md](./invariant-tracking.md) | rationale | Invariant-to-test tracking — stable IDs, test annotations, coverage reports |
+| [workflow-authoring.md](./workflow-authoring.md) | rationale | Workflow authoring guidance — quality attributes, archetypes, error handling patterns |
 | [protocols/](./protocols/) | procedures | Operational procedures (semantic mapping, etc.) |
 
 ## Reading Order for LLMs

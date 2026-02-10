@@ -247,3 +247,62 @@ token_estimate: 100
 - [PHILOSOPHY.md](PHILOSOPHY.md)
 `;
 }
+
+/**
+ * Create a minimal workflow file for testing.
+ */
+export function makeWorkflow(opts?: {
+  name?: string;
+  protocolId?: string;
+  protocolFile?: string;
+  tools?: string[];
+  context?: string[];
+  includeRecovery?: boolean;
+  steps?: number;
+}): string {
+  const {
+    name = 'test-workflow',
+    protocolId = 'PROTO-TEST-1',
+    protocolFile = 'PROTOCOLS.md',
+    tools = ['tool:verify'],
+    context = ['/ETHOS.md'],
+    includeRecovery = true,
+    steps = 3,
+  } = opts ?? {};
+
+  const toolsYaml = tools.map((t) => `  - ${t}`).join('\n');
+  const contextYaml = context.map((c) => `  - ${c}`).join('\n');
+
+  const stepLines = Array.from({ length: steps }, (_, i) =>
+    `${i + 1}. **Step ${i + 1}.** Run \`${tools[0] ?? 'tool:action'}\` to do thing ${i + 1}.`,
+  ).join('\n\n');
+
+  const recoverySection = includeRecovery
+    ? `\n## Error Recovery\n\n| Failure | Recovery Action |\n|---------|------------------|\n| Tool fails | Re-run after fixing the issue |\n`
+    : '';
+
+  return `---
+name: ${name}
+protocol_id: ${protocolId}
+protocol_file: ${protocolFile}
+tools:
+${toolsYaml}
+context:
+${contextYaml}
+---
+
+# Workflow: ${name}
+
+## Context Loading
+
+1. Load product organons
+
+## Steps
+
+${stepLines}
+
+## Verification
+
+Run verification tools.
+${recoverySection}`;
+}
