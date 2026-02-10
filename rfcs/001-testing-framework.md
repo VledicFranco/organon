@@ -37,19 +37,38 @@ audience: [llm, human]
 
 ## Problem Statement
 
-**The organon-tools product lacks a domain for tier-4 testing.** Currently, organon-tools provides verification gates (frontmatter, triplets, freshness) but has no defined domain for **automated code verification of invariants** (tier-4 testing).
+**Three interconnected gaps block tier-4 testing adoption:**
 
-**Why this domain is needed:**
+### 1. Product Incompleteness (organon-tools)
+organon-tools provides verification gates for organon files (frontmatter, triplets, freshness) but has **no domain for tier-4 testing** — the automated verification of code against invariants.
 
-1. **Gap in the enforcement loop** - Organon methodology defines tier-4 testing in `book-llms/invariant-tracking.md`, but organon-tools provides no implementation or constraints for this tier.
+### 2. Methodology Gap (enforcement loop incomplete)
+The Organon methodology defines tier-4 testing in `book-llms/invariant-tracking.md`, but provides **no implementation, no constraints, no patterns** for how testing frameworks should behave. The enforcement loop (Define → Bind → Execute → Verify → Evolve) breaks at "Verify" when invariants can't be automatically tested.
 
-2. **External teams blocked** - Projects adopting Organon must implement tier-4 testing from scratch. No reusable patterns, no coverage tracking, no integration with `organon verify`.
+### 3. External Adoption Blocked (teams lack reusable patterns)
+Projects adopting Organon must implement tier-4 testing from scratch. No semantic assertions, no coverage tracking, no integration with `organon verify`. Teams declare invariants but never automate enforcement — organons become aspirational fiction.
 
-3. **Product incompleteness** - organon-tools claims to enforce organons but can only verify organon files themselves, not the code they govern.
+---
 
-**Current state:** organon-tools has no domain organon that defines "what tier-4 testing should be" or "how testing framework should behave."
+**This RFC: First Language-Specific Solution**
 
-**Desired state:** A **testing domain** that defines the identity, constraints, and design principles for semantic tier-4 testing, with code that implements these definitions.
+This RFC addresses all three gaps **for TypeScript projects** by creating:
+1. A testing domain within organon-tools (closes product gap)
+2. Reference implementation of tier-4 testing patterns (closes methodology gap)
+3. Reusable @organon/testing library (closes adoption gap)
+
+**Language scope:** TypeScript-first by necessity (organon-tools is TypeScript, fastest path to validating approach). Future RFCs will address other languages:
+- Scala 3 (planned)
+- Python (planned)
+- Rust (planned)
+
+**Design principle:** Language-specific implementations, language-agnostic methodology. The testing domain ETHOS.md defines universal constraints (assertions must be pure, coverage must be tracked). TypeScript implementation follows those constraints.
+
+---
+
+**Current state:** organon-tools has no testing domain organon. No language has tier-4 testing support.
+
+**Desired state:** A testing domain that defines universal tier-4 testing constraints, with TypeScript as first implementation proving the pattern.
 
 ---
 
