@@ -4,7 +4,7 @@ scope: meta
 name: three-layer-architecture
 version: "3.0"
 summary: The enforcement loop — protocols, workflows, tools, and verification (tiered testing, drift detection, violation handling) bind organons to LLM execution
-token_estimate: 10603
+token_estimate: 10672
 inherits_from: [meta-organon]
 load_priority: high
 required_for:
@@ -516,7 +516,7 @@ Structural tests are cheap and universal. Semantic tests are expensive and proje
 
 - **File location:** Tier-4 tests live alongside tier 1-3 tests in the project's test suite (e.g., `test/organon/`, `__tests__/organon/`, `spec/organon_spec.rb`)
 - **Discovery:** Test runner finds tier-4 tests via annotation scan (search test files for `@organon-invariant` pattern)
-- **Naming convention:** Prefix test names with scope for clarity (e.g., `test_product_cache_ttl_max_24h`, `test_meta_ethos_required`)
+- **Naming convention:** Prefix test names with scope for clarity: `test_{scope}_{invariant_name}` where scope = frontmatter scope (product, meta, domain, feature, component) and invariant_name = kebab-case description (e.g., `test_product_cache_ttl_max_24h`, `test_meta_ethos_required`)
 - **Failure format:** When tier-4 test fails, error message must include:
   - Invariant ID violated (e.g., `INV-CACHE-3`)
   - Invariant description from ETHOS.md
@@ -558,7 +558,7 @@ A universal checklist for CI gates. Adapt per project:
 - `GATE_FAIL` — Gate failed with errors (blocks merge)
 - `GATE_WARN` — Gate passed with warnings (info only, doesn't block)
 
-See [workflow-authoring.md](./workflow-authoring.md) for detailed error code catalog (`WORKFLOW_MISSING_PROTOCOL_ID`, etc.).
+See [workflow-authoring.md](./workflow-authoring.md) for workflow-quality gate error codes (`WORKFLOW_MISSING_PROTOCOL_ID`, `WORKFLOW_BROKEN_CONTEXT_REF`, etc.). Other gates use similar diagnostic code patterns.
 
 ### Drift detection
 

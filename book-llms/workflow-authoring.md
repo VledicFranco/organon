@@ -4,7 +4,7 @@ scope: meta
 name: workflow-authoring
 version: "1.0"
 summary: Workflow authoring guidance — quality attributes, archetypes, error handling patterns, and anti-patterns for Layer 2 bindings
-token_estimate: 3330
+token_estimate: 3286
 inherits_from: [meta-organon]
 load_priority: high
 required_for:
@@ -38,7 +38,7 @@ Six measurable properties of a well-written workflow. The first four are validat
 | Attribute | Definition | Automated? |
 |-----------|-----------|------------|
 | **Completeness** | Every protocol step has a corresponding workflow step or explicit skip-with-rationale | Yes — compare step counts |
-| **Traceability** | `protocol_id` and `protocol_file` reference a real protocol that references back | Yes — triplets gate |
+| **Traceability** | `protocol_id` and `protocol_file` reference a real protocol that references back | Yes — triplet-integrity gate |
 | **Context sufficiency** | `context` array lists all organon files the agent must load before execution | Yes — check paths resolve |
 | **Error recoverability** | Workflow includes an error recovery section with failure/recovery table | Yes — section scan |
 | **Idempotency awareness** | Each tool invocation is annotated as idempotent or not; non-idempotent steps include rollback guidance | No — guidance only |
@@ -49,7 +49,7 @@ Six measurable properties of a well-written workflow. The first four are validat
 When writing a workflow, check each attribute:
 
 1. Count your steps against the protocol. Missing steps? Add them or document why they're skipped.
-2. Verify `protocol_id` and `protocol_file` are set. Run `organon verify --gate triplets` to confirm bidirectional binding.
+2. Verify `protocol_id` and `protocol_file` are set. Run `organon verify --gate triplet-integrity` to confirm bidirectional binding.
 3. List every organon file the agent needs in the `context` array. If you're unsure, err on the side of including more — context overload is a warning, missing context causes silent failures.
 4. Add `## Error Recovery` with a failure/recovery table. Every tool invocation that can fail needs a recovery path.
 5. For each step, ask: "Can I run this twice safely?" If not, note it and add rollback guidance.
