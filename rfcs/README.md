@@ -46,6 +46,7 @@ See [book-llms/patterns.md](../book-llms/patterns.md#rfc-driven-evolution-patter
 |--------|-------|--------|--------|---------|
 | [001](./001-testing-framework.md) | @organon/testing Framework | Draft | organon-tools-developer | 2026-02-10 |
 | [002](./002-compound-engineering-integration.md) | Compound Engineering Integration | Draft | Claude Sonnet 4.5 | 2026-02-10 |
+| [003](./003-explore-before-ethos.md) | Explore-Before-Ethos Pattern | Draft | Claude Sonnet 4.5 | 2026-02-10 |
 
 ---
 
