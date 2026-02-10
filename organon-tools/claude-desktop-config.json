@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "organon-coach": {
+      "command": "node",
+      "args": [
+        "C:/Users/atfm0/Repositories/organon/organon-tools/dist/cli/index.js",
+        "mcp",
+        "--project-root",
+        "C:/Users/atfm0/Repositories/organon"
+      ]
+    }
+  }
+}
