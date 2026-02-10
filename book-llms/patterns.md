@@ -317,9 +317,10 @@ Protocols are invoked by name, not embedded:
 ```markdown
 ## Heuristics
 
-- Before merging, follow the [Pre-Merge Protocol](./protocols/pre-merge.md)
-- When releasing, follow the [Release Protocol](./protocols/release.md)
+- When situation X occurs, follow the [Relevant Protocol](./protocols/example.md)
 ```
+
+<!-- TODO: Document pre-merge and release protocols as concrete examples -->
 
 **Purpose:** Ethos stays focused on constraints. Protocols handle procedures.
 
