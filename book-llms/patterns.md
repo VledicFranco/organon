@@ -2,7 +2,7 @@
 type: rationale
 scope: meta
 name: patterns
-version: "3.0"
+version: "1.0"
 summary: Common patterns and anti-patterns — progressive disclosure, enforcement loop, code mapping, verification, onboarding, and more
 token_estimate: 8800
 pattern_count: 21

@@ -2,7 +2,7 @@
 type: rationale
 scope: meta
 name: templates
-version: "3.0"
+version: "1.0"
 summary: Copy-paste templates for ETHOS, PHILOSOPHY, PROTOCOL, and WORKFLOW files — all with frontmatter and standardized sections
 token_estimate: 4470
 inherits_from: [meta-organon]

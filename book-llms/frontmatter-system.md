@@ -2,7 +2,7 @@
 type: rationale
 scope: meta
 name: frontmatter-system
-version: "3.0"
+version: "1.0"
 summary: YAML frontmatter specification for progressive disclosure — the mechanism that makes token-efficient big organons possible
 token_estimate: 4124
 inherits_from: [meta-organon]

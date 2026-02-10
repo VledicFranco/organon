@@ -2,7 +2,7 @@
 type: rationale
 scope: meta
 name: three-layer-architecture
-version: "3.0"
+version: "1.0"
 summary: The enforcement loop — protocols, workflows, tools, and verification (tiered testing, drift detection, violation handling) bind organons to LLM execution
 token_estimate: 10732
 inherits_from: [meta-organon]

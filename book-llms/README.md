@@ -2,7 +2,7 @@
 type: navigation
 scope: meta
 name: book-llms
-version: "3.0"
+version: "1.0"
 summary: Navigation for the Organon technical reference — methodology spec optimized for LLM consumption
 token_estimate: 1147
 provides: [overview, ethos, philosophy, patterns, scopes, templates, frontmatter-system, three-layer-architecture, invariant-tracking, workflow-authoring, protocols]

@@ -2,7 +2,7 @@
 type: constraints
 scope: meta
 name: meta-organon
-version: "3.0"
+version: "1.0"
 summary: Core invariants, principles, and heuristics for creating organons — the foundational rules every organon must follow
 token_estimate: 4851
 invariants_count: 10

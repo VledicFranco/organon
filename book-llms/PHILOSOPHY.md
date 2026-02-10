@@ -2,7 +2,7 @@
 type: rationale
 scope: meta
 name: meta-organon-philosophy
-version: "3.0"
+version: "1.0"
 summary: Why the Organon methodology exists — LLM-centric design, enforcement through automation, progressive disclosure, and every trade-off
 token_estimate: 2972
 decision_count: 9

@@ -2,7 +2,7 @@
 type: rationale
 scope: meta
 name: scopes
-version: "3.0"
+version: "1.0"
 summary: How organons apply at different levels — product, domain, feature, component — with inheritance rules and navigation patterns
 token_estimate: 3041
 inherits_from: [meta-organon]
