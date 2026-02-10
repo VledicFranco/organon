@@ -4,7 +4,7 @@ scope: meta
 name: frontmatter-system
 version: "3.0"
 summary: YAML frontmatter specification for progressive disclosure — the mechanism that makes token-efficient big organons possible
-token_estimate: 3717
+token_estimate: 3952
 inherits_from: [meta-organon]
 load_priority: high
 required_for:
@@ -72,6 +72,8 @@ token_estimate: number    # Approximate full file token count
 | `rationale` | PHILOSOPHY.md | Reasoning, trade-offs, design decisions |
 | `procedures` | PROTOCOL.md, protocols/*.md | Step-by-step procedures with verification |
 | `mapping` | components.md | Auto-generated code-to-domain mapping |
+
+**Note on workflows:** Workflows (Layer 2 bindings between protocols and tools) use agent-specific formats and locations (e.g., Claude skills, Cursor rules, runbooks). If a workflow is stored as an organon file, use `type: procedures` with workflow-specific frontmatter fields (`protocol_id`, `protocol_file`, `tools`, `context`). See [templates.md](./templates.md) for the workflow template.
 
 ### Scope Enum
 

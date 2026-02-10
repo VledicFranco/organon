@@ -4,7 +4,7 @@ scope: meta
 name: templates
 version: "3.0"
 summary: Copy-paste templates for ETHOS, PHILOSOPHY, PROTOCOL, and WORKFLOW files — all with frontmatter and standardized sections
-token_estimate: 4204
+token_estimate: 4470
 inherits_from: [meta-organon]
 load_priority: medium
 required_for:
@@ -565,7 +565,14 @@ audience: [llm, human]
 
 ## Verification Checklist
 
-- [ ] Frontmatter counts match (3 invariants, 2 principles, 3 heuristics)
+Structural checks (always required):
+- [ ] Frontmatter present with all required fields
+- [ ] Frontmatter counts match actual content (3 invariants, 2 principles, 3 heuristics)
+- [ ] Identity boundaries are specific and testable
+- [ ] Principles are numbered by priority
+- [ ] No conflicts with parent scope constraints
+
+Feature-specific checks (caching invariants):
 - [ ] Cache keys are deterministic and include all inputs
 - [ ] TTL is set and ≤ 24 hours
 - [ ] Cache miss path works identically to non-cached path
@@ -584,7 +591,7 @@ Required fields for every organon file:
 | `name` | string | Kebab-case identifier matching directory name |
 | `version` | string | Semantic version `"X.Y"` |
 | `summary` | string | One-sentence description, max 200 chars |
-| `token_estimate` | number | Approximate full file token count |
+| `token_estimate` | number | Approximate full file token count (must be within 30% of actual; use ~12 tokens/line or ~3.5 chars/token as heuristic) |
 
 See `frontmatter-system.md` for the complete schema including type-specific and relationship fields.
 

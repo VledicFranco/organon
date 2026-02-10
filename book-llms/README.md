@@ -4,7 +4,7 @@ scope: meta
 name: book-llms
 version: "3.0"
 summary: Navigation for the Organon technical reference — methodology spec optimized for LLM consumption
-token_estimate: 850
+token_estimate: 1236
 provides: [overview, ethos, philosophy, patterns, scopes, templates, frontmatter-system, three-layer-architecture, invariant-tracking, workflow-authoring, protocols]
 parent: organon-root
 ---
@@ -62,4 +62,4 @@ When implementing Organon in a new codebase:
 
 ## Reference Implementation
 
-[Agent Tavern](https://github.com/VledicFranco/agent-tavern) is the canonical implementation with 49 organon files, 100% frontmatter coverage, and full three-layer architecture.
+[Agent Tavern](https://github.com/VledicFranco/agent-tavern) — a multi-agent orchestration platform — is the canonical implementation with 49 organon files, 100% frontmatter coverage, and full three-layer architecture (protocols → workflows → tools → verification).
