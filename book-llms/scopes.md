@@ -279,3 +279,13 @@ Each scope level can have its own protocols, workflows, and tools. The enforceme
 | Child contradicting parent | Violates inheritance model | Remove contradiction or update parent |
 | Too many scope levels | Navigation overhead | Flatten to max 3 levels (product → domain → feature) |
 | Organon at wrong scope | Constraints don't match scope | Move to appropriate level |
+
+---
+
+## Related Files
+
+| File | Relationship |
+|------|--------------|
+| [overview.md](./overview.md) | High-level methodology overview |
+| [ETHOS.md](./ETHOS.md) | Scope-related invariants |
+| [patterns.md](./patterns.md) | Context loading strategy for scopes |

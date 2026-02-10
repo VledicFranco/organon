@@ -14,6 +14,11 @@ required_for:
   - methodology_evolution
   - methodology_enforcement
 audience: [llm, human, tooling]
+related_files:
+  - patterns.md
+  - workflow-authoring.md
+  - invariant-tracking.md
+  - ETHOS.md
 ---
 
 # The Enforcement Loop: Protocols → Workflows → Tools
@@ -671,3 +676,12 @@ Add verification tools that check the binding integrity:
 - **Bidirectional Traceability** — Protocol ↔ workflow ↔ tool, fully linked
 - **Progressive Automation** — Manual → tools → workflows as procedures mature
 - **Executable Documentation** — Documentation that drives code execution, not just describes it
+
+## Related Files
+
+| File | Relationship |
+|------|--------------|
+| [overview.md](./overview.md) | High-level methodology overview |
+| [workflow-authoring.md](./workflow-authoring.md) | Workflow quality attributes (Layer 2) |
+| [invariant-tracking.md](./invariant-tracking.md) | Invariant-to-test tracking (verification tier 4) |
+| [templates.md](./templates.md) | Workflow template scaffold |

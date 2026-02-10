@@ -587,3 +587,16 @@ Required fields for every organon file:
 | `token_estimate` | number | Approximate full file token count |
 
 See `frontmatter-system.md` for the complete schema including type-specific and relationship fields.
+
+---
+
+## Related Files
+
+| File | Relationship |
+|------|--------------|
+| [overview.md](./overview.md) | High-level methodology overview |
+| [ETHOS.md](./ETHOS.md) | Template structure requirements |
+| [patterns.md](./patterns.md) | Patterns these templates implement |
+| [frontmatter-system.md](./frontmatter-system.md) | Complete frontmatter schema |
+| [three-layer-architecture.md](./three-layer-architecture.md) | Workflow template architecture |
+| [invariant-tracking.md](./invariant-tracking.md) | Invariant reference format |

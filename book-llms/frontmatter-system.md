@@ -342,3 +342,15 @@ Reports coverage, validation status, token analysis, freshness, and actionable s
 - Health dashboard: `scripts/organon/health.ts`
 - Tests: 19 comprehensive tests covering all validation rules
 - Results: ~112K total tokens, ~2,283 average per file, 100% validation passing
+
+---
+
+## Related Files
+
+| File | Relationship |
+|------|--------------|
+| [overview.md](./overview.md) | High-level methodology overview |
+| [ETHOS.md](./ETHOS.md) | Frontmatter requirement (INV-META-6) |
+| [patterns.md](./patterns.md) | Progressive disclosure pattern |
+| [templates.md](./templates.md) | Template examples with frontmatter |
+| [invariant-tracking.md](./invariant-tracking.md) | Invariants array specification |

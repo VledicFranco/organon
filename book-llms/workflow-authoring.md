@@ -258,6 +258,7 @@ Errors block the gate. Warnings are advisory.
 
 | File | Relationship |
 |------|-------------|
+| [overview.md](./overview.md) | High-level methodology overview |
 | [three-layer-architecture.md](./three-layer-architecture.md) | Universal contract that this document extends with quality guidance |
 | [templates.md](./templates.md) | Workflow template scaffold |
 | [ETHOS.md](./ETHOS.md) | General anti-patterns table |

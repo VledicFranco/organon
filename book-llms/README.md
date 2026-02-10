@@ -18,7 +18,7 @@ Technical reference for the Organon Methodology, optimized for LLM consumption.
 Organon is a documentation methodology built on five pillars:
 1. **LLM-centric design** — organons are written for LLM consumption first; LLMs execute, humans author and review
 2. **Enforcement through automation** — protocols bind to workflows that orchestrate tools that verify constraints (Define → Bind → Execute → Verify → Evolve)
-3. **Progressive disclosure** — agents access files in layers (frontmatter → sections → full file), never paying for content they don't need
+3. **Progressive disclosure** — agents access files in 5 layers (README → frontmatter → section headings → specific sections → full file), never paying for content they don't need. See frontmatter-system.md for the complete model.
 4. **Three-layer architecture** — protocols (knowledge) → workflows (agent bindings) → tools (operations)
 5. **Code as single source of truth** — documentation derives from code, never prescribes it
 
@@ -50,6 +50,7 @@ When implementing Organon in a new codebase:
 5. **scopes.md** — Understand the scope hierarchy and inheritance rules.
 6. **three-layer-architecture.md** — Bind protocols to executable workflows and tools.
 7. **PHILOSOPHY.md** — Optional. Read when you need to understand *why* a decision was made.
+8. **protocols/** — When you need specific procedures (e.g., semantic mapping). Load on-demand, not part of initial onboarding.
 
 ## Audience
 

@@ -180,6 +180,7 @@ invariants:                      # Stable invariant registry
 
 | File | Relationship |
 |------|-------------|
+| [overview.md](./overview.md) | High-level methodology overview |
 | [ETHOS.md](./ETHOS.md) | Source of truth for meta-organon invariants (first file to get IDs) |
 | [frontmatter-system.md](./frontmatter-system.md) | Schema definition for the `invariants` field |
 | [three-layer-architecture.md](./three-layer-architecture.md) | Verification gates that consume coverage data |

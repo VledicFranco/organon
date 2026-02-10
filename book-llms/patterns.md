@@ -12,6 +12,11 @@ required_for:
   - organon_creation
   - organon_review
 audience: [llm, human]
+related_files:
+  - ETHOS.md
+  - three-layer-architecture.md
+  - frontmatter-system.md
+  - templates.md
 ---
 
 # Organon Patterns
@@ -763,3 +768,16 @@ methodology_version: "3.0"
 | Mixed methodology and product | Process docs in `organon/domains/`, product docs in `organon/methodology/` | Separate: methodology for how-we-build, domains/features for what-it-does |
 | Untested invariant | Invariant in ETHOS.md but no tier-4 test verifies it | Add organon test with `@organon-invariant` annotation referencing the invariant |
 | Stale code mapping | components.md doesn't match current code | Regenerate via idempotent tool and enforce freshness in CI |
+
+---
+
+## Related Files
+
+| File | Relationship |
+|------|--------------|
+| [overview.md](./overview.md) | High-level methodology overview |
+| [ETHOS.md](./ETHOS.md) | Core invariants these patterns implement |
+| [three-layer-architecture.md](./three-layer-architecture.md) | Enforcement loop architecture |
+| [workflow-authoring.md](./workflow-authoring.md) | Workflow-specific patterns |
+| [frontmatter-system.md](./frontmatter-system.md) | Progressive disclosure pattern |
+| [templates.md](./templates.md) | Pattern scaffolds |

@@ -40,6 +40,11 @@ required_for:
   - organon_review
   - methodology_evolution
 audience: [llm, human]
+related_files:
+  - PHILOSOPHY.md
+  - patterns.md
+  - three-layer-architecture.md
+  - frontmatter-system.md
 ---
 
 # Meta-Organon Ethos
@@ -342,6 +347,20 @@ audience: [llm, human, tooling]
 | Mixed methodology and product | Process docs in product scopes, product docs in methodology | Methodology for how-we-build; domains/features for what-it-does |
 | Untested invariant | Invariant in ETHOS.md but no tier-4 test verifies it | Add organon test with `@organon-invariant` annotation referencing the invariant |
 | Stale code mapping | components.md doesn't match current code | Regenerate via idempotent tool and enforce freshness in CI |
+
+---
+
+## Related Files
+
+| File | Relationship |
+|------|--------------|
+| [overview.md](./overview.md) | High-level methodology overview |
+| [PHILOSOPHY.md](./PHILOSOPHY.md) | Explains the reasoning behind these constraints |
+| [patterns.md](./patterns.md) | Concrete patterns that implement these invariants |
+| [three-layer-architecture.md](./three-layer-architecture.md) | Enforcement loop architecture |
+| [invariant-tracking.md](./invariant-tracking.md) | How invariants bind to tests |
+| [workflow-authoring.md](./workflow-authoring.md) | Workflow quality attributes |
+| [frontmatter-system.md](./frontmatter-system.md) | Progressive disclosure mechanism |
 
 ---
 

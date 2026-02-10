@@ -151,3 +151,13 @@ A constraint that isn't enforced is a suggestion. Every invariant in an ETHOS.md
 - **Not a file-size religion** — there are no hard line limits, only progressive disclosure
 - **Not human-first documentation** — organons are LLM-centric, humans interact through LLMs
 - **Not passive documentation** — organons are enforced through the Protocol → Workflow → Tool → Verify loop
+
+---
+
+## Related Files
+
+| File | Relationship |
+|------|--------------|
+| [overview.md](./overview.md) | High-level methodology overview |
+| [ETHOS.md](./ETHOS.md) | The constraints this philosophy explains |
+| [three-layer-architecture.md](./three-layer-architecture.md) | Enforcement loop mechanism |
