@@ -4,7 +4,7 @@ scope: meta
 name: workflow-authoring
 version: "1.0"
 summary: Workflow authoring guidance — quality attributes, archetypes, error handling patterns, and anti-patterns for Layer 2 bindings
-token_estimate: 4000
+token_estimate: 3330
 inherits_from: [meta-organon]
 load_priority: high
 required_for:
