@@ -4,10 +4,35 @@ scope: meta
 name: meta-organon
 version: "3.0"
 summary: Core invariants, principles, and heuristics for creating organons — the foundational rules every organon must follow
-token_estimate: 4000
+token_estimate: 4500
 invariants_count: 10
 principles_count: 7
 heuristics_count: 23
+invariants:
+  - id: INV-META-1
+    name: ethos-required
+  - id: INV-META-2
+    name: identity-first
+  - id: INV-META-3
+    name: principles-prioritized
+  - id: INV-META-4
+    name: child-inherits-never-contradicts
+    judgment_call: true
+  - id: INV-META-5
+    name: code-is-source-of-truth
+    judgment_call: true
+  - id: INV-META-6
+    name: every-file-has-frontmatter
+  - id: INV-META-7
+    name: standardized-section-headings
+  - id: INV-META-8
+    name: progressive-disclosure-over-limits
+    judgment_call: true
+  - id: INV-META-9
+    name: enforcement-loop-closable
+  - id: INV-META-10
+    name: llms-primary-interface
+    judgment_call: true
 inherits_from: []
 load_priority: high
 required_for:
@@ -217,6 +242,9 @@ token_estimate: [number]
 invariants_count: [number]
 principles_count: [number]
 heuristics_count: [number]
+invariants:
+  - id: INV-[SCOPE]-1
+    name: [kebab-case-label]
 inherits_from: [parent-scope-names]
 load_priority: [high|medium|low]
 required_for: [task-types]

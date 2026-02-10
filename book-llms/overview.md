@@ -46,7 +46,7 @@ When humans collaborate with LLMs on complex systems, a predictable set of probl
 
 | ID | Gap | Problem | Current State | Suggested Priority |
 |----|-----|---------|---------------|--------------------|
-| G1 | **Invariant-to-test tracking** | No concrete mechanism to track which invariants have tier-4 tests and which don't | `@organon-invariant` annotation is mentioned but not specified; no coverage report format | v1 |
+| G1 | **Invariant-to-test tracking** | ~~No concrete mechanism to track which invariants have tier-4 tests~~ | Solved — see [invariant-tracking.md](./invariant-tracking.md): stable invariant IDs in frontmatter, `@organon-invariant` annotation contract, `organon coverage` CLI command, `invariant-coverage` verification gate | Done |
 | G2 | **Methodology effectiveness metrics** | No way to track whether the methodology is actually working over time | Health dashboard exists for point-in-time checks; no longitudinal tracking | v1 |
 | G3 | **Workflow authoring guidance** | What makes a good workflow vs a bad one? | Universal contract defines required fields but not quality attributes, error handling patterns, or common workflow shapes | v1 |
 | G4 | **Sibling scope conflict resolution** | Two organons at the same scope level give contradictory guidance | Parent-child inheritance is specified; sibling conflicts have no resolution rule | Later |
@@ -57,7 +57,7 @@ When humans collaborate with LLMs on complex systems, a predictable set of probl
 
 **v1 candidates** — address these to close the most impactful specification gaps:
 
-- **G1 (Invariant-to-test tracking):** Core to the enforcement promise. Without a concrete tracking mechanism, "100% invariant coverage" is aspirational.
+- ~~**G1 (Invariant-to-test tracking):**~~ Resolved. See [invariant-tracking.md](./invariant-tracking.md).
 - **G2 (Methodology effectiveness metrics):** "Is the methodology working?" is a meta question the methodology should answer, not leave to implementers.
 - **G3 (Workflow authoring guidance):** Workflows are what users actually create most. The universal contract says *what fields* are required but not *what good looks like*.
 

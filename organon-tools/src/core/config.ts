@@ -24,6 +24,8 @@ const ConfigFileSchema = z.object({
   ignorePatterns: z.array(z.string()).optional(),
   workflowPaths: WorkflowPathsSchema.optional(),
   freshnessThresholdHours: z.number().positive().optional(),
+  testGlobs: z.array(z.string()).optional(),
+  testIgnorePatterns: z.array(z.string()).optional(),
 }).strict();
 
 export type ConfigFile = z.infer<typeof ConfigFileSchema>;
@@ -76,6 +78,8 @@ export async function resolveConfig(
     ...fileConfig?.workflowPaths,
   };
   const freshnessThresholdHours = fileConfig?.freshnessThresholdHours ?? 24;
+  const testGlobs = fileConfig?.testGlobs;
+  const testIgnorePatterns = fileConfig?.testIgnorePatterns;
 
   return {
     projectRoot,
@@ -84,6 +88,8 @@ export async function resolveConfig(
     ignorePatterns,
     workflowPaths,
     freshnessThresholdHours,
+    testGlobs,
+    testIgnorePatterns,
   };
 }
 

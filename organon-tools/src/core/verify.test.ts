@@ -21,12 +21,13 @@ describe('verify', () => {
     });
     const config = makeConfig('/project');
     const result = await verify({ projectRoot: '/project', config, fs });
-    // Should have at least the 3 built-in gates
-    expect(result.gates.length).toBeGreaterThanOrEqual(3);
+    // Should have at least the 4 built-in gates
+    expect(result.gates.length).toBeGreaterThanOrEqual(4);
     const gateNames = result.gates.map((g) => g.gate);
     expect(gateNames).toContain('frontmatter');
     expect(gateNames).toContain('triplets');
     expect(gateNames).toContain('freshness');
+    expect(gateNames).toContain('invariant-coverage');
   });
 
   it('runs a specific gate subset', async () => {
@@ -106,6 +107,43 @@ describe('verify', () => {
     expect(result.errors).toContainEqual(
       expect.objectContaining({ code: 'GATE_EXECUTION_ERROR' }),
     );
+  });
+
+  it('invariant-coverage gate passes when no invariants defined', async () => {
+    const fs = new MemoryFileSystem({
+      '/project/ETHOS.md': makeEthos({ name: 'test', scope: 'product' }),
+    });
+    const config = makeConfig('/project');
+    const result = await verify({
+      projectRoot: '/project',
+      config,
+      fs,
+      gates: ['invariant-coverage'],
+    });
+    expect(result.gates[0].gate).toBe('invariant-coverage');
+    expect(result.gates[0].passed).toBe(true);
+  });
+
+  it('invariant-coverage gate fails when invariants are uncovered', async () => {
+    const ethosContent = makeEthos({
+      name: 'test',
+      scope: 'product',
+      extra: {
+        invariants: `\n  - id: INV-TEST-1\n    name: rule-one`,
+      },
+    });
+    const fs = new MemoryFileSystem({
+      '/project/ETHOS.md': ethosContent,
+    });
+    const config = makeConfig('/project');
+    const result = await verify({
+      projectRoot: '/project',
+      config,
+      fs,
+      gates: ['invariant-coverage'],
+    });
+    expect(result.gates[0].gate).toBe('invariant-coverage');
+    expect(result.gates[0].passed).toBe(false);
   });
 
   it('success is true only when all gates pass', async () => {

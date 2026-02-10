@@ -9,6 +9,7 @@
  *   health    — Health dashboard
  *   find      — Cross-domain discovery
  *   verify    — Run verification gates
+ *   coverage  — Invariant coverage analysis
  *   mcp       — Start MCP server
  */
 
@@ -22,6 +23,7 @@ import { queryCommand } from './commands/query.js';
 import { healthCommand } from './commands/health.js';
 import { findCommand } from './commands/find.js';
 import { verifyCommand } from './commands/verify.js';
+import { coverageCommand } from './commands/coverage.js';
 import { mcpCommand } from './commands/mcp.js';
 
 async function main() {
@@ -34,6 +36,7 @@ async function main() {
     .command(healthCommand)
     .command(findCommand)
     .command(verifyCommand)
+    .command(coverageCommand)
     .command(mcpCommand)
     .demandCommand(1, chalk.red('Please specify a command'))
     .help()

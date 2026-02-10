@@ -31,6 +31,9 @@ token_estimate: [number]
 invariants_count: [number]
 principles_count: [number]
 heuristics_count: [number]
+invariants:
+  - id: INV-[SCOPE]-1
+    name: [kebab-case-label]
 inherits_from: [parent-scope-names]
 related_domains: [domain-names]
 related_features: [feature-names]

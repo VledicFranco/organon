@@ -261,6 +261,73 @@ token_estimate: 10000
       );
     });
 
+    it('detects invariants array count mismatch', async () => {
+      const content = makeEthos({
+        invariants: 2,
+        extra: {
+          invariants: `\n  - id: INV-TEST-1\n    name: rule-one\n  - id: INV-TEST-2\n    name: rule-two\n  - id: INV-TEST-3\n    name: rule-three`,
+        },
+      });
+      const fs = new MemoryFileSystem({
+        '/project/ETHOS.md': content,
+      });
+      const config = makeConfig('/project');
+      const result = await validateFrontmatter({
+        projectRoot: '/project',
+        config,
+        fs,
+        files: ['ETHOS.md'],
+        stages: [3],
+      });
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({ code: 'FRONTMATTER_INVARIANT_COUNT_MISMATCH' }),
+      );
+    });
+
+    it('detects invalid invariant ID format', async () => {
+      const content = makeEthos({
+        extra: {
+          invariants: `\n  - id: BAD-FORMAT\n    name: bad`,
+        },
+      });
+      const fs = new MemoryFileSystem({
+        '/project/ETHOS.md': content,
+      });
+      const config = makeConfig('/project');
+      const result = await validateFrontmatter({
+        projectRoot: '/project',
+        config,
+        fs,
+        files: ['ETHOS.md'],
+        stages: [3],
+      });
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({ code: 'FRONTMATTER_INVARIANT_ID_FORMAT' }),
+      );
+    });
+
+    it('detects duplicate invariant IDs', async () => {
+      const content = makeEthos({
+        extra: {
+          invariants: `\n  - id: INV-TEST-1\n    name: first\n  - id: INV-TEST-1\n    name: duplicate`,
+        },
+      });
+      const fs = new MemoryFileSystem({
+        '/project/ETHOS.md': content,
+      });
+      const config = makeConfig('/project');
+      const result = await validateFrontmatter({
+        projectRoot: '/project',
+        config,
+        fs,
+        files: ['ETHOS.md'],
+        stages: [3],
+      });
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({ code: 'FRONTMATTER_INVARIANT_DUPLICATE_ID' }),
+      );
+    });
+
     it('passes when counts match', async () => {
       const fs = new MemoryFileSystem({
         '/project/ETHOS.md': makeEthos({ invariants: 5, principles: 3, heuristics: 4 }),

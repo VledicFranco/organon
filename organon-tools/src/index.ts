@@ -18,6 +18,7 @@ export type {
   Complexity,
   Audience,
   ProtocolEntry,
+  InvariantEntry,
   ParsedOrganonFile,
   OrganonConfig,
   WorkflowPaths,
@@ -35,6 +36,8 @@ export type {
   VerifyResult,
   VerifyGateResult,
   VerifyGateFn,
+  InvariantCoverageResult,
+  InvariantCoverageEntry,
 } from './core/types.js';
 
 // Config
@@ -78,6 +81,9 @@ export type { SuggestToolsOptions } from './core/suggest-tools.js';
 
 export { verify, registerGate, getRegisteredGates } from './core/verify.js';
 export type { VerifyOptions } from './core/verify.js';
+
+// Invariant coverage
+export { computeInvariantCoverage, extractInvariants, scanTestAnnotations, computeCoverage } from './core/invariant-coverage.js';
 
 // Protocol parsing
 export { parseProtocols } from './core/add-protocols-array.js';

@@ -96,9 +96,13 @@ Beyond the core schema, each type has additional fields:
 invariants_count: number      # Number of ## Invariants entries
 principles_count: number      # Number of ## Principles entries
 heuristics_count: number      # Number of decision heuristic rows
+invariants:                   # Stable invariant registry (see invariant-tracking.md)
+  - id: string                # Stable ID: INV-{SCOPE}-{N} (never reused)
+    name: string              # Short kebab-case label
+    judgment_call: boolean    # true = requires human review, not automated testing
 ```
 
-These counts let agents estimate section sizes without loading the file. An agent can calculate: "This ethos has 20 invariants — the `## Invariants` section is probably ~60 lines."
+These counts let agents estimate section sizes without loading the file. An agent can calculate: "This ethos has 20 invariants — the `## Invariants` section is probably ~60 lines." The `invariants` array provides stable IDs for test-to-invariant tracking (see [invariant-tracking.md](./invariant-tracking.md)).
 
 ### PHILOSOPHY.md (`type: rationale`)
 
@@ -261,6 +265,9 @@ Frontmatter must be **truthful** — automated tests enforce accuracy.
 - `principles_count` matches actual `## Principles` entries
 - `protocols_count` matches actual protocol count
 - `token_estimate` within 30% of actual (4 chars ≈ 1 token heuristic)
+- `invariants` array length matches `invariants_count`
+- Each invariant `id` follows `INV-{SCOPE}-{N}` format
+- No duplicate invariant IDs
 
 ### Consistency Validation
 

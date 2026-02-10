@@ -9,6 +9,7 @@
 import { validateFrontmatter } from './validate-frontmatter.js';
 import { verifyTriplets } from './verify-triplets.js';
 import { health as runHealth } from './health.js';
+import { computeInvariantCoverage } from './invariant-coverage.js';
 import type {
   DiagnosticMessage,
   FileSystem,
@@ -98,10 +99,21 @@ const freshnessGate: VerifyGateFn = async ({ projectRoot, config, fs }) => {
   };
 };
 
+const invariantCoverageGate: VerifyGateFn = async ({ projectRoot, config, fs }) => {
+  const result = await computeInvariantCoverage({ projectRoot, config, fs });
+  return {
+    gate: 'invariant-coverage',
+    passed: result.success,
+    errors: result.errors,
+    warnings: result.warnings,
+  };
+};
+
 // Register built-in gates
 registerGate('frontmatter', frontmatterGate);
 registerGate('triplets', tripletsGate);
 registerGate('freshness', freshnessGate);
+registerGate('invariant-coverage', invariantCoverageGate);
 
 // ---------------------------------------------------------------------------
 // Main

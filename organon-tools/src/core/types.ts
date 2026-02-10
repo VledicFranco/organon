@@ -72,6 +72,12 @@ export interface ProtocolEntry {
   complexity: Complexity;
 }
 
+export interface InvariantEntry {
+  id: string;
+  name: string;
+  judgment_call?: boolean;
+}
+
 /**
  * Union of all possible frontmatter fields.
  * Not every file will have every field — type-specific fields
@@ -90,6 +96,7 @@ export interface Frontmatter {
   invariants_count?: number;
   principles_count?: number;
   heuristics_count?: number;
+  invariants?: InvariantEntry[];
 
   // PHILOSOPHY-specific (type: rationale)
   decision_count?: number;
@@ -287,6 +294,31 @@ export type VerifyGateFn = (options: {
 }) => Promise<VerifyGateResult>;
 
 // ---------------------------------------------------------------------------
+// Invariant coverage
+// ---------------------------------------------------------------------------
+
+export interface InvariantCoverageResult {
+  success: boolean;
+  invariants: InvariantCoverageEntry[];
+  summary: {
+    total: number;
+    covered: number;
+    uncovered: number;
+    judgment_call: number;
+  };
+  errors: DiagnosticMessage[];
+  warnings: DiagnosticMessage[];
+}
+
+export interface InvariantCoverageEntry {
+  id: string;
+  name: string;
+  file: string;
+  status: 'covered' | 'uncovered' | 'judgment_call';
+  tests: string[];
+}
+
+// ---------------------------------------------------------------------------
 // Config
 // ---------------------------------------------------------------------------
 
@@ -303,4 +335,6 @@ export interface OrganonConfig {
   ignorePatterns: string[];
   workflowPaths: WorkflowPaths;
   freshnessThresholdHours: number;
+  testGlobs?: string[];
+  testIgnorePatterns?: string[];
 }

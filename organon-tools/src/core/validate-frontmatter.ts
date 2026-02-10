@@ -478,6 +478,48 @@ function validateTruthfulness(
       }
     }
   }
+
+  // Invariants array validation (for constraints type)
+  if (fm.type === 'constraints' && fm.invariants) {
+    const invArray = fm.invariants as Array<{ id?: string; name?: string }>;
+
+    // Count matches invariants_count
+    if (fm.invariants_count !== undefined && invArray.length !== fm.invariants_count) {
+      errors.push({
+        severity: 'error',
+        code: 'FRONTMATTER_INVARIANT_COUNT_MISMATCH',
+        message: `invariants_count is ${fm.invariants_count} but invariants array has ${invArray.length} entries`,
+        file,
+        suggestion: `Update invariants_count to ${invArray.length}`,
+      });
+    }
+
+    // ID format and duplicates
+    const INVARIANT_ID_RE = /^INV-[\w]+-\d+$/;
+    const seenIds = new Set<string>();
+    for (const inv of invArray) {
+      if (inv.id) {
+        if (!INVARIANT_ID_RE.test(inv.id)) {
+          errors.push({
+            severity: 'error',
+            code: 'FRONTMATTER_INVARIANT_ID_FORMAT',
+            message: `Invariant ID '${inv.id}' does not match INV-{SCOPE}-{N} format`,
+            file,
+            suggestion: `Use format INV-SCOPE-1, e.g., INV-META-1`,
+          });
+        }
+        if (seenIds.has(inv.id)) {
+          errors.push({
+            severity: 'error',
+            code: 'FRONTMATTER_INVARIANT_DUPLICATE_ID',
+            message: `Duplicate invariant ID: ${inv.id}`,
+            file,
+          });
+        }
+        seenIds.add(inv.id);
+      }
+    }
+  }
 }
 
 // ---------------------------------------------------------------------------
