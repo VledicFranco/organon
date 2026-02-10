@@ -699,7 +699,7 @@ A full three-layer architecture implementation typically includes:
 | **Protocols** | `organon/methodology/*/PROTOCOLS.md` | 5-15 protocol files, 15-50 individual protocols |
 | **Workflows** | Agent-specific bindings (Claude skills, Cursor rules, runbooks) | 5-10 core workflows |
 | **Tools** | Project scripts (npm, make, bash, Python) | 20-50 tools |
-| **Verification** | Multi-gate system (frontmatter, triplets, coverage, freshness) | 5-10 gates targeting 100% invariant coverage |
+| **Verification** | Multi-gate system (frontmatter, triplet-integrity, coverage, freshness) | 5-10 gates targeting 100% invariant coverage |
 
 **Expected Benefits:**
 - Protocol execution time reduced 30-50% (consistency, fewer mistakes)

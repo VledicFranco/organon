@@ -250,7 +250,7 @@ Errors block the gate. Warnings are advisory.
 | Six quality attributes | Concrete, measurable standard | Some attributes (idempotency, scope) can't be automated |
 | Five archetypes | Covers most real workflows | Novel workflow shapes may not fit neatly |
 | Three error patterns | Clear guidance for common scenarios | Real workflows may need hybrid patterns |
-| Separate gate from triplets | Single responsibility (structure vs quality) | One more gate to run |
+| Separate gate from triplet-integrity | Single responsibility (structure vs quality) | One more gate to run |
 
 ---
 
