@@ -580,6 +580,323 @@ Feature-specific checks (caching invariants):
 
 ---
 
+## RFC Template
+
+```markdown
+---
+type: rationale
+scope: product
+name: [feature-name]
+version: "1.0"
+summary: [One-sentence description of what this RFC proposes]
+token_estimate: [estimate]
+status: draft
+created: [YYYY-MM-DD]
+author: [author-name]
+related_files:
+  - ../organon-tools/ETHOS.md
+  - ../book-llms/[relevant-file].md
+load_priority: high
+audience: [llm, human]
+---
+
+# RFC NNN: [Feature Name]
+
+> [One-sentence pitch — what problem does this solve?]
+
+---
+
+## Status
+
+**Current State:** Draft
+
+**Next Milestone:** Review and team approval
+
+| Transition | Date | Notes |
+|------------|------|-------|
+| → Draft | [YYYY-MM-DD] | Initial RFC created |
+
+---
+
+## Problem Statement
+
+**[Describe the problem from the organon's perspective]**
+
+Why does the organon need to evolve? What gap exists in current constraints?
+
+**Current state:** [What organon structure exists today?]
+
+**Desired state:** [What organon structure is needed?]
+
+---
+
+## Proposed Solution
+
+**High-level approach** (both organon + code):
+
+1. Create/update domain organon that defines [X]
+2. Implement code following those constraints
+3. [Additional steps]
+
+---
+
+## Organon Impact
+
+> This RFC proposes specific changes to organon files. Details what those files will contain.
+
+### Create
+
+**`[path/to/new/ETHOS.md]`** ← Core domain/feature definition
+
+This file defines [domain/feature] identity and constraints:
+
+```markdown
+## Identity
+
+### What This [Domain/Feature] IS
+- [Identity statement 1]
+- [Identity statement 2]
+
+### What This [Domain/Feature] IS NOT
+- [Boundary 1]
+- [Boundary 2]
+
+## Invariants
+
+1. **INV-[SCOPE]-1: [name]**
+   - [Invariant text]
+   - Enforced by: [mechanism]
+
+2. **INV-[SCOPE]-2: [name]**
+   - [Invariant text]
+   - Enforced by: [mechanism]
+
+## Principles (Prioritized)
+
+1. **[Principle 1]** - [Description]
+2. **[Principle 2]** - [Description]
+
+## Decision Heuristics
+
+| Situation | Action |
+|-----------|--------|
+| [Scenario 1] | [Response 1] |
+| [Scenario 2] | [Response 2] |
+\```
+
+**`[path/to/new/PHILOSOPHY.md]`** ← Design rationale
+
+This file explains WHY the [domain/feature] is designed this way:
+
+```markdown
+## The Problem
+
+[Detailed problem description]
+
+## The Bet
+
+**Bet:** [What assumption are we making?]
+
+**Why this works:** [Evidence/reasoning]
+
+**What must be true:** [Prerequisites for success]
+
+## Trade-offs
+
+### [Trade-off 1]
+**Choice:** [Decision made]
+**Benefit:** [Upside]
+**Cost:** [Downside]
+**Why we chose [X]:** [Rationale]
+
+### [Trade-off 2]
+...
+\```
+
+**Implementation code** (consequence of domain definition):
+- `[path/to/implementation/]` - [Brief description]
+
+### Update
+
+**`[path/to/existing/file.md]`**
+- [Specific change 1: e.g., "Add invariant INV-X-N: description"]
+- [Specific change 2]
+
+### Delete
+
+[List files to delete, or "None"]
+
+---
+
+## Technical Implementation
+
+> This section describes how code will implement the domain constraints defined above.
+
+### Architecture
+
+**Package Structure:**
+```
+[Show directory tree with key files]
+```
+
+**Core Abstractions:**
+```typescript
+// Show key types/interfaces
+```
+
+**Implements domain invariants:**
+- [INV-X-1]: [How code enforces this]
+- [INV-X-2]: [How code enforces this]
+
+---
+
+### API Design
+
+```typescript
+// Show public API signatures
+function exampleFunction(options: Options): Promise<Result>
+
+interface Options {
+  // ...
+}
+```
+
+---
+
+### Implementation Plan
+
+**Phase 1: [Name] (Weeks X-Y)**
+
+**Week X: [Milestone]**
+- [ ] [Task 1]
+- [ ] [Task 2]
+
+**Week Y: [Milestone]**
+- [ ] [Task 3]
+- [ ] [Task 4]
+
+**Deliverable:** [What ships in Phase 1]
+
+---
+
+**Phase 2: [Name] (Weeks A-B)**
+- [ ] [Task 5]
+- [ ] [Task 6]
+
+**Deliverable:** [What ships in Phase 2]
+
+---
+
+### Design Decisions (Technical)
+
+These decisions implement the domain principles:
+
+**Decision 1: [Name]**
+- **Implements:** [Which principle/invariant]
+- **Technical benefit:** [Why this is good technically]
+- **Trade-off:** [What we're giving up]
+- **Why we chose [X]:** [Rationale]
+
+**Decision 2: [Name]**
+...
+
+---
+
+## Success Metrics
+
+- [ ] **[Metric 1]** - [Measurable outcome]
+- [ ] **[Metric 2]** - [Measurable outcome]
+- [ ] **[Metric 3]** - [Measurable outcome]
+
+---
+
+## Risks & Mitigations
+
+| Risk | Impact | Mitigation |
+|------|--------|------------|
+| [Risk 1] | [High/Med/Low] | [How to address] |
+| [Risk 2] | [High/Med/Low] | [How to address] |
+
+---
+
+## Open Questions
+
+### Resolved (Pre-RFC)
+1. ✅ **[Question 1]** → [Decision]
+2. ✅ **[Question 2]** → [Decision]
+
+### Still Open
+1. **[Question 3]** - [Description]
+   - **Recommendation:** [Suggestion]
+
+---
+
+## Dependencies
+
+**Blocks:**
+- [What can't happen until this is done?]
+
+**Blocked by:**
+- [What must happen first?]
+
+**Related work:**
+- [Parallel efforts]
+
+---
+
+## Related Files
+
+| File | Relationship |
+|------|--------------|
+| [[path/to/file.md](path/to/file.md)] | [How this RFC relates to that file] |
+
+---
+
+## Approval Process
+
+**Review criteria:**
+- [ ] Organon impact is clear and complete
+- [ ] Technical implementation is detailed and feasible
+- [ ] Success metrics are measurable
+- [ ] Risks have mitigations
+
+**Reviewers:**
+- [ ] @[role-1]
+- [ ] @[role-2]
+
+**Timeline:**
+- Draft complete: [YYYY-MM-DD]
+- Review period: [duration]
+- Target acceptance: [YYYY-MM-DD]
+- Implementation start: [YYYY-MM-DD]
+- Delivery: [YYYY-MM-DD]
+
+---
+
+## Next Steps
+
+1. [First action]
+2. [Second action]
+3. [Third action]
+
+---
+
+## Changelog
+
+| Date | Change | Author |
+|------|--------|--------|
+| [YYYY-MM-DD] | Initial draft | [author] |
+```
+
+**Key requirements:**
+- **Organon Impact:** Show exact content of new/updated organon files (invariants, principles, identity)
+- **Technical Implementation:** Include architecture, API, and phased plan
+- **Both sections required:** RFCs propose evolution of both organon and code
+
+See [patterns.md (RFC-Driven Evolution Pattern)](./patterns.md#rfc-driven-evolution-pattern) for lifecycle and principles.
+
+---
+
 ## Frontmatter Quick Reference
 
 Required fields for every organon file:

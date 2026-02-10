@@ -517,6 +517,52 @@ Every RFC declares its organon impact upfront — what organon files it will **C
 
 **Why this matters:** Forces upfront thinking about architectural constraints. Makes organon evolution explicit and auditable. Prevents drift — if code changes but no RFC declared impact, something is missing.
 
+### RFC Structure (Required Sections)
+
+**RFCs have dual nature:** They propose both organon mutation AND technical implementation. The RFC document must contain both plans.
+
+```
+RFC NNN: [Feature Name]
+
+1. Problem Statement
+   - Why does the organon need to evolve?
+   - What gap exists in current constraints?
+
+2. Proposed Solution (Overview)
+   - High-level approach (both organon + code)
+
+3. Organon Impact ← REQUIRED: What organon files will say
+   ├─ Create
+   │  └─ Detailed content: exact invariants, principles, identity
+   ├─ Update
+   │  └─ Specific changes: which invariants added/modified
+   └─ Delete
+
+4. Technical Implementation ← REQUIRED: How code will be built
+   ├─ Architecture (package structure, abstractions)
+   ├─ API Design (interfaces, function signatures)
+   ├─ Implementation Plan (phases, deliverables, weeks)
+   └─ Design Decisions (technical trade-offs)
+
+5. Success Metrics
+6. Risks & Mitigations
+7. Open Questions
+8. Dependencies
+```
+
+**Why both sections are required:**
+
+- **Organon Impact** defines "should be" (constraints the code must follow)
+- **Technical Implementation** defines "will be" (how the code implements those constraints)
+- The RFC sits between organon and code, proposing evolution of both
+- Same-PR principle: both land together, keeping organon and code in sync
+
+**Common mistake:** Writing only technical plan without detailing organon content, or only organon content without implementation strategy. **RFCs must contain both.**
+
+**Organon Impact detail level:** For new domains/features, include the actual invariant text, principles, and identity statements that will appear in ETHOS.md and PHILOSOPHY.md. Don't just say "will add testing domain" — show what that domain organon will contain.
+
+**Technical Implementation detail level:** Include architecture diagrams, API signatures, phase-by-phase plan with deliverables. Enough detail that implementation can begin without additional design work.
+
 ### Same-PR principle
 
 **Organon changes happen in the same PR as implementation, never deferred.** When an RFC lands, the implementing PR includes both code changes and organon updates. This prevents:
