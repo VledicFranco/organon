@@ -4,7 +4,7 @@ scope: meta
 name: frontmatter-system
 version: "3.0"
 summary: YAML frontmatter specification for progressive disclosure — the mechanism that makes token-efficient big organons possible
-token_estimate: 3696
+token_estimate: 3717
 inherits_from: [meta-organon]
 load_priority: high
 required_for:
@@ -109,7 +109,10 @@ These counts let agents estimate section sizes without loading the file. An agen
 ```yaml
 decision_count: number        # Number of design decisions
 explains_invariants: string[] # Invariant IDs explained (e.g., [GEN-1, GEN-2])
+pattern_count: number          # For pattern catalogs (e.g., patterns.md) — number of documented patterns
 ```
+
+**Note:** Custom `*_count` fields are allowed for catalog-style rationale files. Examples: `pattern_count`, `antipattern_count`, `example_count`. Use when the file enumerates a collection of items that agents may need to count without loading the full content.
 
 ### PROTOCOL.md (`type: procedures`)
 

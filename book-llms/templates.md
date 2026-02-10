@@ -4,7 +4,7 @@ scope: meta
 name: templates
 version: "3.0"
 summary: Copy-paste templates for ETHOS, PHILOSOPHY, PROTOCOL, and WORKFLOW files — all with frontmatter and standardized sections
-token_estimate: 3381
+token_estimate: 4204
 inherits_from: [meta-organon]
 load_priority: medium
 required_for:
@@ -118,6 +118,8 @@ Do not [action] in this [scope]:
 
 ## Philosophy Template
 
+PHILOSOPHY.md files use this structure for philosophical/architectural reasoning.
+
 ```markdown
 ---
 type: rationale
@@ -151,7 +153,7 @@ audience: [llm, human]
 
 ## The Bet
 
-[What approach did we choose? What's the core insight?]
+[What approach did we choose? What's the core insight? What's the central gamble we're making?]
 
 ---
 
@@ -188,7 +190,54 @@ audience: [llm, human]
 
 ---
 
+## Rationale Template (General)
+
+For technical rationale files (not PHILOSOPHY.md), use this flexible structure. Required sections: `## The Problem` and `## Trade-offs`. Middle sections (`## The Solution`, `## Design Decisions`, etc.) adapt to content.
+
+```markdown
+---
+type: rationale
+scope: [product|domain|feature|component|meta|methodology]
+name: [kebab-case-name]
+version: "1.0"
+summary: [One-sentence description, max 200 chars]
+token_estimate: [number]
+inherits_from: [parent-scope-names]
+audience: [llm, human]
+---
+
+# [Topic Name]
+
+> [One-sentence description of what this explains.]
+
+---
+
+## The Problem
+
+[What challenge or question does this address?]
+
+---
+
+## The Solution
+
+[How does this design/approach solve it? Core technical decisions.]
+
+---
+
+## Trade-offs
+
+| Decision | Benefit | Cost |
+|----------|---------|------|
+| [Choice we made] | [What we gained] | [What we sacrificed] |
+```
+
+**Note:** Some rationale files may use `## The Bet` instead of `## The Solution` when the approach is more speculative. Use whichever better fits the content's nature.
+
+---
+
 ## Protocol Template
+
+**Note:** The `## Recovery` section is recommended for all protocols, especially error-prone or complex ones. For simple protocols, it may be omitted if failure modes are trivial.
 
 ```markdown
 ---
@@ -360,6 +409,46 @@ parent: [parent-directory-name]
 | [ETHOS.md](./ETHOS.md) | constraints | [What it constrains] |
 | [PHILOSOPHY.md](./PHILOSOPHY.md) | rationale | [What it explains] |
 | [child-dir/](./child-dir/) | [scope] | [What it covers] |
+```
+
+---
+
+## Mapping Template (Code-to-Organon)
+
+For projects with code modules, create a `components.md` file that maps code locations to organon directories. See patterns.md (Code Mapping Pattern) for full details.
+
+```markdown
+---
+type: mapping
+scope: [product]
+name: components
+version: "1.0"
+summary: Maps codebase modules to organon components — bidirectional navigation between code and constraints
+token_estimate: [number]
+file_count: [number of code modules]
+last_generated: [YYYY-MM-DD]
+inherits_from: []
+audience: [llm, human, tooling]
+---
+
+# Component Mapping
+
+> Maps codebase modules to their organon documentation.
+
+## By Code Module
+
+| Code Path | Organon Path | Purpose |
+|-----------|--------------|---------|
+| `src/core/` | [organon/components/core/](./organon/components/core/) | Type system and core abstractions |
+| `src/runtime/` | [organon/components/runtime/](./organon/components/runtime/) | Execution engine |
+| `src/compiler/` | [organon/components/compiler/](./organon/components/compiler/) | DSL parser and compiler |
+
+## By Organon Component
+
+| Organon Path | Code Paths | Key Files |
+|--------------|------------|-----------|
+| [organon/components/core/](./organon/components/core/) | `src/core/**/*` | `Type.scala`, `Value.scala` |
+| [organon/components/runtime/](./organon/components/runtime/) | `src/runtime/**/*` | `Runtime.scala`, `Executor.scala` |
 ```
 
 ---
