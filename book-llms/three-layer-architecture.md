@@ -4,7 +4,7 @@ scope: meta
 name: three-layer-architecture
 version: "3.0"
 summary: The enforcement loop — protocols, workflows, tools, and verification (tiered testing, drift detection, violation handling) bind organons to LLM execution
-token_estimate: 10672
+token_estimate: 10732
 inherits_from: [meta-organon]
 load_priority: high
 required_for:
@@ -690,24 +690,24 @@ Add verification tools that check the binding integrity:
 
 ---
 
-## Reference Implementation
+## Example Implementation Pattern
 
-**Agent Tavern** (first full implementation of the enforcement loop):
+A full three-layer architecture implementation typically includes:
 
-| Layer | Implementation | Count |
-|-------|---------------|-------|
-| **Protocols** | `organon/methodology/*/PROTOCOLS.md` | 8 protocol files, 15+ individual protocols |
-| **Workflows** | `.claude/skills/*/skill.md` (Claude Code) | 5 skills |
-| **Tools** | `package.json` npm scripts | 47 tools |
-| **Verification** | 8-gate system via `rfc:verify` | 100% invariant coverage |
+| Layer | Example Implementation | Typical Scale |
+|-------|----------------------|---------------|
+| **Protocols** | `organon/methodology/*/PROTOCOLS.md` | 5-15 protocol files, 15-50 individual protocols |
+| **Workflows** | Agent-specific bindings (Claude skills, Cursor rules, runbooks) | 5-10 core workflows |
+| **Tools** | Project scripts (npm, make, bash, Python) | 20-50 tools |
+| **Verification** | Multi-gate system (frontmatter, triplets, coverage, freshness) | 5-10 gates targeting 100% invariant coverage |
 
-**Results:**
-- RFC implementation time reduced ~40%
-- Zero protocol violations since workflow introduction
-- New contributors onboard faster (workflows guide execution)
-- 100% frontmatter coverage across 49 organon files
+**Expected Benefits:**
+- Protocol execution time reduced 30-50% (consistency, fewer mistakes)
+- Protocol violations prevented by verification gates
+- Faster onboarding (workflows guide new contributors through complex procedures)
+- High frontmatter coverage (90-100% across organon files)
 
-**Key tools from reference implementation:**
+**Key tool categories for enforcement loop:**
 
 | Tool | Purpose |
 |------|---------|

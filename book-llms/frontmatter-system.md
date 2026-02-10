@@ -4,7 +4,7 @@ scope: meta
 name: frontmatter-system
 version: "3.0"
 summary: YAML frontmatter specification for progressive disclosure — the mechanism that makes token-efficient big organons possible
-token_estimate: 4070
+token_estimate: 4124
 inherits_from: [meta-organon]
 load_priority: high
 required_for:
@@ -338,16 +338,16 @@ Reports coverage, validation status, token analysis, freshness, and actionable s
 
 ---
 
-## Reference Implementation
+## Example Implementation Pattern
 
-**Agent Tavern** (100% frontmatter coverage across 49 organon files):
+A complete frontmatter tooling implementation typically includes:
 
-- Generator: `scripts/organon/generate-frontmatter.ts`
-- Validator: `scripts/organon/validate-frontmatter.ts`
-- Query tool: `scripts/organon/query-frontmatter.ts`
-- Health dashboard: `scripts/organon/health.ts`
-- Tests: 19 comprehensive tests covering all validation rules
-- Results: ~112K total tokens, ~2,283 average per file, 100% validation passing
+- **Generator**: Auto-generate or update frontmatter (e.g., `organon generate <file>`)
+- **Validator**: Check schema compliance and truthfulness (e.g., `organon validate`)
+- **Query tool**: Filter files by frontmatter criteria (e.g., `organon find --scope meta --required-for tool_creation`)
+- **Health dashboard**: System-wide frontmatter quality metrics
+- **Tests**: Comprehensive validation rule coverage (schema, counts, token estimates, references)
+- **Results**: Target 100% frontmatter coverage, ~2,000-3,000 tokens average per file
 
 ---
 
