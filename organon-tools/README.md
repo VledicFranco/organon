@@ -2,6 +2,15 @@
 
 CLI tools and MCP server for the **Organon Methodology** — enforce documentation constraints, validate frontmatter, and give agents immediate methodology context.
 
+## Organon (Start Here)
+
+This project uses the Organon methodology to govern its own development:
+
+- **[ETHOS.md](./ETHOS.md)** — Constraints for developing organon-tools (what rules must never be violated)
+- **[PHILOSOPHY.md](./PHILOSOPHY.md)** — Design decisions and trade-offs (why TypeScript, why CLI, why fail-fast)
+
+**For contributors:** Read ETHOS.md first to understand invariants and principles. Read PHILOSOPHY.md to understand why the tool is built this way.
+
 ## Architecture
 
 ```
