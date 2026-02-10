@@ -113,6 +113,19 @@ After adding semantic mappings:
 
 ---
 
+## Recovery
+
+If something goes wrong:
+
+| Failure | Recovery Action |
+|---------|-----------------|
+| Generated catalog doesn't exist | Run catalog generation tool first, then retry |
+| Component ETHOS.md doesn't exist | Create minimal ETHOS using templates.md |
+| Invalid file#symbol reference | Verify symbol exists in source file; use fully qualified name if needed |
+| Broken catalog link | Regenerate catalog; verify file path is correct |
+
+---
+
 ## Example
 
 ```markdown
