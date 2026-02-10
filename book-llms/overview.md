@@ -4,7 +4,7 @@ scope: meta
 name: methodology-overview
 version: "1.0"
 summary: Bird's-eye view of what problems Organon solves, where solutions live, and what gaps remain
-token_estimate: 2006
+token_estimate: 2026
 inherits_from: [meta-organon]
 load_priority: high
 required_for:
@@ -38,8 +38,8 @@ When humans collaborate with LLMs on complex systems, a predictable set of probl
 | 7 | **Enforcement gap** | Documentation exists but isn't followed | Three-layer architecture, automation tiers, bidirectional references, verification gates ([three-layer-architecture.md](./three-layer-architecture.md)) | Solved |
 | 8 | **Constraint inheritance** | Inconsistent rules across project levels | Scope hierarchy, inheritance rules, methodology scope ([scopes.md](./scopes.md)) | Solved |
 | 9 | **Over/under-automation** | Not knowing what to automate vs keep manual | Automation tiers, decision factors, progressive automation ([three-layer-architecture.md](./three-layer-architecture.md)) | Solved |
-| 10 | **Methodology evolution** | How the methodology itself changes without drift | RFC-driven evolution, methodology version pinning, meta-organon pattern ([patterns.md](./patterns.md)) | Solved |
-| 11 | **Invariant-to-test tracking** | No mechanism to track which invariants have tests | Stable invariant IDs in frontmatter, `@organon-invariant` annotation contract, `organon coverage` CLI, `invariant-coverage` verification gate ([invariant-tracking.md](./invariant-tracking.md)) | Solved |
+| 10 | **Methodology evolution** | How the methodology itself changes without drift | [RFC-driven evolution](./patterns.md#rfc-driven-evolution-pattern), methodology version pinning, meta-organon pattern ([patterns.md](./patterns.md)) | Solved |
+| 11 | **Invariant-to-test tracking** | No mechanism to track which invariants have tests | Stable invariant IDs in frontmatter, `@organon-invariant` annotation contract, `organon coverage` CLI, `invariant-coverage` verification gate. Note: Judgment-call invariant review mechanism specified but not automated (V1 manual process) ([invariant-tracking.md](./invariant-tracking.md)) | Solved |
 | 12 | **Workflow authoring guidance** | What makes a good workflow vs a bad one? | Quality attributes (completeness, traceability, context sufficiency, error recoverability), archetypes, error handling patterns, anti-patterns, `workflow-quality` verification gate ([workflow-authoring.md](./workflow-authoring.md)) | Solved |
 
 ---

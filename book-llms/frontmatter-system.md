@@ -4,7 +4,7 @@ scope: meta
 name: frontmatter-system
 version: "3.0"
 summary: YAML frontmatter specification for progressive disclosure — the mechanism that makes token-efficient big organons possible
-token_estimate: 3952
+token_estimate: 4070
 inherits_from: [meta-organon]
 load_priority: high
 required_for:
@@ -140,9 +140,13 @@ parent: string                # Parent directory name
 ### components.md (`type: mapping`)
 
 ```yaml
-file_count: number            # Number of files mapped
-last_generated: string        # ISO 8601 timestamp
+file_count: number            # Number of code modules/files mapped
+last_generated: string        # ISO 8601 timestamp of generation
+generated_from: string        # Tool that generated this file (e.g., "organon-generate-v1.2.0")
+source_globs: string[]        # Source patterns scanned (e.g., ["src/**/*.scala", "modules/**/src/"])
 ```
+
+**Drift detection:** The `freshness` verification gate regenerates the mapping and compares with committed version. `generated_from` and `source_globs` enable reproducible generation.
 
 ---
 

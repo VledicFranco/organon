@@ -4,7 +4,7 @@ scope: meta
 name: invariant-tracking
 version: "1.0"
 summary: Invariant-to-test tracking specification — how to declare invariant IDs and verify test coverage
-token_estimate: 2200
+token_estimate: 2213
 inherits_from: [meta-organon]
 load_priority: high
 required_for:
@@ -162,6 +162,38 @@ invariants:                      # Stable invariant registry
 - `invariants` array length must match `invariants_count`
 - Each `id` must follow `INV-{SCOPE}-{N}` format (regex: `/^INV-[\w]+-\d+$/`)
 - No duplicate IDs within the array
+
+---
+
+## Human Review of Judgment-Call Invariants
+
+Invariants marked with `judgment_call: true` require human review rather than automated testing. These invariants represent constraints that cannot be mechanically verified (e.g., "identity boundaries are specific and testable," "LLMs are the primary interface").
+
+### Review Mechanisms
+
+**During Development** (Pre-merge):
+- **PR Review:** Reviewer explicitly confirms judgment-call invariants hold for the change
+- **Design Doc Annotation:** RFCs that introduce or modify judgment-call invariants must document how compliance will be maintained
+
+**During Audit** (Post-merge):
+- **Manual Checklist:** Periodic audits (quarterly, release milestones) verify judgment-call invariants across the codebase
+- **Issue Annotation:** When judgment-call invariants are violated, issues are tagged with `organon-invariant: INV-{SCOPE}-{N}` for tracking
+
+### Tracking Judgment-Call Review
+
+Judgment-call invariants are **excluded from automated coverage checks** (no `@organon-invariant` annotations required in test files). Instead, track review via:
+
+1. **PR reviews:** Reviewer confirms "Judgment-call invariants reviewed" as part of PR checklist
+2. **Audit log:** Quarterly audit creates an issue documenting all judgment-call invariants and their current compliance status
+3. **Optional annotation:** For critical judgment calls, add `@organon-invariant-reviewed YYYY-MM-DD` in design docs or architecture decision records
+
+### Verification Gate
+
+The `judgment-calls` verification gate (V2 planned) will check:
+- All invariants with `judgment_call: true` have corresponding audit issue or design doc annotation within the last 90 days
+- Warnings (not errors) when judgment-call invariants lack recent review
+
+**V1 Status:** Judgment-call review is manual process. No automated gate yet.
 
 ---
 

@@ -4,3 +4,7 @@
 # Node
 node_modules/
 dist/
+
+# Temporary collaboration directory
+tmp/
+tmp/

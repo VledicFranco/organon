@@ -4,7 +4,7 @@ scope: meta
 name: meta-organon
 version: "3.0"
 summary: Core invariants, principles, and heuristics for creating organons — the foundational rules every organon must follow
-token_estimate: 4500
+token_estimate: 4851
 invariants_count: 10
 principles_count: 7
 heuristics_count: 23
@@ -180,7 +180,7 @@ Progressive disclosure achieves the same goal (token efficiency) without sacrifi
 |-----------|--------|
 | Task must be done the same way every time | Write protocol. |
 | Errors in execution have significant consequences | Write protocol with verification steps. |
-| Task requires judgment calls | Don't write protocol; put guidance in ethos. |
+| Task requires human discretion/judgment at each execution | Don't write protocol; put guidance in ethos. (Note: different from invariant `judgment_call` flag which means "invariant verification requires human review") |
 
 ### When enforcing methodology
 

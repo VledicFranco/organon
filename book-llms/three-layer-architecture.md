@@ -4,7 +4,7 @@ scope: meta
 name: three-layer-architecture
 version: "3.0"
 summary: The enforcement loop — protocols, workflows, tools, and verification (tiered testing, drift detection, violation handling) bind organons to LLM execution
-token_estimate: 9115
+token_estimate: 10603
 inherits_from: [meta-organon]
 load_priority: high
 required_for:
@@ -163,6 +163,30 @@ Not every protocol needs a workflow. Use these criteria:
 - **Error risk:** Many edge cases → automate for consistency
 - **Cross-domain:** Touches multiple systems → orchestration value is high
 - **Judgment:** Requires human context → keep manual
+
+**Decision flowchart** (priority order):
+
+```
+1. Does it require human judgment/discretion at each execution?
+   → YES: Manual (no tools, no workflow)
+
+2. Is it <3 steps AND infrequent (<monthly)?
+   → YES: Manual
+
+3. Is it a single tool invocation (1-2 steps)?
+   → YES: Semi-automated (tool only, no workflow)
+
+4. Is it ≥5 steps OR daily/weekly OR error-prone OR cross-domain?
+   → YES: Automated (workflow + tools)
+
+5. Otherwise:
+   → Semi-automated or Manual (lean toward manual)
+```
+
+**Examples:**
+- "Run `organon generate components.md`" → 1 step, infrequent → **Semi-automated** (tool exists, no workflow needed)
+- "RFC implementation" → 5 phases, weekly, cross-domain → **Automated** (needs workflow orchestration)
+- "Emergency hotfix decision" → Judgment required → **Manual** (no automation)
 
 ---
 
@@ -420,11 +444,12 @@ protocol_file: organon/methodology/rfcs/PROTOCOLS.md   # ← references protocol
 
 **Validation rules:**
 1. If `automation_tier == "automated"`, `workflow` field is required
-2. Workflow file must exist (in agent-specific location)
-3. Workflow must include `protocol_id` matching protocol ID
-4. Workflow must include `protocol_file` pointing to PROTOCOLS.md
-5. Orphaned workflows (no protocol) are validation errors
-6. Phantom automation (protocol claims automated but workflow doesn't exist) are validation errors
+2. If `automation_tier == "semi-automated"` or `"manual"`, `workflow` field must be absent (these tiers use tools directly or no automation)
+3. Workflow file must exist (in agent-specific location)
+4. Workflow must include `protocol_id` matching protocol ID
+5. Workflow must include `protocol_file` pointing to PROTOCOLS.md
+6. Orphaned workflows (no protocol) are validation errors
+7. Phantom automation (protocol claims automated but workflow doesn't exist) are validation errors
 
 **Why bidirectional:** Prevents orphaned workflows, incomplete protocols, and silent drift between what the protocol says and what the workflow does.
 
@@ -487,6 +512,19 @@ Structural tests are cheap and universal. Semantic tests are expensive and proje
 
 **Language-agnostic annotation:** Mark tier-4 tests with an `@organon-invariant` annotation (or language-equivalent: decorator, tag, comment convention) referencing the specific invariant they verify. This enables coverage tracking — every invariant in ETHOS.md should map to at least one test (structural or semantic).
 
+**Test organization and discovery:**
+
+- **File location:** Tier-4 tests live alongside tier 1-3 tests in the project's test suite (e.g., `test/organon/`, `__tests__/organon/`, `spec/organon_spec.rb`)
+- **Discovery:** Test runner finds tier-4 tests via annotation scan (search test files for `@organon-invariant` pattern)
+- **Naming convention:** Prefix test names with scope for clarity (e.g., `test_product_cache_ttl_max_24h`, `test_meta_ethos_required`)
+- **Failure format:** When tier-4 test fails, error message must include:
+  - Invariant ID violated (e.g., `INV-CACHE-3`)
+  - Invariant description from ETHOS.md
+  - Specific violation (file, line, value that failed)
+  - Example: `FAIL: INV-CACHE-3 (Cache TTL max 24h) - config/cache.yml:12 sets ttl=172800 (exceeds 86400)`
+
+**Coverage reporting:** The `organon coverage` tool scans test files for `@organon-invariant` annotations and reports which invariants lack tests. See [invariant-tracking.md](./invariant-tracking.md) for annotation contract details.
+
 ### Verification gates (pre-merge)
 
 A universal checklist for CI gates. Adapt per project:
@@ -502,6 +540,25 @@ A universal checklist for CI gates. Adapt per project:
 | **RFC status** | If RFC-driven, RFC state matches implementation state | Yes |
 
 **Principle:** Verification gates **fail builds**, not just warn. A warning is an invitation to ignore. A failed build is a constraint.
+
+### Gate Implementation Details
+
+**Running gates:**
+- `organon verify` — runs all blocking gates in sequence
+- `organon verify --gate <name>` — runs specific gate (e.g., `--gate invariant-coverage`)
+- `organon verify --non-blocking` — includes warnings-only gates (V2 feature)
+
+**Gate dependencies:**
+1. **Frontmatter truthfulness** must pass before **invariant coverage** (can't check coverage if frontmatter is invalid)
+2. **Reference integrity** must pass before **freshness** (broken refs prevent regeneration)
+3. All others can run in parallel
+
+**Error codes:** Each gate produces structured output for CI reporting:
+- `GATE_PASS` — Gate passed, no issues
+- `GATE_FAIL` — Gate failed with errors (blocks merge)
+- `GATE_WARN` — Gate passed with warnings (info only, doesn't block)
+
+See [workflow-authoring.md](./workflow-authoring.md) for detailed error code catalog (`WORKFLOW_MISSING_PROTOCOL_ID`, etc.).
 
 ### Drift detection
 
