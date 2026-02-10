@@ -49,10 +49,11 @@ export function parseOrganonFile(path: string, content: string): ParsedOrganonFi
 
 /**
  * Estimate token count from content.
- * Heuristic: ~4 characters per token (aligns with frontmatter-system.md spec).
+ * Heuristic: ~3.5 characters per token for markdown text.
+ * (Accounts for spaces, punctuation, and markdown syntax)
  */
 export function estimateTokens(content: string): number {
-  return Math.ceil(content.length / 4);
+  return Math.ceil(content.length / 3.5);
 }
 
 /**

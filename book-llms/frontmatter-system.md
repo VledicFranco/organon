@@ -264,7 +264,7 @@ Frontmatter must be **truthful** — automated tests enforce accuracy.
 - `invariants_count` matches actual `## Invariants` entries
 - `principles_count` matches actual `## Principles` entries
 - `protocols_count` matches actual protocol count
-- `token_estimate` within 30% of actual (4 chars ≈ 1 token heuristic)
+- `token_estimate` within 30% of actual (~3.5 chars ≈ 1 token for markdown, or ~12 tokens per line as quick estimate)
 - `invariants` array length matches `invariants_count`
 - Each invariant `id` follows `INV-{SCOPE}-{N}` format
 - No duplicate invariant IDs

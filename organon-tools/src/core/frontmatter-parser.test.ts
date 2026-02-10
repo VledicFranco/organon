@@ -102,14 +102,14 @@ token_estimate: 200
 });
 
 describe('estimateTokens', () => {
-  it('estimates ~1 token per 4 characters', () => {
+  it('estimates ~1 token per 3.5 characters', () => {
     const content = 'a'.repeat(400);
-    expect(estimateTokens(content)).toBe(100);
+    expect(estimateTokens(content)).toBe(115); // ceil(400/3.5) = 115
   });
 
   it('rounds up', () => {
     const content = 'a'.repeat(5);
-    expect(estimateTokens(content)).toBe(2); // ceil(5/4) = 2
+    expect(estimateTokens(content)).toBe(2); // ceil(5/3.5) = 2
   });
 });
 
