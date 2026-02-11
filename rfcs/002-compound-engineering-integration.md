@@ -19,7 +19,7 @@ audience: [llm, human]
 
 # RFC 002: Recursive Collaboration Pattern
 
-> Make explicit the recursive, self-improving nature of Organon methodology. "Compound Engineering" describes the emergent property where systematic human+LLM collaboration produces exponential efficiency gains through recursive iteration, self-correction, and progressive automation. The goal is effective collaboration; compounding is the side effect.
+> Make explicit the recursive, self-improving nature of Organon methodology. The Recursive Collaboration Pattern describes how systematic human+LLM collaboration produces exponential efficiency gains (compounding) through three structural properties: recursive iteration, self-correction, and progressive automation. The goal is effective collaboration; compounding is the emergent side effect.
 
 ---
 
@@ -205,13 +205,15 @@ Session 4: Similar RFC Implementation (30 units of effort)
 
 1. **book-llms/ETHOS.md** — Add core principles about recursive improvement, self-correction, and progressive automation (the mechanisms that enable compounding)
 
-2. **book-llms/three-layer-architecture.md** — Update enforcement loop to include explicit "Compound" step and parallel verification pattern (making recursion operational)
+2. **book-llms/overview.md** — Update high-level introduction to mention recursive nature and compounding as emergent property
 
-3. **book-llms/patterns.md** — Add "Recursive Collaboration Pattern" (formerly "Compound Engineering Pattern") with Four-Step Loop, time allocation heuristics, and collaborative semantic review (HOW to execute recursive improvement)
+3. **book-llms/three-layer-architecture.md** — Update enforcement loop to include explicit "Compound" step and parallel verification pattern (making recursion operational)
 
-4. **book-llms/PHILOSOPHY.md** — Add design decisions explaining why compounding is emergent (not goal) and why recursive structure enables it
+4. **book-llms/patterns.md** — Add "Recursive Collaboration Pattern" with Four-Step Loop, time allocation heuristics, and collaborative semantic review (HOW to execute recursive improvement)
 
-**Key reframing:** This RFC doesn't just add a "compound" step—it makes explicit the structural properties (recursive, self-correcting, progressively automating) that cause compounding. These properties were always present but never documented.
+5. **book-llms/PHILOSOPHY.md** — Add design decisions explaining why compounding is emergent (not goal) and why recursive structure enables it
+
+**Key reframing:** This RFC doesn't just add a "compound" step—it makes explicit the structural properties (recursive, self-correcting, progressively automating) that cause compounding. These properties emerged organically in practice (through enforcement loop evolution, RFC-driven methodology changes, and tiered testing) but were never explicitly documented as the mechanisms behind compounding.
 
 This is a **methodology refinement**, not a breaking change. All existing organon files remain valid. New guidance makes the recursive nature explicit so compounding happens deliberately instead of accidentally.
 
@@ -219,7 +221,7 @@ This is a **methodology refinement**, not a breaking change. All existing organo
 
 ## Organon Impact
 
-> This RFC updates methodology documentation to integrate Compound Engineering principles.
+> This RFC updates methodology documentation to make the recursive, self-improving nature of collaboration explicit.
 
 ### Create
 
@@ -386,12 +388,38 @@ jobs:
 
 ---
 
-**`book-llms/patterns.md`** — Add Compound Engineering Pattern
+**`book-llms/overview.md`** — Update high-level introduction
+
+Add mention of recursive nature to the core concepts section:
+
+```markdown
+## Core Concepts
+
+Organon is a documentation methodology built on five pillars:
+
+1. **LLM-centric design** — organons are written for LLM consumption first; LLMs execute, humans author and review
+
+2. **Enforcement through automation** — protocols bind to workflows that orchestrate tools that verify constraints (Define → Bind → Execute → Verify → Evolve)
+
+3. **Recursive improvement by design** — the methodology improves itself through iteration. Each cycle generates learnings that feed into the next cycle. Improvements compound: better tools → faster execution → more time for improvement → even better tools. This recursive structure (combined with self-correction and progressive automation) produces exponential efficiency gains over time. Compounding is an emergent property, not a separate goal.
+
+4. **Progressive disclosure** — agents access files in 5 layers (README → frontmatter → section headings → specific sections → full file), never paying for content they don't need. See frontmatter-system.md for the complete model.
+
+5. **Three-layer architecture** — protocols (knowledge) → workflows (agent bindings) → tools (operations)
+
+6. **Code as single source of truth** — documentation derives from code, never prescribes it
+```
+
+Note: This expands the 5 pillars to 6, with "Recursive improvement by design" as the third pillar (emphasizing it's foundational, not an add-on).
+
+---
+
+**`book-llms/patterns.md`** — Add Recursive Collaboration Pattern
 
 Add new pattern after "RFC-Driven Evolution Pattern":
 
 ```markdown
-## Compound Engineering Pattern
+## Recursive Collaboration Pattern
 
 **The problem:** LLM-human collaboration lacks guidance on time allocation and improvement cycles. Without structure:
 - Planning phases run too long (over-design before execution)
@@ -902,7 +930,7 @@ None
 - [ ] Update trade-offs table
 
 **Day 5: Update patterns.md**
-- [ ] Add "Compound Engineering Pattern" after RFC-Driven Evolution
+- [ ] Add "Recursive Collaboration Pattern" after RFC-Driven Evolution
 - [ ] Four-Step Loop definition
 - [ ] Time allocation heuristics table
 - [ ] "Trust with Guardrails" principle
@@ -911,7 +939,7 @@ None
 - [ ] Anti-pattern: No Compound
 - [ ] Integration with Enforcement Loop
 
-**Deliverable:** Methodology documentation updated with Compound Engineering principles
+**Deliverable:** Methodology documentation updated with recursive collaboration principles
 
 ---
 
@@ -1031,7 +1059,7 @@ None
 | File | Relationship |
 |------|--------------|
 | [book-llms/three-layer-architecture.md](../book-llms/three-layer-architecture.md) | Updated to include Compound step and parallel verification |
-| [book-llms/patterns.md](../book-llms/patterns.md) | Updated to include Compound Engineering Pattern |
+| [book-llms/patterns.md](../book-llms/patterns.md) | Updated to include Recursive Collaboration Pattern |
 | [book-llms/ETHOS.md](../book-llms/ETHOS.md) | Updated principles and heuristics for time allocation |
 | [book-llms/PHILOSOPHY.md](../book-llms/PHILOSOPHY.md) | Updated with design decisions for Compound, time allocation, trust with guardrails |
 
