@@ -161,13 +161,13 @@ Ship a tested, documented CLI command or verification gate that follows all 6 or
 
 ### Preconditions
 
-- [ ] `packages/tools/ETHOS.md` has been read (6 invariants, 5 principles)
-- [ ] `packages/tools/PHILOSOPHY.md` has been read (design decisions)
+- [ ] `organon/domains/tools/ETHOS.md` has been read (6 invariants, 5 principles)
+- [ ] `organon/domains/tools/PHILOSOPHY.md` has been read (design decisions)
 - [ ] If adding a gate: `book-llms/three-layer-architecture.md` verification section loaded
 
 ### Steps
 
-1. **Load context.** Read `packages/tools/ETHOS.md`, `packages/tools/PHILOSOPHY.md`, and if relevant, `book-llms/three-layer-architecture.md`.
+1. **Load context.** Read `organon/domains/tools/ETHOS.md`, `organon/domains/tools/PHILOSOPHY.md`, and if relevant, `book-llms/three-layer-architecture.md`.
 
 2. **Design.** Answer: What does it do? Is it idempotent? Does it support `--format json`? What exit codes? Does it compose?
 

@@ -131,5 +131,5 @@ Do not do the following in this domain:
 - [ ] Frontmatter counts match actual content (7 invariants, 5 principles, 10 decision heuristic rows)
 - [ ] Identity boundaries are specific and testable
 - [ ] Principles are numbered by priority
-- [ ] No conflicts with parent scope constraints (organon-tools/ETHOS.md)
+- [ ] No conflicts with parent scope constraints (organon/domains/tools/ETHOS.md)
 - [ ] All 6 inherited organon-tools invariants are compatible (verified: schema fidelity, every command has tests, gates fail not warn, machine-parsable output via json-reporter, idempotent operations, no breaking changes without version bump)

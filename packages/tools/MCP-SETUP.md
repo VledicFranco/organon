@@ -34,7 +34,7 @@ The Organon MCP server gives Claude Code 12 capabilities:
 ### 1. Build the Tools
 
 ```bash
-cd organon-tools
+cd packages/tools
 npm install
 npm run build
 ```
@@ -49,7 +49,7 @@ Add to your Claude Desktop config (`~/.claude/config.json` or `%APPDATA%\Claude\
     "organon-coach": {
       "command": "node",
       "args": [
-        "C:/Users/atfm0/Repositories/organon/organon-tools/dist/cli/index.js",
+        "C:/Users/atfm0/Repositories/organon/packages/tools/dist/cli/index.js",
         "mcp",
         "--project-root",
         "C:/Users/atfm0/Repositories/organon"
@@ -139,7 +139,7 @@ Returns: List of relevant organons with token estimates, stays within budget
 
 **Claude (via Organon Coach):**
 ```
-organon_validate_frontmatter(files: ["organon-tools/ETHOS.md"], stages: [1,2,3,4])
+organon_validate_frontmatter(files: ["organon/domains/tools/ETHOS.md"], stages: [1,2,3,4])
 ```
 Returns: Validation report (schema, references, truthfulness, consistency)
 
@@ -163,7 +163,7 @@ Claude Code
     ↓
 MCP Protocol (stdio)
     ↓
-Organon MCP Server (organon-tools/dist/cli/index.js mcp)
+Organon MCP Server (packages/tools/dist/cli/index.js mcp)
     ↓
 Core Utilities (frontmatter-parser, validate, verify, query, etc.)
     ↓
@@ -178,7 +178,7 @@ You can also use the MCP server from Claude Code CLI in a dedicated terminal:
 
 ```bash
 # Terminal 1: Run Claude Code with Organon Coach
-export CLAUDE_MCP_ORGANON="node organon-tools/dist/cli/index.js mcp --project-root ."
+export CLAUDE_MCP_ORGANON="node packages/tools/dist/cli/index.js mcp --project-root ."
 claude-code
 
 # Now Claude has access to all 12 Organon capabilities!
@@ -192,14 +192,14 @@ claude-code
 
 1. Check config path is correct (`~/.claude/config.json` or `%APPDATA%\Claude\config.json`)
 2. Verify absolute paths in config (no relative paths)
-3. Check `organon-tools/dist/cli/index.js` exists (run `npm run build`)
+3. Check `packages/tools/dist/cli/index.js` exists (run `npm run build`)
 4. Restart Claude Desktop completely (close all windows)
 
 ### Tool Call Fails
 
 1. Verify `--project-root` points to your project with organons
 2. Check organon files have valid frontmatter
-3. Run `cd organon-tools && npm test` to verify core utilities work
+3. Run `cd packages/tools && npm test` to verify core utilities work
 
 ### Prompt Not Appearing
 
@@ -238,5 +238,5 @@ Traditional tools validate after the fact. The Organon Coach guides **during** d
 
 - [ETHOS.md](./ETHOS.md) — Constraints for organon-tools development
 - [PHILOSOPHY.md](./PHILOSOPHY.md) — Why the tool is built this way
-- [../book-llms/three-layer-architecture.md](../book-llms/three-layer-architecture.md) — Verification gates we implement
-- [../book-llms/patterns.md](../book-llms/patterns.md) — Methodology patterns
+- [../../book-llms/three-layer-architecture.md](../../book-llms/three-layer-architecture.md) — Verification gates we implement
+- [../../book-llms/patterns.md](../../book-llms/patterns.md) — Methodology patterns

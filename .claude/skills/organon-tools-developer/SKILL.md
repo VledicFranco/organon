@@ -1,12 +1,12 @@
 ---
 name: organon-tools-developer
-description: Ensures organon-tools development follows its own ETHOS.md and PHILOSOPHY.md constraints. Use when adding CLI commands, verification gates, MCP tools, or evolving the methodology specification. Dogfoods the Organon methodology by enforcing the 6 invariants (schema fidelity, every command has tests, gates fail not warn, machine-parsable output, idempotent operations, breaking changes require major version bump) and 5 design principles (fail-fast, composability, testability, clarity). Loads packages/tools/ETHOS.md and packages/tools/PHILOSOPHY.md before starting work.
+description: Ensures organon-tools development follows its own ETHOS.md and PHILOSOPHY.md constraints. Use when adding CLI commands, verification gates, MCP tools, or evolving the methodology specification. Dogfoods the Organon methodology by enforcing the 6 invariants (schema fidelity, every command has tests, gates fail not warn, machine-parsable output, idempotent operations, breaking changes require major version bump) and 5 design principles (fail-fast, composability, testability, clarity). Loads organon/domains/tools/ETHOS.md and organon/domains/tools/PHILOSOPHY.md before starting work.
 protocol_id: PROTO-ORG-2
 protocol_file: organon/protocols/PROTOCOLS.md
 tools: [organon-validate, organon-verify, npm-test, npm-build]
 organon_context:
-  - packages/tools/ETHOS.md
-  - packages/tools/PHILOSOPHY.md
+  - organon/domains/tools/ETHOS.md
+  - organon/domains/tools/PHILOSOPHY.md
   - book-llms/three-layer-architecture.md
   - CLAUDE.md
 context: fork
@@ -36,8 +36,8 @@ Use this skill when:
 
 Before any work, load and internalize:
 
-1. **Read `packages/tools/ETHOS.md`** - 6 invariants, 5 principles, 8 heuristics
-2. **Read `packages/tools/PHILOSOPHY.md`** - 5 design decisions and trade-offs
+1. **Read `organon/domains/tools/ETHOS.md`** - 6 invariants, 5 principles, 8 heuristics
+2. **Read `organon/domains/tools/PHILOSOPHY.md`** - 5 design decisions and trade-offs
 3. **Read `book-llms/three-layer-architecture.md`** - If working on verification gates
 
 **Critical constraint:** This tool builds tools that enforce methodology. The builder must follow what it builds.
@@ -46,7 +46,7 @@ Before any work, load and internalize:
 
 ## The 6 Invariants (Never Violate)
 
-From `packages/tools/ETHOS.md`:
+From `organon/domains/tools/ETHOS.md`:
 
 1. **Schema fidelity** - Frontmatter parser matches `book-llms/frontmatter-system.md` exactly
 2. **Every command has tests** - No untested code ships
@@ -61,7 +61,7 @@ From `packages/tools/ETHOS.md`:
 
 ## The 5 Design Principles (Prioritized)
 
-From `packages/tools/ETHOS.md`:
+From `organon/domains/tools/ETHOS.md`:
 
 1. **Schema fidelity over convenience** - When book-llms/ spec conflicts with ease-of-use, spec wins
 2. **Fail-fast over forgiving** - Invalid input blocks execution, errors surface immediately
@@ -73,7 +73,7 @@ From `packages/tools/ETHOS.md`:
 
 ## Core Architecture Pattern
 
-From `packages/tools/PHILOSOPHY.md`:
+From `organon/domains/tools/PHILOSOPHY.md`:
 
 ```
 src/

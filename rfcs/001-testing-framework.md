@@ -9,8 +9,8 @@ status: draft
 created: 2026-02-10
 author: organon-tools-developer
 related_files:
-  - ../packages/tools/ETHOS.md
-  - ../packages/tools/PHILOSOPHY.md
+  - ../organon/domains/tools/ETHOS.md
+  - ../organon/domains/tools/PHILOSOPHY.md
   - ../book-llms/invariant-tracking.md
   - ../book-llms/three-layer-architecture.md
   - ./002-compound-engineering-integration.md
@@ -278,7 +278,7 @@ Do not do the following in this domain:
 - [ ] Frontmatter counts match actual content (7 invariants, 5 principles, 10 decision heuristic rows)
 - [ ] Identity boundaries are specific and testable
 - [ ] Principles are numbered by priority
-- [ ] No conflicts with parent scope constraints (packages/tools/ETHOS.md)
+- [ ] No conflicts with parent scope constraints (organon/domains/tools/ETHOS.md)
 - [ ] All 6 inherited organon-tools invariants are compatible (verified: schema fidelity, every command has tests, gates fail not warn, machine-parsable output via json-reporter, idempotent operations, no breaking changes without version bump)
 ```
 
@@ -409,7 +409,7 @@ This bet succeeds if:
 
 ### Update
 
-**`packages/tools/ETHOS.md`** (product-level organon)
+**`organon/domains/tools/ETHOS.md`** (product-level organon)
 - Add reference: testing domain inherits product invariants
 - Add decision heuristic: "Testing domain work? Read organon/domains/testing/ETHOS.md"
 
@@ -877,8 +877,8 @@ None — all design questions resolved. Ready for implementation.
 
 | File | Relationship |
 |------|--------------|
-| [packages/tools/ETHOS.md](../packages/tools/ETHOS.md) | Testing library must follow organon-tools invariants (schema fidelity, 100% coverage, idempotent operations) |
-| [packages/tools/PHILOSOPHY.md](../packages/tools/PHILOSOPHY.md) | Design principles (fail-fast, testability, clarity) guide assertion API design |
+| [organon/domains/tools/ETHOS.md](../organon/domains/tools/ETHOS.md) | Testing library must follow organon-tools invariants (schema fidelity, 100% coverage, idempotent operations) |
+| [organon/domains/tools/PHILOSOPHY.md](../organon/domains/tools/PHILOSOPHY.md) | Design principles (fail-fast, testability, clarity) guide assertion API design |
 | [book-llms/invariant-tracking.md](../book-llms/invariant-tracking.md) | Defines tier-4 testing specification (this RFC implements it) |
 | [book-llms/three-layer-architecture.md](../book-llms/three-layer-architecture.md) | Testing library is Layer 3 (Tools) that executes tier-4 verification |
 | [packages/tools/dev/testing-framework-design.md](../packages/tools/dev/testing-framework-design.md) | Detailed design document (basis for this RFC) |
@@ -915,7 +915,7 @@ None — all design questions resolved. Ready for implementation.
 1. **Request review** - Share RFC with stakeholders for feedback
 2. **Acceptance vote** - All design questions resolved; team approval required to proceed
 3. **Begin implementation** - Phase 1 Week 1 (monorepo setup + core assertions)
-4. **Update organon files** - Same PR as Phase 1 completion (packages/tools/ETHOS.md, methodology/testing/PROTOCOL.md)
+4. **Update organon files** - Same PR as Phase 1 completion (organon/domains/tools/ETHOS.md, methodology/testing/PROTOCOL.md)
 
 ---
 

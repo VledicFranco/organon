@@ -26,6 +26,7 @@ This project's own organon hierarchy. The Organon methodology dogfoods itself â€
 
 | Domain | Purpose | Status |
 |--------|---------|--------|
+| [tools](./domains/tools/) | CLI and MCP server â€” verification, generation, discovery | Active |
 | [testing](./domains/testing/) | Semantic testing framework for tier-4 invariant verification | Created (RFC 001) |
 
 ## Relationship to CLAUDE.md
@@ -38,4 +39,4 @@ This project's own organon hierarchy. The Organon methodology dogfoods itself â€
 
 ## Relationship to packages/
 
-Each package (`packages/tools/`, `packages/testing/`) may have its own product-level organon files (ETHOS.md, PHILOSOPHY.md) for package-specific constraints. Domain-level organon files that govern bounded contexts live here at the project level, not nested under individual packages.
+All organon files (ETHOS.md, PHILOSOPHY.md) live here at the project level under `domains/`. The `packages/` directory contains only implementation code â€” no organon governance files.

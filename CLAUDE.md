@@ -122,7 +122,9 @@ organon/
 │   ├── ETHOS.md                      ← Meta-organon for the organon system
 │   ├── README.md                     ← Navigation
 │   ├── domains/                      ← Bounded contexts of this project
-│   ├── features/                     ← Cross-cutting capabilities
+│   │   ├── tools/                    ← CLI domain (ETHOS.md, PHILOSOPHY.md)
+│   │   └── testing/                  ← Testing domain (ETHOS.md, PHILOSOPHY.md)
+│   ├── observations/                 ← Empirical observations (RFC 005)
 │   └── protocols/                    ← Development procedures
 └── packages/
     ├── tools/                        ← CLI tooling (TypeScript, yargs)
