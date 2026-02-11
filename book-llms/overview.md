@@ -4,7 +4,7 @@ scope: meta
 name: methodology-overview
 version: "1.0"
 summary: Bird's-eye view of what problems Organon solves, where solutions live, and what gaps remain
-token_estimate: 2026
+token_estimate: 2300
 inherits_from: [meta-organon]
 load_priority: high
 required_for:
@@ -16,6 +16,24 @@ audience: [llm, human]
 # Methodology Overview
 
 > Organon is a documentation methodology that makes human-LLM collaboration on complex systems consistent, enforceable, and token-efficient. This document maps the problem landscape to solution coverage and documents known gaps.
+
+---
+
+## Core Concepts
+
+Organon is a documentation methodology built on six pillars:
+
+1. **LLM-centric design** — organons are written for LLM consumption first; LLMs execute, humans author and review
+
+2. **Enforcement through automation** — protocols bind to workflows that orchestrate tools that verify constraints (Define → Bind → Execute → Verify → Evolve)
+
+3. **Recursive improvement by design** — the methodology improves itself through iteration. Each cycle generates learnings that feed into the next cycle. Improvements compound: better tools → faster execution → more time for improvement → even better tools. This recursive structure (combined with self-correction and progressive automation) produces exponential efficiency gains over time. Compounding is an emergent property, not a separate goal.
+
+4. **Progressive disclosure** — agents access files in 5 layers (README → frontmatter → section headings → specific sections → full file), never paying for content they don't need. See frontmatter-system.md for the complete model.
+
+5. **Three-layer architecture** — protocols (knowledge) → workflows (agent bindings) → tools (operations)
+
+6. **Code as single source of truth** — documentation derives from code, never prescribes it
 
 ---
 

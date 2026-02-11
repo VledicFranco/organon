@@ -4,8 +4,8 @@ scope: meta
 name: patterns
 version: "1.0"
 summary: Common patterns and anti-patterns — progressive disclosure, enforcement loop, code mapping, verification, onboarding, and more
-token_estimate: 8800
-pattern_count: 21
+token_estimate: 11300
+pattern_count: 22
 inherits_from: [meta-organon]
 load_priority: medium
 required_for:
@@ -592,6 +592,342 @@ The enforcement loop (Define → Bind → Execute → Verify → **Evolve**) req
 - **Evolve:** RFC proposes new constraints based on what was learned → loop restarts
 
 Without RFCs (or an equivalent), "Evolve" is informal — someone edits an organon file ad-hoc. With RFCs, evolution is deliberate, reviewed, and traceable.
+
+---
+
+## Recursive Collaboration Pattern
+
+**The problem:** LLM-human collaboration lacks guidance on time allocation and improvement cycles. Without structure:
+- Planning phases run too long (over-design before execution)
+- Review phases run too short (incomplete validation)
+- Improvement never happens (no time reserved for compounding)
+
+**The solution:** A four-step collaboration rhythm with explicit time allocation heuristics.
+
+### The Four-Step Loop
+
+```
+PLAN (10-20% of session)
+  ↓
+WORK (60-70% of session)
+  ↓
+REVIEW (10-20% of session)
+  ↓
+COMPOUND (5-10% of session)
+  ↓
+(repeat)
+```
+
+### Phase Definitions
+
+**PLAN** — Define the approach before executing
+- What's the goal? (Success criteria)
+- What's the scope? (What's in/out)
+- What's the approach? (High-level strategy)
+- What are the risks? (Known unknowns)
+- **Output:** Written plan (can be 2-3 paragraphs, doesn't need to be formal)
+
+**WORK** — Execute with focus
+- Implement the plan
+- Use tools (generate, verify, test)
+- Parallel verification running continuously
+- Stop when scope complete or time budget exhausted
+- **Output:** Working code, passing tests, updated organons
+
+**REVIEW** — Validate results before declaring done
+- Does it meet success criteria?
+- Do all verification gates pass?
+- Are there edge cases we missed?
+- Did we violate any invariants?
+- **Output:** Confirmation that work is complete, or list of remaining issues
+
+**COMPOUND** — Capture learnings, improve the system
+- What was harder than expected? (Add heuristic)
+- What steps did we repeat? (Create tool)
+- What was unclear? (Update protocol)
+- What did we learn? (Update organon if constraint changed)
+- **Output:** Updated workflow/protocol/tool/heuristic (optional: updated organon if constraints changed)
+
+### Time Allocation Heuristics
+
+| Session Length | Plan | Work | Review | Compound |
+|----------------|------|------|--------|----------|
+| **30 min** | 5 min | 20 min | 4 min | 1 min |
+| **1 hour** | 8 min | 42 min | 8 min | 2 min |
+| **2 hours** | 15 min | 90 min | 20 min | 5 min |
+| **4 hours** | 30 min | 180 min | 40 min | 10 min |
+
+**The 80/20 rule:** Spend 80% of time on WORK, 20% on PLAN+REVIEW+COMPOUND. This prevents over-planning and ensures progress.
+
+**The 10% compound rule:** Reserve at least 5-10% of session for compounding. Without explicit reservation, compounding never happens (work expands to fill available time).
+
+**Flexible allocation:** These are starting points, not rigid rules. Adjust based on:
+- Complex problem → more PLAN (up to 25%)
+- Well-understood problem → less PLAN (down to 5%)
+- High-risk change → more REVIEW (up to 25%)
+- Routine change → less REVIEW (down to 5%)
+- New workflow → more COMPOUND (up to 15%)
+
+### "Trust with Guardrails" Principle
+
+**The principle:** Trust LLMs to execute workflows autonomously, but provide guardrails that catch violations early.
+
+**What this means:**
+- **Trust:** LLMs don't need humans to approve every step. Let them work through PLAN → WORK → REVIEW phases autonomously.
+- **Guardrails:** Parallel verification, pre-commit hooks, CI gates catch violations before they land. Verification is automated, not manual.
+- **Human checkpoint:** Humans review during COMPOUND phase and at final merge. Not every micro-decision.
+
+**Implementation:**
+```
+┌─────────────────────────────────────────┐
+│   LLM Autonomous Zone                   │
+│   ┌─────┐   ┌─────┐   ┌─────┐          │
+│   │PLAN │ → │WORK │ → │REVIEW│          │
+│   └─────┘   └─────┘   └─────┘          │
+│   Guardrails running continuously ────► │
+└─────────────────────────────────────────┘
+              ↓
+┌─────────────────────────────────────────┐
+│   Human Checkpoint                      │
+│   ┌─────────┐                           │
+│   │COMPOUND │ ← Human reviews results   │
+│   └─────────┘    + improvement ideas    │
+└─────────────────────────────────────────┘
+```
+
+**Why this works:**
+- LLMs are fast at execution (WORK phase)
+- Humans are good at judgment (COMPOUND phase)
+- Verification catches rule violations (GUARDRAILS)
+- Combines strengths, minimizes weaknesses
+
+### When to Compound
+
+**After every significant work session:**
+- Completed an RFC implementation → Compound
+- Fixed a complex bug → Compound
+- Implemented a new feature → Compound
+
+**Signal that compounding is needed:**
+- You repeated the same manual steps 3+ times → Create tool
+- Workflow was unclear or had missing steps → Update protocol
+- You discovered a new heuristic ("When X, do Y") → Add to ETHOS.md
+- Verification caught the same violation twice → Add gate or improve error message
+
+**When NOT to compound:**
+- Trivial changes (typo fixes, small edits) → No compound phase needed
+- Work didn't reveal new insights → No compound needed (that's fine)
+- Time-critical work → Defer compounding to retrospective
+
+### REVIEW Phase: Collaborative Semantic Review
+
+For complex artifacts (RFCs, organons, significant designs), use **collaborative semantic review** — a structured pattern where human and LLM review concepts together.
+
+**The problem:** Traditional review approaches have limitations:
+- Pure human review: Slow, might miss semantic inconsistencies
+- Pure LLM review: No judgment, might miss context
+- Async PR comments: Fragmented, no real-time dialogue
+
+**The solution:** Synchronous, collaborative, concept-by-concept review.
+
+#### The Pattern
+
+```
+1. DECOMPOSE
+   - Break artifact into conceptual sections (not just headings)
+   - Identify logical boundaries (Problem Statement, Proposed Solution, etc.)
+   - Create review sequence (usually: foundational concepts first)
+
+2. ANALYZE (LLM-led)
+   For each concept:
+   - Semantic analysis: Question assumptions, check coherence
+   - Identify gaps: What's missing? What's unclear?
+   - Check consistency: Does this contradict earlier sections?
+   - Present findings as questions, not assertions
+   - Output: "Here's what I found, what do you think?"
+
+3. JUDGE (Human-led)
+   For each concept:
+   - Provide context LLM doesn't have
+   - Make decisions: "This makes sense" or "This needs refinement"
+   - Add domain knowledge, user perspective, strategic priorities
+   - Resolve ambiguities
+   - Output: Clear direction ("accept", "refine X", "reject Y")
+
+4. REFINE (Collaborative)
+   - LLM updates artifact based on human judgment
+   - Human confirms changes or requests iteration
+   - Move to next concept when aligned
+   - Output: Refined section, ready for next concept
+
+5. REPEAT
+   - Continue until all concepts reviewed
+   - Final pass: Check cross-concept consistency
+   - Output: Artifact ready for approval or implementation
+```
+
+#### When to Use
+
+**Use collaborative semantic review for:**
+- Complex RFCs (novel domains, significant changes)
+- New organon files (ETHOS, PHILOSOPHY for new domains)
+- Significant design decisions (architecture changes)
+- Methodology evolution (changes to how we work)
+
+**Don't use for:**
+- Simple changes (typo fixes, small edits)
+- Low-stakes reviews (internal docs, temporary notes)
+- Time-critical work (async review is faster)
+
+**Time allocation:** 40-60% of REVIEW phase time (for complex artifacts)
+
+#### Example: RFC Review Session
+
+```
+2-hour session, 20 min allocated to REVIEW:
+
+├─ DECOMPOSE (2 min)
+│  └─ Break RFC into: Problem Statement, Proposed Solution,
+│     Organon Impact, Success Metrics
+│
+├─ ANALYZE + JUDGE + REFINE (15 min, iterative)
+│  ├─ Concept 1: Problem Statement
+│  │  └─ LLM: "Three gaps identified. Are they distinct? Is Gap 2 really
+│  │     a gap or just missing documentation?"
+│  │  └─ Human: "Gap 2 is real. Gap 1 and 3 might overlap. Let's combine."
+│  │  └─ LLM: Refines Problem Statement
+│  │  └─ Human: "Good, move on."
+│  │
+│  ├─ Concept 2: Proposed Solution
+│  │  └─ [same pattern]
+│  │
+│  └─ ... (continue through concepts)
+│
+└─ FINAL CONSISTENCY CHECK (3 min)
+   └─ Does solution actually solve all stated problems?
+   └─ Any contradictions between sections?
+```
+
+#### Why This Works
+
+**LLM strengths:**
+- Tireless analysis (can question every assumption)
+- Pattern recognition (spot inconsistencies across sections)
+- Thoroughness (won't skip hard questions out of politeness)
+
+**Human strengths:**
+- Context (knows unstated constraints, history, politics)
+- Judgment (can make calls when multiple options are valid)
+- Prioritization (knows what matters most)
+
+**Combined:** Fast, thorough, contextual review.
+
+#### Anti-Pattern: Async-Only Review
+
+**Bad pattern:**
+```
+Write RFC → Post for review → Wait for comments → Address comments → Repeat
+Timeline: 1-2 weeks of wall-clock time
+```
+
+**Good pattern (collaborative):**
+```
+Write RFC → Schedule 2-hour review session → Review concept-by-concept
+→ Refine in real-time → Done
+Timeline: 2 hours of focused time
+```
+
+**When async is better:** Multiple stakeholders need to review (can't all be in session).
+
+**When collaborative is better:** Complex artifact, need deep semantic analysis, single decision-maker available.
+
+#### Integration with Four-Step Loop
+
+Collaborative semantic review is a **specific technique for the REVIEW phase**, used when reviewing complex artifacts:
+
+```
+PLAN → WORK → REVIEW (use collaborative semantic review for complex artifacts) → COMPOUND
+```
+
+Not every REVIEW needs collaborative semantic review (simple changes use standard checks). But for RFCs, organons, and complex designs, this pattern ensures thorough validation before moving to COMPOUND.
+
+### Compound vs Evolve
+
+**Compound** improves methodology (workflows, tools, protocols). Happens frequently.
+
+**Evolve** updates constraints (ETHOS.md, PHILOSOPHY.md). Happens when learning changes what "should be."
+
+| Scenario | Compound or Evolve? | Example |
+|----------|-------------------|---------|
+| Workflow step was unclear | **Compound** | Update protocol.md for clarity |
+| Repeated manual step 3x | **Compound** | Create automation tool |
+| Verification caught same issue twice | **Compound** | Improve gate or error message |
+| Discovered new architectural constraint | **Evolve** | Add invariant to ETHOS.md |
+| Trade-off reasoning changed | **Evolve** | Update PHILOSOPHY.md |
+
+Both are valuable. Compound happens more often (every session). Evolve happens less often (when constraints change).
+
+### Example: RFC Implementation with Compound
+
+```
+SESSION 1 (2 hours)
+├─ PLAN (15 min)
+│  └─ Read RFC, load organon context, plan implementation phases
+├─ WORK (90 min)
+│  └─ Implement Phase 1 (domain layer + tests)
+├─ REVIEW (20 min)
+│  └─ Run verification, check coverage, validate tests
+└─ COMPOUND (5 min)
+   └─ Notice: RFC context loading takes 5 manual steps
+   └─ Create: `rfc:load-context` tool to automate it
+   └─ Update: RFC workflow to use new tool
+
+SESSION 2 (2 hours)
+├─ PLAN (15 min)
+│  └─ Plan Phase 2 (organon updates)
+├─ WORK (90 min)
+│  └─ Create ETHOS.md, PHILOSOPHY.md per RFC spec
+│  └─ Use `rfc:load-context` tool (faster than Session 1!)
+├─ REVIEW (20 min)
+│  └─ Run verification, all gates pass
+└─ COMPOUND (5 min)
+   └─ Notice: Discovered new invariant (all RFCs need "Organon Impact" section)
+   └─ Evolve: Add INV-RFC-3 to methodology/rfcs/ETHOS.md
+```
+
+Notice: Compound in Session 1 made Session 2 faster. That's the point.
+
+### Anti-Pattern: No Compound
+
+**Bad pattern:**
+```
+Session 1: Plan → Work → Review → Done (no compound)
+Session 2: Plan → Work → Review → Done (no compound)
+Session 3: Plan → Work → Review → Done (no compound)
+Result: Repeating same manual steps, never improving efficiency
+```
+
+**Good pattern:**
+```
+Session 1: Plan → Work → Review → Compound (create tool)
+Session 2: Plan → Work (faster!) → Review → Compound (update workflow)
+Session 3: Plan → Work (even faster!) → Review → Compound (add heuristic)
+Result: Each session builds on previous, efficiency compounds
+```
+
+### Integration with Enforcement Loop
+
+The Four-Step Loop (Plan → Work → Review → Compound) happens **within** the EXECUTE phase of the Enforcement Loop:
+
+```
+Enforcement Loop (macro):
+  Define → Bind → [EXECUTE: Four-Step Loop] → Verify → Compound → Evolve
+
+Four-Step Loop (micro):
+  Plan → Work → Review → Compound (repeats within EXECUTE phase)
+```
+
+The Four-Step Loop is the **operational rhythm**. The Enforcement Loop is the **architectural structure**.
 
 ---
 
