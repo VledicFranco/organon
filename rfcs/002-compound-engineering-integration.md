@@ -111,6 +111,8 @@ Cycle 3: Define (informed by Cycles 1+2) → ...
 
 **Not linear progression but circular improvement.** Each cycle doesn't just complete work—it generates knowledge that makes the next cycle faster.
 
+> **Note on terminology:** "Recursive" here means "cyclical with feedback" (each cycle informs the next), not "function calls itself" (programming sense). Alternative terms: "iterative feedback loop" or "cyclical improvement." We use "recursive" because it's evocative and captures the self-referential nature (methodology improving itself).
+
 #### 2. Self-Correction
 
 The methodology improves itself:
@@ -171,6 +173,8 @@ Session 4: Similar RFC Implementation (30 units of effort)
 
 **Result:** 70% efficiency gain over 4 sessions. This is exponential (not linear) improvement.
 
+> **Note on example numbers:** These values (100 → 80 → 50 → 30 units) are illustrative, not empirical data. They demonstrate the PATTERN of exponential decay (constant percentage reduction per cycle). Actual gains will vary by task complexity, team experience, and automation opportunities. The hypothesis (exponential vs linear) will be validated through pilot project metrics (see Success Metrics section).
+
 **Why it compounds:**
 1. **Time saved accumulates** - Each tool saves time in ALL future sessions
 2. **Learning persists** - Heuristics prevent repeating mistakes
@@ -188,6 +192,10 @@ Session 4: Similar RFC Implementation (30 units of effort)
 - **Counter-example:** Novel work stays flat (no compounding for one-off tasks, which is expected)
 
 **Proof of compounding:** If methodology is working, similar tasks get EXPONENTIALLY faster, not just incrementally faster. This RFC makes the recursive structure explicit so compounding happens deliberately, not accidentally.
+
+> **Note on diminishing returns:** True exponential decay may not continue indefinitely. Expected pattern: exponential improvements in early sessions (high-value automation opportunities), then plateau as automation matures and only marginal gains remain. Example: 40h → 28h → 20h → 14h → 12h → 11h (exponential becomes logarithmic). This is expected and acceptable—the bulk of compounding happens early. Validation should focus on first 4-6 sessions where most automation occurs.
+>
+> **Scope clarification:** Compounding validation applies only to **repeated work types** (similar RFCs, similar features, similar bugs). Novel one-off work will not show compounding (and shouldn't—that's expected). The methodology optimizes for repeated patterns, not unique tasks.
 
 ---
 
