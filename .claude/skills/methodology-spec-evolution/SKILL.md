@@ -57,14 +57,14 @@ Grep pattern="<concept-being-changed>" path="."
 Also check which organon files relate by name:
 
 ```bash
-cd organon-tools && npx organon find --name "<concept>"
+cd packages/tools && npx organon find --name "<concept>"
 ```
 
 Every file returned is a potential propagation target.
 
 **Known high-propagation files:**
 - `book-llms/ETHOS.md` changes → affects templates.md, frontmatter-system.md, patterns.md, scopes.md, overview.md, CLAUDE.md
-- `book-llms/frontmatter-system.md` changes → affects templates.md, ETHOS.md (structure templates), organon-tools parsers
+- `book-llms/frontmatter-system.md` changes → affects templates.md, ETHOS.md (structure templates), packages/tools parsers
 - `book-llms/three-layer-architecture.md` changes → affects workflow-authoring.md, templates.md, patterns.md
 - Terminology changes → grep ALL files including CLAUDE.md, README.md, skill files
 
@@ -125,7 +125,7 @@ Grep pattern="<old-term>" path="."
 Also check organon files by name:
 
 ```bash
-cd organon-tools && npx organon find --name "<old-term>"
+cd packages/tools && npx organon find --name "<old-term>"
 ```
 
 Additionally, manually check common stale term locations:
@@ -137,8 +137,8 @@ Additionally, manually check common stale term locations:
 ### Step 7: Run Full Verification
 
 ```bash
-cd organon-tools && npx organon verify
-cd organon-tools && npx organon health
+cd packages/tools && npx organon verify
+cd packages/tools && npx organon health
 ```
 
 All gates must pass. Health score should not decrease.

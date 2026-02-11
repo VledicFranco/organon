@@ -74,7 +74,7 @@ For each finding, categorize it:
 
 | Category | Description | Where to Implement |
 |----------|-------------|-------------------|
-| **Tool candidate** | Repeated operation that could be automated | `organon-tools/` — new command or flag |
+| **Tool candidate** | Repeated operation that could be automated | `packages/tools/` — new command or flag |
 | **Protocol update** | Procedure followed but not documented | `organon/protocols/PROTOCOLS.md` — new or updated protocol |
 | **Heuristic addition** | Decision made repeatedly in same way | `CLAUDE.md` or `organon/ETHOS.md` — new heuristic row |
 | **Workflow refinement** | Existing workflow that was awkward or incomplete | `.claude/skills/<name>/SKILL.md` — update steps, context, or error recovery |
@@ -125,7 +125,7 @@ Grep pattern="<term-to-check>" path="." glob="*.md"
 Also check organon files by name:
 
 ```bash
-cd organon-tools && npx organon find --name "<term-to-check>"
+cd packages/tools && npx organon find --name "<term-to-check>"
 ```
 
 Check common drift points:
@@ -136,8 +136,8 @@ Check common drift points:
 ### Step 8: Run Verification
 
 ```bash
-cd organon-tools && npx organon verify
-cd organon-tools && npx organon health
+cd packages/tools && npx organon verify
+cd packages/tools && npx organon health
 ```
 
 Confirm no regressions from the improvement.

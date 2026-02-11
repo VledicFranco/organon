@@ -217,7 +217,7 @@ The `judgment-calls` verification gate (V2 planned) will check:
 - **I/O separation** — pure assertion logic in `core/assertions/` (no file system imports), resolver layer in `core/resolvers/` handles file reading
 - **Coverage tracking** — registry maps tested invariant IDs to test results, feeds `organon coverage` gate
 
-**Source:** `organon-tools/packages/testing/` | **Domain organon:** `organon-tools/organon/domains/testing/` | **RFC:** [001-testing-framework](../rfcs/001-testing-framework.md)
+**Source:** `packages/testing/` | **Domain organon:** `organon/domains/testing/` | **RFC:** [001-testing-framework](../rfcs/001-testing-framework.md)
 
 Future language implementations (Scala, Python, Rust) should follow the same pattern: language-specific assertion libraries that use the universal `@organon-invariant` annotation contract defined above.
 

@@ -52,8 +52,8 @@ Choose what to review:
 ### Step 2: Run Automated Gates First
 
 ```bash
-cd organon-tools && npx organon verify
-cd organon-tools && npx organon validate <path>
+cd packages/tools && npx organon verify
+cd packages/tools && npx organon validate <path>
 ```
 
 Fix any automated failures before proceeding. Semantic review is only meaningful when structural issues are resolved.
@@ -189,8 +189,8 @@ Structure findings by severity:
 If fixes are made during the review:
 
 ```bash
-cd organon-tools && npx organon verify
-cd organon-tools && npx organon health
+cd packages/tools && npx organon verify
+cd packages/tools && npx organon health
 ```
 
 Confirm no regressions. Health score should be equal to or higher.

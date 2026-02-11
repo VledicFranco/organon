@@ -600,7 +600,7 @@ status: draft
 created: [YYYY-MM-DD]
 author: [author-name]
 related_files:
-  - ../organon-tools/ETHOS.md
+  - ../packages/tools/ETHOS.md
   - ../book-llms/[relevant-file].md
 load_priority: high
 audience: [llm, human]

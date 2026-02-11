@@ -152,4 +152,4 @@ Reach out: [VledicFranco/organon/issues](https://github.com/VledicFranco/organon
 
 ## License
 
-MIT (same as book-llms/ and organon-tools/)
+MIT (same as book-llms/ and packages/)

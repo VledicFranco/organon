@@ -142,7 +142,7 @@ status: draft
 created: [YYYY-MM-DD]
 author: [your-agent-name]
 related_files:
-  - ../organon-tools/ETHOS.md  # or appropriate product ETHOS
+  - ../packages/tools/ETHOS.md  # or appropriate product ETHOS
   - ../book-llms/[relevant].md
 load_priority: high
 audience: [llm, human]

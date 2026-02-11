@@ -10,7 +10,7 @@
 
 - A methodology repository: documentation + CLI tooling for the Organon documentation system
 - A meta-organon: it documents itself using its own rules
-- Three deliverables: `book-llms/` (LLM reference), `book-humans/` (narrative guide), `organon-tools/` (CLI)
+- Three deliverables: `book-llms/` (LLM reference), `book-humans/` (narrative guide), `packages/tools/` (CLI)
 - The canonical definition of the Organon methodology
 - A three-layer system: protocols (knowledge) → workflows (agent bindings) → tools (operations)
 
@@ -27,7 +27,7 @@
 
 1. **Dogfood the methodology.** This repo must use Organon to govern itself. If the methodology says it, we follow it here.
 
-2. **Code is the source of truth.** `organon-tools/` source code is authoritative. Documentation about the CLI describes what the code does, never aspirations.
+2. **Code is the source of truth.** `packages/tools/` source code is authoritative. Documentation about the CLI describes what the code does, never aspirations.
 
 3. **Every organon file has YAML frontmatter.** Frontmatter enables progressive disclosure — agents discover, filter, and budget before loading full content. See `book-llms/frontmatter-system.md` for the schema.
 
@@ -68,7 +68,7 @@
 | File growing large | Ensure frontmatter has accurate `token_estimate`. Ensure sections use standardized headings so agents can load partially. Do NOT split just for size — split only when content serves different scopes or audiences. |
 | Editing `book-llms/` content | Follow section structure from `book-llms/ETHOS.md`. Update frontmatter counts if invariants/principles/heuristics changed. |
 | Adding a new pattern | Add to `book-llms/patterns.md` if universal. Create a protocol in `book-llms/protocols/` if procedural. |
-| Modifying `organon-tools/` | TypeScript only. Use yargs for CLI. Keep command files self-contained. |
+| Modifying `packages/tools/` | TypeScript only. Use yargs for CLI. Keep command files self-contained. |
 | Creating new methodology content | Ask: does it constrain (ethos), explain (philosophy), or instruct (protocol)? File accordingly. |
 | Unsure if something belongs here vs Agent Tavern | Specification and methodology go here. Implementation-specific patterns stay in Agent Tavern. |
 | README exceeds 100 lines | READMEs are still routers, not content. Split content into dedicated files. |
@@ -124,9 +124,11 @@ organon/
 │   ├── domains/                      ← Bounded contexts of this project
 │   ├── features/                     ← Cross-cutting capabilities
 │   └── protocols/                    ← Development procedures
-└── organon-tools/                    ← CLI tooling (TypeScript, yargs)
-    ├── src/commands/                 ← generate, verify, find
-    └── package.json                  ← @organon/tools
+└── packages/
+    ├── tools/                        ← CLI tooling (TypeScript, yargs)
+    │   ├── src/commands/             ← generate, verify, find
+    │   └── package.json              ← @organon/tools
+    └── testing/                      ← Test utilities and shared test infrastructure
 ```
 
 ---

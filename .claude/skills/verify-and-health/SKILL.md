@@ -43,7 +43,7 @@ Use this skill when:
 ### Step 1: Run All Verification Gates
 
 ```bash
-cd organon-tools && npx organon verify
+cd packages/tools && npx organon verify
 ```
 
 This runs all 5 gates:
@@ -56,7 +56,7 @@ This runs all 5 gates:
 ### Step 2: Run Health Check
 
 ```bash
-cd organon-tools && npx organon health
+cd packages/tools && npx organon health
 ```
 
 Reports overall project health score with breakdown by category.
@@ -95,7 +95,7 @@ For each failure:
 After all fixes are applied:
 
 ```bash
-cd organon-tools && npx organon verify && npx organon health
+cd packages/tools && npx organon verify && npx organon health
 ```
 
 All gates should pass. Health score should be equal to or higher than before.
@@ -115,7 +115,7 @@ All gates should pass. Health score should be equal to or higher than before.
 
 | Failure | Recovery Action |
 |---------|-----------------|
-| `organon verify` command not found | Build organon-tools: `cd organon-tools && npm install && npm run build` |
+| `organon verify` command not found | Build organon-tools: `cd packages/tools && npm install && npm run build` |
 | Gate failure not in diagnostic table | Read the gate's error message for file:line details. Check `book-llms/workflow-authoring.md` for diagnostic codes. |
 | Fix introduces new failure | Re-run full verification. Cascading failures are common when fixing references — fix in dependency order (frontmatter → references → triplets). |
 | Health score decreased after fixes | Investigate what changed. A lower score usually means a file was removed or frontmatter was invalidated. |

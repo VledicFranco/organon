@@ -47,7 +47,7 @@ related_files:
 
 - A methodology repository: documentation + CLI tooling for the Organon documentation system
 - A meta-organon: it documents itself using its own rules
-- Three deliverables: `book-llms/` (LLM reference), `book-humans/` (narrative guide), `organon-tools/` (CLI)
+- Three deliverables: `book-llms/` (LLM reference), `book-humans/` (narrative guide), `packages/tools/` (CLI)
 - The canonical definition of the Organon methodology
 - A three-layer system: protocols (knowledge) → workflows (agent bindings) → tools (operations)
 
@@ -65,7 +65,7 @@ related_files:
 1. **INV-ORG-1: dogfood-methodology.** This repo must use Organon to govern itself. If the methodology says it, we follow it here.
    - Enforced by: `organon verify` gates, protocol↔workflow bidirectional references, this ETHOS.md file existing
 
-2. **INV-ORG-2: code-is-source-of-truth.** `organon-tools/` source code is authoritative. Documentation about the CLI describes what the code does, never aspirations.
+2. **INV-ORG-2: code-is-source-of-truth.** `packages/tools/` source code is authoritative. Documentation about the CLI describes what the code does, never aspirations.
    - Enforced by: `organon-tools-developer` workflow (PROTO-ORG-2), test suite (137 tests)
 
 3. **INV-ORG-3: every-file-has-frontmatter.** Every organon file has YAML frontmatter. Frontmatter enables progressive disclosure — agents discover, filter, and budget before loading full content.
@@ -108,7 +108,7 @@ related_files:
 | File growing large | Ensure frontmatter has accurate `token_estimate`. Ensure sections use standardized headings. Do NOT split just for size. |
 | Editing `book-llms/` content | Use `methodology-spec-evolution` workflow (PROTO-ORG-3). Follow section structure from `book-llms/ETHOS.md`. |
 | Adding a new pattern | Add to `book-llms/patterns.md` if universal. Create a protocol in `book-llms/protocols/` if procedural. |
-| Modifying `organon-tools/` | Use `organon-tools-developer` workflow (PROTO-ORG-2). TypeScript only. Use yargs for CLI. |
+| Modifying `packages/tools/` | Use `organon-tools-developer` workflow (PROTO-ORG-2). TypeScript only. Use yargs for CLI. |
 | Creating new methodology content | Ask: does it constrain (ethos), explain (philosophy), or instruct (protocol)? File accordingly. |
 | Unsure if something belongs here vs Agent Tavern | Specification and methodology go here. Implementation-specific patterns stay in Agent Tavern. |
 | README exceeds 100 lines | READMEs are routers, not content. Split content into dedicated files. |

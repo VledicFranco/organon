@@ -152,7 +152,7 @@ Follow the template's section structure exactly:
 ### Step 7: Validate
 
 ```bash
-cd organon-tools && npx organon validate <path-to-new-file>
+cd packages/tools && npx organon validate <path-to-new-file>
 ```
 
 Runs all 4 validation stages:
@@ -169,7 +169,7 @@ If the new file references other organon files, ensure those files reference bac
 - If setting `related_files`, ensure those files exist
 
 ```bash
-cd organon-tools && npx organon verify --gate triplets
+cd packages/tools && npx organon verify --gate triplets
 ```
 
 ---
