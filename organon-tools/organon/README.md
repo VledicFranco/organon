@@ -22,6 +22,7 @@ audience: [llm, human]
 organon/
 ├── domains/           ← Bounded contexts within organon-tools
 │   └── testing/       ← Testing framework domain (@organon/testing)
+├── learnings/         ← Dogfooding observations (experimental)
 └── features/          ← Cross-cutting capabilities (future)
 ```
 
@@ -39,6 +40,7 @@ organon/
 
 - **Product-level organon:** See [../ETHOS.md](../ETHOS.md) and [../PHILOSOPHY.md](../PHILOSOPHY.md)
 - **Testing domain:** See [domains/testing/](./domains/testing/)
+- **Learnings:** See [learnings/](./learnings/) (dogfooding observations)
 
 ---
 
