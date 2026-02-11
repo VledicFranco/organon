@@ -18,7 +18,7 @@ audience: [llm, human]
 
 # RFC 003: Explore-Before-Ethos Pattern
 
-> Add pattern for novel domains where writing ETHOS from first principles is premature — time-boxed exploration discovers constraints before codification.
+> Add pattern for novel domains where writing ETHOS from first principles is premature — time-boxed exploration discovers constraints before codification. This pattern addresses the DEFINE phase of the enforcement loop (from RFC 002) when technical feasibility is unknown.
 
 ---
 
@@ -210,6 +210,37 @@ Exploration happens **before the PR branch**, not during implementation.
 **Default:** Ethos-First Development (bias toward action, not analysis paralysis)
 
 **Exception:** Explore-Before-Ethos (when uncertainty is HIGH)
+
+---
+
+### Integration with RFC 002 (Recursive Collaboration Pattern)
+
+**This RFC addresses the DEFINE phase** of the enforcement loop updated in RFC 002:
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  DEFINE (This RFC affects this phase)                  │
+│    Option A: Write ETHOS directly (Ethos-First)        │
+│    Option B: EXPLORE → Write ETHOS (Explore-Before)    │
+└──────────────────────┬──────────────────────────────────┘
+                       ▼
+┌─────────────────────────────────────────────────────────┐
+│  BIND → EXECUTE → VERIFY → COMPOUND → EVOLVE           │
+│  (RFC 002's Recursive Collaboration Pattern)           │
+└─────────────────────────────────────────────────────────┘
+```
+
+**Relationship:**
+- **RFC 002** defines how to execute work recursively (PLAN → WORK → REVIEW → COMPOUND)
+- **RFC 003** defines when to explore before defining constraints (EXPLORE → ETHOS)
+- Both support the methodology's recursive nature: exploration findings feed into ETHOS, ETHOS guides implementation, implementation validates ETHOS (self-correcting loop)
+
+**Compounding connection:** Explore-Before-Ethos enables compounding by:
+1. **Reducing rework** - Validated constraints mean less ETHOS rewriting
+2. **Building knowledge** - Exploration findings become reusable patterns
+3. **Progressive automation** - Exploration tools can be created (e.g., `organon explore` scaffold)
+
+This pattern is consistent with RFC 002's principle: **recursive improvement by design**. Exploration is another form of iteration that generates learnings feeding into the next cycle.
 
 ---
 
@@ -688,8 +719,8 @@ None
 - None (can implement immediately)
 
 **Related work:**
-- RFC 002 (Compound Engineering) — Affects EXECUTE phase, this RFC affects DEFINE phase (complementary)
-- RFC 001 (Testing Framework) — Example of domain that could have benefited from exploration
+- RFC 002 (Recursive Collaboration Pattern) — Affects EXECUTE phase, this RFC affects DEFINE phase (complementary, both support recursive improvement)
+- RFC 001 (Testing Framework) — Example of novel domain that could have benefited from exploration
 
 ---
 
@@ -701,19 +732,21 @@ None
 | [book-llms/ETHOS.md](../book-llms/ETHOS.md) | Updated with decision heuristic for pattern selection |
 | [book-llms/PHILOSOPHY.md](../book-llms/PHILOSOPHY.md) | Updated with design decisions for two-pattern approach |
 | [rfcs/001-testing-framework.md](./001-testing-framework.md) | Example of novel domain that would use Explore-Before-Ethos |
-| [rfcs/002-compound-engineering-integration.md](./002-compound-engineering-integration.md) | Complementary RFC (affects EXECUTE phase, this affects DEFINE phase) |
+| [rfcs/002-compound-engineering-integration.md](./002-compound-engineering-integration.md) | Complementary RFC: Recursive Collaboration Pattern (affects EXECUTE phase, this affects DEFINE phase) |
 
 ---
 
 ## Approval Process
 
 **Review criteria:**
-- [ ] Pattern is clearly defined with concrete examples
+- [ ] Pattern is clearly defined with concrete examples (Scenario A vs B comparison)
 - [ ] Decision heuristic provides clear guidance (no ambiguity about when to use which pattern)
-- [ ] Time-boxing mechanism prevents analysis paralysis
-- [ ] Ethos-First remains default (Explore-Before-Ethos stays exceptional)
-- [ ] Changes are backwards-compatible (existing organons remain valid)
-- [ ] No contradictions with existing methodology
+- [ ] Time-boxing mechanism prevents analysis paralysis (mandatory 1-2 day limit)
+- [ ] Integration with RFC 002 is clear (DEFINE phase, supports recursive improvement)
+- [ ] Ethos-First remains default (Explore-Before-Ethos stays exceptional, <30% usage expected)
+- [ ] Changes are backwards-compatible (existing organons remain valid, additive pattern)
+- [ ] No contradictions with existing methodology (aligns with Same-PR principle, dogfooding)
+- [ ] Success metrics are measurable (pattern adoption, reduced rework, time-box compliance)
 
 **Reviewers:**
 - [ ] @organon-methodology (methodology coherence, pattern consistency)
