@@ -106,7 +106,7 @@ describe('assertMaxValue (high-level)', () => {
     }
   });
 
-  it('passes when no files match (no values to check)', async () => {
+  it('throws when no values are extracted (requireMatches default)', async () => {
     const fs = new MockFileSystem({
       'src/config.ts': 'export const name = "test";',
     });
@@ -116,6 +116,22 @@ describe('assertMaxValue (high-level)', () => {
         files: ['src/config.ts'],
         pattern: /ttl\s*=\s*(\d+)/,
         maxValue: 86400,
+        fs,
+      }),
+    ).rejects.toThrow(MaxValueResolverError);
+  });
+
+  it('passes when no values are extracted and requireMatches is false', async () => {
+    const fs = new MockFileSystem({
+      'src/config.ts': 'export const name = "test";',
+    });
+
+    await expect(
+      assertMaxValue({
+        files: ['src/config.ts'],
+        pattern: /ttl\s*=\s*(\d+)/,
+        maxValue: 86400,
+        requireMatches: false,
         fs,
       }),
     ).resolves.toBeUndefined();

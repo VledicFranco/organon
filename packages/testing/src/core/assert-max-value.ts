@@ -45,6 +45,13 @@ export interface MaxValueOptions {
   cwd?: string;
   /** Optional FileSystem implementation (defaults to Node.js fs + fast-glob) */
   fs?: FileSystem;
+  /**
+   * Require at least one value to be extracted (default: true).
+   * When true, throws if no files match the glob or no lines match the pattern.
+   * This prevents silent passes from typos in file globs or regex patterns.
+   * Set to false when the absence of matches is a valid (expected) outcome.
+   */
+  requireMatches?: boolean;
 }
 
 /**
@@ -79,7 +86,7 @@ export class MaxValueResolverError extends Error {
 export async function assertMaxValue(
   options: MaxValueOptions,
 ): Promise<void> {
-  const { files, pattern, maxValue, unit, cwd, fs } = options;
+  const { files, pattern, maxValue, unit, cwd, fs, requireMatches = true } = options;
   const resolvedFs = fs ?? createNodeFileSystem();
 
   // 0. Fail-fast on empty files array (INV-TEST-2)
@@ -98,7 +105,19 @@ export async function assertMaxValue(
     throw new MaxValueResolverError(resolved.errors);
   }
 
-  // 3. Validate extracted values against the maximum (pure assertion, sync)
+  // 3. Fail-fast when no values found and requireMatches is true (INV-TEST-2)
+  //    Prevents silent passes from typos in file globs or regex patterns.
+  if (requireMatches && resolved.values.length === 0) {
+    const filesDetail = resolved.filesRead.length === 0
+      ? 'No files matched the glob pattern(s).'
+      : `Searched ${resolved.filesRead.length} file(s) but pattern matched no lines.`;
+    throw new MaxValueResolverError([{
+      file: files.join(', '),
+      message: `No values extracted. ${filesDetail} Check your file globs and regex pattern.`,
+    }]);
+  }
+
+  // 4. Validate extracted values against the maximum (pure assertion, sync)
   validateMaxValue({
     values: resolved.values,
     maxValue,
