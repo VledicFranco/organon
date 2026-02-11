@@ -28,6 +28,14 @@
   ],
   "author": "Organon Methodology Contributors",
   "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
   "peerDependencies": {
     "vitest": ">=1.0.0"
   },

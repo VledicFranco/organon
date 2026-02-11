@@ -82,6 +82,14 @@ export async function assertMaxValue(
   const { files, pattern, maxValue, unit, cwd, fs: optionsFs } = options;
   const resolvedFs = fs ?? optionsFs ?? createNodeFileSystem();
 
+  // 0. Fail-fast on empty files array (INV-TEST-2)
+  if (files.length === 0) {
+    throw new MaxValueResolverError([{
+      file: '(none)',
+      message: 'No file patterns provided. The files array must not be empty.',
+    }]);
+  }
+
   // 1. Resolve files and extract values
   const resolved = await resolveValues({ files, pattern, cwd }, resolvedFs);
 
@@ -90,8 +98,8 @@ export async function assertMaxValue(
     throw new MaxValueResolverError(resolved.errors);
   }
 
-  // 3. Validate extracted values against the maximum (pure assertion)
-  await validateMaxValue({
+  // 3. Validate extracted values against the maximum (pure assertion, sync)
+  validateMaxValue({
     values: resolved.values,
     maxValue,
     unit,

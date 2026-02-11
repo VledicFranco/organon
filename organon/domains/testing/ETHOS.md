@@ -23,7 +23,7 @@ invariants:
     name: always-async
   - id: INV-TEST-7
     name: composable
-inherits_from: [organon-tools]
+inherits_from: [organon-self-governance]
 load_priority: high
 required_for:
   - tier4_testing

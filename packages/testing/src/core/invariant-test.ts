@@ -54,6 +54,8 @@ export type TestRunner = (
 export interface TestInvariantOptions {
   /** Custom test runner (default: passthrough that executes the function) */
   runner?: TestRunner;
+  /** Custom registry for tracking test registrations (default: global registry) */
+  registry?: InvariantTestRegistry;
 }
 
 // ---------------------------------------------------------------------------
@@ -149,8 +151,10 @@ export interface InvariantTestRegistry {
   getAll(): InvariantTestMetadata[];
   /** Check if an invariant ID has been registered */
   has(invariantId: string): boolean;
-  /** Get the count of registered tests */
+  /** Get the count of registered tests (may exceed distinct invariants if multiple tests cover the same ID) */
   size(): number;
+  /** Get the count of distinct invariant IDs covered */
+  coveredCount(): number;
   /** Clear all registrations (for test isolation) */
   clear(): void;
 }
@@ -176,6 +180,10 @@ export function createRegistry(): InvariantTestRegistry {
 
     size(): number {
       return entries.length;
+    },
+
+    coveredCount(): number {
+      return new Set(entries.map((e) => e.invariantId)).size;
     },
 
     clear(): void {
@@ -243,7 +251,7 @@ export function testInvariant(
   invariantId: string,
   description: string,
   testFn: InvariantTestFn,
-  options?: TestInvariantOptions & { registry?: InvariantTestRegistry },
+  options?: TestInvariantOptions,
 ): void {
   // 1. Validate inputs (INV-TEST-2: fail-fast on bad input)
   validateInvariantId(invariantId);

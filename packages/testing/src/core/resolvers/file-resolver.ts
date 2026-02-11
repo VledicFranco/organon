@@ -11,6 +11,7 @@
  * - Assertions receive pre-resolved data, never file paths
  */
 
+import { join } from 'node:path';
 import type { FileSystem } from './types.js';
 
 /**
@@ -131,7 +132,7 @@ export async function resolveValues(
   for (const filePath of paths) {
     // When cwd is set, glob returns paths relative to cwd.
     // Prepend cwd to get the full path for file reading.
-    const readPath = cwd ? `${cwd}/${filePath}` : filePath;
+    const readPath = cwd ? join(cwd, filePath) : filePath;
     let content: string;
     try {
       content = await fs.readFile(readPath);

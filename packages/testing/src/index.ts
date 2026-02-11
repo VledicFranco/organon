@@ -46,7 +46,6 @@ export type {
 
 export {
   validateMaxValue,
-  MaxValueAssertionError as MaxValueValidationError,
 } from './core/assertions/max-value.js';
 
 export type {

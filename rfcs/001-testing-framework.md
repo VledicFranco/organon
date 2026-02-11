@@ -516,7 +516,7 @@ packages/
 
 **Implements domain invariants:**
 - Pure assertion logic (INV-TEST-1): `core/assertions/` imports no I/O modules; `core/resolvers/` handles file reading and feeds data into pure validators
-- Fail-fast (INV-TEST-2): Throw on first violation
+- Fail-fast (INV-TEST-2): Throw on violation (collects all before throwing for diagnostics)
 - Invariant ID required (INV-TEST-3): `testInvariant()` wrapper enforces ID linkage
 - Framework-agnostic core (INV-TEST-4): Zero test-framework deps in core/
 - 100% line coverage (INV-TEST-5): Dogfooded via Vitest coverage gate
@@ -742,7 +742,7 @@ These decisions implement the domain principles defined in testing/PHILOSOPHY.md
 **Decision 6: Fail-Fast (INV-TEST-2)**
 - **Implements:** Principle 1 (Fail-fast over forgiving)
 - **Technical benefit:** Clear errors, no ambiguity, fast feedback
-- **Implementation:** Assertions throw on first violation (no collect-all-errors mode)
+- **Implementation:** Assertions collect all violations and throw once with complete diagnostics (better UX than stopping at the first violation)
 
 **Decision 7: Configurable Coverage Threshold**
 - **Implements:** Principle 5 (Integration over replacement) — gradual adoption path

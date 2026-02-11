@@ -9,41 +9,41 @@ import type {
 } from '../src/core/assertions/max-value.js';
 
 describe('validateMaxValue (pure assertion)', () => {
-  it('passes when no values are provided', async () => {
-    await expect(
+  it('passes when no values are provided', () => {
+    expect(() =>
       validateMaxValue({ values: [], maxValue: 100 }),
-    ).resolves.toBeUndefined();
+    ).not.toThrow();
   });
 
-  it('passes when all values are below the maximum', async () => {
+  it('passes when all values are below the maximum', () => {
     const values: MaxValueEntry[] = [
       { file: 'a.ts', line: 1, lineText: 'ttl: 100', value: 100, rawValue: '100' },
       { file: 'b.ts', line: 5, lineText: 'ttl: 200', value: 200, rawValue: '200' },
     ];
 
-    await expect(
+    expect(() =>
       validateMaxValue({ values, maxValue: 300 }),
-    ).resolves.toBeUndefined();
+    ).not.toThrow();
   });
 
-  it('passes when a value exactly equals the maximum', async () => {
+  it('passes when a value exactly equals the maximum', () => {
     const values: MaxValueEntry[] = [
       { file: 'a.ts', line: 1, lineText: 'ttl: 86400', value: 86400, rawValue: '86400' },
     ];
 
-    await expect(
+    expect(() =>
       validateMaxValue({ values, maxValue: 86400 }),
-    ).resolves.toBeUndefined();
+    ).not.toThrow();
   });
 
-  it('throws MaxValueAssertionError when a value exceeds the maximum', async () => {
+  it('throws MaxValueAssertionError when a value exceeds the maximum', () => {
     const values: MaxValueEntry[] = [
       { file: 'config.ts', line: 10, lineText: '  ttl: 172800,', value: 172800, rawValue: '172800' },
     ];
 
-    await expect(
+    expect(() =>
       validateMaxValue({ values, maxValue: 86400 }),
-    ).rejects.toThrow(MaxValueAssertionError);
+    ).toThrow(MaxValueAssertionError);
   });
 
   it('includes violation details in the error', async () => {
@@ -52,7 +52,7 @@ describe('validateMaxValue (pure assertion)', () => {
     ];
 
     try {
-      await validateMaxValue({ values, maxValue: 86400 });
+      validateMaxValue({ values, maxValue: 86400 });
       expect.unreachable('Should have thrown');
     } catch (err) {
       expect(err).toBeInstanceOf(MaxValueAssertionError);
@@ -75,7 +75,7 @@ describe('validateMaxValue (pure assertion)', () => {
     ];
 
     try {
-      await validateMaxValue({ values, maxValue: 86400, unit: 'seconds' });
+      validateMaxValue({ values, maxValue: 86400, unit: 'seconds' });
       expect.unreachable('Should have thrown');
     } catch (err) {
       const error = err as MaxValueAssertionError;
@@ -92,7 +92,7 @@ describe('validateMaxValue (pure assertion)', () => {
     ];
 
     try {
-      await validateMaxValue({ values, maxValue: 86400 });
+      validateMaxValue({ values, maxValue: 86400 });
       expect.unreachable('Should have thrown');
     } catch (err) {
       const error = err as MaxValueAssertionError;
@@ -108,7 +108,7 @@ describe('validateMaxValue (pure assertion)', () => {
     ];
 
     try {
-      await validateMaxValue({ values, maxValue: 86400 });
+      validateMaxValue({ values, maxValue: 86400 });
       expect.unreachable('Should have thrown');
     } catch (err) {
       const error = err as MaxValueAssertionError;
@@ -125,7 +125,7 @@ describe('validateMaxValue (pure assertion)', () => {
     ];
 
     try {
-      await validateMaxValue({ values, maxValue: 100 });
+      validateMaxValue({ values, maxValue: 100 });
       expect.unreachable('Should have thrown');
     } catch (err) {
       const error = err as MaxValueAssertionError;
@@ -139,7 +139,7 @@ describe('validateMaxValue (pure assertion)', () => {
     ];
 
     try {
-      await validateMaxValue({ values, maxValue: 100 });
+      validateMaxValue({ values, maxValue: 100 });
       expect.unreachable('Should have thrown');
     } catch (err) {
       expect((err as Error).name).toBe('MaxValueAssertionError');
@@ -152,7 +152,7 @@ describe('validateMaxValue (pure assertion)', () => {
     ];
 
     try {
-      await validateMaxValue({ values, maxValue: 100 });
+      validateMaxValue({ values, maxValue: 100 });
       expect.unreachable('Should have thrown');
     } catch (err) {
       const error = err as MaxValueAssertionError;

@@ -3,8 +3,8 @@
  *
  * Invariants enforced:
  * - INV-TEST-1 (assertion-logic-pure): No I/O imports. Operates on pre-resolved data.
- * - INV-TEST-2 (fail-fast): Throws on first violation.
- * - INV-TEST-6 (always-async): Returns Promise<void>.
+ * - INV-TEST-2 (fail-fast): Throws on violation (collects all before throwing for better diagnostics).
+ * - INV-TEST-6 (always-async): Public API is async; pure validators are sync.
  * - INV-TEST-7 (composable): No module-level mutable state.
  *
  * This module must NEVER import fs, http, process, or any I/O module.
@@ -87,14 +87,15 @@ export class MaxValueAssertionError extends Error {
 /**
  * Validate that all pre-resolved values do not exceed a maximum.
  *
- * This is a pure function: no I/O, no side effects, deterministic.
+ * This is a pure, synchronous function: no I/O, no side effects, deterministic.
  * The resolver layer feeds pre-extracted values; this function only validates.
+ * Collects all violations before throwing for complete diagnostic output.
  *
  * @throws {MaxValueAssertionError} if any value exceeds maxValue (INV-TEST-2: fail-fast)
  */
-export async function validateMaxValue(
+export function validateMaxValue(
   options: ValidateMaxValueOptions,
-): Promise<void> {
+): void {
   const { values, maxValue, unit } = options;
 
   const violations: MaxValueViolation[] = [];
