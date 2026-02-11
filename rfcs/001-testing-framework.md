@@ -426,6 +426,11 @@ audience: [llm, human, tooling]
 | Test framework not supported | Check demand (≥10 requests), then build adapter |
 | Coverage < 100% | Warn at 90%, fail build at configured threshold (default 80%) |
 | Performance issue | Parallelize file scanning, add caching, document patterns |
+| Invariant can't be tested with existing assertions | Use assertCustom() and document the pattern. If pattern recurs (≥3 uses), propose new assertion via issue |
+| Two assertions conflict when composed | File bug — composability violation (INV-TEST-7). Assertions must not have hidden coupling |
+| Tier-4 test has false positive/negative | Fix test immediately. Add regression test for the fix. Document the scenario in test comments |
+| Codebase too large (>10K files) | Use incremental testing (only changed files). Add `organon:test-changed` command in Phase 3 |
+| Invariant is untestable (design constraint) | Mark with `judgment_call: true` in ETHOS.md. Do NOT create tier-4 test. Document in PHILOSOPHY.md why it's untestable |
 ```
 
 **`organon-tools/organon/domains/testing/PHILOSOPHY.md`** ← **Core: Design rationale**
@@ -780,6 +785,45 @@ interface MaxValueOptions {
 
 **Deliverable:** Working testing framework (Vitest-only) with coverage tracking and CLI integration
 
+### Milestone Checkpoints
+
+**Week 2 Checkpoint: Core Assertions Functional**
+- **Validation:** Demo `assertMaxValue`, `assertNoSideEffects`, `assertFileExists`, `assertCustom` on 5 real invariants from organon-tools
+- **Success criteria:**
+  - All 5 invariants testable with pre-built assertions
+  - Tests pass on first run
+  - 100% code coverage of assertion implementations
+  - No false positives or false negatives
+- **Go/No-Go Decision:** If >3 invariants can't be expressed with current assertions, revisit API design before Week 3
+- **Output:** Demo recording + coverage report
+
+**Week 4 Checkpoint: CLI Integration Works End-to-End**
+- **Validation:** Run complete workflow on organon-tools:
+  1. `organon generate-tests` (scaffolds created)
+  2. Implement tests using scaffolds
+  3. `organon coverage` (accurate report)
+  4. `organon verify --gate=tier4-tests` (passes)
+- **Success criteria:**
+  - All commands work without errors
+  - Coverage report matches manual count
+  - Workflow takes <15 steps total (including manual test writing)
+  - No manual file editing needed beyond test implementation
+- **Go/No-Go Decision:** If workflow requires >20 manual steps, simplify before continuing. If this adds >1 week, defer Phase 2 features.
+- **Output:** Workflow documentation + screen recording
+
+**Week 6 Checkpoint: Phase 1 Complete, Ready for Beta**
+- **Validation:** Full dogfooding on organon-tools
+  - Write ≥10 tier-4 tests for organon-tools invariants
+  - Achieve ≥80% tier-4 coverage
+  - Run in CI successfully
+- **Success criteria:**
+  - Documentation complete (README, API docs, migration guide)
+  - Zero critical bugs in backlog
+  - All Phase 1 checklist items completed
+  - Package ready for npm publish
+- **Go/No-Go Decision:** If <70% coverage achieved, extend Phase 1 by 1 week before starting Phase 2
+- **Output:** Beta release `@organon/testing@0.1.0-beta`
+
 ---
 
 **Phase 2: More Assertions + Jest (Weeks 7-9)**
@@ -856,6 +900,44 @@ These decisions implement the domain principles defined in testing/PHILOSOPHY.md
 - [ ] **Developer satisfaction** NPS ≥ 8 ("Would you recommend this library?")
 - [ ] **Integration speed** < 30 minutes from install to CI integration
 
+### Measurement Methodology
+
+**Time-to-first-test:**
+- **Method:** Instrumented `organon generate-tests` command logs timestamps (start → test file created → test passing)
+- **Sample:** First 20 users of @organon/testing beta
+- **Target:** 90th percentile < 5 minutes
+- **Data collection:** Optional telemetry (opt-in), local logs
+
+**Assertion reuse:**
+- **Method:** Parse generated `.organon/coverage.json` files from pilot projects
+- **Formula:** `(count of invariants using pre-built assertions) / (total invariants tested) × 100%`
+- **Sample:** All pilot projects (minimum 5 projects, 50+ invariants total)
+- **Target:** ≥70% across all projects
+
+**Coverage adoption:**
+- **Method:** Weekly snapshots of tier-4 coverage % from pilot projects
+- **Sample:** 5 pilot projects (organon-tools itself + 4 external early adopters TBD)
+- **Timeline:** Measure at weeks 0, 1, 2, 4 post-adoption
+- **Target:** ≥50% of projects reach 80% coverage by week 4
+- **Data collection:** `organon coverage` output captured in CI logs
+
+**Developer satisfaction:**
+- **Method:** Post-implementation survey sent to pilot project teams (after 4 weeks of use)
+- **Survey:** 5-point Likert scale ("Would you recommend?") mapped to NPS scale
+  - Strongly agree (+2) → Score 10
+  - Agree (+1) → Score 8
+  - Neutral (0) → Score 5
+  - Disagree (-1) → Score 3
+  - Strongly disagree (-2) → Score 0
+- **Target:** Mean score ≥8 across all respondents
+- **Sample size:** Minimum 10 developers (at least 2 per pilot project)
+
+**Integration speed:**
+- **Method:** Measure from `npm install @organon/testing` to first successful `organon verify --gate=tier4-tests` in CI
+- **Tracking:** Combination of telemetry (opt-in) and manual timing for pilot projects
+- **Target:** 90th percentile < 30 minutes
+- **Includes:** Package install, test file creation, first test written, CI configuration, first passing build
+
 ---
 
 ## Risks & Mitigations
@@ -906,6 +988,27 @@ These decisions implement the domain principles defined in testing/PHILOSOPHY.md
 **Related work:**
 - `organon init` (future: generate test scaffolds during project setup)
 - `organon discover` (future: suggest invariants → auto-generate tests)
+
+---
+
+## Backward Compatibility
+
+**Impact:** None. This RFC is fully backward compatible.
+
+**Rationale:**
+- Testing domain is new (doesn't modify existing domains)
+- No changes to core organon structure (ETHOS, PHILOSOPHY, PROTOCOL templates remain unchanged)
+- New frontmatter fields are domain-specific (only in testing domain organon files)
+- Existing projects can adopt incrementally (opt-in, not breaking change)
+- `organon-tools` CLI gains new commands (`generate-tests`, enhanced `coverage`, `verify --gate=tier4-tests`) but existing commands unchanged
+- @organon/testing is a new package (no version to break compatibility with)
+
+**Migration:** None required. Projects not using @organon/testing are completely unaffected. Projects adopting @organon/testing add it as a new dependency without changing existing code.
+
+**Versioning:**
+- @organon/testing will start at `0.1.0-beta` (Phase 1 delivery)
+- SemVer followed: breaking changes require major version bump
+- organon-tools CLI remains on separate versioning (no coupling)
 
 ---
 
