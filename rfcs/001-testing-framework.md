@@ -4,7 +4,7 @@ scope: product
 name: testing-framework
 version: "1.0"
 summary: Introduce @organon/testing semantic testing framework to bridge the gap between invariant declaration and automated verification
-token_estimate: 5200
+token_estimate: 6800
 status: draft
 created: 2026-02-10
 author: organon-tools-developer
@@ -13,6 +13,8 @@ related_files:
   - ../organon-tools/PHILOSOPHY.md
   - ../book-llms/invariant-tracking.md
   - ../book-llms/three-layer-architecture.md
+  - ./002-compound-engineering-integration.md
+  - ./003-explore-before-ethos.md
 load_priority: high
 audience: [llm, human]
 ---
@@ -40,10 +42,10 @@ audience: [llm, human]
 **Three interconnected gaps block tier-4 testing adoption:**
 
 ### 1. Product Incompleteness (organon-tools)
-organon-tools provides verification gates for organon files (frontmatter, triplets, freshness) but has **no domain for tier-4 testing** — the automated verification of code against invariants.
+organon-tools provides verification gates for organon files (frontmatter, triplets, freshness) but has **no domain for tier-4 testing** — the highest tier of invariant enforcement where code is automatically verified against invariants through executable tests.
 
 ### 2. Methodology Gap (enforcement loop incomplete)
-The Organon methodology defines tier-4 testing in `book-llms/invariant-tracking.md`, but provides **no implementation, no constraints, no patterns** for how testing frameworks should behave. The enforcement loop (Define → Bind → Execute → Verify → Evolve) breaks at "Verify" when invariants can't be automatically tested.
+The Organon methodology defines tier-4 testing in `book-llms/invariant-tracking.md`, but provides **no implementation, no constraints, no patterns** for how testing frameworks should behave. The enforcement loop (Define → Bind → Execute → Verify → Compound → Evolve) breaks at "Verify" when invariants can't be automatically tested.
 
 ### 3. External Adoption Blocked (teams lack reusable patterns)
 Projects adopting Organon must implement tier-4 testing from scratch. No semantic assertions, no coverage tracking, no integration with `organon verify`. Teams declare invariants but never automate enforcement — organons become aspirational fiction.
@@ -320,9 +322,48 @@ npm test -- --quiet   # Concise (counts only)
 
 **`organon-tools/organon/domains/testing/ETHOS.md`** ← **Core: Domain definition**
 
-This file defines the testing domain's identity and constraints:
+This is the complete content that will be created:
 
 ```markdown
+---
+type: constraints
+scope: domain
+name: testing
+version: "1.0"
+summary: Tier-4 invariant verification framework — semantic testing library for TypeScript projects
+token_estimate: 2800
+invariants_count: 7
+principles_count: 5
+heuristics_count: 5
+invariants:
+  - id: INV-TEST-1
+    name: assertions-are-pure
+  - id: INV-TEST-2
+    name: fail-fast
+  - id: INV-TEST-3
+    name: invariant-id-required
+  - id: INV-TEST-4
+    name: framework-agnostic-core
+  - id: INV-TEST-5
+    name: 100-percent-coverage
+  - id: INV-TEST-6
+    name: always-async
+  - id: INV-TEST-7
+    name: composable
+inherits_from: [organon-tools]
+load_priority: high
+required_for:
+  - tier4_testing
+  - invariant_verification
+audience: [llm, human, tooling]
+---
+
+# Testing Domain Ethos
+
+> Semantic testing framework for automated tier-4 invariant verification.
+
+---
+
 ## Identity
 
 ### What This Domain IS
@@ -389,9 +430,31 @@ This file defines the testing domain's identity and constraints:
 
 **`organon-tools/organon/domains/testing/PHILOSOPHY.md`** ← **Core: Design rationale**
 
-This file explains WHY the testing domain is designed this way:
+This is the complete content that will be created:
 
 ```markdown
+---
+type: rationale
+scope: domain
+name: testing-philosophy
+version: "1.0"
+summary: Why semantic tier-4 testing exists — design decisions, trade-offs, and the bet we're making
+token_estimate: 2400
+decision_count: 5
+inherits_from: [organon-tools-philosophy]
+load_priority: medium
+required_for:
+  - tier4_testing_evolution
+  - testing_domain_maintenance
+audience: [llm, human]
+---
+
+# Testing Domain Philosophy
+
+> Why we built @organon/testing this way.
+
+---
+
 ## The Problem
 
 Projects declare invariants in ETHOS.md but never automate enforcement. Why?
@@ -855,6 +918,8 @@ These decisions implement the domain principles defined in testing/PHILOSOPHY.md
 | [book-llms/invariant-tracking.md](../book-llms/invariant-tracking.md) | Defines tier-4 testing specification (this RFC implements it) |
 | [book-llms/three-layer-architecture.md](../book-llms/three-layer-architecture.md) | Testing library is Layer 3 (Tools) that executes tier-4 verification |
 | [organon-tools/dev/testing-framework-design.md](../organon-tools/dev/testing-framework-design.md) | Detailed design document (basis for this RFC) |
+| [rfcs/002-compound-engineering-integration.md](./002-compound-engineering-integration.md) | Defines 6-step enforcement loop (Define → Bind → Execute → Verify → Compound → Evolve) used in this RFC |
+| [rfcs/003-explore-before-ethos.md](./003-explore-before-ethos.md) | Uses testing framework as example of Explore-Before-Ethos pattern for novel domains |
 
 ---
 
