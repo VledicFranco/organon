@@ -5,7 +5,7 @@ name: compound-engineering-integration
 version: "1.0"
 summary: Make explicit the recursive, self-improving nature of human+machine collaboration. Compounding improvements emerge from deliberate iteration, self-correction, and progressive automation.
 token_estimate: 9500
-status: draft
+status: implemented
 created: 2026-02-10
 author: Claude Sonnet 4.5
 related_files:
@@ -25,13 +25,14 @@ audience: [llm, human]
 
 ## Status
 
-**Current State:** Draft
+**Current State:** Implemented
 
-**Next Milestone:** Review and team approval
+**Next Milestone:** None — implemented and merged
 
 | Transition | Date | Notes |
 |------------|------|-------|
 | → Draft | 2026-02-10 | Initial RFC created |
+| → Implemented | 2026-02-10 | Merged in `702be22` — Recursive Collaboration Pattern added to patterns.md, ETHOS.md, PHILOSOPHY.md, overview.md |
 
 ---
 

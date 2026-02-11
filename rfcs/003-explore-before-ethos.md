@@ -5,7 +5,7 @@ name: explore-before-ethos
 version: "1.0"
 summary: Add Explore-Before-Ethos pattern for novel domains where technical feasibility is unknown — time-boxed exploration before constraint definition
 token_estimate: 6500
-status: draft
+status: implemented
 created: 2026-02-10
 author: Claude Sonnet 4.5
 related_files:
@@ -24,13 +24,14 @@ audience: [llm, human]
 
 ## Status
 
-**Current State:** Draft
+**Current State:** Implemented
 
-**Next Milestone:** Review and team approval
+**Next Milestone:** None — implemented and merged
 
 | Transition | Date | Notes |
 |------------|------|-------|
 | → Draft | 2026-02-10 | Initial RFC created |
+| → Implemented | 2026-02-10 | Merged in `3f732b2` — Explore-Before-Ethos pattern added to patterns.md, PHILOSOPHY.md |
 
 ---
 
