@@ -236,7 +236,7 @@ Add explicit "Compound" step and parallel verification pattern:
 ```markdown
 ## The Enforcement Loop (Updated)
 
-The three layers form a closed loop with six phases (Compound Engineering integration):
+The three layers form a closed loop with six phases (Recursive Collaboration Pattern):
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
@@ -1042,15 +1042,16 @@ None
 ## Dependencies
 
 **Blocks:**
-- Future RFC on "Compound Engineering Workflow" (if we create automated tooling for compounding)
-- Future updates to workflow templates (include time allocation guidance)
+- Future RFC on recursive collaboration tooling (if we create automated support for compounding, e.g., `organon compound` command)
+- Future updates to workflow templates (include time allocation guidance and Four-Step Loop reference)
 
 **Blocked by:**
 - None (can implement immediately)
 
 **Related work:**
 - RFC 001 (Testing Framework) — Tier-4 tests are an example of parallel verification (run during development)
-- Any future "workflow quality" work should reference Four-Step Loop
+- RFC 003 (Explore-Before-Ethos) — Addresses DEFINE phase, complementary to this RFC's EXECUTE phase focus
+- Any future "workflow quality" work should reference Recursive Collaboration Pattern
 
 ---
 
@@ -1058,21 +1059,26 @@ None
 
 | File | Relationship |
 |------|--------------|
-| [book-llms/three-layer-architecture.md](../book-llms/three-layer-architecture.md) | Updated to include Compound step and parallel verification |
-| [book-llms/patterns.md](../book-llms/patterns.md) | Updated to include Recursive Collaboration Pattern |
-| [book-llms/ETHOS.md](../book-llms/ETHOS.md) | Updated principles and heuristics for time allocation |
-| [book-llms/PHILOSOPHY.md](../book-llms/PHILOSOPHY.md) | Updated with design decisions for Compound, time allocation, trust with guardrails |
+| [book-llms/overview.md](../book-llms/overview.md) | Updated to add recursive improvement as third core pillar |
+| [book-llms/ETHOS.md](../book-llms/ETHOS.md) | Updated with Core Properties section and new principles (recursive improvement, compound deliberately) |
+| [book-llms/three-layer-architecture.md](../book-llms/three-layer-architecture.md) | Updated to include Compound step and parallel verification pattern |
+| [book-llms/patterns.md](../book-llms/patterns.md) | Updated to include Recursive Collaboration Pattern with Four-Step Loop and collaborative semantic review |
+| [book-llms/PHILOSOPHY.md](../book-llms/PHILOSOPHY.md) | Updated with design decisions explaining compounding as emergent property and compound as explicit step |
 
 ---
 
 ## Approval Process
 
 **Review criteria:**
+- [ ] Recursive nature clearly explained (three structural properties: recursive, self-correcting, progressive automation)
+- [ ] Compounding positioned as emergent property (result of structure), not primary goal
+- [ ] Hypothesis is testable (exponential decay validation metric)
 - [ ] Methodology updates are clear and internally consistent
 - [ ] No contradictions with existing methodology
-- [ ] Examples are concrete and actionable
+- [ ] Examples are concrete and actionable (with appropriate caveats about illustrative numbers)
 - [ ] Heuristics provide clear guidance without being rigid
 - [ ] Changes are backwards-compatible (existing organons remain valid)
+- [ ] Terminology is consistent ("Recursive Collaboration Pattern" throughout)
 
 **Reviewers:**
 - [ ] @organon-methodology (methodology coherence)
