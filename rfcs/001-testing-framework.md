@@ -161,10 +161,10 @@ scope: domain
 name: testing
 version: "1.0"
 summary: Tier-4 invariant verification framework — semantic testing library for TypeScript projects
-token_estimate: 2800
+token_estimate: 1500
 invariants_count: 7
 principles_count: 5
-heuristics_count: 5
+heuristics_count: 10
 invariants:
   - id: INV-TEST-1
     name: assertion-logic-pure
@@ -232,12 +232,12 @@ audience: [llm, human, tooling]
    - Enforced by: Vitest coverage gate (`--coverage.lines 100`)
 
 6. **INV-TEST-6: always-async**
-   - All assertions return Promise<void> (consistency over brevity)
-   - Enforced by: TypeScript type checks
+   - All public assertion functions have return type `Promise<void>` (consistency over brevity)
+   - Enforced by: TypeScript type checks (return type enforcement)
 
 7. **INV-TEST-7: composable**
-   - Assertions can be combined without conflicts (no global state)
-   - Enforced by: integration tests combining assertions
+   - Assertion functions read no module-level mutable variables and write no shared state. Each assertion call is independent of previous calls — output is identical regardless of execution order.
+   - Enforced by: static analysis for module-level `let`/`var` in core/assertions/, integration tests verifying assertion output is identical regardless of execution order
 
 ## Principles (Prioritized)
 
@@ -275,7 +275,7 @@ Do not do the following in this domain:
 ## Verification Checklist
 
 - [ ] Frontmatter present with all required fields
-- [ ] Frontmatter counts match actual content (7 invariants, 5 principles, 10 heuristics)
+- [ ] Frontmatter counts match actual content (7 invariants, 5 principles, 10 decision heuristic rows)
 - [ ] Identity boundaries are specific and testable
 - [ ] Principles are numbered by priority
 - [ ] No conflicts with parent scope constraints (organon-tools/ETHOS.md)
@@ -521,7 +521,7 @@ organon-tools/
 - Framework-agnostic core (INV-TEST-4): Zero test-framework deps in core/
 - 100% line coverage (INV-TEST-5): Dogfooded via Vitest coverage gate
 - Always async (INV-TEST-6): All assertions return Promise<void>
-- Composable (INV-TEST-7): No global state, no side effects
+- Composable (INV-TEST-7): No module-level mutable state, execution-order independent
 
 ---
 
@@ -913,10 +913,9 @@ None — all design questions resolved. Ready for implementation.
 ## Next Steps
 
 1. **Request review** - Share RFC with stakeholders for feedback
-2. **Iterate on open questions** - Finalize naming, API style, metadata location
-3. **Acceptance vote** - Team approval required to proceed
-4. **Begin implementation** - Phase 1 Week 1 (monorepo setup + core assertions)
-5. **Update organon files** - Same PR as Phase 1 completion (organon-tools/ETHOS.md, methodology/testing/PROTOCOL.md)
+2. **Acceptance vote** - All design questions resolved; team approval required to proceed
+3. **Begin implementation** - Phase 1 Week 1 (monorepo setup + core assertions)
+4. **Update organon files** - Same PR as Phase 1 completion (organon-tools/ETHOS.md, methodology/testing/PROTOCOL.md)
 
 ---
 
@@ -925,4 +924,5 @@ None — all design questions resolved. Ready for implementation.
 | Date | Change | Author |
 |------|--------|--------|
 | 2026-02-10 | Initial draft | organon-tools-developer |
-| 2026-02-11 | Quality review: fix INV-TEST-1 purity contradiction (add resolver layer), consolidate duplicate sections, add Out of Scope/Verification Checklist, resolve open questions, specify coverage metric | Claude Opus 4.6 |
+| 2026-02-11 | Quality review pass 1: fix INV-TEST-1 purity contradiction (add resolver layer), consolidate duplicate sections, add Out of Scope/Verification Checklist, resolve open questions, specify coverage metric | Claude Opus 4.6 |
+| 2026-02-11 | Quality review pass 2: sharpen INV-TEST-7 composable (concrete enforcement), fix heuristics_count 5→10, update proposed ETHOS token_estimate, clean stale Next Steps | Claude Opus 4.6 |
