@@ -1,0 +1,45 @@
+{
+  "name": "@organon/testing",
+  "version": "0.1.0-beta",
+  "description": "Semantic testing framework for automated tier-4 invariant verification",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
+  },
+  "keywords": [
+    "organon",
+    "testing",
+    "invariant",
+    "tier-4",
+    "verification"
+  ],
+  "author": "Organon Methodology Contributors",
+  "license": "MIT",
+  "peerDependencies": {
+    "vitest": ">=1.0.0"
+  },
+  "peerDependenciesMeta": {
+    "vitest": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@vitest/coverage-v8": "^4.0.18",
+    "typescript": "^5.3.0",
+    "vitest": "^4.0.18"
+  }
+}
