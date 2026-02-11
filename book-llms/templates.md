@@ -896,7 +896,7 @@ These decisions implement the domain principles:
 
 **Key requirements:**
 - **Organon Impact:** Show exact content of new/updated organon files (invariants, principles, identity)
-- **Technical Implementation:** Include architecture, API, and phased plan
+- **Technical Implementation:** Include architecture, API, and phased plan. Decompose work into phases that can be independently verified — each phase should end with a verification step (run gates, check health). Leave planning tool choice to the implementer (GitHub issues, task lists, plain checklists — the methodology doesn't prescribe project management tooling).
 - **Both sections required:** RFCs propose evolution of both organon and code
 
 See [patterns.md (RFC-Driven Evolution Pattern)](./patterns.md#rfc-driven-evolution-pattern) for lifecycle and principles.
