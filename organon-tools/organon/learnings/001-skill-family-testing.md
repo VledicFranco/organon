@@ -28,9 +28,9 @@ Tested the skill family by executing a planned 9-step sequence:
 | 3 | `/organon-file-creation` | Create testing/PHILOSOPHY.md | Done (same invocation as step 2) |
 | 4 | `/quality-review` | Semantic review of created files | Done |
 | 5 | `/verify-and-health` | Check project integrity | Done (82/100, 0 new regressions) |
-| 6 | `/organon-tools-developer` | Implement testInvariant() + assertMaxValue() | Pending |
-| 7 | `/verify-and-health` | Re-check after code changes | Pending |
-| 8 | `/methodology-spec-evolution` | Update book-llms/ references | Pending |
+| 6 | `/organon-tools-developer` | Implement testInvariant() + assertMaxValue() | Done (65 tests, 100% cov) |
+| 7 | `/verify-and-health` | Re-check after code changes | Done (82/100, 0 new regressions) |
+| 8 | `/methodology-spec-evolution` | Update book-llms/ references | In progress |
 | 9 | `/session-compounding` | End-of-session review | Pending |
 
 ---
@@ -105,6 +105,14 @@ Tested the skill family by executing a planned 9-step sequence:
 
 **Health baseline:** 82/100 (7/9 frontmatter coverage, 7 passing / 2 failing validation, all files fresh).
 
+### O8b: Forked skill execution works well for substantial implementation
+
+**Pattern:** `/organon-tools-developer` ran in forked mode (`context: fork`), loaded the domain ETHOS.md and PHILOSOPHY.md, then autonomously implemented 15 files (4 source modules + 4 test files + helpers + config) with 65 tests at 100% coverage. The agent correctly enforced all 7 INV-TEST-* invariants without manual intervention.
+
+**Implication:** Forked execution is the right mode for implementation skills — the agent needs full autonomy to make architectural decisions (e.g., how to structure the resolver layer, what test patterns to use). Inline execution would have been too interactive.
+
+**Observation:** The forked agent created a `package-lock.json` (3K+ lines) — worth checking if that should be gitignored for the packages/ directory.
+
 ### O9: Three failure categories have different fix timelines
 
 **Pattern:** The 20 failures from `organon verify` naturally segment into: (1) pre-existing debt (fix anytime), (2) blocked by RFC 004 (fix when RFC is implemented), (3) blocked by RFC 001 (fix when testing framework exists). No ad-hoc fixes possible — each category needs its own planned work.
@@ -132,3 +140,4 @@ These are early signals — not enough data to generalize yet:
 |------|-------|--------|
 | 2026-02-11 | Initial observations (O1-O7) from steps 1-4 of skill testing | Claude Opus 4.6 |
 | 2026-02-11 | Added O8-O9 from step 5 (verify-and-health) | Claude Opus 4.6 |
+| 2026-02-11 | Added O8b from step 6 (organon-tools-developer forked execution) | Claude Opus 4.6 |
