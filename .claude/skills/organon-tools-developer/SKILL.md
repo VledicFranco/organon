@@ -1,6 +1,14 @@
 ---
 name: organon-tools-developer
 description: Ensures organon-tools development follows its own ETHOS.md and PHILOSOPHY.md constraints. Use when adding CLI commands, verification gates, MCP tools, or evolving the methodology specification. Dogfoods the Organon methodology by enforcing the 6 invariants (schema fidelity, every command has tests, gates fail not warn, machine-parsable output, idempotent operations, breaking changes require major version bump) and 5 design principles (fail-fast, composability, testability, clarity). Loads organon-tools/ETHOS.md and organon-tools/PHILOSOPHY.md before starting work.
+protocol_id: PROTO-ORG-2
+protocol_file: organon/protocols/PROTOCOLS.md
+tools: [organon-validate, organon-verify, npm-test, npm-build]
+organon_context:
+  - organon-tools/ETHOS.md
+  - organon-tools/PHILOSOPHY.md
+  - book-llms/three-layer-architecture.md
+  - CLAUDE.md
 context: fork
 agent: general-purpose
 ---
@@ -421,3 +429,17 @@ If organon-tools has invalid frontmatter, how can it validate others?
 If organon-tools violates its own ETHOS.md, the methodology loses credibility.
 
 **Build the tools you wish existed when auditing someone else's work.**
+
+---
+
+## Error Recovery
+
+| Failure | Recovery Action |
+|---------|-----------------|
+| Tests fail | Fix implementation to match test expectations. Do not skip or disable tests. |
+| Coverage below threshold (>90% core, 100% gates) | Add missing test cases for uncovered branches. Use `npm run test:coverage` to identify gaps. |
+| TypeScript compilation errors | Fix type issues. Do not use `any` or `@ts-ignore` as workarounds. |
+| Gate warns instead of failing | Change gate to produce pass/fail exit codes. Invariant INV-TOOLS-3: gates fail builds, never warn. |
+| `--format json` not supported | Add JSON output format. Invariant INV-TOOLS-4: all commands must support `--format json`. |
+| Breaking change detected | Bump major version. Invariant INV-TOOLS-6: breaking changes require major version bump. |
+| Spec not updated before implementation | Stop. Update `book-llms/` specification first, then implement to match. Spec is source of truth. |

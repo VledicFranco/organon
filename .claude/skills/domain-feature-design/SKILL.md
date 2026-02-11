@@ -1,6 +1,15 @@
 ---
 name: domain-feature-design
 description: Guides agents through proper domain/feature design following Organon methodology. Ensures RFCs contain both organon mutation plan (ETHOS.md, PHILOSOPHY.md content) AND technical implementation plan (architecture, API, phases). Prevents common mistake of writing only technical plan or only organon plan. Use when designing new domains, features, or significant capabilities that require organon evolution.
+protocol_id: PROTO-ORG-1
+protocol_file: organon/protocols/PROTOCOLS.md
+tools: [organon-validate, organon-verify, organon-find, organon-generate]
+organon_context:
+  - book-llms/patterns.md
+  - book-llms/templates.md
+  - book-llms/scopes.md
+  - book-llms/frontmatter-system.md
+  - CLAUDE.md
 context: fork
 agent: general-purpose
 ---
@@ -699,3 +708,17 @@ If you write code before defining the organon, you're doing it backwards. The or
 4. **Ask:** Can someone start implementing from this RFC without additional design work?
 
 **If any answer is NO, the RFC is incomplete.**
+
+---
+
+## Error Recovery
+
+| Failure | Recovery Action |
+|---------|-----------------|
+| Can't classify scope (domain vs feature vs component) | Re-read `book-llms/scopes.md`. Apply: ≥3 unique concepts + lifecycle → domain; crosses multiple domains → feature; code terms → component. |
+| Invariants are too vague to test | Apply "testable?" filter — if you can't write a verification gate for it, rewrite to be more specific or move to principles. |
+| Missing organon mutation plan | Stop and write exact ETHOS.md and PHILOSOPHY.md content before proceeding to technical plan. |
+| Missing technical implementation plan | Stop and add architecture, API design, and phased implementation plan. Both plans are required. |
+| RFC too large (>10000 tokens) | Split into multiple RFCs with explicit dependency chain. Each RFC must be self-contained. |
+| Principles not truly prioritized | Reorder with explicit trade-off reasoning. Test: if principle 3 conflicts with principle 1, does 1 genuinely win? |
+| Parent scope constraints contradicted | Remove or weaken the contradicting constraint in the child RFC. Child scopes can add constraints, never relax them. |
