@@ -25,7 +25,7 @@ Organon is a documentation methodology built on six pillars:
 
 1. **LLM-centric design** — organons are written for LLM consumption first; LLMs execute, humans author and review
 
-2. **Enforcement through automation** — protocols bind to workflows that orchestrate tools that verify constraints (Define → Bind → Execute → Verify → Evolve)
+2. **Enforcement through automation** — protocols bind to workflows that orchestrate tools that verify constraints (Define → Bind → Execute → Verify → Compound → Evolve)
 
 3. **Recursive improvement by design** — the methodology improves itself through iteration. Each cycle generates learnings that feed into the next cycle. Improvements compound: better tools → faster execution → more time for improvement → even better tools. This recursive structure (combined with self-correction and progressive automation) produces exponential efficiency gains over time. Compounding is an emergent property, not a separate goal.
 

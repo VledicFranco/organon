@@ -4,7 +4,7 @@ scope: meta
 name: templates
 version: "1.0"
 summary: Copy-paste templates for ETHOS, PHILOSOPHY, PROTOCOL, and WORKFLOW files — all with frontmatter and standardized sections
-token_estimate: 4470
+token_estimate: 11100
 inherits_from: [meta-organon]
 load_priority: medium
 required_for:

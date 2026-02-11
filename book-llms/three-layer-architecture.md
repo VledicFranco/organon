@@ -408,7 +408,7 @@ The three layers form a closed loop that makes the methodology self-enforcing:
 
 **Without the loop:** Organons are documentation. LLMs read them, maybe follow them, maybe don't. No way to know. Drift accumulates silently.
 
-**With the loop:** Organons are enforced constraints. Every implementation goes through Define → Bind → Execute → Verify → Evolve. Violations are caught by tools, flagged by verification, and fed back to the LLM. The methodology gets stronger with each cycle because new invariants capture new learnings.
+**With the loop:** Organons are enforced constraints. Every implementation goes through Define → Bind → Execute → Verify → Compound → Evolve. Violations are caught by tools, flagged by verification, and fed back to the LLM. The methodology gets stronger with each cycle because new invariants capture new learnings.
 
 ### The LLM's role in the loop
 

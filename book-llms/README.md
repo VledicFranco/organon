@@ -4,7 +4,7 @@ scope: meta
 name: book-llms
 version: "1.0"
 summary: Navigation for the Organon technical reference — methodology spec optimized for LLM consumption
-token_estimate: 1147
+token_estimate: 850
 provides: [overview, ethos, philosophy, patterns, scopes, templates, frontmatter-system, three-layer-architecture, invariant-tracking, workflow-authoring, protocols]
 parent: organon-root
 ---
@@ -15,12 +15,13 @@ Technical reference for the Organon Methodology, optimized for LLM consumption.
 
 ## Core Concepts
 
-Organon is a documentation methodology built on five pillars:
+Organon is a documentation methodology built on six pillars:
 1. **LLM-centric design** — organons are written for LLM consumption first; LLMs execute, humans author and review
-2. **Enforcement through automation** — protocols bind to workflows that orchestrate tools that verify constraints (Define → Bind → Execute → Verify → Evolve)
-3. **Progressive disclosure** — agents access files in 5 layers (README → frontmatter → section headings → specific sections → full file), never paying for content they don't need. See frontmatter-system.md for the complete model.
-4. **Three-layer architecture** — protocols (knowledge) → workflows (agent bindings) → tools (operations)
-5. **Code as single source of truth** — documentation derives from code, never prescribes it
+2. **Enforcement through automation** — protocols bind to workflows that orchestrate tools that verify constraints (Define → Bind → Execute → Verify → Compound → Evolve)
+3. **Recursive improvement by design** — the methodology improves itself through iteration. Each cycle generates learnings that feed into the next cycle. Improvements compound exponentially. Compounding is an emergent property of recursive structure, not a separate goal.
+4. **Progressive disclosure** — agents access files in 5 layers (README → frontmatter → section headings → specific sections → full file), never paying for content they don't need. See frontmatter-system.md for the complete model.
+5. **Three-layer architecture** — protocols (knowledge) → workflows (agent bindings) → tools (operations)
+6. **Code as single source of truth** — documentation derives from code, never prescribes it
 
 ## Contents
 

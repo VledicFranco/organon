@@ -109,7 +109,7 @@ After adding semantic mappings:
 - [ ] Mapping descriptions are concise (one line each)
 - [ ] Invariant references use correct format (`file#symbol`)
 - [ ] Link to generated catalog is valid
-- [ ] `make verify-ethos` passes (if invariants have references)
+- [ ] `organon verify` passes (if invariants have references)
 
 ---
 

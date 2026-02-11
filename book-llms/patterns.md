@@ -4,8 +4,8 @@ scope: meta
 name: patterns
 version: "1.0"
 summary: Common patterns and anti-patterns — progressive disclosure, enforcement loop, code mapping, verification, onboarding, and more
-token_estimate: 12400
-pattern_count: 23
+token_estimate: 15700
+pattern_count: 22
 inherits_from: [meta-organon]
 load_priority: medium
 required_for:
@@ -316,7 +316,7 @@ Time-boxed exploration before committing to constraints:
 
 ### Example: Testing Framework
 
-See RFC 003 for full walkthrough comparing Ethos-First vs Explore-Before-Ethos for novel domain.
+For a full walkthrough comparing Ethos-First vs Explore-Before-Ethos for novel domains (including the testing framework example), see [RFC 003](../rfcs/003-explore-before-ethos.md).
 
 **Key difference:**
 - Ethos-First: Write ETHOS → Implement → Discover constraints invalid → Rewrite ETHOS
