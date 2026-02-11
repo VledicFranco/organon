@@ -20,7 +20,7 @@ audience: [llm, human]
 
 **RFC:** [001-testing-framework](../../../rfcs/001-testing-framework.md) (Draft)
 
-**Implementation:** Not started
+**Implementation:** Organon files created, code not started
 
 ---
 
@@ -28,8 +28,8 @@ audience: [llm, human]
 
 | File | Purpose | Status |
 |------|---------|--------|
-| ETHOS.md | Domain identity, invariants, principles | Pending (RFC 001) |
-| PHILOSOPHY.md | Design decisions, trade-offs, reasoning | Pending (RFC 001) |
+| [ETHOS.md](./ETHOS.md) | Domain identity, invariants, principles | Created |
+| [PHILOSOPHY.md](./PHILOSOPHY.md) | Design decisions, trade-offs, reasoning | Created |
 
 ---
 
