@@ -2,9 +2,9 @@
 type: rationale
 scope: meta
 name: three-layer-architecture
-version: "1.0"
+version: "1.1"
 summary: The enforcement loop — protocols, workflows, tools, and verification (tiered testing, drift detection, violation handling) bind organons to LLM execution
-token_estimate: 10732
+token_estimate: 10800
 inherits_from: [meta-organon]
 load_priority: high
 required_for:
@@ -507,6 +507,8 @@ A universal 4-tier model, technology-agnostic:
 - "All public APIs are backwards-compatible" → test compares exported signatures against baseline
 
 Structural tests are cheap and universal. Semantic tests are expensive and project-specific. But semantic tests are the only defense against behavioral drift — where code changes violate an invariant without any structural signal.
+
+**Reference implementation:** `@organon/testing` (TypeScript, `organon-tools/packages/testing/`) provides pre-built assertions for common semantic test patterns (`assertMaxValue`, `assertNoSideEffects`, `assertFileExists`). The `testInvariant()` wrapper links each test to its invariant ID for coverage tracking. See [invariant-tracking.md](./invariant-tracking.md) for the full specification.
 
 **Heuristic:** When writing a new invariant, ask: "Can a test verify this against code?" If yes, write the semantic test. If no, it's a judgment-call invariant — document how humans should review it.
 

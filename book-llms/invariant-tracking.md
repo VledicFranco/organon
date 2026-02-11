@@ -2,9 +2,9 @@
 type: rationale
 scope: meta
 name: invariant-tracking
-version: "1.0"
+version: "1.1"
 summary: Invariant-to-test tracking specification — how to declare invariant IDs and verify test coverage
-token_estimate: 2213
+token_estimate: 2800
 inherits_from: [meta-organon]
 load_priority: high
 required_for:
@@ -205,6 +205,21 @@ The `judgment-calls` verification gate (V2 planned) will check:
 | Never-reuse policy | Stable references across time | Gaps in numbering after removals |
 | judgment_call flag | Acknowledges not everything is automatable | Requires honest assessment of what can be tested |
 | Language-agnostic regex | Works across any tech stack | Less precise than language-specific tooling |
+
+---
+
+## Reference Implementation
+
+**`@organon/testing`** (TypeScript) is the first language-specific implementation of tier-4 testing. It provides:
+
+- **`testInvariant(id, description, fn)`** — wrapper that links test execution to invariant IDs (enforces annotation requirement)
+- **Pre-built assertions** — `assertMaxValue()`, `assertNoSideEffects()`, `assertFileExists()`, etc. for common invariant patterns
+- **I/O separation** — pure assertion logic in `core/assertions/` (no file system imports), resolver layer in `core/resolvers/` handles file reading
+- **Coverage tracking** — registry maps tested invariant IDs to test results, feeds `organon coverage` gate
+
+**Source:** `organon-tools/packages/testing/` | **Domain organon:** `organon-tools/organon/domains/testing/` | **RFC:** [001-testing-framework](../rfcs/001-testing-framework.md)
+
+Future language implementations (Scala, Python, Rust) should follow the same pattern: language-specific assertion libraries that use the universal `@organon-invariant` annotation contract defined above.
 
 ---
 
