@@ -129,9 +129,11 @@ For each decision heuristic table:
 
 Search for key terms across all organon files:
 
-```bash
-cd organon-tools && npx organon find --term "workflow"
-cd organon-tools && npx organon find --term "skill"
+Use the Grep tool to search for key terms across all project files:
+
+```
+Grep pattern="workflow" path="." glob="*.md"
+Grep pattern="skill" path="." glob="*.md"
 ```
 
 Flag inconsistencies:

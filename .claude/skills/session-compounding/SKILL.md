@@ -116,8 +116,16 @@ With user confirmation, implement the highest-priority improvement:
 
 Search ALL files for terminology that may have become inconsistent during the session:
 
+Use the Grep tool to search all files for the term:
+
+```
+Grep pattern="<term-to-check>" path="." glob="*.md"
+```
+
+Also check organon files by name:
+
 ```bash
-cd organon-tools && npx organon find --term "<term-to-check>"
+cd organon-tools && npx organon find --name "<term-to-check>"
 ```
 
 Check common drift points:

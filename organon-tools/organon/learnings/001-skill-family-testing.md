@@ -4,8 +4,8 @@ scope: product
 name: skill-family-testing
 version: "1.0"
 summary: Observations from testing the 7-skill enforcement loop family through RFC 001 refinement and testing domain creation
-token_estimate: 2000
-status: in-progress
+token_estimate: 2800
+status: complete
 created: 2026-02-11
 author: Claude Opus 4.6
 audience: [llm, human]
@@ -31,7 +31,7 @@ Tested the skill family by executing a planned 9-step sequence:
 | 6 | `/organon-tools-developer` | Implement testInvariant() + assertMaxValue() | Done (65 tests, 100% cov) |
 | 7 | `/verify-and-health` | Re-check after code changes | Done (82/100, 0 new regressions) |
 | 8 | `/methodology-spec-evolution` | Update book-llms/ references | Done (2 files updated, versions bumped) |
-| 9 | `/session-compounding` | End-of-session review | In progress |
+| 9 | `/session-compounding` | End-of-session review | Done (2 improvements: workflow fix + ignore pattern bug) |
 
 ---
 
@@ -129,6 +129,16 @@ Tested the skill family by executing a planned 9-step sequence:
 
 **Tooling gap:** The workflow references `organon find --term "<concept>"` for impact assessment, but the actual CLI uses `--name`, `--scope`, `--type`, `--file` flags. Either the workflow should reference the correct flags or `organon find` should gain a `--term` option for free-text search.
 
+### O11: session-compounding found a real bug through dogfooding
+
+**Pattern:** During the session compounding verification step, `organon verify` showed 61 FRONTMATTER_MISSING failures (up from ~2 pre-existing). Root cause: the default ignore pattern `node_modules/**` only matches top-level `node_modules/`, but the forked agent in step 6 created `packages/testing/node_modules/` which is nested. Fixed by changing to `**/node_modules/**` (also applied to `dist/**`, `.git/**`, `coverage/**`).
+
+**Implication:** Session compounding's verification step is the safety net that catches cascading effects from earlier steps. Without running verify at the end, the nested `node_modules/` contamination would have been invisible — health score would appear to drop from 82 to much lower on next session start.
+
+**Result:** Health score jumped from 82/100 to 91/100 after the fix. The session also fixed 3 skill files referencing the non-existent `organon find --term` flag, replacing with correct Grep tool + `organon find --name` guidance.
+
+**Bonus observation:** The session compounding workflow itself referenced `organon find --term` — it was part of the problem it detected. Self-referential bug fix.
+
 ---
 
 ## Patterns to Watch
@@ -150,3 +160,4 @@ These are early signals — not enough data to generalize yet:
 | 2026-02-11 | Added O8-O9 from step 5 (verify-and-health) | Claude Opus 4.6 |
 | 2026-02-11 | Added O8b from step 6 (organon-tools-developer forked execution) | Claude Opus 4.6 |
 | 2026-02-11 | Added O10 from step 8 (methodology-spec-evolution) | Claude Opus 4.6 |
+| 2026-02-11 | Added O11 from step 9 (session-compounding): nested node_modules bug + workflow --term fix | Claude Opus 4.6 |
