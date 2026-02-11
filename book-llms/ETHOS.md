@@ -4,9 +4,9 @@ scope: meta
 name: meta-organon
 version: "1.0"
 summary: Core invariants, principles, and heuristics for creating organons — the foundational rules every organon must follow
-token_estimate: 4851
+token_estimate: 5400
 invariants_count: 10
-principles_count: 7
+principles_count: 9
 heuristics_count: 23
 invariants:
   - id: INV-META-1
@@ -99,21 +99,62 @@ related_files:
 
 ---
 
+## Core Properties
+
+The Organon methodology achieves compounding improvements through three structural properties. These are not aspirations but fundamental characteristics of how the methodology works.
+
+### 1. Recursive Structure
+
+Each loop iteration (Define → Bind → Execute → Verify → Compound → Evolve) feeds learnings into the next. Not linear progression but circular improvement. Work in Cycle N generates knowledge that makes Cycle N+1 faster. This recursion is not accidental—it's the fundamental mechanism of the methodology.
+
+**Example:** Cycle 1 manually loads RFC context. Compound phase creates `rfc:load-context` tool. Cycle 2 uses the tool (faster). Cycle 3 adds automation. Each cycle builds on the previous.
+
+### 2. Self-Correction
+
+The methodology improves itself through:
+- **Dogfooding:** Methodology documents itself (meta-organon)
+- **RFC-driven evolution:** Constraints that prove impractical get refined
+- **Workflow refinement:** Unclear steps get clarified based on execution
+
+When methodology constraints don't work, they evolve. This prevents stagnation and ensures the methodology stays practical, not dogmatic.
+
+### 3. Progressive Automation
+
+Work moves through tiers over time:
+
+```
+Manual (Tier 1) → Human does every step
+    ↓ (recognize pattern)
+Semi-automated (Tier 2) → Tools assist, humans orchestrate
+    ↓ (automation matures)
+Automated (Tier 3) → Tools execute, humans review
+```
+
+Each tier unlocks the next: automation creates time → time enables more automation → more automation creates more time. This is the compounding mechanism—improvements accumulate exponentially, not linearly.
+
+**Result:** Compounding improvements emerge naturally from these three properties. The methodology is DESIGNED to compound, not just ASPIRE to compound. Compounding is an emergent property of the structure, not a separate goal.
+
+---
+
 ## Principles (Prioritized)
 
 1. **LLM-centric design.** Organons exist to be consumed and executed by LLMs. Every design decision — frontmatter, standardized sections, decision heuristics, protocol bindings — optimizes for LLM parsing and action. LLMs are the interface between human intent and automated enforcement. Humans define the "what" and "why"; LLMs execute the "how."
 
-2. **Enforcement through automation.** Organons that aren't enforced become fiction. Every constraint should have a path to automated verification. Protocols bind to workflows that orchestrate tools that check invariants. The enforcement loop (Define → Bind → Execute → Verify → Evolve) is what makes organons real. A constraint without an enforcement path is a suggestion.
+2. **Enforcement through automation.** Organons that aren't enforced become fiction. Every constraint should have a path to automated verification. Protocols bind to workflows that orchestrate tools that check invariants. The enforcement loop (Define → Bind → Execute → Verify → Compound → Evolve) is what makes organons real. A constraint without an enforcement path is a suggestion.
 
-3. **Clarity over completeness.** A short, clear ethos beats a comprehensive but vague one.
+3. **Recursive improvement by design.** The methodology improves itself through iteration. Each cycle generates learnings that feed into the next cycle. Improvements compound: better tools → faster execution → more time for improvement → even better tools. This recursive nature is not accidental—it's the mechanism that makes the methodology sustainable at scale. Compounding is an emergent property of recursive collaboration, not a separate goal.
 
-4. **Progressive disclosure over monolithic loading.** Structure every file so agents can access it in layers — frontmatter for discovery, sections for targeted loading, full file only when needed. This is how token efficiency is achieved at scale.
+4. **Compound deliberately.** Reserve 5-10% of every significant work session for improving the system itself (tools, workflows, protocols). Without explicit time allocation, improvement never happens. Compounding is distinct from evolution: compound improves methodology (how we work), evolve updates constraints (what we're building). The Compound step in the enforcement loop makes this explicit.
 
-5. **Constraints over explanations.** State what to do, not why. Put "why" in philosophy.
+5. **Clarity over completeness.** A short, clear ethos beats a comprehensive but vague one.
 
-6. **Specificity over generality.** "Never force-push to master" beats "Be careful with git."
+6. **Progressive disclosure over monolithic loading.** Structure every file so agents can access it in layers — frontmatter for discovery, sections for targeted loading, full file only when needed. This is how token efficiency is achieved at scale.
 
-7. **Actionable over aspirational.** "Run tests before merging" beats "Maintain code quality."
+7. **Constraints over explanations.** State what to do, not why. Put "why" in philosophy.
+
+8. **Specificity over generality.** "Never force-push to master" beats "Be careful with git."
+
+9. **Actionable over aspirational.** "Run tests before merging" beats "Maintain code quality."
 
 ---
 

@@ -3,9 +3,9 @@ type: rationale
 scope: meta
 name: meta-organon-philosophy
 version: "1.0"
-summary: Why the Organon methodology exists — LLM-centric design, enforcement through automation, progressive disclosure, and every trade-off
-token_estimate: 2972
-decision_count: 9
+summary: Why the Organon methodology exists — LLM-centric design, enforcement through automation, progressive disclosure, recursive improvement, and every trade-off
+token_estimate: 3700
+decision_count: 11
 inherits_from: [meta-organon]
 load_priority: low
 required_for:
@@ -123,6 +123,37 @@ A constraint that isn't enforced is a suggestion. Every invariant in an ETHOS.md
 **Rationale:** The history of software documentation is a history of drift. Teams write rules, then stop following them. The only documentation that stays accurate is documentation that's enforced by automation. Organons break this cycle by building enforcement into the methodology itself: protocols bind to workflows, workflows invoke verification tools, verification gates block non-compliant changes. The organon becomes a living system, not a static document.
 
 **Trade-off:** Not every constraint can be automated. Judgment-heavy invariants (e.g., "prefer simple designs") require human review. The automation tier system (automated/semi-automated/manual) acknowledges this — the goal is maximum practical enforcement, not 100% automation.
+
+### 10. Compounding as Emergent Property
+
+**Choice:** Frame compounding as emergent result of recursive structure, not as primary goal.
+
+**The realization:** Early methodology drafts positioned "continuous improvement" as aspirational. But compounding is actually an EMERGENT PROPERTY—the natural result of three structural characteristics: recursive iteration, self-correction, and progressive automation.
+
+**Why this matters:**
+- **Primary goal:** Effective human+machine collaboration
+- **Mechanism:** Recursive, self-correcting structure with progressive automation
+- **Result:** Exponential efficiency gains (compounding)
+
+The methodology is DESIGNED to compound, not just ASPIRE to compound. This isn't motivational—it's mechanical. Each cycle (Define → Bind → Execute → Verify → Compound → Evolve) generates learnings that feed into the next cycle. Automation creates time, time enables more automation. The structure ensures improvements accumulate exponentially, not linearly.
+
+**Rationale:** Framing compounding as the goal obscures the mechanism. Framing it as an emergent property explains WHY compounding happens (structural properties) rather than just prescribing THAT it should happen. This is more accurate and more powerful—it means compounding is inevitable if you follow the methodology, not aspirational if you try really hard.
+
+**Conditions for reconsideration:** If empirical data shows that teams following the methodology DO NOT experience compounding (efficiency stays flat across sessions), the hypothesis that "recursive structure causes compounding" would be falsified. This would require revisiting the core properties.
+
+### 11. Compound as Explicit Step
+
+**Choice:** Make "Compound" a distinct phase in the enforcement loop, separate from "Evolve"
+
+**Benefit:** Forces explicit improvement cycles. Prevents "we'll improve it later" (which means never).
+
+**Why we chose explicit compounding:** Generic "continuous improvement" fails because it has no time budget and no trigger. By making Compound a distinct step (5-10% of session time), improvement becomes scheduled, not aspirational. The distinction from Evolve clarifies WHAT to improve and WHEN:
+- **Compound:** Improve methodology itself (tools, workflows, protocols) — frequent (after every significant session)
+- **Evolve:** Update domain constraints (ETHOS.md, PHILOSOPHY.md, invariants) — infrequent (when constraints change)
+
+**Rationale:** Without explicit time allocation, improvement never happens. Work expands to fill available time (Parkinson's Law). Reserving 5-10% creates capacity for compounding. Without the Compound/Evolve distinction, teams confuse "improving how we work" with "changing what we're building," leading to ad-hoc methodology changes or no changes at all.
+
+**Trade-off:** Adds cognitive overhead (another step to remember). But the alternative (ad-hoc improvement) leads to methodology stagnation. Better to spend 5% of time deliberately improving than 0% accidentally never improving.
 
 ---
 
