@@ -4,10 +4,10 @@ scope: meta
 name: meta-organon
 version: "1.0"
 summary: Core invariants, principles, and heuristics for creating organons — the foundational rules every organon must follow
-token_estimate: 5400
+token_estimate: 5450
 invariants_count: 10
 principles_count: 9
-heuristics_count: 23
+heuristics_count: 25
 invariants:
   - id: INV-META-1
     name: ethos-required
@@ -202,6 +202,8 @@ Progressive disclosure achieves the same goal (token efficiency) without sacrifi
 
 | Situation | Action |
 |-----------|--------|
+| Starting new domain with uncertain feasibility | Consider Explore-Before-Ethos pattern (1-2 day time-boxed exploration, see patterns.md) |
+| Starting new domain with proven patterns | Use Ethos-First Development (standard) |
 | Unsure if a constraint belongs | Ask: "Would violating this cause real harm?" If yes, include it. |
 | Constraint feels obvious | Include it anyway. LLMs have no "obvious." |
 | Two constraints might conflict | Add priority numbers or explicit "X trumps Y" statement. |

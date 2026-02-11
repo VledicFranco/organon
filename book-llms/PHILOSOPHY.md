@@ -4,8 +4,8 @@ scope: meta
 name: meta-organon-philosophy
 version: "1.0"
 summary: Why the Organon methodology exists — LLM-centric design, enforcement through automation, progressive disclosure, recursive improvement, and every trade-off
-token_estimate: 3700
-decision_count: 11
+token_estimate: 4100
+decision_count: 13
 inherits_from: [meta-organon]
 load_priority: low
 required_for:
@@ -154,6 +154,47 @@ The methodology is DESIGNED to compound, not just ASPIRE to compound. This isn't
 **Rationale:** Without explicit time allocation, improvement never happens. Work expands to fill available time (Parkinson's Law). Reserving 5-10% creates capacity for compounding. Without the Compound/Evolve distinction, teams confuse "improving how we work" with "changing what we're building," leading to ad-hoc methodology changes or no changes at all.
 
 **Trade-off:** Adds cognitive overhead (another step to remember). But the alternative (ad-hoc improvement) leads to methodology stagnation. Better to spend 5% of time deliberately improving than 0% accidentally never improving.
+
+### 12. Two Constraint Definition Patterns
+
+**Choice:** Provide two patterns (Ethos-First and Explore-Before-Ethos) instead of universal one-size-fits-all
+
+**Benefit:** Flexibility for novel domains without abandoning proven Ethos-First pattern for routine work
+
+**Why we chose two patterns:** Originally, Ethos-First Development was universal. But we observed that novel domains (like testing framework in RFC 001) led to ETHOS rewrites when "first principles" turned out impractical. The alternatives were:
+1. Accept ETHOS rewrites as normal (high rework cost)
+2. Skip ETHOS until after implementation (loses guidance during development)
+3. Add exploration phase before ETHOS (validates constraints upfront)
+
+We chose option 3 for novel domains while keeping option 1 (Ethos-First) as default for known domains.
+
+**When each applies:**
+- **Ethos-First (default):** Well-understood domains, proven patterns, constraints knowable upfront
+- **Explore-Before-Ethos (exception):** Novel domains, technical uncertainty, unfamiliar technology
+
+**Trade-off:** More complexity (two patterns to choose between) vs better outcomes (less rework in novel domains). Decision heuristic in patterns.md mitigates choice paralysis.
+
+**Risk mitigation:** Strong bias toward Ethos-First as default. Explore-Before-Ethos only when uncertainty is HIGH. Time-boxing (1-2 days) prevents analysis paralysis.
+
+### 13. Time-Boxing Exploration
+
+**Choice:** Strict 1-2 day time-box for exploration phase
+
+**Benefit:** Prevents "permanent prototyping" (exploration without commitment to constraints)
+
+**Why we chose strict time-boxing:** Exploration without limits becomes implementation. The goal of exploration is to discover constraints (learning), not build production code (execution). A strict time-box forces:
+- Clear success criteria (what questions must we answer?)
+- Decisive constraint codification (even with remaining uncertainty)
+- Bias toward action (write ETHOS after 2 days, refine during implementation if needed)
+
+**How to enforce:** Before exploration begins, write down:
+1. Key questions to answer (3-5 max)
+2. Exploration end date (1-2 days from now)
+3. Commitment: "After exploration, we WILL write ETHOS regardless of confidence level"
+
+**What if questions aren't answered?** Write ETHOS with best current knowledge, mark uncertain invariants with `judgment_call: true`, refine during implementation. Perfect knowledge is impossible; exploration gives "good enough" confidence.
+
+**Trade-off:** May still write some imperfect invariants (uncertainty remains). But alternative (no time-box) leads to indefinite exploration, which is worse (no progress, no constraints).
 
 ---
 

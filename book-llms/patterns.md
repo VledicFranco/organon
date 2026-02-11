@@ -4,8 +4,8 @@ scope: meta
 name: patterns
 version: "1.0"
 summary: Common patterns and anti-patterns — progressive disclosure, enforcement loop, code mapping, verification, onboarding, and more
-token_estimate: 11300
-pattern_count: 22
+token_estimate: 12400
+pattern_count: 23
 inherits_from: [meta-organon]
 load_priority: medium
 required_for:
@@ -252,6 +252,145 @@ When starting a new feature or domain:
    - Repeatable tasks get protocols
    - One-off tasks stay in ethos heuristics
 ```
+
+---
+
+## Explore-Before-Ethos Pattern
+
+**When to use:** Technical feasibility unknown, novel domain, high technical risk.
+
+**When NOT to use:** Well-understood domain, proven patterns, adding to existing system.
+
+### The Problem
+
+Ethos-First Development assumes you can articulate invariants from first principles. But in novel domains, you don't know what's possible until you try. Writing ETHOS prematurely risks:
+
+- **Impossible invariants** — Discovered during implementation, requiring ETHOS rewrites
+- **Over-constraining** — Overly strict invariants block valid solutions
+- **Under-constraining** — Missing critical constraints because risks aren't obvious
+- **Rework cost** — Rewriting ETHOS mid-implementation wastes design effort
+
+### The Solution
+
+Time-boxed exploration before committing to constraints:
+
+```
+1. EXPLORE (time-boxed: 1-2 days max)
+   - Build throwaway spike/prototype
+   - Answer: What's possible? What's not? What's expensive?
+   - Test competing approaches
+   - Goal: Discover technical constraints, not production code
+
+2. DOCUMENT CONSTRAINTS
+   - Capture learnings: "X is possible," "Y is impossible," "Z requires trade-off"
+   - Identify which constraints are real (tech limits) vs preferences (design choices)
+   - Write findings in tmp/ or similar (throwaway documentation)
+
+3. WRITE ETHOS
+   - Codify real constraints as invariants
+   - Document design choices as principles
+   - Decision heuristics based on real scenarios encountered
+   - Now grounded in reality, not speculation
+
+4. IMPLEMENT PROPERLY
+   - Follow ETHOS (now validated)
+   - Standard Ethos-First Development from here
+   - ETHOS can still evolve (Same-PR principle)
+   - But major constraints already validated (less rework)
+```
+
+### Decision Heuristic: Which Pattern to Use?
+
+| Situation | Pattern | Rationale |
+|-----------|---------|-----------|
+| Adding to existing system, proven patterns | **Ethos-First** | Constraints knowable upfront |
+| Novel architecture, unfamiliar tech | **Explore-Before-Ethos** | Technical feasibility unknown |
+| First-of-its-kind feature | **Explore-Before-Ethos** | No prior art, high uncertainty |
+| Multiple approaches with unclear trade-offs | **Explore-Before-Ethos** | Exploration evaluates options |
+| High confidence in constraints | **Ethos-First** | Don't over-optimize for uncertainty |
+| Uncertain which applies | **Lightweight Ethos-First** | Write 2-3 invariants, expand as you learn |
+
+**Default:** Ethos-First Development (bias toward action, not analysis paralysis)
+
+**Exception:** Explore-Before-Ethos only when uncertainty is HIGH
+
+### Example: Testing Framework
+
+See RFC 003 for full walkthrough comparing Ethos-First vs Explore-Before-Ethos for novel domain.
+
+**Key difference:**
+- Ethos-First: Write ETHOS → Implement → Discover constraints invalid → Rewrite ETHOS
+- Explore-Before-Ethos: Explore → Validate constraints → Write ETHOS → Implement
+
+**Time saved:** 1-3 days (avoid ETHOS rewrites)
+
+**When it's worth it:** Novel domains (>50% of constraints uncertain). Not worth it for routine work.
+
+### Anti-Pattern: Permanent Prototyping
+
+**Bad:** Prototype indefinitely without committing to constraints
+- No ETHOS ever written (exploration becomes implementation)
+- Ad-hoc decisions without guiding principles
+- Time-box violations (2 days becomes 2 weeks)
+- Analysis paralysis (never confident enough to define constraints)
+
+**Good:** Time-boxed exploration → ETHOS → implementation
+- Exploration has clear goal (discover constraints)
+- Time-box enforced (1-2 days max)
+- ETHOS codifies learnings (captures knowledge)
+- Implementation follows validated constraints
+
+**Mitigation:** Strict time-boxing (1-2 days). After time-box, must write ETHOS even if some uncertainty remains. Perfect knowledge is impossible; "good enough" knowledge is the goal.
+
+### Integration with Same-PR Principle
+
+Explore-Before-Ethos still follows Same-PR principle:
+
+- **Exploration code:** THROWAWAY (not committed to any branch)
+- **Final PR:** ETHOS + PHILOSOPHY + implementation (all together)
+- **ETHOS evolution:** Can still evolve during implementation (based on further learning)
+
+**The difference:** Exploration happens BEFORE the PR branch is created, not during implementation on the branch.
+
+**Timeline:**
+```
+Traditional Ethos-First:
+  Create branch → Write ETHOS → Implement → Open PR (ETHOS + code)
+
+Explore-Before-Ethos:
+  Explore (no branch) → Create branch → Write ETHOS → Implement → Open PR (ETHOS + code)
+```
+
+Exploration is "pre-work" (like RFC writing), not implementation work.
+
+### When This Pattern Adds Value
+
+**High value (use it):**
+- Novel architecture (no prior art in this codebase)
+- Unfamiliar technology (team learning new framework/paradigm)
+- Multiple competing approaches (unclear which is best)
+- High-risk constraints (performance, security, correctness concerns)
+
+**Low value (skip it):**
+- Routine feature addition (patterns proven)
+- Experienced team in familiar domain
+- Constraints are obvious (no technical uncertainty)
+- Time pressure (ship fast, refine later)
+
+**Cost-benefit:**
+- **Cost:** 1-2 days exploration + overhead of managing throwaway code
+- **Benefit:** Avoid 1-5 days of ETHOS rewrites + implementation rework
+- **Break-even:** If >30% of constraints uncertain, exploration likely pays for itself
+
+### Related Patterns
+
+**Complements:**
+- **Ethos-First Development** — Standard pattern, Explore-Before-Ethos is exception
+- **Same-PR Principle** — Both patterns follow this (organon + code land together)
+- **RFC-Driven Evolution** — RFCs proposing novel domains should declare which pattern used
+
+**Conflicts with:**
+- None (this is additive, not replacing existing patterns)
 
 ---
 
