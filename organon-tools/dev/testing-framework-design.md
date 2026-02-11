@@ -4,7 +4,7 @@ scope: product
 name: testing-framework-design
 version: "0.1"
 summary: Design document for @organon/testing - semantic testing framework for tier-4 invariant verification
-token_estimate: 3500
+token_estimate: 7100
 related_files:
   - ../ETHOS.md
   - ../PHILOSOPHY.md

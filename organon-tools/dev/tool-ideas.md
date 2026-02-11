@@ -4,7 +4,7 @@ scope: product
 name: adoption-tools
 version: "1.0"
 summary: Brainstormed tools to accelerate Organon methodology adoption in new and existing projects
-token_estimate: 4800
+token_estimate: 7100
 related_files:
   - ../ETHOS.md
   - ../../book-llms/three-layer-architecture.md

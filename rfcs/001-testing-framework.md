@@ -4,7 +4,7 @@ scope: product
 name: testing-framework
 version: "1.0"
 summary: Introduce @organon/testing semantic testing framework to bridge the gap between invariant declaration and automated verification
-token_estimate: 6800
+token_estimate: 11100
 status: draft
 created: 2026-02-10
 author: organon-tools-developer

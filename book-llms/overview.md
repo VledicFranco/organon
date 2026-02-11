@@ -4,7 +4,7 @@ scope: meta
 name: methodology-overview
 version: "1.0"
 summary: Bird's-eye view of what problems Organon solves, where solutions live, and what gaps remain
-token_estimate: 2300
+token_estimate: 1300
 inherits_from: [meta-organon]
 load_priority: high
 required_for:

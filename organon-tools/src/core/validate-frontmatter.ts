@@ -3,7 +3,7 @@
  *
  * Stage 1: Schema — required fields, type enums, format rules
  * Stage 2: References — inherits_from, related_domains, related_features, primary_rfcs exist
- * Stage 3: Truthfulness — counts match content, token_estimate within 30%
+ * Stage 3: Truthfulness — counts match content, token_estimate order-of-magnitude accurate
  * Stage 4: Consistency — name↔directory, scope↔directory, bidirectional refs
  */
 
@@ -43,7 +43,7 @@ const VALID_SCOPES: FrontmatterScope[] = ['product', 'domain', 'feature', 'compo
 const KEBAB_CASE_RE = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/;
 const VERSION_RE = /^\d+\.\d+$/;
 const MAX_SUMMARY_LENGTH = 200;
-const TOKEN_TOLERANCE = 0.3; // 30%
+const TOKEN_TOLERANCE = 1.0; // 100% — warn when estimate would mislead load-or-skip decisions (off by 2x+)
 
 // ---------------------------------------------------------------------------
 // Main

@@ -4,7 +4,7 @@ scope: meta
 name: explore-before-ethos
 version: "1.0"
 summary: Add Explore-Before-Ethos pattern for novel domains where technical feasibility is unknown — time-boxed exploration before constraint definition
-token_estimate: 6500
+token_estimate: 9400
 status: implemented
 created: 2026-02-10
 author: Claude Sonnet 4.5

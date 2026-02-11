@@ -235,7 +235,7 @@ token_estimate: 100
       );
     });
 
-    it('warns on token estimate drift beyond 30%', async () => {
+    it('warns on token estimate drift beyond 2x (load-or-skip misleading)', async () => {
       const fs = new MemoryFileSystem({
         '/project/ETHOS.md': `---
 type: constraints
