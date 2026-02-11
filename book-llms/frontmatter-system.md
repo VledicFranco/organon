@@ -116,6 +116,17 @@ pattern_count: number          # For pattern catalogs (e.g., patterns.md) — nu
 
 **Note:** Custom `*_count` fields are allowed for catalog-style rationale files. Examples: `pattern_count`, `antipattern_count`, `example_count`. Use when the file enumerates a collection of items that agents may need to count without loading the full content.
 
+### RFCs (`type: rationale`, lifecycle-tracked)
+
+```yaml
+status: string                # draft | review | accepted | implementing | implemented | superseded | withdrawn
+created: string               # ISO 8601 date
+author: string                # Author name or agent identifier
+related_files: string[]       # File paths this RFC impacts or references
+```
+
+RFCs are rationale files with lifecycle tracking. The `status` field is the most important for progressive disclosure — an implementer agent scanning RFC frontmatter can skip `implemented` or `withdrawn` RFCs immediately. Use `related_files` to list impacted organon and code files so agents can trace RFC→file relationships without loading the full RFC.
+
 ### PROTOCOL.md (`type: procedures`)
 
 ```yaml
@@ -223,6 +234,24 @@ Optional: `## Progressive Disclosure Model`, `## Out of Scope`, `## Failure Mode
 
 Optional: `## What This Is Not`
 
+### RFC sections (`type: rationale`, `scope: product`)
+
+RFCs use `type: rationale` but have their own section contract optimized for two reading paths: **reviewers** (full read) and **implementer agents** (targeted sections).
+
+| Heading | Content | Typical size | Implementer needs? |
+|---------|---------|-------------|-------------------|
+| `## Status` | Lifecycle state + transition log | 5-10 lines | Yes (skip if not Accepted/Implementing) |
+| `## Problem Statement` | Gap description, current/desired state | 10-20 lines | Skim |
+| `## Proposed Solution` | High-level approach | 5-10 lines | Yes |
+| `## Organon Impact` | Create/Update/Delete with full file content | 30-150 lines | Yes (primary section) |
+| `## Technical Implementation` | Architecture, API, plan, design decisions | 50-200 lines | Yes (primary section) |
+| `## Success Metrics` | Measurable outcomes | 5-10 lines | Yes |
+| `## Open Questions` | Resolved and still-open questions | 10-30 lines | Only "Still Open" |
+
+Optional: `## Risks & Mitigations`, `## Dependencies`, `## Approval Process`, `## Next Steps`
+
+**Implementer reading path:** Status → Proposed Solution → Organon Impact → Technical Implementation → Open Questions (still open only). Skip Problem Statement details, Risks, Approval Process.
+
 ### PROTOCOL.md sections
 
 | Heading | Content | Typical size |
@@ -273,7 +302,7 @@ Frontmatter must be **truthful** — automated tests enforce accuracy.
 - `invariants_count` matches actual `## Invariants` entries
 - `principles_count` matches actual `## Principles` entries
 - `protocols_count` matches actual protocol count
-- `token_estimate` within 30% of actual (~3.5 chars ≈ 1 token for markdown, or ~12 tokens per line as quick estimate)
+- `token_estimate` should reflect order-of-magnitude cost for context budget planning. Use ~12 tokens/line or ~3.5 chars/token as heuristic. Accuracy matters most for the load-or-skip decision — an agent deciding whether to read a 5000-token file vs a 50000-token file needs to know which bucket it's in, not the exact count. For evolving documents (RFCs, design docs), estimates may drift as content grows; update when the estimate would mislead the load-or-skip decision (e.g., estimate says 5000 but actual is 15000).
 - `invariants` array length matches `invariants_count`
 - Each invariant `id` follows `INV-{SCOPE}-{N}` format
 - No duplicate invariant IDs

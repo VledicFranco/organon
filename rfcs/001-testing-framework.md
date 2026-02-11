@@ -138,176 +138,6 @@ organon verify --gate=tier4-tests
 
 ---
 
-## Design Decisions
-
-### Decision 1: Monorepo with npm Workspaces
-**Choice:** Keep @organon/testing inside organon-tools monorepo but publish as separate npm package.
-
-**Rationale:**
-- Shared code (ETHOS parsing, validation) avoids duplication
-- Single CI pipeline ensures version compatibility
-- Users can install testing library independently: `npm install @organon/testing`
-- Lighter than forcing CLI dependency on test library users
-
-**Trade-off:** Slightly larger organon-tools repo, but better developer experience.
-
----
-
-### Decision 2: Vitest-Only Phase 1
-**Choice:** Support only Vitest initially. Add Jest/Mocha adapters in Phase 2 based on demand.
-
-**Rationale:**
-- Vitest is modern, fast, TypeScript-native (~80% of TS projects)
-- Faster delivery (4-6 weeks vs 8-10 weeks for multi-framework)
-- Framework-agnostic core allows adding adapters later without breaking changes
-- Early adopters are likely already using Vitest
-
-**Trade-off:** Jest/Mocha users must wait, but we deliver core value faster.
-
----
-
-### Decision 3: Configurable Coverage Threshold
-**Choice:** Default 80% threshold, warns at 90%, configurable per project.
-
-```json
-{
-  "coverage": {
-    "tier4_tests": {
-      "threshold": 0.8,
-      "enforced": true,
-      "warn_below": 0.9
-    }
-  }
-}
-```
-
-**Rationale:**
-- 100% from day one blocks adoption (teams need ramp-up time)
-- Configurable allows gradual path: 50% → 80% → 100%
-- Warning at 90% encourages improvement without failing builds
-- Teams can override for stricter enforcement when ready
-
-**Trade-off:** Risk of teams setting threshold too low and leaving it there. Mitigated by clear documentation and "90% warn" nudge.
-
----
-
-### Decision 4: Always Async Assertions
-**Choice:** All assertions return `Promise<void>`, always use `await`.
-
-```typescript
-await assertMaxValue({ /* ... */ });  // Always async
-```
-
-**Rationale:**
-- Consistent API (no "when do I use await?" confusion)
-- Future-proof (supports file I/O, API calls, database queries)
-- TypeScript `async/await` is idiomatic, not verbose
-- Fail-fast errors propagate naturally through test runners
-
-**Trade-off:** Slightly more verbose for simple checks, but consistency wins.
-
----
-
-### Decision 5: Verbose Errors by Default
-**Choice:** Show all violation details by default. Add `--quiet` flag for concise output.
-
-```bash
-npm test              # Verbose (file paths, line numbers, values)
-npm test -- --quiet   # Concise (counts only)
-```
-
-**Rationale:**
-- Debugging requires exact locations (verbose)
-- CI logs benefit from concise output (opt-in)
-- Developer experience prioritizes local debugging over CI aesthetics
-- Flag makes both audiences happy
-
-**Trade-off:** CI logs may be noisy without `--quiet`, but actionable errors > clean logs.
-
----
-
-## Architecture
-
-```
-@organon/testing/
-├── core/
-│   ├── invariant-test.ts          # testInvariant() wrapper, metadata tracking
-│   ├── assertions/
-│   │   ├── max-value.ts           # assertMaxValue() - numeric bounds
-│   │   ├── no-side-effects.ts     # assertNoSideEffects() - purity checks
-│   │   ├── file-exists.ts         # assertFileExists() - structural requirements
-│   │   ├── backwards-compat.ts    # assertBackwardsCompat() - API stability
-│   │   ├── naming-convention.ts   # assertNamingConvention() - code style
-│   │   └── custom.ts              # assertCustom() - user-defined logic
-│   ├── discovery/
-│   │   ├── scan-ethos.ts          # Parse ETHOS.md for declared invariants
-│   │   ├── scan-tests.ts          # Find testInvariant() calls in test files
-│   │   └── coverage.ts            # Calculate coverage % (tested/declared)
-│   └── reporters/
-│       ├── json-reporter.ts       # Write .organon/coverage.json
-│       └── console-reporter.ts    # Human-readable terminal output
-├── adapters/
-│   ├── vitest.ts                  # Vitest integration (Phase 1)
-│   ├── jest.ts                    # Jest integration (Phase 2, future)
-│   └── mocha.ts                   # Mocha integration (Phase 3, future)
-└── index.ts                       # Public API exports
-```
-
-**Core Principles:**
-1. **Pure functions** - All assertions are pure, no side effects
-2. **Fail-fast** - Violations throw clear errors immediately
-3. **Composable** - Assertions can be combined
-4. **Framework-agnostic core** - Adapters handle framework specifics
-
----
-
-## Implementation Plan
-
-### Phase 1: Core + Vitest (Weeks 1-6)
-
-**Weeks 1-2: Core Assertions**
-- [ ] Monorepo setup (npm workspaces, tsconfig)
-- [ ] `testInvariant()` wrapper with metadata tracking
-- [ ] `assertMaxValue()` + tests (100% coverage)
-- [ ] `assertNoSideEffects()` + tests (100% coverage)
-- [ ] `assertFileExists()` + tests (100% coverage)
-- [ ] `assertCustom()` + tests (100% coverage)
-
-**Week 3: Discovery + Coverage**
-- [ ] `scanEthos()` - parse ETHOS.md invariants array
-- [ ] `scanTests()` - find testInvariant() calls via AST
-- [ ] `calculateCoverage()` - compute tested/declared ratio
-- [ ] JSON reporter (write `.organon/coverage.json`)
-- [ ] Console reporter (terminal output)
-
-**Week 4: CLI Integration**
-- [ ] `organon generate-tests` command
-- [ ] Heuristics (detect assertion type from invariant text)
-- [ ] Template generation (scaffolds with TODOs)
-- [ ] Enhanced `organon coverage` (read test metadata)
-- [ ] New gate: `organon verify --gate=tier4-tests`
-
-**Weeks 5-6: Polish + Documentation**
-- [ ] Error message quality (clear, actionable)
-- [ ] README with full workflow example
-- [ ] API documentation (TSDoc)
-- [ ] Migration guide (custom tests → @organon/testing)
-- [ ] Publish `@organon/testing@0.1.0-beta`
-
-### Phase 2: More Assertions + Jest (Weeks 7-9)
-- [ ] Jest adapter
-- [ ] `assertBackwardsCompat()` (API stability)
-- [ ] `assertNamingConvention()` (code style)
-- [ ] Performance optimization (parallel file scanning)
-
-### Phase 3: Advanced Features (Weeks 10-15)
-- [ ] Mocha adapter
-- [ ] Watch mode integration
-- [ ] Incremental testing (only changed files)
-- [ ] LSP integration (inline errors in IDE)
-
----
-
 ## Organon Impact
 
 > This RFC creates a new domain organon that **defines** what the testing framework should be. Code implements these definitions.
@@ -337,7 +167,7 @@ principles_count: 5
 heuristics_count: 5
 invariants:
   - id: INV-TEST-1
-    name: assertions-are-pure
+    name: assertion-logic-pure
   - id: INV-TEST-2
     name: fail-fast
   - id: INV-TEST-3
@@ -345,7 +175,7 @@ invariants:
   - id: INV-TEST-4
     name: framework-agnostic-core
   - id: INV-TEST-5
-    name: 100-percent-coverage
+    name: 100-percent-line-coverage
   - id: INV-TEST-6
     name: always-async
   - id: INV-TEST-7
@@ -381,9 +211,9 @@ audience: [llm, human, tooling]
 
 ## Invariants
 
-1. **INV-TEST-1: assertions-are-pure**
-   - All assertion functions are pure (no side effects, no I/O, deterministic)
-   - Enforced by: tier-4 tests scanning for forbidden imports
+1. **INV-TEST-1: assertion-logic-pure**
+   - Core assertion validation logic is pure (no side effects, deterministic). File reading and I/O are handled by a separate resolver layer (`core/resolvers/`) that feeds data into pure validators. Assertion functions in `core/assertions/` import no I/O modules.
+   - Enforced by: dependency analysis (core/assertions/ imports no fs, http, or process modules), tier-4 tests
 
 2. **INV-TEST-2: fail-fast**
    - Assertions throw clear errors immediately on violation (no warnings, no retries)
@@ -397,9 +227,9 @@ audience: [llm, human, tooling]
    - Core assertion logic has zero test-framework dependencies
    - Enforced by: dependency checks in CI
 
-5. **INV-TEST-5: 100-percent-coverage**
-   - Testing domain itself has 100% test coverage (dogfooding)
-   - Enforced by: Vitest coverage gate
+5. **INV-TEST-5: 100-percent-line-coverage**
+   - Testing domain itself has 100% line coverage (dogfooding, c8 provider)
+   - Enforced by: Vitest coverage gate (`--coverage.lines 100`)
 
 6. **INV-TEST-6: always-async**
    - All assertions return Promise<void> (consistency over brevity)
@@ -431,6 +261,25 @@ audience: [llm, human, tooling]
 | Tier-4 test has false positive/negative | Fix test immediately. Add regression test for the fix. Document the scenario in test comments |
 | Codebase too large (>10K files) | Use incremental testing (only changed files). Add `organon:test-changed` command in Phase 3 |
 | Invariant is untestable (design constraint) | Mark with `judgment_call: true` in ETHOS.md. Do NOT create tier-4 test. Document in PHILOSOPHY.md why it's untestable |
+
+## Out of Scope
+
+Do not do the following in this domain:
+
+- Build a test runner (integrate with Vitest/Jest/Mocha instead)
+- Validate organon file structure (that's organon-tools core: `organon validate`)
+- Provide mocking, fixture, or snapshot utilities
+- Support non-TypeScript languages (future RFCs will address other languages)
+- Auto-generate invariants from code (discovery is a separate concern)
+
+## Verification Checklist
+
+- [ ] Frontmatter present with all required fields
+- [ ] Frontmatter counts match actual content (7 invariants, 5 principles, 10 heuristics)
+- [ ] Identity boundaries are specific and testable
+- [ ] Principles are numbered by priority
+- [ ] No conflicts with parent scope constraints (organon-tools/ETHOS.md)
+- [ ] All 6 inherited organon-tools invariants are compatible (verified: schema fidelity, every command has tests, gates fail not warn, machine-parsable output via json-reporter, idempotent operations, no breaking changes without version bump)
 ```
 
 **`organon-tools/organon/domains/testing/PHILOSOPHY.md`** ← **Core: Design rationale**
@@ -609,13 +458,16 @@ organon-tools/
 │       ├── src/
 │       │   ├── core/
 │       │   │   ├── invariant-test.ts          # testInvariant() wrapper, metadata
-│       │   │   ├── assertions/
+│       │   │   ├── assertions/                # Pure validation logic (no I/O imports)
 │       │   │   │   ├── max-value.ts           # assertMaxValue()
 │       │   │   │   ├── no-side-effects.ts     # assertNoSideEffects()
 │       │   │   │   ├── file-exists.ts         # assertFileExists()
 │       │   │   │   ├── backwards-compat.ts    # assertBackwardsCompat()
 │       │   │   │   ├── naming-convention.ts   # assertNamingConvention()
 │       │   │   │   └── custom.ts              # assertCustom()
+│       │   │   ├── resolvers/                 # I/O layer (file reading, glob expansion)
+│       │   │   │   ├── file-resolver.ts       # Read files, expand globs → feed to assertions
+│       │   │   │   └── types.ts               # FileSystem interface (mockable)
 │       │   │   ├── discovery/
 │       │   │   │   ├── scan-ethos.ts          # Parse ETHOS.md
 │       │   │   │   ├── scan-tests.ts          # Find testInvariant() calls
@@ -663,9 +515,11 @@ organon-tools/
    ```
 
 **Implements domain invariants:**
-- Pure functions (INV-TEST-1): No imports of fs, http, process
+- Pure assertion logic (INV-TEST-1): `core/assertions/` imports no I/O modules; `core/resolvers/` handles file reading and feeds data into pure validators
 - Fail-fast (INV-TEST-2): Throw on first violation
+- Invariant ID required (INV-TEST-3): `testInvariant()` wrapper enforces ID linkage
 - Framework-agnostic core (INV-TEST-4): Zero test-framework deps in core/
+- 100% line coverage (INV-TEST-5): Dogfooded via Vitest coverage gate
 - Always async (INV-TEST-6): All assertions return Promise<void>
 - Composable (INV-TEST-7): No global state, no side effects
 
@@ -880,15 +734,25 @@ These decisions implement the domain principles defined in testing/PHILOSOPHY.md
 - **Technical benefit:** Self-documenting, extensible, TypeScript autocomplete
 - **Example:** `assertMaxValue({ files, pattern, maxValue })` not `assertMaxValue('*.ts', /x/, 100)`
 
-**Decision 5: Pure Functions (INV-TEST-1)**
+**Decision 5: Pure Assertion Logic with I/O Separation (INV-TEST-1)**
 - **Implements:** Principle 4 (Testability over performance)
-- **Technical benefit:** Deterministic, parallelizable, easier to test
-- **Enforcement:** CI checks for forbidden imports (fs, http, process)
+- **Technical benefit:** Deterministic, parallelizable, easier to test. `core/assertions/` contains pure validation; `core/resolvers/` handles file I/O via mockable `FileSystem` interface.
+- **Enforcement:** Dependency analysis (assertions/ imports no fs, http, process modules)
 
 **Decision 6: Fail-Fast (INV-TEST-2)**
 - **Implements:** Principle 1 (Fail-fast over forgiving)
 - **Technical benefit:** Clear errors, no ambiguity, fast feedback
 - **Implementation:** Assertions throw on first violation (no collect-all-errors mode)
+
+**Decision 7: Configurable Coverage Threshold**
+- **Implements:** Principle 5 (Integration over replacement) — gradual adoption path
+- **Technical benefit:** Default 80%, warn at 90%, configurable per project via `organon.config.json`
+- **Trade-off:** Risk of "good enough at 80%" complacency. Mitigated by 90% warning nudge and documentation emphasizing path to 100%.
+
+**Decision 8: Verbose Errors by Default**
+- **Implements:** Principle 2 (Clarity over brevity)
+- **Technical benefit:** File paths, line numbers, expected vs actual values shown by default. `--quiet` flag for CI.
+- **Trade-off:** CI logs may be noisy without `--quiet`, but actionable errors > clean logs.
 
 ---
 
@@ -961,17 +825,14 @@ These decisions implement the domain principles defined in testing/PHILOSOPHY.md
 4. ✅ **Async or sync assertions?** → Always async
 5. ✅ **Error verbosity?** → Verbose default, `--quiet` flag
 
+### Resolved (During RFC Review)
+6. ✅ **Naming:** `@organon/testing` (matches `@testing-library/*` convention)
+7. ✅ **Assertion API:** Options object (`assertMaxValue({ files, pattern, maxValue })`) — clearer, extensible, optional params without breaking changes
+8. ✅ **Test metadata storage:** `.organon/coverage.json` (already referenced throughout docs and architecture)
+
 ### Still Open
-1. **Naming:** Is `@organon/testing` the right package name, or `@organon/test`?
-   - Leaning: `@organon/testing` (matches convention: `@testing-library/*`)
 
-2. **Assertion API:** Should assertions take options object or positional arguments?
-   - Current: `assertMaxValue({ files, pattern, maxValue })` (options object)
-   - Alternative: `assertMaxValue('src/**/*.ts', /pattern/, 100)` (positional)
-   - **Recommendation:** Options object (clearer, extensible, optional params)
-
-3. **Test metadata storage:** `.organon/coverage.json` or `.organon/test-metadata.json`?
-   - **Recommendation:** `.organon/coverage.json` (already referenced in docs)
+None — all design questions resolved. Ready for implementation.
 
 ---
 
@@ -1064,3 +925,4 @@ These decisions implement the domain principles defined in testing/PHILOSOPHY.md
 | Date | Change | Author |
 |------|--------|--------|
 | 2026-02-10 | Initial draft | organon-tools-developer |
+| 2026-02-11 | Quality review: fix INV-TEST-1 purity contradiction (add resolver layer), consolidate duplicate sections, add Out of Scope/Verification Checklist, resolve open questions, specify coverage metric | Claude Opus 4.6 |

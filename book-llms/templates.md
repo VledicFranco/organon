@@ -582,6 +582,12 @@ Feature-specific checks (caching invariants):
 
 ## RFC Template
 
+RFCs support progressive disclosure for two audiences: **reviewers** read end-to-end during the review phase; **implementer agents** load targeted sections during implementation. The `status` frontmatter field is the first filter — agents skip `implemented` or `withdrawn` RFCs without loading content.
+
+**Implementer reading path:** Frontmatter → Status → Proposed Solution → Organon Impact → Technical Implementation → Open Questions (still open only).
+
+See `frontmatter-system.md` for the full RFC section contract.
+
 ```markdown
 ---
 type: rationale
@@ -908,7 +914,7 @@ Required fields for every organon file:
 | `name` | string | Kebab-case identifier matching directory name |
 | `version` | string | Semantic version `"X.Y"` |
 | `summary` | string | One-sentence description, max 200 chars |
-| `token_estimate` | number | Approximate full file token count (must be within 30% of actual; use ~12 tokens/line or ~3.5 chars/token as heuristic) |
+| `token_estimate` | number | Approximate full file token count — accuracy matters for the load-or-skip decision (use ~12 tokens/line or ~3.5 chars/token as heuristic; update when estimate would mislead budget planning) |
 
 See `frontmatter-system.md` for the complete schema including type-specific and relationship fields.
 

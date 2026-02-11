@@ -412,7 +412,7 @@ audience: [llm, human, tooling]
 Before publishing an organon:
 
 - [ ] YAML frontmatter present with all required fields
-- [ ] `token_estimate` is within 30% of actual token count
+- [ ] `token_estimate` reflects order-of-magnitude cost for the load-or-skip decision
 - [ ] Frontmatter counts (`invariants_count`, etc.) match actual content
 - [ ] Ethos has IS/IS NOT identity section
 - [ ] Principles are numbered by priority
