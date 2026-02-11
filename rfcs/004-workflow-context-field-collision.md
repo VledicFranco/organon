@@ -255,7 +255,7 @@ organon_context:
 **`book-llms/frontmatter-system.md`**
 - Line 76: workflow-specific fields list → replace `context` with `loads`
 
-**`organon-tools/` (verification gates)**
+**`packages/tools/` (verification gates)**
 - `workflow-quality` gate: check `loads` instead of `context`
 - Accept both `loads` and `context` during transition (minor version compatibility)
 

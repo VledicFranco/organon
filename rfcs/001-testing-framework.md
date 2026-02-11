@@ -9,8 +9,8 @@ status: draft
 created: 2026-02-10
 author: organon-tools-developer
 related_files:
-  - ../organon-tools/ETHOS.md
-  - ../organon-tools/PHILOSOPHY.md
+  - ../organon/domains/tools/ETHOS.md
+  - ../organon/domains/tools/PHILOSOPHY.md
   - ../book-llms/invariant-tracking.md
   - ../book-llms/three-layer-architecture.md
   - ./002-compound-engineering-integration.md
@@ -76,7 +76,7 @@ This RFC addresses all three gaps **for TypeScript projects** by creating:
 
 ## Proposed Solution
 
-**Create a new domain organon** at `organon-tools/organon/domains/testing/` that defines:
+**Create a new domain organon** at `organon/domains/testing/` that defines:
 
 ### 1. Domain Identity (ETHOS.md)
 What the testing domain IS and IS NOT, its invariants, principles, and decision heuristics.
@@ -85,7 +85,7 @@ What the testing domain IS and IS NOT, its invariants, principles, and decision 
 Why the testing domain is designed this way, the problems it solves, the bet we're making, and trade-offs.
 
 ### 3. Implementation (code)
-TypeScript code in `organon-tools/src/core/testing/` that implements the constraints defined by the domain organon.
+TypeScript code in `packages/testing/src/core/` that implements the constraints defined by the domain organon.
 
 **Key principle:** The organon defines "should be" (constraints), the code implements "what is" (reality). Same PR contains both.
 
@@ -144,13 +144,13 @@ organon verify --gate=tier4-tests
 
 ### Create
 
-**`organon-tools/organon/README.md`**
-- Navigation for organon-tools domain hierarchy
+**`packages/tools/organon/README.md`**
+- Navigation for packages/tools domain hierarchy
 
-**`organon-tools/organon/domains/testing/README.md`**
+**`organon/domains/testing/README.md`**
 - Navigation for testing domain
 
-**`organon-tools/organon/domains/testing/ETHOS.md`** ← **Core: Domain definition**
+**`organon/domains/testing/ETHOS.md`** ← **Core: Domain definition**
 
 This is the complete content that will be created:
 
@@ -278,11 +278,11 @@ Do not do the following in this domain:
 - [ ] Frontmatter counts match actual content (7 invariants, 5 principles, 10 decision heuristic rows)
 - [ ] Identity boundaries are specific and testable
 - [ ] Principles are numbered by priority
-- [ ] No conflicts with parent scope constraints (organon-tools/ETHOS.md)
+- [ ] No conflicts with parent scope constraints (organon/domains/tools/ETHOS.md)
 - [ ] All 6 inherited organon-tools invariants are compatible (verified: schema fidelity, every command has tests, gates fail not warn, machine-parsable output via json-reporter, idempotent operations, no breaking changes without version bump)
 ```
 
-**`organon-tools/organon/domains/testing/PHILOSOPHY.md`** ← **Core: Design rationale**
+**`organon/domains/testing/PHILOSOPHY.md`** ← **Core: Design rationale**
 
 This is the complete content that will be created:
 
@@ -403,17 +403,17 @@ This bet succeeds if:
 ```
 
 **Implementation code** (consequence of domain definition):
-- `organon-tools/src/core/testing/` - Implements domain constraints
-- `organon-tools/src/cli/commands/generate-tests.ts` - CLI integration
-- `organon-tools/packages/testing/` - Published npm package
+- `packages/testing/src/core/` - Implements domain constraints
+- `packages/tools/src/cli/commands/generate-tests.ts` - CLI integration
+- `packages/testing/` - Published npm package
 
 ### Update
 
-**`organon-tools/ETHOS.md`** (product-level organon)
+**`organon/domains/tools/ETHOS.md`** (product-level organon)
 - Add reference: testing domain inherits product invariants
 - Add decision heuristic: "Testing domain work? Read organon/domains/testing/ETHOS.md"
 
-**`organon-tools/README.md`**
+**`packages/tools/README.md`**
 - Add link to testing domain in "Domains" section
 
 **`book-llms/invariant-tracking.md`**
@@ -452,40 +452,40 @@ Once the domain organon is created, implementation builds what the organon defin
 
 **Package Structure:**
 ```
-organon-tools/
-├── packages/
-│   └── testing/                    ← Published as @organon/testing
-│       ├── src/
-│       │   ├── core/
-│       │   │   ├── invariant-test.ts          # testInvariant() wrapper, metadata
-│       │   │   ├── assertions/                # Pure validation logic (no I/O imports)
-│       │   │   │   ├── max-value.ts           # assertMaxValue()
-│       │   │   │   ├── no-side-effects.ts     # assertNoSideEffects()
-│       │   │   │   ├── file-exists.ts         # assertFileExists()
-│       │   │   │   ├── backwards-compat.ts    # assertBackwardsCompat()
-│       │   │   │   ├── naming-convention.ts   # assertNamingConvention()
-│       │   │   │   └── custom.ts              # assertCustom()
-│       │   │   ├── resolvers/                 # I/O layer (file reading, glob expansion)
-│       │   │   │   ├── file-resolver.ts       # Read files, expand globs → feed to assertions
-│       │   │   │   └── types.ts               # FileSystem interface (mockable)
-│       │   │   ├── discovery/
-│       │   │   │   ├── scan-ethos.ts          # Parse ETHOS.md
-│       │   │   │   ├── scan-tests.ts          # Find testInvariant() calls
-│       │   │   │   └── coverage.ts            # Calculate coverage %
-│       │   │   └── reporters/
-│       │   │       ├── json-reporter.ts       # Write coverage.json
-│       │   │       └── console-reporter.ts    # Human-readable output
-│       │   ├── adapters/
-│       │   │   ├── vitest.ts                  # Vitest integration (Phase 1)
-│       │   │   ├── jest.ts                    # Jest (Phase 2)
-│       │   │   └── mocha.ts                   # Mocha (Phase 3)
-│       │   └── index.ts                       # Public API exports
-│       ├── tests/                             # Dogfooding (100% coverage)
-│       └── package.json
-└── src/
-    └── cli/
-        └── commands/
-            └── generate-tests.ts               # CLI integration
+packages/
+├── testing/                        ← Published as @organon/testing
+│   ├── src/
+│   │   ├── core/
+│   │   │   ├── invariant-test.ts          # testInvariant() wrapper, metadata
+│   │   │   ├── assertions/                # Pure validation logic (no I/O imports)
+│   │   │   │   ├── max-value.ts           # assertMaxValue()
+│   │   │   │   ├── no-side-effects.ts     # assertNoSideEffects()
+│   │   │   │   ├── file-exists.ts         # assertFileExists()
+│   │   │   │   ├── backwards-compat.ts    # assertBackwardsCompat()
+│   │   │   │   ├── naming-convention.ts   # assertNamingConvention()
+│   │   │   │   └── custom.ts              # assertCustom()
+│   │   │   ├── resolvers/                 # I/O layer (file reading, glob expansion)
+│   │   │   │   ├── file-resolver.ts       # Read files, expand globs → feed to assertions
+│   │   │   │   └── types.ts               # FileSystem interface (mockable)
+│   │   │   ├── discovery/
+│   │   │   │   ├── scan-ethos.ts          # Parse ETHOS.md
+│   │   │   │   ├── scan-tests.ts          # Find testInvariant() calls
+│   │   │   │   └── coverage.ts            # Calculate coverage %
+│   │   │   └── reporters/
+│   │   │       ├── json-reporter.ts       # Write coverage.json
+│   │   │       └── console-reporter.ts    # Human-readable output
+│   │   ├── adapters/
+│   │   │   ├── vitest.ts                  # Vitest integration (Phase 1)
+│   │   │   ├── jest.ts                    # Jest (Phase 2)
+│   │   │   └── mocha.ts                   # Mocha (Phase 3)
+│   │   └── index.ts                       # Public API exports
+│   ├── tests/                             # Dogfooding (100% coverage)
+│   └── package.json
+└── tools/
+    └── src/
+        └── cli/
+            └── commands/
+                └── generate-tests.ts               # CLI integration
 ```
 
 **Core Abstractions:**
@@ -516,7 +516,7 @@ organon-tools/
 
 **Implements domain invariants:**
 - Pure assertion logic (INV-TEST-1): `core/assertions/` imports no I/O modules; `core/resolvers/` handles file reading and feeds data into pure validators
-- Fail-fast (INV-TEST-2): Throw on first violation
+- Fail-fast (INV-TEST-2): Throw on violation (collects all before throwing for diagnostics)
 - Invariant ID required (INV-TEST-3): `testInvariant()` wrapper enforces ID linkage
 - Framework-agnostic core (INV-TEST-4): Zero test-framework deps in core/
 - 100% line coverage (INV-TEST-5): Dogfooded via Vitest coverage gate
@@ -742,7 +742,7 @@ These decisions implement the domain principles defined in testing/PHILOSOPHY.md
 **Decision 6: Fail-Fast (INV-TEST-2)**
 - **Implements:** Principle 1 (Fail-fast over forgiving)
 - **Technical benefit:** Clear errors, no ambiguity, fast feedback
-- **Implementation:** Assertions throw on first violation (no collect-all-errors mode)
+- **Implementation:** Assertions collect all violations and throw once with complete diagnostics (better UX than stopping at the first violation)
 
 **Decision 7: Configurable Coverage Threshold**
 - **Implements:** Principle 5 (Integration over replacement) — gradual adoption path
@@ -877,11 +877,11 @@ None — all design questions resolved. Ready for implementation.
 
 | File | Relationship |
 |------|--------------|
-| [organon-tools/ETHOS.md](../organon-tools/ETHOS.md) | Testing library must follow organon-tools invariants (schema fidelity, 100% coverage, idempotent operations) |
-| [organon-tools/PHILOSOPHY.md](../organon-tools/PHILOSOPHY.md) | Design principles (fail-fast, testability, clarity) guide assertion API design |
+| [organon/domains/tools/ETHOS.md](../organon/domains/tools/ETHOS.md) | Testing library must follow organon-tools invariants (schema fidelity, 100% coverage, idempotent operations) |
+| [organon/domains/tools/PHILOSOPHY.md](../organon/domains/tools/PHILOSOPHY.md) | Design principles (fail-fast, testability, clarity) guide assertion API design |
 | [book-llms/invariant-tracking.md](../book-llms/invariant-tracking.md) | Defines tier-4 testing specification (this RFC implements it) |
 | [book-llms/three-layer-architecture.md](../book-llms/three-layer-architecture.md) | Testing library is Layer 3 (Tools) that executes tier-4 verification |
-| [organon-tools/dev/testing-framework-design.md](../organon-tools/dev/testing-framework-design.md) | Detailed design document (basis for this RFC) |
+| [packages/tools/dev/testing-framework-design.md](../packages/tools/dev/testing-framework-design.md) | Detailed design document (basis for this RFC) |
 | [rfcs/002-compound-engineering-integration.md](./002-compound-engineering-integration.md) | Defines 6-step enforcement loop (Define → Bind → Execute → Verify → Compound → Evolve) used in this RFC |
 | [rfcs/003-explore-before-ethos.md](./003-explore-before-ethos.md) | Uses testing framework as example of Explore-Before-Ethos pattern for novel domains |
 
@@ -915,7 +915,7 @@ None — all design questions resolved. Ready for implementation.
 1. **Request review** - Share RFC with stakeholders for feedback
 2. **Acceptance vote** - All design questions resolved; team approval required to proceed
 3. **Begin implementation** - Phase 1 Week 1 (monorepo setup + core assertions)
-4. **Update organon files** - Same PR as Phase 1 completion (organon-tools/ETHOS.md, methodology/testing/PROTOCOL.md)
+4. **Update organon files** - Same PR as Phase 1 completion (organon/domains/tools/ETHOS.md, methodology/testing/PROTOCOL.md)
 
 ---
 

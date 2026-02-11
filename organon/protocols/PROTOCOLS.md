@@ -161,13 +161,13 @@ Ship a tested, documented CLI command or verification gate that follows all 6 or
 
 ### Preconditions
 
-- [ ] `organon-tools/ETHOS.md` has been read (6 invariants, 5 principles)
-- [ ] `organon-tools/PHILOSOPHY.md` has been read (design decisions)
+- [ ] `organon/domains/tools/ETHOS.md` has been read (6 invariants, 5 principles)
+- [ ] `organon/domains/tools/PHILOSOPHY.md` has been read (design decisions)
 - [ ] If adding a gate: `book-llms/three-layer-architecture.md` verification section loaded
 
 ### Steps
 
-1. **Load context.** Read `organon-tools/ETHOS.md`, `organon-tools/PHILOSOPHY.md`, and if relevant, `book-llms/three-layer-architecture.md`.
+1. **Load context.** Read `organon/domains/tools/ETHOS.md`, `organon/domains/tools/PHILOSOPHY.md`, and if relevant, `book-llms/three-layer-architecture.md`.
 
 2. **Design.** Answer: What does it do? Is it idempotent? Does it support `--format json`? What exit codes? Does it compose?
 
@@ -280,7 +280,7 @@ Confirm project integrity. Surface all issues with actionable fix guidance.
 ### Preconditions
 
 - [ ] Working directory is the organon repository root
-- [ ] `organon-tools` is built and available (`npm run build` in organon-tools/)
+- [ ] `organon-tools` is built and available (`npm run build` in packages/tools/)
 
 ### Steps
 
@@ -312,7 +312,7 @@ Confirm project integrity. Surface all issues with actionable fix guidance.
 
 | Failure | Recovery Action |
 |---------|-----------------|
-| `organon verify` command not found | Build organon-tools: `cd organon-tools && npm run build` |
+| `organon verify` command not found | Build organon-tools: `cd packages/tools && npm run build` |
 | Gate failure not in decision table | Read gate source code to understand the check, add new entry to table |
 | Fix introduces new failure | Re-run full verification, fix cascading issues |
 

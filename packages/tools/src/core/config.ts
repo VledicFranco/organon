@@ -40,10 +40,10 @@ const DEFAULT_ORGANON_GLOBS = [
 ];
 
 const DEFAULT_IGNORE_PATTERNS = [
-  'node_modules/**',
-  'dist/**',
-  '.git/**',
-  'coverage/**',
+  '**/node_modules/**',
+  '**/dist/**',
+  '**/.git/**',
+  '**/coverage/**',
   '*.test.*',
   '*.spec.*',
 ];

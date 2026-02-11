@@ -6,8 +6,8 @@ CLI tools and MCP server for the **Organon Methodology** — enforce documentati
 
 This project uses the Organon methodology to govern its own development:
 
-- **[ETHOS.md](./ETHOS.md)** — Constraints for developing organon-tools (what rules must never be violated)
-- **[PHILOSOPHY.md](./PHILOSOPHY.md)** — Design decisions and trade-offs (why TypeScript, why CLI, why fail-fast)
+- **[ETHOS.md](../../organon/domains/tools/ETHOS.md)** — Constraints for developing organon-tools (what rules must never be violated)
+- **[PHILOSOPHY.md](../../organon/domains/tools/PHILOSOPHY.md)** — Design decisions and trade-offs (why TypeScript, why CLI, why fail-fast)
 - **[dev/](./dev/)** — Design docs, RFCs, and future tool ideas
 
 **For contributors:** Read ETHOS.md first to understand invariants and principles. Read PHILOSOPHY.md to understand why the tool is built this way.
@@ -15,7 +15,7 @@ This project uses the Organon methodology to govern its own development:
 ## Architecture
 
 ```
-organon-tools/src/
+packages/tools/src/
 ├── core/               ← Pure logic (no I/O, no console, no process.exit)
 │   ├── types.ts        ← FileSystem interface, result types, config
 │   ├── config.ts       ← Convention-based config discovery
@@ -90,7 +90,7 @@ Start with `organon mcp`. Exposes:
   "mcpServers": {
     "organon": {
       "command": "npx",
-      "args": ["tsx", "organon-tools/src/cli/index.ts", "mcp", "--project-root", "."]
+      "args": ["tsx", "packages/tools/src/cli/index.ts", "mcp", "--project-root", "."]
     }
   }
 }

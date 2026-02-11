@@ -6,10 +6,10 @@ version: "1.0"
 summary: Brainstormed tools to accelerate Organon methodology adoption in new and existing projects
 token_estimate: 7100
 related_files:
-  - ../ETHOS.md
-  - ../../book-llms/three-layer-architecture.md
-  - ../../book-llms/frontmatter-system.md
-  - ../../book-llms/invariant-tracking.md
+  - ../../../organon/domains/tools/ETHOS.md
+  - ../../../book-llms/three-layer-architecture.md
+  - ../../../book-llms/frontmatter-system.md
+  - ../../../book-llms/invariant-tracking.md
 load_priority: medium
 audience: [llm, human]
 ---
@@ -573,11 +573,11 @@ For **maximum adoption impact**, build in this order:
 
 | File | Relationship |
 |------|--------------|
-| [../ETHOS.md](../ETHOS.md) | Tools must follow invariants (schema fidelity, idempotent, machine-parsable) |
-| [../PHILOSOPHY.md](../PHILOSOPHY.md) | Design decisions (fail-fast, testability, clarity) apply to new tools |
-| [../../book-llms/three-layer-architecture.md](../../book-llms/three-layer-architecture.md) | Tools implement Layer 3 (atomic operations) |
-| [../../book-llms/invariant-tracking.md](../../book-llms/invariant-tracking.md) | Testing framework implements tier-4 testing spec |
-| [../../book-llms/frontmatter-system.md](../../book-llms/frontmatter-system.md) | Init/discover tools must generate valid frontmatter |
+| [../../../organon/domains/tools/ETHOS.md](../../../organon/domains/tools/ETHOS.md) | Tools must follow invariants (schema fidelity, idempotent, machine-parsable) |
+| [../../../organon/domains/tools/PHILOSOPHY.md](../../../organon/domains/tools/PHILOSOPHY.md) | Design decisions (fail-fast, testability, clarity) apply to new tools |
+| [../../../book-llms/three-layer-architecture.md](../../../book-llms/three-layer-architecture.md) | Tools implement Layer 3 (atomic operations) |
+| [../../../book-llms/invariant-tracking.md](../../../book-llms/invariant-tracking.md) | Testing framework implements tier-4 testing spec |
+| [../../../book-llms/frontmatter-system.md](../../../book-llms/frontmatter-system.md) | Init/discover tools must generate valid frontmatter |
 
 ---
 

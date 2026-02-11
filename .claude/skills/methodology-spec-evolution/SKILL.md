@@ -48,15 +48,23 @@ Use this skill when:
 
 Before making any changes, understand the blast radius:
 
-```bash
-cd organon-tools && npx organon find --term "<concept-being-changed>"
+Use the Grep tool to search for the concept across all project files:
+
+```
+Grep pattern="<concept-being-changed>" path="."
 ```
 
-This traces all references to the concept across the entire project. Every file returned is a potential propagation target.
+Also check which organon files relate by name:
+
+```bash
+cd packages/tools && npx organon find --name "<concept>"
+```
+
+Every file returned is a potential propagation target.
 
 **Known high-propagation files:**
 - `book-llms/ETHOS.md` changes → affects templates.md, frontmatter-system.md, patterns.md, scopes.md, overview.md, CLAUDE.md
-- `book-llms/frontmatter-system.md` changes → affects templates.md, ETHOS.md (structure templates), organon-tools parsers
+- `book-llms/frontmatter-system.md` changes → affects templates.md, ETHOS.md (structure templates), packages/tools parsers
 - `book-llms/three-layer-architecture.md` changes → affects workflow-authoring.md, templates.md, patterns.md
 - Terminology changes → grep ALL files including CLAUDE.md, README.md, skill files
 
@@ -108,11 +116,19 @@ Update the `version` field in YAML frontmatter of **ALL** modified files:
 
 Search ALL files for old terminology that should have been updated:
 
-```bash
-cd organon-tools && npx organon find --term "<old-term>"
+Use the Grep tool to search all files for old terminology:
+
+```
+Grep pattern="<old-term>" path="."
 ```
 
-Also manually grep for common stale terms:
+Also check organon files by name:
+
+```bash
+cd packages/tools && npx organon find --name "<old-term>"
+```
+
+Additionally, manually check common stale term locations:
 - Check CLAUDE.md
 - Check README.md (project root)
 - Check all skill files in `.claude/skills/`
@@ -121,8 +137,8 @@ Also manually grep for common stale terms:
 ### Step 7: Run Full Verification
 
 ```bash
-cd organon-tools && npx organon verify
-cd organon-tools && npx organon health
+cd packages/tools && npx organon verify
+cd packages/tools && npx organon health
 ```
 
 All gates must pass. Health score should not decrease.
@@ -159,7 +175,7 @@ After any methodology change, verify:
 
 | Failure | Recovery Action |
 |---------|-----------------|
-| Stale terminology found after commit | Run full grep sweep again with `organon find`. Update all remaining instances. |
+| Stale terminology found after commit | Run full grep sweep again (Grep tool across project root). Update all remaining instances. |
 | scopes.md out of sync | Re-read scopes.md alongside ETHOS.md. Update scopes.md to match current concepts. |
 | Version not bumped in a modified file | Check git diff for all files touched. Bump version in any file that was modified but not version-bumped. |
 | Backward compatibility broken unintentionally | Assess impact. If minor, document in CHANGELOG. If major, create RFC and bump major version. |

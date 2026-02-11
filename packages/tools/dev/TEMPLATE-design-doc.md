@@ -6,8 +6,8 @@ version: "0.1"
 summary: [One sentence describing what this design doc covers]
 token_estimate: [estimate]
 related_files:
-  - ../ETHOS.md
-  - ../PHILOSOPHY.md
+  - ../../../organon/domains/tools/ETHOS.md
+  - ../../../organon/domains/tools/PHILOSOPHY.md
 load_priority: medium
 audience: [llm, human]
 status: draft  # draft | review | approved | implemented | archived
@@ -124,8 +124,8 @@ import { feature } from '@organon/tools';
 
 | File | Relationship |
 |------|--------------|
-| [../ETHOS.md](../ETHOS.md) | [How this relates to organon-tools invariants] |
-| [../PHILOSOPHY.md](../PHILOSOPHY.md) | [How this relates to design principles] |
+| [../../../organon/domains/tools/ETHOS.md](../../../organon/domains/tools/ETHOS.md) | [How this relates to organon-tools invariants] |
+| [../../../organon/domains/tools/PHILOSOPHY.md](../../../organon/domains/tools/PHILOSOPHY.md) | [How this relates to design principles] |
 
 ---
 

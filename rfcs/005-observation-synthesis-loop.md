@@ -258,9 +258,9 @@ organon/
   observations/               ← project-level observations
     001-skill-family-testing.md
     002-rfc-implementation-patterns.md
-organon-tools/
+packages/tools/
   organon/
-    observations/             ← organon-tools-specific observations
+    observations/             ← packages/tools-specific observations
       001-validator-edge-cases.md
 ```
 

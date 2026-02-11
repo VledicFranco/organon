@@ -56,7 +56,7 @@ Organon fixes this by:
 This repository contains three resources for implementing Organon:
 
 ```
-ethos/
+organon/
 ├── book-llms/          # Technical reference for LLMs and developers
 │   ├── ETHOS.md        # Immutable invariants
 │   ├── PHILOSOPHY.md   # Design decisions and trade-offs
@@ -68,11 +68,13 @@ ethos/
 ├── book-humans/        # Narrative guide (planned)
 │   └── README.md       # Coming soon
 │
-└── organon-tools/      # CLI tools and future MCP server
-    ├── src/
-    │   ├── commands/   # generate, verify, find
-    │   └── lib/        # Shared utilities
-    └── README.md       # Tool documentation
+└── packages/           # Publishable npm packages
+    ├── tools/          # @organon/tools — CLI + MCP server
+    │   ├── src/
+    │   └── README.md
+    └── testing/        # @organon/testing — invariant test library
+        ├── src/
+        └── README.md
 ```
 
 ### 1. book-llms/ — Technical Reference
@@ -106,7 +108,7 @@ ethos/
 
 [Learn more →](./book-humans/)
 
-### 3. organon-tools/ — CLI Tools
+### 3. packages/ — CLI Tools & Libraries
 
 **Audience:** Developers using Organon in their codebase
 
@@ -128,7 +130,7 @@ organon find --domain=api
 
 **Future:** MCP server for IDE integration (LSP-like features)
 
-[Install organon-tools →](./organon-tools/)
+[Explore packages →](./packages/)
 
 ---
 
@@ -211,14 +213,14 @@ agent-tavern/organon/
 We welcome contributions to:
 - **book-llms/** — Patterns, templates, examples
 - **book-humans/** — Narrative chapters, tutorials
-- **organon-tools/** — CLI features, MCP server
+- **packages/** — CLI features, MCP server, testing library
 
 ### How to Contribute
 
 1. **Fork the repository**
 2. **Create a feature branch** (`git checkout -b feature/new-pattern`)
 3. **Make your changes** (follow existing patterns)
-4. **Test locally** (if changing organon-tools/)
+4. **Test locally** (if changing packages/)
 5. **Submit a PR** with clear description
 
 ---
