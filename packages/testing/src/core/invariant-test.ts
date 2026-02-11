@@ -218,9 +218,21 @@ export function getDefaultRegistry(): InvariantTestRegistry {
  * Default test runner: executes the async test function directly.
  * Used when no framework-specific adapter is configured.
  * Framework adapters (vitest, jest) replace this with their own `it()`/`test()` wrapper.
+ *
+ * Since TestRunner is synchronous (for framework compatibility) but testFn is async,
+ * failures surface as unhandled promise rejections. In Node.js 15+, unhandled
+ * rejections crash the process with a clear error. A .catch() handler wraps the
+ * error with the test name for better diagnostics.
  */
-const defaultRunner: TestRunner = (_testName, testFn, _metadata) => {
-  void testFn();
+const defaultRunner: TestRunner = (testName, testFn, _metadata) => {
+  testFn().catch((err: unknown) => {
+    const wrapped = err instanceof Error
+      ? err
+      : new Error(String(err));
+    wrapped.message = `[${testName}] ${wrapped.message}`;
+    // Re-throw as unhandled rejection so Node.js exits non-zero
+    queueMicrotask(() => { throw wrapped; });
+  });
 };
 
 /**

@@ -21,7 +21,7 @@ invariants:
     name: idempotent-operations
   - id: INV-TOOLS-6
     name: breaking-changes-major-version
-inherits_from: [meta-organon]
+inherits_from: [organon-self-governance]
 load_priority: high
 required_for:
   - tool_development

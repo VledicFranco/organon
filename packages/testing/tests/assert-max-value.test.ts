@@ -13,14 +13,12 @@ describe('assertMaxValue (high-level)', () => {
     });
 
     await expect(
-      assertMaxValue(
-        {
-          files: ['src/config.ts'],
-          pattern: /ttl\s*=\s*(\d+)/,
-          maxValue: 86400,
-        },
+      assertMaxValue({
+        files: ['src/config.ts'],
+        pattern: /ttl\s*=\s*(\d+)/,
+        maxValue: 86400,
         fs,
-      ),
+      }),
     ).resolves.toBeUndefined();
   });
 
@@ -30,15 +28,13 @@ describe('assertMaxValue (high-level)', () => {
     });
 
     await expect(
-      assertMaxValue(
-        {
-          files: ['src/config.ts'],
-          pattern: /ttl\s*=\s*(\d+)/,
-          maxValue: 86400,
-          unit: 'seconds',
-        },
+      assertMaxValue({
+        files: ['src/config.ts'],
+        pattern: /ttl\s*=\s*(\d+)/,
+        maxValue: 86400,
+        unit: 'seconds',
         fs,
-      ),
+      }),
     ).rejects.toThrow(MaxValueAssertionError);
   });
 
@@ -46,14 +42,12 @@ describe('assertMaxValue (high-level)', () => {
     const fs = new MockFileSystem({});
 
     await expect(
-      assertMaxValue(
-        {
-          files: ['nonexistent.ts'],
-          pattern: /ttl\s*=\s*(\d+)/,
-          maxValue: 86400,
-        },
+      assertMaxValue({
+        files: ['nonexistent.ts'],
+        pattern: /ttl\s*=\s*(\d+)/,
+        maxValue: 86400,
         fs,
-      ),
+      }),
     ).rejects.toThrow(MaxValueResolverError);
   });
 
@@ -63,14 +57,12 @@ describe('assertMaxValue (high-level)', () => {
     });
 
     await expect(
-      assertMaxValue(
-        {
-          files: ['src/config.ts'],
-          pattern: /ttl\s*=\s*(\w+)/,
-          maxValue: 86400,
-        },
+      assertMaxValue({
+        files: ['src/config.ts'],
+        pattern: /ttl\s*=\s*(\w+)/,
+        maxValue: 86400,
         fs,
-      ),
+      }),
     ).rejects.toThrow(MaxValueResolverError);
   });
 
@@ -82,14 +74,12 @@ describe('assertMaxValue (high-level)', () => {
     });
 
     await expect(
-      assertMaxValue(
-        {
-          files: ['src/*.ts'],
-          pattern: /ttl\s*=\s*(\d+)/,
-          maxValue: 500,
-        },
+      assertMaxValue({
+        files: ['src/*.ts'],
+        pattern: /ttl\s*=\s*(\d+)/,
+        maxValue: 500,
         fs,
-      ),
+      }),
     ).resolves.toBeUndefined();
   });
 
@@ -100,14 +90,12 @@ describe('assertMaxValue (high-level)', () => {
     });
 
     try {
-      await assertMaxValue(
-        {
-          files: ['src/a.ts', 'src/b.ts'],
-          pattern: /ttl\s*=\s*(\d+)/,
-          maxValue: 86400,
-        },
+      await assertMaxValue({
+        files: ['src/a.ts', 'src/b.ts'],
+        pattern: /ttl\s*=\s*(\d+)/,
+        maxValue: 86400,
         fs,
-      );
+      });
       expect.unreachable('Should have thrown');
     } catch (err) {
       expect(err).toBeInstanceOf(MaxValueAssertionError);
@@ -124,14 +112,12 @@ describe('assertMaxValue (high-level)', () => {
     });
 
     await expect(
-      assertMaxValue(
-        {
-          files: ['src/config.ts'],
-          pattern: /ttl\s*=\s*(\d+)/,
-          maxValue: 86400,
-        },
+      assertMaxValue({
+        files: ['src/config.ts'],
+        pattern: /ttl\s*=\s*(\d+)/,
+        maxValue: 86400,
         fs,
-      ),
+      }),
     ).resolves.toBeUndefined();
   });
 
@@ -141,15 +127,13 @@ describe('assertMaxValue (high-level)', () => {
     });
 
     try {
-      await assertMaxValue(
-        {
-          files: ['src/config.ts'],
-          pattern: /ttl\s*=\s*(\d+)/,
-          maxValue: 86400,
-          unit: 'seconds',
-        },
+      await assertMaxValue({
+        files: ['src/config.ts'],
+        pattern: /ttl\s*=\s*(\d+)/,
+        maxValue: 86400,
+        unit: 'seconds',
         fs,
-      );
+      });
       expect.unreachable('Should have thrown');
     } catch (err) {
       const error = err as MaxValueAssertionError;
@@ -161,14 +145,12 @@ describe('assertMaxValue (high-level)', () => {
     const fs = new MockFileSystem({});
 
     try {
-      await assertMaxValue(
-        {
-          files: ['missing.ts'],
-          pattern: /ttl\s*=\s*(\d+)/,
-          maxValue: 86400,
-        },
+      await assertMaxValue({
+        files: ['missing.ts'],
+        pattern: /ttl\s*=\s*(\d+)/,
+        maxValue: 86400,
         fs,
-      );
+      });
       expect.unreachable('Should have thrown');
     } catch (err) {
       expect(err).toBeInstanceOf(MaxValueResolverError);
@@ -185,15 +167,26 @@ describe('assertMaxValue (high-level)', () => {
     });
 
     await expect(
-      assertMaxValue(
-        {
-          files: ['src/*.ts'],
-          pattern: /ttl\s*=\s*(\d+)/,
-          maxValue: 200,
-          cwd: 'project',
-        },
+      assertMaxValue({
+        files: ['src/*.ts'],
+        pattern: /ttl\s*=\s*(\d+)/,
+        maxValue: 200,
+        cwd: 'project',
         fs,
-      ),
+      }),
     ).resolves.toBeUndefined();
+  });
+
+  it('throws MaxValueResolverError when files array is empty', async () => {
+    const fs = new MockFileSystem({});
+
+    await expect(
+      assertMaxValue({
+        files: [],
+        pattern: /ttl\s*=\s*(\d+)/,
+        maxValue: 86400,
+        fs,
+      }),
+    ).rejects.toThrow(MaxValueResolverError);
   });
 });

@@ -2,11 +2,11 @@
 type: navigation
 scope: domain
 name: testing-domain
-version: "1.0"
+version: "1.1"
 summary: Testing domain — semantic framework for tier-4 invariant verification, published as @organon/testing
 token_estimate: 80
 provides: [testing-domain-navigation]
-parent: organon-tools
+parent: organon-self-governance
 audience: [llm, human]
 ---
 
@@ -20,7 +20,7 @@ audience: [llm, human]
 
 **RFC:** [001-testing-framework](../../../rfcs/001-testing-framework.md) (Draft)
 
-**Implementation:** Organon files created, code not started
+**Implementation:** Initial implementation complete (testInvariant + assertMaxValue, 65 tests, 100% coverage)
 
 ---
 
@@ -37,7 +37,7 @@ audience: [llm, human]
 
 **Published as:** `@organon/testing` (npm package)
 
-**Code location:** `organon-tools/src/core/testing/`, `organon-tools/packages/testing/`
+**Code location:** `packages/testing/`
 
 **Concepts:**
 - Assertions (core verification primitives)
@@ -52,6 +52,6 @@ audience: [llm, human]
 
 | File | Relationship |
 |------|--------------|
-| [../../ETHOS.md](../../ETHOS.md) | Product-level constraints (testing domain inherits these) |
-| [../../PHILOSOPHY.md](../../PHILOSOPHY.md) | Product-level design principles |
+| [../../ETHOS.md](../../ETHOS.md) | Project-level constraints (testing domain inherits these) |
 | [../../../book-llms/invariant-tracking.md](../../../book-llms/invariant-tracking.md) | Tier-4 testing specification (this domain implements it) |
+| [../../../packages/testing/](../../../packages/testing/) | Implementation source code |

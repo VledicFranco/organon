@@ -72,15 +72,15 @@ export class MaxValueResolverError extends Error {
  * 2. Extract numeric values matching the pattern
  * 3. Validate all values against maxValue (pure assertion)
  *
+ * @param options - Configuration including files, pattern, maxValue, and optional fs/cwd/unit
  * @throws {MaxValueResolverError} if files can't be read or values can't be extracted
  * @throws {MaxValueAssertionError} if any value exceeds maxValue
  */
 export async function assertMaxValue(
   options: MaxValueOptions,
-  fs?: FileSystem,
 ): Promise<void> {
-  const { files, pattern, maxValue, unit, cwd, fs: optionsFs } = options;
-  const resolvedFs = fs ?? optionsFs ?? createNodeFileSystem();
+  const { files, pattern, maxValue, unit, cwd, fs } = options;
+  const resolvedFs = fs ?? createNodeFileSystem();
 
   // 0. Fail-fast on empty files array (INV-TEST-2)
   if (files.length === 0) {

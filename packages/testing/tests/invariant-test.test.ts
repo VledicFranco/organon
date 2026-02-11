@@ -137,6 +137,16 @@ describe('createRegistry', () => {
     expect(registry.getAll()).toEqual([]);
     expect(registry.has('INV-A-1')).toBe(false);
   });
+
+  it('coveredCount returns distinct invariant IDs', () => {
+    const registry = createRegistry();
+    registry.register({ invariantId: 'INV-A-1', description: 'test A1' });
+    registry.register({ invariantId: 'INV-A-1', description: 'test A2' });
+    registry.register({ invariantId: 'INV-B-1', description: 'test B' });
+
+    expect(registry.size()).toBe(3);
+    expect(registry.coveredCount()).toBe(2);
+  });
 });
 
 describe('getDefaultRegistry', () => {
@@ -254,5 +264,17 @@ describe('testInvariant', () => {
     testInvariant('INV-FN-1', 'fn test', myTestFn, { runner });
 
     expect(capturedFn).toBe(myTestFn);
+  });
+
+  it('default runner executes the test function', async () => {
+    let executed = false;
+
+    testInvariant('INV-EXEC-1', 'execution test', async () => {
+      executed = true;
+    });
+
+    // Default runner calls testFn() asynchronously, give it a tick to resolve
+    await new Promise((resolve) => setTimeout(resolve, 10));
+    expect(executed).toBe(true);
   });
 });

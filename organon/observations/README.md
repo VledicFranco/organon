@@ -1,24 +1,26 @@
 ---
 type: navigation
 scope: product
-name: learnings
-version: "1.0"
-summary: Observations and learnings from dogfooding the Organon methodology — experimental, may inform future methodology evolution
+name: observations
+version: "1.1"
+summary: Empirical observations from dogfooding — structured records that accumulate across sessions and graduate into methodology improvements
 token_estimate: 200
-provides: [learnings-directory]
-parent: organon-tools
+provides: [observations-directory]
+parent: organon-self-governance
 audience: [llm, human]
 ---
 
-# Learnings
+# Observations
 
-> Observations from using the Organon methodology on itself. Experimental — patterns that recur here may graduate into methodology guidance via RFCs.
+> Empirical observations from using the Organon methodology on itself. Patterns that recur here graduate into methodology improvements via RFCs, heuristic additions, or tool fixes.
 
 ---
 
 ## Purpose
 
-This directory captures **what we notice while dogfooding**. Not prescriptive (that's `book-llms/`), not procedural (that's `protocols/`), not constraints (that's `ETHOS.md`). Just observations with enough structure to be useful later.
+This directory captures **what we notice while dogfooding**. Not prescriptive (that's `book-llms/`), not procedural (that's `protocols/`), not constraints (that's `ETHOS.md`). Structured observations with enough detail to synthesize across sessions.
+
+See [RFC 005](../../rfcs/005-observation-synthesis-loop.md) for the formal proposal.
 
 ---
 
@@ -26,11 +28,11 @@ This directory captures **what we notice while dogfooding**. Not prescriptive (t
 
 | Number | Title | Date | Status |
 |--------|-------|------|--------|
-| [001](./001-skill-family-testing.md) | Skill Family Testing Observations | 2026-02-11 | In progress |
+| [001](./001-skill-family-testing.md) | Skill Family Testing Observations | 2026-02-11 | Complete |
 
 ---
 
-## When to Add a Learning
+## When to Add an Observation
 
 - You noticed a pattern that recurred across ≥2 sessions
 - A workflow didn't work as expected and you figured out why
