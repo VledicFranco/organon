@@ -484,7 +484,7 @@ Update "When writing an ethos" section (~line 163):
 Add new decision after existing decisions:
 
 ```markdown
-### N. Two Constraint Definition Patterns
+### 12. Two Constraint Definition Patterns
 
 **Choice:** Provide two patterns (Ethos-First and Explore-Before-Ethos) instead of universal one-size-fits-all
 
@@ -505,7 +505,7 @@ We chose option 3 for novel domains while keeping option 1 (Ethos-First) as defa
 
 **Risk mitigation:** Strong bias toward Ethos-First as default. Explore-Before-Ethos only when uncertainty is HIGH. Time-boxing (1-2 days) prevents analysis paralysis.
 
-### N+1. Time-Boxing Exploration
+### 13. Time-Boxing Exploration
 
 **Choice:** Strict 1-2 day time-box for exploration phase
 
