@@ -236,7 +236,7 @@ Traditional tools validate after the fact. The Organon Coach guides **during** d
 
 ## Related Files
 
-- [ETHOS.md](./ETHOS.md) — Constraints for organon-tools development
-- [PHILOSOPHY.md](./PHILOSOPHY.md) — Why the tool is built this way
+- [ETHOS.md](../../organon/domains/tools/ETHOS.md) — Constraints for organon-tools development
+- [PHILOSOPHY.md](../../organon/domains/tools/PHILOSOPHY.md) — Why the tool is built this way
 - [../../book-llms/three-layer-architecture.md](../../book-llms/three-layer-architecture.md) — Verification gates we implement
 - [../../book-llms/patterns.md](../../book-llms/patterns.md) — Methodology patterns

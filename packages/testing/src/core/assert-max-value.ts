@@ -25,6 +25,7 @@
 import type { FileSystem } from './resolvers/types.js';
 import { resolveValues } from './resolvers/file-resolver.js';
 import { validateMaxValue, MaxValueAssertionError } from './assertions/max-value.js';
+import { createNodeFileSystem } from './resolvers/node-fs.js';
 
 /**
  * Options for assertMaxValue.
@@ -42,6 +43,8 @@ export interface MaxValueOptions {
   unit?: string;
   /** Optional working directory for glob resolution */
   cwd?: string;
+  /** Optional FileSystem implementation (defaults to Node.js fs + fast-glob) */
+  fs?: FileSystem;
 }
 
 /**
@@ -74,12 +77,13 @@ export class MaxValueResolverError extends Error {
  */
 export async function assertMaxValue(
   options: MaxValueOptions,
-  fs: FileSystem,
+  fs?: FileSystem,
 ): Promise<void> {
-  const { files, pattern, maxValue, unit, cwd } = options;
+  const { files, pattern, maxValue, unit, cwd, fs: optionsFs } = options;
+  const resolvedFs = fs ?? optionsFs ?? createNodeFileSystem();
 
   // 1. Resolve files and extract values
-  const resolved = await resolveValues({ files, pattern, cwd }, fs);
+  const resolved = await resolveValues({ files, pattern, cwd }, resolvedFs);
 
   // 2. Fail-fast on resolver errors (INV-TEST-2)
   if (resolved.errors.length > 0) {

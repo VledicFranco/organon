@@ -63,6 +63,8 @@ export type {
   FileSystem,
 } from './core/resolvers/types.js';
 
+export { createNodeFileSystem } from './core/resolvers/node-fs.js';
+
 export {
   resolveValues,
   expandGlobs,

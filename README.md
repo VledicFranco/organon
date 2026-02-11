@@ -56,7 +56,7 @@ Organon fixes this by:
 This repository contains three resources for implementing Organon:
 
 ```
-ethos/
+organon/
 ├── book-llms/          # Technical reference for LLMs and developers
 │   ├── ETHOS.md        # Immutable invariants
 │   ├── PHILOSOPHY.md   # Design decisions and trade-offs

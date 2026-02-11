@@ -9,11 +9,10 @@
     "**/components.md"
   ],
   "ignorePatterns": [
-    "node_modules/**",
-    "dist/**",
-    ".git/**",
-    "coverage/**",
-    "organon-tools/**"
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/.git/**",
+    "**/coverage/**"
   ],
   "workflowPaths": {
     "claudeCode": ".claude/skills",

@@ -207,16 +207,12 @@ export function getDefaultRegistry(): InvariantTestRegistry {
 // ---------------------------------------------------------------------------
 
 /**
- * Default test runner: simply executes the async test function.
+ * Default test runner: executes the async test function directly.
  * Used when no framework-specific adapter is configured.
+ * Framework adapters (vitest, jest) replace this with their own `it()`/`test()` wrapper.
  */
-const defaultRunner: TestRunner = (testName, testFn, _metadata) => {
-  // In the default runner, we don't auto-execute; we just store.
-  // Framework adapters (vitest, jest) call their `it()`/`test()` here.
-  // The default runner is a no-op for registration purposes.
-  // Direct execution happens when calling testInvariant() programmatically.
-  void testName;
-  void testFn;
+const defaultRunner: TestRunner = (_testName, testFn, _metadata) => {
+  void testFn();
 };
 
 /**
