@@ -27,7 +27,7 @@ Tested the skill family by executing a planned 9-step sequence:
 | 2 | `/organon-file-creation` | Create testing/ETHOS.md | Done |
 | 3 | `/organon-file-creation` | Create testing/PHILOSOPHY.md | Done (same invocation as step 2) |
 | 4 | `/quality-review` | Semantic review of created files | Done |
-| 5 | `/verify-and-health` | Check project integrity | Pending |
+| 5 | `/verify-and-health` | Check project integrity | Done (82/100, 0 new regressions) |
 | 6 | `/organon-tools-developer` | Implement testInvariant() + assertMaxValue() | Pending |
 | 7 | `/verify-and-health` | Re-check after code changes | Pending |
 | 8 | `/methodology-spec-evolution` | Update book-llms/ references | Pending |
@@ -89,13 +89,29 @@ Tested the skill family by executing a planned 9-step sequence:
 
 **Possible methodology guidance:** "The organon-file-creation workflow's Steps 7-8 (validate + bidirectional check) are the highest-value steps. Never skip them even when creating files manually."
 
-### O7: Automated gates and semantic review serve clearly different purposes
+### O7: Automated gates and semantic review serve clearly different purposes (confirmed in step 4)
 
 **Pattern:** `organon validate` catches: missing frontmatter, wrong counts, broken references, schema violations. `/quality-review` catches: vague invariants, wrong principle ordering, missing heuristics, terminology drift. Zero overlap in findings between the two.
 
 **Implication:** Both are needed. Automated gates are necessary but not sufficient. Semantic review catches meaning issues that no schema validator can detect.
 
 **Possible methodology guidance:** "Automated verification (VERIFY phase) and semantic review (also VERIFY phase) are complementary, not redundant. The verify-and-health workflow handles the first; quality-review handles the second."
+
+### O8: verify-and-health is most useful as a regression detector, not a fixer
+
+**Pattern:** Running `/verify-and-health` after creating testing domain files confirmed zero new regressions. All failures (20 total) were pre-existing and fell into three clean categories: pre-existing (2), RFC 004 field collision (7), invariant coverage gap (11). The skill correctly identified "no action needed on this branch."
+
+**Implication:** The skill's highest value is **confirming no regressions** after changes, not finding new issues. It's a confidence gate: "my changes didn't break anything." The diagnostic table in the skill made categorization fast — each failure mapped to a known root cause immediately.
+
+**Health baseline:** 82/100 (7/9 frontmatter coverage, 7 passing / 2 failing validation, all files fresh).
+
+### O9: Three failure categories have different fix timelines
+
+**Pattern:** The 20 failures from `organon verify` naturally segment into: (1) pre-existing debt (fix anytime), (2) blocked by RFC 004 (fix when RFC is implemented), (3) blocked by RFC 001 (fix when testing framework exists). No ad-hoc fixes possible — each category needs its own planned work.
+
+**Implication:** Verification output should ideally group failures by root cause, not by gate. An agent seeing 20 failures needs to quickly distinguish "3 categories, none are my fault" from "1 new failure I just introduced."
+
+**Possible tooling improvement:** `organon verify --since <commit>` to show only new failures since a baseline.
 
 ---
 
@@ -115,3 +131,4 @@ These are early signals — not enough data to generalize yet:
 | Date | Entry | Author |
 |------|-------|--------|
 | 2026-02-11 | Initial observations (O1-O7) from steps 1-4 of skill testing | Claude Opus 4.6 |
+| 2026-02-11 | Added O8-O9 from step 5 (verify-and-health) | Claude Opus 4.6 |
