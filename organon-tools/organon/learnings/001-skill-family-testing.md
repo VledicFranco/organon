@@ -30,8 +30,8 @@ Tested the skill family by executing a planned 9-step sequence:
 | 5 | `/verify-and-health` | Check project integrity | Done (82/100, 0 new regressions) |
 | 6 | `/organon-tools-developer` | Implement testInvariant() + assertMaxValue() | Done (65 tests, 100% cov) |
 | 7 | `/verify-and-health` | Re-check after code changes | Done (82/100, 0 new regressions) |
-| 8 | `/methodology-spec-evolution` | Update book-llms/ references | In progress |
-| 9 | `/session-compounding` | End-of-session review | Pending |
+| 8 | `/methodology-spec-evolution` | Update book-llms/ references | Done (2 files updated, versions bumped) |
+| 9 | `/session-compounding` | End-of-session review | In progress |
 
 ---
 
@@ -121,6 +121,14 @@ Tested the skill family by executing a planned 9-step sequence:
 
 **Possible tooling improvement:** `organon verify --since <commit>` to show only new failures since a baseline.
 
+### O10: methodology-spec-evolution workflow prevents the most common drift pattern
+
+**Pattern:** The workflow's Step 1 (impact assessment) correctly identified the two files needing updates (`invariant-tracking.md` and `three-layer-architecture.md`) via grep. Step 4 (propagation checklist) forced checking all 6 propagation targets even though only 2 needed changes. Step 5 (version bumps) caught that both files needed `1.0 → 1.1`. Step 7 (verification) confirmed no regressions.
+
+**Implication:** The workflow's highest value is the **propagation checklist** — without it, updating `invariant-tracking.md` would likely happen, but `three-layer-architecture.md` would be forgotten. The checklist forces checking files you wouldn't naturally think to check. However, the `organon find --term` command referenced in the workflow doesn't exist — had to use direct grep instead.
+
+**Tooling gap:** The workflow references `organon find --term "<concept>"` for impact assessment, but the actual CLI uses `--name`, `--scope`, `--type`, `--file` flags. Either the workflow should reference the correct flags or `organon find` should gain a `--term` option for free-text search.
+
 ---
 
 ## Patterns to Watch
@@ -141,3 +149,4 @@ These are early signals — not enough data to generalize yet:
 | 2026-02-11 | Initial observations (O1-O7) from steps 1-4 of skill testing | Claude Opus 4.6 |
 | 2026-02-11 | Added O8-O9 from step 5 (verify-and-health) | Claude Opus 4.6 |
 | 2026-02-11 | Added O8b from step 6 (organon-tools-developer forked execution) | Claude Opus 4.6 |
+| 2026-02-11 | Added O10 from step 8 (methodology-spec-evolution) | Claude Opus 4.6 |
