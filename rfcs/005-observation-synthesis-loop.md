@@ -5,7 +5,7 @@ name: observation-synthesis-loop
 version: "0.2"
 summary: Lightweight convention for accumulating empirical observations across sessions — convention-first, formalize only if evidence warrants
 token_estimate: 3200
-status: accepted
+status: implemented
 created: 2026-02-11
 author: Claude Opus 4.6
 related_files:
@@ -26,13 +26,14 @@ audience: [llm, human]
 
 ## Status
 
-**Current State:** Accepted — ready to implement
+**Current State:** Implemented
 
 | Transition | Date | Notes |
 |------------|------|-------|
 | Draft | 2026-02-11 | Initial proposal from session compounding learnings |
 | Refined | 2026-02-12 | Rewritten as lightweight convention (was over-engineered) |
 | Accepted | 2026-02-12 | Approved for implementation |
+| Implemented | 2026-02-12 | All 5 implementation steps complete |
 
 ---
 
