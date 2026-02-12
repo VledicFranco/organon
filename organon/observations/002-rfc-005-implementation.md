@@ -4,7 +4,7 @@ scope: product
 name: rfc-005-implementation
 version: "1.0"
 summary: Observations from implementing RFC 005 (Observation Accumulation Convention) — RFC lifecycle compression and methodology-spec-evolution skip pattern
-token_estimate: 1200
+token_estimate: 850
 status: complete
 created: 2026-02-12
 author: Claude Opus 4.6
