@@ -11,6 +11,8 @@ interface MemoryFile {
 
 export class MemoryFileSystem implements FileSystem {
   private files = new Map<string, MemoryFile>();
+  private throwPaths = new Set<string>();
+  private throwReadPaths = new Set<string>();
 
   constructor(files?: Record<string, string>) {
     if (files) {
@@ -27,7 +29,35 @@ export class MemoryFileSystem implements FileSystem {
     });
   }
 
+  /** Make exists() and readFile() throw for any path containing this substring. */
+  throwOn(pathSubstring: string): void {
+    this.throwPaths.add(pathSubstring);
+  }
+
+  /** Make only readFile() throw for any path containing this substring (exists() still works). */
+  throwOnRead(pathSubstring: string): void {
+    this.throwReadPaths.add(pathSubstring);
+  }
+
+  private checkThrow(path: string): void {
+    for (const sub of this.throwPaths) {
+      if (path.includes(sub)) {
+        throw new Error(`EPERM: permission denied, '${path}'`);
+      }
+    }
+  }
+
+  private checkThrowRead(path: string): void {
+    for (const sub of this.throwReadPaths) {
+      if (path.includes(sub)) {
+        throw new Error(`EPERM: permission denied, '${path}'`);
+      }
+    }
+  }
+
   async readFile(path: string): Promise<string> {
+    this.checkThrow(path);
+    this.checkThrowRead(path);
     const file = this.files.get(normalize(path));
     if (!file) throw new Error(`ENOENT: ${path}`);
     return file.content;
@@ -47,6 +77,7 @@ export class MemoryFileSystem implements FileSystem {
   }
 
   async exists(path: string): Promise<boolean> {
+    this.checkThrow(path);
     const norm = normalize(path);
     // Check exact file match
     if (this.files.has(norm)) return true;

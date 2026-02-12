@@ -3,6 +3,8 @@
  * Organon CLI — Tools for the Organon Methodology.
  *
  * Commands:
+ *   init      — Bootstrap a new project with Organon structure
+ *   upgrade   — Detect version drift and upgrade project
  *   validate  — Validate organon frontmatter
  *   generate  — Auto-generate frontmatter from content
  *   query     — Query organons by metadata
@@ -18,6 +20,8 @@ import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import chalk from 'chalk';
 
+import { initCommand } from './commands/init.js';
+import { upgradeCommand } from './commands/upgrade.js';
 import { validateCommand } from './commands/validate.js';
 import { generateCommand } from './commands/generate.js';
 import { queryCommand } from './commands/query.js';
@@ -32,6 +36,8 @@ async function main() {
   await yargs(hideBin(process.argv))
     .scriptName('organon')
     .usage('$0 <command> [options]')
+    .command(initCommand)
+    .command(upgradeCommand)
     .command(validateCommand)
     .command(generateCommand)
     .command(queryCommand)

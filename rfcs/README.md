@@ -2,9 +2,9 @@
 type: navigation
 scope: product
 name: rfcs
-version: "1.0"
+version: "1.1"
 summary: Request for Comments (RFC) directory — proposals for changes to the Organon methodology and organon-tools implementation
-token_estimate: 150
+token_estimate: 900
 provides: [rfc-directory, proposal-tracking]
 audience: [llm, human]
 ---
@@ -49,6 +49,7 @@ See [book-llms/patterns.md](../book-llms/patterns.md#rfc-driven-evolution-patter
 | [003](./003-explore-before-ethos.md) | Explore-Before-Ethos Pattern | Implemented | Claude Sonnet 4.5 | 2026-02-10 |
 | [004](./004-workflow-context-field-collision.md) | Workflow Context Field Collision | Implemented | Claude Opus 4.6 | 2026-02-11 |
 | [005](./005-observation-synthesis-loop.md) | Observation Accumulation Convention | Implemented | Claude Opus 4.6 | 2026-02-11 |
+| [006](./006-init-and-upgrade.md) | Init, Upgrade, and Skills as First-Class Citizens | Implemented | Claude Opus 4.6 | 2026-02-12 |
 
 ---
 

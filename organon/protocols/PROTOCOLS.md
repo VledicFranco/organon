@@ -2,10 +2,10 @@
 type: procedures
 scope: product
 name: protocols
-version: "1.0"
-summary: Seven development protocols backing the Organon project's workflow family — covers all 6 enforcement loop phases
-token_estimate: 5800
-protocols_count: 7
+version: "1.1"
+summary: Nine development protocols backing the Organon project's workflow family — covers all 6 enforcement loop phases plus onboarding
+token_estimate: 7100
+protocols_count: 9
 protocols:
   - id: PROTO-ORG-1
     name: RFC-Driven Design
@@ -56,6 +56,20 @@ protocols:
     workflow: quality-review
     tools: [organon-verify, organon-validate, organon-health]
     complexity: high
+  - id: PROTO-ORG-8
+    name: Project Initialization
+    steps: 5
+    automation_tier: semi-automated
+    workflow: null
+    tools: [organon-init, organon-verify]
+    complexity: low
+  - id: PROTO-ORG-9
+    name: Project Upgrade
+    steps: 6
+    automation_tier: semi-automated
+    workflow: null
+    tools: [organon-upgrade, organon-verify]
+    complexity: medium
 inherits_from: [organon-project]
 audience: [llm, human, tooling]
 related_files:
@@ -67,7 +81,7 @@ related_files:
 
 # Organon Development Protocols
 
-> Step-by-step procedures for all development activities in the Organon methodology repository. Each protocol has a corresponding workflow binding.
+> Step-by-step procedures for all development activities in the Organon methodology repository. Each protocol has a corresponding workflow binding or direct tool invocation.
 
 ---
 
@@ -81,6 +95,8 @@ VERIFY:    PROTO-ORG-4  Verification and Health ........ verify-and-health
            PROTO-ORG-7  Quality Review ................. quality-review
 COMPOUND:  PROTO-ORG-5  Session Compounding ............ session-compounding
 EVOLVE:    PROTO-ORG-3  Methodology Evolution .......... methodology-spec-evolution
+ONBOARD:   PROTO-ORG-8  Project Initialization ......... organon init (tool)
+           PROTO-ORG-9  Project Upgrade ................ organon upgrade (tool)
 ```
 
 ---
@@ -487,3 +503,91 @@ Identify quality issues that automated gates cannot detect: vague invariants, mi
 | Identity too generic | Add specifics: names, technologies, scope boundaries |
 | Anti-pattern found | Apply the fix from the anti-pattern table |
 | Terminology inconsistent | Choose canonical term, grep-and-replace across all files |
+
+---
+
+## PROTO-ORG-8: Project Initialization
+
+> Bootstrap a new project with Organon structure and Claude Code skills.
+
+### Goal
+
+Create a valid organon project structure from scratch, including config, scaffold files, and workflow skills.
+
+### Preconditions
+
+- `@organon/tools` is installed and available on PATH (or run via `npx`)
+- Target directory is writable
+- No conflicting `organon.config.json` in parent directories (could cause config resolution confusion)
+
+### Steps
+
+1. **Choose target directory.** Defaults to current directory. Create if it doesn't exist.
+
+2. **Run init.** Execute `organon init [target-dir]`. Use `--dry-run` to preview first.
+
+3. **Review generated files.** Check organon.config.json, organon/ETHOS.md, organon/PHILOSOPHY.md, organon/README.md, organon/protocols/PROTOCOLS.md. If `--skills` was used (default), also check `.claude/skills/`.
+
+4. **Customize scaffolds.** Edit organon/ETHOS.md to define the project's real identity, invariants, principles, and heuristics. Edit organon/PHILOSOPHY.md with actual design rationale.
+
+5. **Verify.** Run `organon verify` to confirm the initialized project passes all gates.
+
+### Verification
+
+- [ ] `organon init` completes without errors
+- [ ] All generated files have valid frontmatter
+- [ ] `organon verify` passes on the new project
+- [ ] ETHOS.md has been customized (not left as scaffold)
+
+### Recovery
+
+| Failure | Recovery Action |
+|---------|-----------------|
+| Files already exist | Use `--force` to overwrite, or manually merge |
+| `organon verify` fails on generated files | Report as bug — init output should always pass verify |
+| Skills not installed | Run `organon init --skills` or `organon upgrade --apply --skills` |
+
+---
+
+## PROTO-ORG-9: Project Upgrade
+
+> Detect version drift and incrementally upgrade project to latest methodology.
+
+### Goal
+
+Bring an existing organon project up to date with the latest methodology version, skills, and configuration.
+
+### Preconditions
+
+- An existing organon project with `organon.config.json` exists (or was previously initialized)
+- `@organon/tools` is installed at the target version
+- Working directory or `--project-root` points to a valid project
+
+### Steps
+
+1. **Check current version.** Run `organon upgrade --dry-run` to see the diff report. Review methodology version, skill changes, and config changes.
+
+2. **Review changes.** Examine each proposed change. Skill updates show [N] for new, [U] for updated.
+
+3. **Decide scope.** Use `--skills` to upgrade skills only, or upgrade everything.
+
+4. **Apply changes.** Run `organon upgrade --apply` to apply all changes. Files are written, methodology_version is updated.
+
+5. **Review customizations.** If any customized files were overwritten, merge your customizations back in.
+
+6. **Verify.** Run `organon verify` to confirm the upgraded project passes all gates.
+
+### Verification
+
+- [ ] `organon upgrade --dry-run` shows accurate diff
+- [ ] Applied changes don't break existing functionality
+- [ ] `organon verify` passes after upgrade
+- [ ] methodology_version in organon.config.json matches CLI version
+
+### Recovery
+
+| Failure | Recovery Action |
+|---------|-----------------|
+| Upgrade shows "already up to date" | No action needed — project is current |
+| Custom skill was overwritten | Restore from git and manually merge changes |
+| `organon verify` fails after upgrade | Check diff report for unexpected changes, fix or revert |

@@ -2,7 +2,7 @@
 type: rationale
 scope: product
 name: adoption-tools
-version: "1.0"
+version: "1.1"
 summary: Brainstormed tools to accelerate Organon methodology adoption in new and existing projects
 token_estimate: 7100
 related_files:
@@ -34,7 +34,7 @@ audience: [llm, human]
 
 ## High-Impact Tools (Build First)
 
-### 1. Project Initialization (`organon init`)
+### 1. Project Initialization (`organon init`) — **IMPLEMENTED (RFC 006)**
 
 **Problem:** New projects face a blank slate. No clear starting point.
 
@@ -490,9 +490,9 @@ organon monitor --daemon
 For **maximum adoption impact**, build in this order:
 
 ### Phase 1: Onboarding (Weeks 1-4)
-1. ✅ **`organon init`** - Scaffolding wizard
-2. ✅ **CI templates** - GitHub Actions + pre-commit hooks
-3. ✅ **`organon discover`** - Codebase analysis for migration
+1. ✅ **`organon init`** - Scaffolding (non-interactive, RFC 006)
+2. **CI templates** - GitHub Actions + pre-commit hooks
+3. **`organon discover`** - Codebase analysis for migration
 
 **Outcome:** New projects start instantly. Existing projects have migration path.
 
@@ -501,9 +501,9 @@ For **maximum adoption impact**, build in this order:
 ---
 
 ### Phase 2: Enforcement (Weeks 5-8)
-4. ✅ **`@organon/testing`** - Semantic testing framework (TypeScript first)
-5. ✅ **Test generator** - From ETHOS.md invariants → test scaffolds
-6. ✅ **Enhanced coverage** - Integrate testing library with `organon coverage`
+4. ✅ **`@organon/testing`** - Semantic testing framework (TypeScript first, RFC 001)
+5. ✅ **Test generator** - From ETHOS.md invariants → test scaffolds (RFC 001)
+6. **Enhanced coverage** - Integrate testing library with `organon coverage`
 
 **Outcome:** Projects can actually enforce their invariants automatically.
 
@@ -512,9 +512,9 @@ For **maximum adoption impact**, build in this order:
 ---
 
 ### Phase 3: Developer Experience (Weeks 9-12)
-7. ✅ **LSP server** - IDE integration
-8. ✅ **Workflow generator** - Protocol → multi-format workflows
-9. ✅ **Migration assistant** - ADRs/docs → organon files
+7. **LSP server** - IDE integration
+8. **Workflow generator** - Protocol → multi-format workflows
+9. **Migration assistant** - ADRs/docs → organon files
 
 **Outcome:** Daily workflow is smooth. Organon feels native, not bolted on.
 
@@ -523,9 +523,9 @@ For **maximum adoption impact**, build in this order:
 ---
 
 ### Phase 4: Advanced (Weeks 13+)
-10. ✅ **Visualization dashboard** - Web UI
-11. ✅ **Invariant synthesizer** - AI-powered suggestions
-12. ✅ **Drift monitor** - Continuous staleness tracking
+10. **Visualization dashboard** - Web UI
+11. **Invariant synthesizer** - AI-powered suggestions
+12. **Drift monitor** - Continuous staleness tracking
 
 **Outcome:** Organon becomes proactive, not just reactive.
 

@@ -19,6 +19,7 @@ const WorkflowPathsSchema = z.object({
 }).strict();
 
 const ConfigFileSchema = z.object({
+  methodology_version: z.string().optional(),
   organonPaths: z.array(z.string()).optional(),
   organonGlobs: z.array(z.string()).optional(),
   ignorePatterns: z.array(z.string()).optional(),

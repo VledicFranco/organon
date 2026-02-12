@@ -1,6 +1,10 @@
-{
+/**
+ * organon.config.json template for organon init.
+ */
+
+export const CONFIG_TEMPLATE = `{
   "methodology_version": "0.3.0",
-  "organonPaths": ["book-llms", "organon", "."],
+  "organonPaths": ["organon", "."],
   "organonGlobs": [
     "**/ETHOS.md",
     "**/PHILOSOPHY.md",
@@ -13,8 +17,7 @@
     "**/node_modules/**",
     "**/dist/**",
     "**/.git/**",
-    "**/coverage/**",
-    "docs/**"
+    "**/coverage/**"
   ],
   "workflowPaths": {
     "claudeCode": ".claude/skills",
@@ -23,3 +26,6 @@
   },
   "freshnessThresholdHours": 720
 }
+`;
+
+export const METHODOLOGY_VERSION = '0.3.0';

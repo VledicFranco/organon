@@ -2,7 +2,7 @@
 type: constraints
 scope: domain
 name: tools
-version: "1.0"
+version: "1.1"
 summary: Behavioral constraints for developing the Organon CLI tooling — verification gates, frontmatter generation, and invariant tracking
 token_estimate: 1561
 invariants_count: 6
@@ -41,7 +41,8 @@ audience: [llm, human]
 ### What Organon Tools IS
 
 - A TypeScript/Node.js CLI for enforcing Organon methodology
-- Command-based architecture using yargs (generate, validate, verify, coverage, find, query, health)
+- Command-based architecture using yargs (init, upgrade, generate, validate, verify, coverage, find, query, health)
+- Project bootstrapping (init) and incremental upgrade (upgrade) for methodology adoption
 - Implementation of verification gates from three-layer-architecture.md
 - Frontmatter generator and validator matching book-llms/ schema exactly
 - Invariant-to-test coverage tracker with `@organon-invariant` annotation parsing
@@ -118,7 +119,7 @@ Do not implement in organon-tools:
 
 Before releasing a version:
 
-- [ ] All tests passing (132+ tests)
+- [ ] All tests passing
 - [ ] No TypeScript compilation errors
 - [ ] All commands have `--help` output
 - [ ] All commands support `--format json`

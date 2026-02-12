@@ -18,7 +18,7 @@ This project's own organon hierarchy. The Organon methodology dogfoods itself â€
 | Path | Type | Description |
 |------|------|-------------|
 | [ETHOS.md](./ETHOS.md) | constraints | Project-level invariants with stable IDs (INV-ORG-1 through INV-ORG-6) |
-| [protocols/](./protocols/) | procedures | Development protocols backing the 7 workflow bindings |
+| [protocols/](./protocols/) | procedures | Development protocols (9 protocols, 7 with workflow bindings) |
 | [domains/](./domains/) | scopes | Bounded contexts â€” product domains with their own organon files |
 | [observations/](./observations/) | observation | Empirical observations from dogfooding and real work sessions |
 

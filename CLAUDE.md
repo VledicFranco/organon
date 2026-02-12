@@ -75,6 +75,8 @@
 | README exceeds 100 lines | READMEs are still routers, not content. Split content into dedicated files. |
 | Adding a new scope/directory | Include a README.md as router. Follow Pattern A (dedicated `organon/` directory). |
 | Deciding automation tier for a protocol | Manual: judgment required. Semi-automated: 1-2 steps, single tool. Automated (workflow): ≥5 steps, cross-domain, error-prone, frequent. |
+| Bootstrapping a new project | Run `organon init` to scaffold structure + skills. Edit ETHOS.md first, then verify. |
+| Upgrading an existing project | Run `organon upgrade --dry-run` to see what changed. Use `--apply` to update. |
 
 ---
 
