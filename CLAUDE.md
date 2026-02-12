@@ -108,6 +108,7 @@ An agent working on a genesis tool implementation doesn't need to load all 49 or
 organon/
 ├── CLAUDE.md                         ← You are here (product-level agent guidance)
 ├── README.md                         ← Public-facing project overview
+├── docs/                             ← Developer documentation (how-to guides, tutorials)
 ├── book-llms/                        ← LLM technical reference (methodology spec)
 │   ├── ETHOS.md                      ← Meta-organon constraints
 │   ├── PHILOSOPHY.md                 ← Meta-organon reasoning

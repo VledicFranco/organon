@@ -12,7 +12,8 @@
     "**/node_modules/**",
     "**/dist/**",
     "**/.git/**",
-    "**/coverage/**"
+    "**/coverage/**",
+    "docs/**"
   ],
   "workflowPaths": {
     "claudeCode": ".claude/skills",

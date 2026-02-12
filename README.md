@@ -62,12 +62,28 @@ Organon fixes this by:
 
 ---
 
+## Documentation
+
+| Resource | Audience | Description |
+|----------|----------|-------------|
+| **[docs/](./docs/)** | Developers | Practical how-to guides, CLI reference, tutorials |
+| **[book-llms/](./book-llms/)** | LLMs + advanced devs | Formal methodology specification |
+| **[book-humans/](./book-humans/)** | All developers | Philosophical narrative guide (planned) |
+
+New to Organon? Start with **[docs/](./docs/)** for practical guidance.
+
+---
+
 ## Repository Structure
 
 This repository contains three resources for implementing Organon:
 
 ```
 organon/
+├── docs/               # Developer documentation (how-to guides, tutorials)
+│   ├── README.md       # Documentation router
+│   └── 01-07 guides    # Concepts, getting started, CLI, authoring, testing
+│
 ├── book-llms/          # Technical reference for LLMs and developers
 │   ├── ETHOS.md        # Immutable invariants
 │   ├── PHILOSOPHY.md   # Design decisions and trade-offs

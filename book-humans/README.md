@@ -100,6 +100,16 @@ Each chapter draws from specific book-llms/ sources:
 
 ---
 
+## Differences from docs/ and book-llms/
+
+`docs/` provides practical, task-oriented developer documentation (how to install, how to use the CLI, how to write organon files). `book-humans/` is different — it's a philosophical narrative guide that explains *why* the methodology works, with progressive storytelling from problem to mastery.
+
+| Resource | Focus | Style |
+|----------|-------|-------|
+| `docs/` | How to use Organon | Task-oriented, example-driven |
+| `book-humans/` | Why Organon works | Narrative, story-driven |
+| `book-llms/` | Formal methodology spec | Technical reference, prescriptive |
+
 ## Differences from book-llms/
 
 | Aspect | book-llms/ | book-humans/ |
