@@ -84,3 +84,19 @@ export {
   getDefaultRegistry,
   InvariantTestError,
 } from '../core/invariant-test.js';
+
+// Phase 2/3 assertions
+export { assertFileExists, FileExistsResolverError, FileExistsAssertionError } from '../core/assert-file-exists.js';
+export type { FileExistsOptions } from '../core/assert-file-exists.js';
+
+export { assertCustom, CustomAssertionError } from '../core/assert-custom.js';
+export type { CustomAssertionOptions } from '../core/assert-custom.js';
+
+export { assertNoSideEffects, NoSideEffectsResolverError, NoSideEffectsAssertionError } from '../core/assert-no-side-effects.js';
+export type { NoSideEffectsOptions } from '../core/assert-no-side-effects.js';
+
+export { assertNamingConvention, NamingConventionResolverError, NamingConventionAssertionError } from '../core/assert-naming-convention.js';
+export type { NamingConventionOptions, Convention } from '../core/assert-naming-convention.js';
+
+export { assertExportsPresent, ExportsPresentResolverError, ExportsPresentAssertionError } from '../core/assert-exports-present.js';
+export type { ExportsPresentOptions } from '../core/assert-exports-present.js';

@@ -14,7 +14,8 @@
  * @organon-invariant INV-ORG-6 bidirectional-references
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, expect } from 'vitest';
+import { testInvariant } from '@organon/testing/vitest';
 import { resolve } from 'node:path';
 import { readFile, readdir, access } from 'node:fs/promises';
 import { parseFrontmatter, extractSection } from './frontmatter-parser.js';
@@ -39,7 +40,7 @@ async function exists(relPath: string): Promise<boolean> {
 // ---------------------------------------------------------------------------
 
 describe('INV-META-3: principles-prioritized', () => {
-  it('ETHOS.md files have numbered principles', async () => {
+  testInvariant('INV-META-3', 'ETHOS.md files have numbered principles', async () => {
     const ethosFiles = [
       'book-llms/ETHOS.md',
       'organon/ETHOS.md',
@@ -66,7 +67,7 @@ describe('INV-META-3: principles-prioritized', () => {
 // ---------------------------------------------------------------------------
 
 describe('INV-META-6 / INV-ORG-3: every-file-has-frontmatter', () => {
-  it('all organon files have YAML frontmatter', async () => {
+  testInvariant('INV-META-6', 'all organon files have YAML frontmatter', async () => {
     const organonFiles = [
       'book-llms/ETHOS.md',
       'book-llms/PHILOSOPHY.md',
@@ -94,7 +95,7 @@ describe('INV-META-6 / INV-ORG-3: every-file-has-frontmatter', () => {
 // ---------------------------------------------------------------------------
 
 describe('INV-META-7: standardized-section-headings', () => {
-  it('ETHOS.md files have required sections', async () => {
+  testInvariant('INV-META-7', 'ETHOS.md files have required sections', async () => {
     const ethosFiles = [
       'organon/ETHOS.md',
       'organon/domains/tools/ETHOS.md',
@@ -120,7 +121,7 @@ describe('INV-META-7: standardized-section-headings', () => {
 // ---------------------------------------------------------------------------
 
 describe('INV-META-9: enforcement-loop-closable', () => {
-  it('automated protocols have workflow bindings', async () => {
+  testInvariant('INV-META-9', 'automated protocols have workflow bindings', async () => {
     const content = await readOrganonFile('organon/protocols/PROTOCOLS.md');
     const { frontmatter } = parseFrontmatter(content);
     const protocols = frontmatter?.protocols as Array<{
@@ -147,11 +148,11 @@ describe('INV-META-9: enforcement-loop-closable', () => {
 // ---------------------------------------------------------------------------
 
 describe('INV-ORG-1: dogfood-methodology', () => {
-  it('organon/ directory exists with ETHOS.md', async () => {
+  testInvariant('INV-ORG-1', 'organon/ directory exists with ETHOS.md', async () => {
     expect(await exists('organon/ETHOS.md')).toBe(true);
   });
 
-  it('organon/protocols/PROTOCOLS.md exists', async () => {
+  testInvariant('INV-ORG-1', 'organon/protocols/PROTOCOLS.md exists', async () => {
     expect(await exists('organon/protocols/PROTOCOLS.md')).toBe(true);
   });
 });
@@ -161,7 +162,7 @@ describe('INV-ORG-1: dogfood-methodology', () => {
 // ---------------------------------------------------------------------------
 
 describe('INV-ORG-2: code-is-source-of-truth', () => {
-  it('packages/tools/src/ exists with implementation code', async () => {
+  testInvariant('INV-ORG-2', 'packages/tools/src/ exists with implementation code', async () => {
     expect(await exists('packages/tools/src/core')).toBe(true);
     const entries = await readdir(resolve(repoRoot, 'packages/tools/src/core'));
     const tsFiles = entries.filter((f) => f.endsWith('.ts') && !f.endsWith('.test.ts'));
@@ -174,7 +175,7 @@ describe('INV-ORG-2: code-is-source-of-truth', () => {
 // ---------------------------------------------------------------------------
 
 describe('INV-ORG-4: three-artifact-separation', () => {
-  it('ETHOS.md files have type: constraints', async () => {
+  testInvariant('INV-ORG-4', 'ETHOS.md files have type: constraints', async () => {
     const ethosFiles = [
       'organon/ETHOS.md',
       'organon/domains/tools/ETHOS.md',
@@ -188,7 +189,7 @@ describe('INV-ORG-4: three-artifact-separation', () => {
     }
   });
 
-  it('PHILOSOPHY.md files have type: rationale', async () => {
+  testInvariant('INV-ORG-4', 'PHILOSOPHY.md files have type: rationale', async () => {
     const philosophyFiles = [
       'organon/domains/tools/PHILOSOPHY.md',
       'organon/domains/testing/PHILOSOPHY.md',
@@ -201,7 +202,7 @@ describe('INV-ORG-4: three-artifact-separation', () => {
     }
   });
 
-  it('PROTOCOLS.md files have type: procedures', async () => {
+  testInvariant('INV-ORG-4', 'PROTOCOLS.md files have type: procedures', async () => {
     const content = await readOrganonFile('organon/protocols/PROTOCOLS.md');
     const { frontmatter } = parseFrontmatter(content);
     expect(frontmatter?.type).toBe('procedures');
@@ -213,7 +214,7 @@ describe('INV-ORG-4: three-artifact-separation', () => {
 // ---------------------------------------------------------------------------
 
 describe('INV-ORG-6: bidirectional-references', () => {
-  it('automated protocols reference workflows that exist as skills', async () => {
+  testInvariant('INV-ORG-6', 'automated protocols reference workflows that exist as skills', async () => {
     const content = await readOrganonFile('organon/protocols/PROTOCOLS.md');
     const { frontmatter } = parseFrontmatter(content);
     const protocols = frontmatter?.protocols as Array<{

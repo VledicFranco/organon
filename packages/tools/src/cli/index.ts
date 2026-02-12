@@ -9,8 +9,9 @@
  *   health    — Health dashboard
  *   find      — Cross-domain discovery
  *   verify    — Run verification gates
- *   coverage  — Invariant coverage analysis
- *   mcp       — Start MCP server
+ *   coverage       — Invariant coverage analysis
+ *   generate-tests — Generate test scaffolds for uncovered invariants
+ *   mcp            — Start MCP server
  */
 
 import yargs from 'yargs';
@@ -24,6 +25,7 @@ import { healthCommand } from './commands/health.js';
 import { findCommand } from './commands/find.js';
 import { verifyCommand } from './commands/verify.js';
 import { coverageCommand } from './commands/coverage.js';
+import { generateTestsCommand } from './commands/generate-tests.js';
 import { mcpCommand } from './commands/mcp.js';
 
 async function main() {
@@ -37,6 +39,7 @@ async function main() {
     .command(findCommand)
     .command(verifyCommand)
     .command(coverageCommand)
+    .command(generateTestsCommand)
     .command(mcpCommand)
     .demandCommand(1, chalk.red('Please specify a command'))
     .help()

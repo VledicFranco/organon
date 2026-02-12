@@ -13,6 +13,7 @@
 
 import { join } from 'node:path';
 import type { FileSystem } from './types.js';
+import { readFilesParallel } from './parallel-reader.js';
 
 /**
  * A single match found in a file by the resolver.
@@ -129,21 +130,26 @@ export async function resolveValues(
   const values: ExtractedValue[] = [];
   const filesRead: string[] = [];
 
-  for (const filePath of paths) {
-    // When cwd is set, glob returns paths relative to cwd.
-    // Prepend cwd to get the full path for file reading.
-    const readPath = cwd ? join(cwd, filePath) : filePath;
-    let content: string;
-    try {
-      content = await fs.readFile(readPath);
-    } catch (err) {
+  // Build read paths (prepend cwd when set)
+  const readPaths = paths.map((p) => cwd ? join(cwd, p) : p);
+
+  // Read all files in parallel with concurrency control
+  const readResults = await readFilesParallel(readPaths, fs);
+
+  for (let idx = 0; idx < readResults.length; idx++) {
+    const result = readResults[idx];
+    const filePath = paths[idx];
+
+    if (result.error) {
       errors.push({
         file: filePath,
-        message: `Failed to read file: ${err instanceof Error ? err.message : String(err)}`,
+        message: `Failed to read file: ${result.error}`,
       });
       continue;
     }
+
     filesRead.push(filePath);
+    const content = result.content!;
 
     const lines = content.split('\n');
     for (let i = 0; i < lines.length; i++) {

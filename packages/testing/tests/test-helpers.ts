@@ -30,6 +30,10 @@ export class MockFileSystem implements FileSystem {
     return content;
   }
 
+  async exists(path: string): Promise<boolean> {
+    return this.files.has(normalize(path));
+  }
+
   async glob(pattern: string, options?: { cwd?: string }): Promise<string[]> {
     const cwd = options?.cwd ? normalize(options.cwd) : '';
     const results: string[] = [];

@@ -11,6 +11,7 @@ import { verifyTriplets } from './verify-triplets.js';
 import { health as runHealth } from './health.js';
 import { computeInvariantCoverage } from './invariant-coverage.js';
 import { validateWorkflow } from './validate-workflow.js';
+import { verifyTier4Tests } from './verify-tier4-tests.js';
 import type {
   DiagnosticMessage,
   FileSystem,
@@ -120,12 +121,23 @@ const workflowQualityGate: VerifyGateFn = async ({ projectRoot, config, fs }) =>
   };
 };
 
+const tier4TestsGate: VerifyGateFn = async ({ projectRoot, config, fs }) => {
+  const result = await verifyTier4Tests({ projectRoot, config, fs });
+  return {
+    gate: 'tier4-tests',
+    passed: result.success,
+    errors: result.errors,
+    warnings: result.warnings,
+  };
+};
+
 // Register built-in gates
 registerGate('frontmatter', frontmatterGate);
 registerGate('triplets', tripletsGate);
 registerGate('freshness', freshnessGate);
 registerGate('invariant-coverage', invariantCoverageGate);
 registerGate('workflow-quality', workflowQualityGate);
+registerGate('tier4-tests', tier4TestsGate);
 
 // ---------------------------------------------------------------------------
 // Main

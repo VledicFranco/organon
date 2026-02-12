@@ -6,7 +6,7 @@
  * FileSystem is provided.
  */
 
-import { readFile } from 'node:fs/promises';
+import { readFile, access } from 'node:fs/promises';
 import fg from 'fast-glob';
 import type { FileSystem } from './types.js';
 
@@ -21,6 +21,15 @@ export function createNodeFileSystem(): FileSystem {
 
     async glob(pattern: string, options?: { cwd?: string }): Promise<string[]> {
       return fg(pattern, { cwd: options?.cwd });
+    },
+
+    async exists(path: string): Promise<boolean> {
+      try {
+        await access(path);
+        return true;
+      } catch {
+        return false;
+      }
     },
   };
 }

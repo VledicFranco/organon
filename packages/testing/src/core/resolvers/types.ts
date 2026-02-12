@@ -10,4 +10,5 @@
 export interface FileSystem {
   readFile(path: string): Promise<string>;
   glob(pattern: string, options?: { cwd?: string }): Promise<string[]>;
+  exists(path: string): Promise<boolean>;
 }

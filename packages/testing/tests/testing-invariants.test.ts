@@ -66,6 +66,19 @@ describe('INV-TEST-4: framework-agnostic-core', () => {
       'src/core/assert-max-value.ts',
       'src/core/resolvers/file-resolver.ts',
       'src/core/resolvers/node-fs.ts',
+      'src/core/resolvers/types.ts',
+      'src/core/resolvers/import-resolver.ts',
+      'src/core/resolvers/string-resolver.ts',
+      'src/core/resolvers/parallel-reader.ts',
+      'src/core/assertions/file-exists.ts',
+      'src/core/assertions/no-side-effects.ts',
+      'src/core/assertions/naming-convention.ts',
+      'src/core/assertions/exports-present.ts',
+      'src/core/assert-file-exists.ts',
+      'src/core/assert-custom.ts',
+      'src/core/assert-no-side-effects.ts',
+      'src/core/assert-naming-convention.ts',
+      'src/core/assert-exports-present.ts',
     ];
 
     const frameworkImports = /from\s+['"](?:vitest|jest|mocha|@jest|@vitest)/;
@@ -89,8 +102,8 @@ describe('INV-TEST-5: 100-percent-line-coverage', () => {
     const testDir = resolve(pkgRoot, 'tests');
     const entries = await readdir(testDir);
     const testFiles = entries.filter((f) => f.endsWith('.test.ts'));
-    // At least one test file per core module
-    expect(testFiles.length).toBeGreaterThanOrEqual(3);
+    // At least one test file per core module (17 as of Phase 2/3)
+    expect(testFiles.length).toBeGreaterThanOrEqual(15);
   });
 });
 
@@ -123,6 +136,15 @@ describe('INV-TEST-7: composable', () => {
     const assertionFiles = [
       'src/core/assertions/max-value.ts',
       'src/core/assert-max-value.ts',
+      'src/core/assertions/file-exists.ts',
+      'src/core/assert-file-exists.ts',
+      'src/core/assert-custom.ts',
+      'src/core/assertions/no-side-effects.ts',
+      'src/core/assert-no-side-effects.ts',
+      'src/core/assertions/naming-convention.ts',
+      'src/core/assert-naming-convention.ts',
+      'src/core/assertions/exports-present.ts',
+      'src/core/assert-exports-present.ts',
     ];
 
     // Module-level let or var (not inside function/class body)
