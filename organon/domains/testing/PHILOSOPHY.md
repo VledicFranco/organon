@@ -1,12 +1,12 @@
 ---
 type: rationale
 scope: domain
-name: testing-philosophy
+name: testing
 version: "1.0"
 summary: Why semantic tier-4 testing exists — design decisions, trade-offs, and the bet we're making
 token_estimate: 2400
 decision_count: 5
-inherits_from: [organon-tools-philosophy]
+inherits_from: [tools]
 load_priority: medium
 required_for:
   - tier4_testing_evolution

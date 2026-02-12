@@ -1,7 +1,7 @@
 ---
 type: rationale
-scope: product
-name: organon-tools-philosophy
+scope: domain
+name: tools
 version: "1.0"
 summary: Why organon-tools is built with TypeScript/Node, command-based CLI, and pure-function core — design decisions and trade-offs
 token_estimate: 1868

@@ -1,7 +1,7 @@
 ---
 type: constraints
 scope: domain
-name: organon-tools
+name: tools
 version: "1.0"
 summary: Behavioral constraints for developing the Organon CLI tooling — verification gates, frontmatter generation, and invariant tracking
 token_estimate: 1561

@@ -1,7 +1,7 @@
 ---
 type: procedures
 scope: product
-name: organon-development-protocols
+name: protocols
 version: "1.0"
 summary: Seven development protocols backing the Organon project's workflow family — covers all 6 enforcement loop phases
 token_estimate: 5800
