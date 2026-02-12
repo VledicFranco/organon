@@ -67,6 +67,7 @@
 | Creating any organon file | Add YAML frontmatter first. Include `type`, `scope`, `name`, `version`, `summary`, `token_estimate` at minimum. |
 | File growing large | Ensure frontmatter has accurate `token_estimate`. Ensure sections use standardized headings so agents can load partially. Do NOT split just for size — split only when content serves different scopes or audiences. |
 | Editing `book-llms/` content | Follow section structure from `book-llms/ETHOS.md`. Update frontmatter counts if invariants/principles/heuristics changed. |
+| Editing `book-llms/` with terminology or structural changes | Use `/methodology-spec-evolution` skill — its propagation checklist catches cross-file drift. Additive content (new pattern, new diagram step) with no terminology changes can be direct-edited. |
 | Adding a new pattern | Add to `book-llms/patterns.md` if universal. Create a protocol in `book-llms/protocols/` if procedural. |
 | Modifying `packages/tools/` | TypeScript only. Use yargs for CLI. Keep command files self-contained. |
 | Creating new methodology content | Ask: does it constrain (ethos), explain (philosophy), or instruct (protocol)? File accordingly. |
