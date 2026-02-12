@@ -2,9 +2,9 @@
 type: navigation
 scope: product
 name: organon
-version: "1.0"
+version: "1.1"
 summary: Public-facing project overview — methodology repository with LLM reference, narrative guide, and CLI tooling
-token_estimate: 2900
+token_estimate: 3200
 provides: [overview, quick-start, repository-structure, reference-implementation]
 audience: [llm, human]
 ---
@@ -141,50 +141,100 @@ organon/
 
 **Commands:**
 ```bash
-# Auto-generate components.md from codebase
-organon generate --all
-
-# Verify organon integrity (4 gates)
-organon verify
-
-# Cross-domain discovery
-organon find --file=MyFile.ts
-organon find --feature=auth
-organon find --domain=api
+organon init [dir]              # Scaffold a new project
+organon upgrade [dir]           # Detect and apply version updates
+organon verify                  # Run all 6 verification gates
+organon health                  # Project health score (0-100)
+organon validate <file>         # Validate a single organon file
+organon generate <file>         # Auto-generate frontmatter
+organon find --name=<term>      # Find organon files by name
+organon find --scope=<scope>    # Find by scope (domain, feature, etc.)
 ```
 
-**Status:** 🚧 Scaffolding complete, migrating from Agent Tavern
-
-**Future:** MCP server for IDE integration (LSP-like features)
+**Status:** v0.3.0 — init, upgrade, verify, health, validate, generate, find, query, coverage
 
 [Explore packages →](./packages/)
 
 ---
 
-## Quick Start
+## Setting Up Organon in a Project
 
-### For LLMs Implementing Organon
+> **For AI assistants:** Follow these steps when a user asks you to set up the Organon methodology in their project. This is the canonical bootstrap procedure.
 
-Load the technical reference into context:
+### Step 1: Install the CLI
+
+Clone this repository and build the tools:
 
 ```bash
-# Read core methodology
-cat book-llms/ETHOS.md        # Invariants
-cat book-llms/patterns.md     # Common patterns
-cat book-llms/templates.md    # Templates
+git clone https://github.com/VledicFranco/organon.git /tmp/organon-repo
+cd /tmp/organon-repo/packages/tools && npm install && npm run build
+```
 
-# Use tools to bootstrap
-cd your-project
-npx @organon/tools generate --all
-npx @organon/tools verify
+The CLI is now available via `npx organon` from that directory, or you can link it globally:
+
+```bash
+cd /tmp/organon-repo/packages/tools && npm link
+```
+
+### Step 2: Scaffold the project
+
+From the user's project root:
+
+```bash
+organon init <project-root>
+# Creates: organon.config.json, CLAUDE.md, organon/ directory,
+# .claude/skills/ with 5 workflow skills
+```
+
+This generates 12 files: 7 organon scaffold files + 5 Claude Code skills. All files pass `organon verify` out of the box.
+
+### Step 3: Customize the organon files
+
+The scaffolded files contain placeholder text. Guide the user through editing:
+
+1. **`organon/ETHOS.md`** — Define the project's identity (IS/IS NOT), invariants, principles, and decision heuristics. This is the most important file — it tells AI assistants what the project is and how to behave.
+
+2. **`organon/PHILOSOPHY.md`** — Document why the project is designed the way it is. Problem statement, core bet, design decisions with trade-offs.
+
+3. **`CLAUDE.md`** — Project-level agent instructions. The scaffold has a working template; customize the heuristics table and project structure section.
+
+4. **`organon/protocols/PROTOCOLS.md`** — Development procedures. The scaffold includes 5 generic protocols matching the installed skills.
+
+### Step 4: Verify the setup
+
+```bash
+organon verify --project-root <project-root>
+organon health --project-root <project-root>
+```
+
+All 6 gates should pass. Fix any issues reported.
+
+### Step 5: Use the skills
+
+The 5 installed Claude Code skills automate common workflows:
+
+| Skill | Purpose |
+|-------|---------|
+| `domain-feature-design` | Design new domains/features with proper organon files |
+| `organon-file-creation` | Create new ETHOS.md, PHILOSOPHY.md, PROTOCOL.md files |
+| `quality-review` | Semantic review beyond automated gates |
+| `session-compounding` | Convert session learnings into durable improvements |
+| `verify-and-health` | Run verification gates and interpret failures |
+
+### Keeping Up to Date
+
+When this repository's methodology version advances, update an existing project:
+
+```bash
+organon upgrade <project-root>          # Show what changed (dry run)
+organon upgrade <project-root> --apply  # Apply updates
 ```
 
 ### For Human Developers
 
-1. **Read the reference implementation:** [Agent Tavern](https://github.com/VledicFranco/agent-tavern)
-2. **Explore the organon hierarchy:** `agent-tavern/organon/`
-3. **Install tools:** `npm install @organon/tools`
-4. **Generate your first organon:** `organon generate --all`
+1. **Read the [docs/](./docs/)** for practical guidance
+2. **Explore `organon/`** in this repo to see the methodology dogfooding itself
+3. **Read the reference implementation:** [Agent Tavern](https://github.com/VledicFranco/agent-tavern)
 
 ---
 
