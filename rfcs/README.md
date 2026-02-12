@@ -99,4 +99,4 @@ Numbers are never reused. If an RFC is withdrawn, the number is retired.
 | File | Relationship |
 |------|--------------|
 | [book-llms/patterns.md](../book-llms/patterns.md) | RFC-Driven Evolution Pattern specification |
-| [packages/tools/dev/](../packages/tools/dev/) | Pre-RFC design work and brainstorming |
+| [dev/](../dev/) | Pre-RFC design work and brainstorming |

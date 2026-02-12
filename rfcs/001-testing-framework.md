@@ -883,7 +883,7 @@ None — all design questions resolved. Ready for implementation.
 | [organon/domains/tools/PHILOSOPHY.md](../organon/domains/tools/PHILOSOPHY.md) | Design principles (fail-fast, testability, clarity) guide assertion API design |
 | [book-llms/invariant-tracking.md](../book-llms/invariant-tracking.md) | Defines tier-4 testing specification (this RFC implements it) |
 | [book-llms/three-layer-architecture.md](../book-llms/three-layer-architecture.md) | Testing library is Layer 3 (Tools) that executes tier-4 verification |
-| [packages/tools/dev/testing-framework-design.md](../packages/tools/dev/testing-framework-design.md) | Detailed design document (basis for this RFC) |
+| [dev/testing-framework-design.md](../dev/testing-framework-design.md) | Detailed design document (basis for this RFC) |
 | [rfcs/002-compound-engineering-integration.md](./002-compound-engineering-integration.md) | Defines 6-step enforcement loop (Define → Bind → Execute → Verify → Compound → Evolve) used in this RFC |
 | [rfcs/003-explore-before-ethos.md](./003-explore-before-ethos.md) | Uses testing framework as example of Explore-Before-Ethos pattern for novel domains |
 

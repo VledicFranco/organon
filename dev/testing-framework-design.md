@@ -6,10 +6,10 @@ version: "0.1"
 summary: Design document for @organon/testing - semantic testing framework for tier-4 invariant verification
 token_estimate: 7100
 related_files:
-  - ../../../organon/domains/tools/ETHOS.md
-  - ../../../organon/domains/tools/PHILOSOPHY.md
-  - ../../../book-llms/invariant-tracking.md
-  - ../../../book-llms/three-layer-architecture.md
+  - ../organon/domains/tools/ETHOS.md
+  - ../organon/domains/tools/PHILOSOPHY.md
+  - ../book-llms/invariant-tracking.md
+  - ../book-llms/three-layer-architecture.md
 load_priority: high
 audience: [llm, human]
 status: draft
@@ -576,10 +576,10 @@ npm test -- --quiet   # Show counts only
 
 | File | Relationship |
 |------|--------------|
-| [../../../organon/domains/tools/ETHOS.md](../../../organon/domains/tools/ETHOS.md) | Testing library must follow organon-tools invariants (schema fidelity, 100% test coverage, idempotent) |
-| [../../../organon/domains/tools/PHILOSOPHY.md](../../../organon/domains/tools/PHILOSOPHY.md) | Design principles (fail-fast, testability, clarity) guide assertion API |
-| [../../../book-llms/invariant-tracking.md](../../../book-llms/invariant-tracking.md) | Defines tier-4 testing specification (this implements it) |
-| [../../../book-llms/three-layer-architecture.md](../../../book-llms/three-layer-architecture.md) | Testing library is Layer 3 (tools) for tier-4 protocols |
+| [../organon/domains/tools/ETHOS.md](../organon/domains/tools/ETHOS.md) | Testing library must follow organon-tools invariants (schema fidelity, 100% test coverage, idempotent) |
+| [../organon/domains/tools/PHILOSOPHY.md](../organon/domains/tools/PHILOSOPHY.md) | Design principles (fail-fast, testability, clarity) guide assertion API |
+| [../book-llms/invariant-tracking.md](../book-llms/invariant-tracking.md) | Defines tier-4 testing specification (this implements it) |
+| [../book-llms/three-layer-architecture.md](../book-llms/three-layer-architecture.md) | Testing library is Layer 3 (tools) for tier-4 protocols |
 
 ---
 
