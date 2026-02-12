@@ -58,11 +58,13 @@ export const verifyCommand: CommandModule<{}, VerifyArgs> = {
       console.log(`  ${icon} ${gate.gate}`);
 
       for (const e of gate.errors) {
-        console.log(chalk.red(`    ✗ [${e.code}] ${e.message}`));
+        const filePrefix = e.file ? `${e.file}: ` : '';
+        console.log(chalk.red(`    ✗ [${e.code}] ${filePrefix}${e.message}`));
         if (e.suggestion) console.log(chalk.dim(`      → ${e.suggestion}`));
       }
       for (const w of gate.warnings) {
-        console.log(chalk.yellow(`    ⚠ [${w.code}] ${w.message}`));
+        const filePrefix = w.file ? `${w.file}: ` : '';
+        console.log(chalk.yellow(`    ⚠ [${w.code}] ${filePrefix}${w.message}`));
       }
     }
 
