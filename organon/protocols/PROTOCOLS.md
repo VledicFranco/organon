@@ -12,49 +12,49 @@ protocols:
     steps: 15
     automation_tier: automated
     workflow: domain-feature-design
-    tools: [organon-validate, organon-verify, organon-find, organon-generate]
+    tools: [organon-validate, organon-verify]
     complexity: high
   - id: PROTO-ORG-2
     name: Tool Development
     steps: 10
     automation_tier: automated
     workflow: organon-tools-developer
-    tools: [organon-validate, organon-verify, npm-test, npm-build]
+    tools: [organon-verify, npm-test]
     complexity: high
   - id: PROTO-ORG-3
     name: Methodology Evolution
     steps: 12
     automation_tier: automated
     workflow: methodology-spec-evolution
-    tools: [organon-verify, organon-validate, organon-find, organon-query, organon-generate, organon-health]
+    tools: [organon-verify, organon-find, organon-health]
     complexity: high
   - id: PROTO-ORG-4
     name: Verification and Health
     steps: 5
     automation_tier: automated
     workflow: verify-and-health
-    tools: [organon-verify, organon-health, organon-coverage, organon-validate]
+    tools: [organon-verify, organon-health]
     complexity: low
   - id: PROTO-ORG-5
     name: Session Compounding
     steps: 8
     automation_tier: automated
     workflow: session-compounding
-    tools: [organon-verify, organon-health, organon-find, organon-query]
+    tools: [organon-verify, organon-health, organon-find]
     complexity: medium
   - id: PROTO-ORG-6
     name: Organon File Creation
     steps: 8
     automation_tier: automated
     workflow: organon-file-creation
-    tools: [organon-generate, organon-validate, organon-verify, organon-find, organon-query]
+    tools: [organon-generate, organon-validate, organon-verify]
     complexity: medium
   - id: PROTO-ORG-7
     name: Quality Review
     steps: 10
     automation_tier: automated
     workflow: quality-review
-    tools: [organon-verify, organon-validate, organon-health, organon-find, organon-query, organon-coverage]
+    tools: [organon-verify, organon-validate, organon-health]
     complexity: high
 inherits_from: [organon-project]
 audience: [llm, human, tooling]

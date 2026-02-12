@@ -3,7 +3,7 @@ name: session-compounding
 description: Reviews a work session's output to detect improvable patterns, classify improvements, and execute the highest-priority one. Use at the end of significant work sessions to ensure the COMPOUND phase of the enforcement loop happens. Without explicit compounding, improvement never happens.
 protocol_id: PROTO-ORG-5
 protocol_file: organon/protocols/PROTOCOLS.md
-tools: [organon-verify, organon-health, organon-find, organon-query]
+tools: [organon-verify, organon-health, organon-find]
 loads:
   - CLAUDE.md
   - book-llms/patterns.md

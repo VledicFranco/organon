@@ -153,6 +153,42 @@ describe('validateWorkflow', () => {
     );
   });
 
+  it('matches kebab-case tool ids against CLI-command form in body', async () => {
+    // Tool listed as "organon-verify" should match body text "organon verify"
+    const content = `---
+name: cli-workflow
+protocol_id: PROTO-TEST-1
+protocol_file: PROTOCOLS.md
+tools:
+  - organon-verify
+  - organon-health
+loads:
+  - /ETHOS.md
+---
+
+# Workflow
+
+## Steps
+
+1. Run \`organon verify\` to check gates.
+2. Run \`organon health\` to check score.
+
+## Error Recovery
+
+| Failure | Recovery Action |
+|---------|-----------------|
+| Fails | Fix it |
+`;
+    const fs = new MemoryFileSystem({
+      '/project/workflows/test.md': content,
+      '/project/ETHOS.md': '# ethos',
+    });
+    const config = makeConfig('/project');
+    const result = await validateWorkflow({ projectRoot: '/project', config, fs });
+    const toolWarnings = result.warnings.filter(w => w.code === 'WORKFLOW_UNREFERENCED_TOOL');
+    expect(toolWarnings).toHaveLength(0);
+  });
+
   it('warns when workflow step count is less than protocol step count', async () => {
     const protocolContent = `---
 type: procedures

@@ -3,7 +3,7 @@ name: methodology-spec-evolution
 description: Guides evolution of book-llms/ methodology specification files with cross-file consistency. Handles version bumps, terminology propagation, and backward compatibility checks. Use when modifying any file in book-llms/ — the highest error-risk activity in this project.
 protocol_id: PROTO-ORG-3
 protocol_file: organon/protocols/PROTOCOLS.md
-tools: [organon-verify, organon-validate, organon-find, organon-query, organon-generate, organon-health]
+tools: [organon-verify, organon-find, organon-health]
 loads:
   - book-llms/ETHOS.md
   - book-llms/PHILOSOPHY.md

@@ -3,7 +3,7 @@ name: domain-feature-design
 description: Guides agents through proper domain/feature design following Organon methodology. Ensures RFCs contain both organon mutation plan (ETHOS.md, PHILOSOPHY.md content) AND technical implementation plan (architecture, API, phases). Prevents common mistake of writing only technical plan or only organon plan. Use when designing new domains, features, or significant capabilities that require organon evolution.
 protocol_id: PROTO-ORG-1
 protocol_file: organon/protocols/PROTOCOLS.md
-tools: [organon-validate, organon-verify, organon-find, organon-generate]
+tools: [organon-validate, organon-verify]
 loads:
   - book-llms/patterns.md
   - book-llms/templates.md
@@ -685,6 +685,8 @@ Once RFC is complete:
 5. **Begin implementation** following Same-PR principle:
    - Implement Phase 1
    - Create organon files (ETHOS.md, PHILOSOPHY.md)
+   - Run `organon validate` on new organon files to verify structure
+   - Run `organon verify` to check cross-file integrity
    - **Same PR:** Organon files + implementation code
    - Update RFC status: Draft → Implementing → Implemented
 

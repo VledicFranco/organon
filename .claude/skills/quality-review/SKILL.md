@@ -3,7 +3,7 @@ name: quality-review
 description: Semantic review of organon files that goes beyond automated gates. Checks whether invariants are testable, principles are genuinely prioritized, identity statements define real boundaries, and heuristics cover actual recurring decisions. Use for weekly quality checks or when reviewing new organon files.
 protocol_id: PROTO-ORG-7
 protocol_file: organon/protocols/PROTOCOLS.md
-tools: [organon-verify, organon-validate, organon-health, organon-find, organon-query, organon-coverage]
+tools: [organon-verify, organon-validate, organon-health]
 loads:
   - book-llms/ETHOS.md
   - book-llms/patterns.md

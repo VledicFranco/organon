@@ -196,7 +196,11 @@ export async function validateWorkflow(
 
     if (tools && Array.isArray(tools)) {
       for (const tool of tools) {
-        if (!body.includes(tool)) {
+        // Check both the exact tool id (e.g. "organon-verify") and the
+        // CLI-command form (e.g. "organon verify") so kebab-case ids
+        // match natural command invocations in the workflow body.
+        const cliForm = tool.replace(/-/g, ' ');
+        if (!body.includes(tool) && !body.includes(cliForm)) {
           fileWarnings.push({
             severity: 'warning',
             code: 'WORKFLOW_UNREFERENCED_TOOL',

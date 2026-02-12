@@ -3,7 +3,7 @@ name: verify-and-health
 description: Runs all 5 verification gates and health checks, interprets failures with actionable fix guidance, and re-verifies after fixes. Use at session start, before commits, or whenever you need to check project integrity. Lightweight daily-use workflow.
 protocol_id: PROTO-ORG-4
 protocol_file: organon/protocols/PROTOCOLS.md
-tools: [organon-verify, organon-health, organon-coverage, organon-validate]
+tools: [organon-verify, organon-health]
 loads:
   - CLAUDE.md
   - book-llms/three-layer-architecture.md

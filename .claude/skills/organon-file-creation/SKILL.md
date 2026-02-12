@@ -3,7 +3,7 @@ name: organon-file-creation
 description: Creates new organon files (ETHOS.md, PHILOSOPHY.md, PROTOCOL.md, README.md) with correct structure, frontmatter, scope inheritance, and bidirectional references. Use when adding a new domain, feature, component, or scope that needs organon documentation. Replaces ad-hoc file creation with validated workflow.
 protocol_id: PROTO-ORG-6
 protocol_file: organon/protocols/PROTOCOLS.md
-tools: [organon-generate, organon-validate, organon-verify, organon-find, organon-query]
+tools: [organon-generate, organon-validate, organon-verify]
 loads:
   - book-llms/templates.md
   - book-llms/scopes.md
