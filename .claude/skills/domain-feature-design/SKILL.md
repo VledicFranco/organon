@@ -4,7 +4,7 @@ description: Guides agents through proper domain/feature design following Organo
 protocol_id: PROTO-ORG-1
 protocol_file: organon/protocols/PROTOCOLS.md
 tools: [organon-validate, organon-verify, organon-find, organon-generate]
-organon_context:
+loads:
   - book-llms/patterns.md
   - book-llms/templates.md
   - book-llms/scopes.md

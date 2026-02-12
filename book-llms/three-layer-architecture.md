@@ -215,7 +215,7 @@ Regardless of which mechanism hosts them, all workflow bindings must:
 
 1. **Reference their protocol** — via protocol ID and file path (bidirectional traceability)
 2. **Specify tool orchestration** — which tools to run, in what order, with what arguments
-3. **Provide context loading guidance** — which organon files to read before execution
+3. **Provide context loading guidance** — which organon files to load (`loads` array) before execution
 4. **Handle errors** — what to do when tools fail or gates don't pass
 5. **Be discoverable** — the agent can find and invoke the workflow (by command, auto-load, slash command, or autonomous detection)
 
@@ -241,7 +241,7 @@ name: implement-rfc                    # Workflow identifier
 protocol_id: PROTO-RFC-1              # ← References protocol (REQUIRED)
 protocol_file: organon/methodology/rfcs/PROTOCOLS.md  # ← Protocol source (REQUIRED)
 tools: [rfc:context, rfc:verify, organon:generate]     # Tools orchestrated
-context:                               # Organon files to load before execution
+loads:                                 # Organon files to load before execution
   - organon/methodology/rfcs/PROTOCOLS.md
   - /ETHOS.md
 ---
@@ -257,7 +257,7 @@ user-invocable: true
 protocol_id: PROTO-RFC-1
 protocol_file: organon/methodology/rfcs/PROTOCOLS.md
 tools: [rfc:context, rfc:verify, organon:generate]
-context:
+loads:
   - organon/methodology/rfcs/PROTOCOLS.md
   - /ETHOS.md
   - /PHILOSOPHY.md
@@ -560,7 +560,7 @@ A universal checklist for CI gates. Adapt per project:
 - `GATE_FAIL` — Gate failed with errors (blocks merge)
 - `GATE_WARN` — Gate passed with warnings (info only, doesn't block)
 
-See [workflow-authoring.md](./workflow-authoring.md) for workflow-quality gate error codes (`WORKFLOW_MISSING_PROTOCOL_ID`, `WORKFLOW_BROKEN_CONTEXT_REF`, etc.). Other gates use similar diagnostic code patterns.
+See [workflow-authoring.md](./workflow-authoring.md) for workflow-quality gate error codes (`WORKFLOW_MISSING_PROTOCOL_ID`, `WORKFLOW_BROKEN_LOADS_REF`, etc.). Other gates use similar diagnostic code patterns.
 
 ### Drift detection
 

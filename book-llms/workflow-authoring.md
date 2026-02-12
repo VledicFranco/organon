@@ -39,7 +39,7 @@ Six measurable properties of a well-written workflow. The first four are validat
 |-----------|-----------|------------|
 | **Completeness** | Every protocol step has a corresponding workflow step or explicit skip-with-rationale | Yes — compare step counts |
 | **Traceability** | `protocol_id` and `protocol_file` reference a real protocol that references back | Yes — triplet-integrity gate |
-| **Context sufficiency** | `context` array lists all organon files the agent must load before execution | Yes — check paths resolve |
+| **Context sufficiency** | `loads` array lists all organon files the agent must load before execution | Yes — check paths resolve |
 | **Error recoverability** | Workflow includes an error recovery section with failure/recovery table | Yes — section scan |
 | **Idempotency awareness** | Each tool invocation is annotated as idempotent or not; non-idempotent steps include rollback guidance | No — guidance only |
 | **Scope alignment** | Workflow scope matches its protocol scope | No — guidance only |
@@ -50,7 +50,7 @@ When writing a workflow, check each attribute:
 
 1. Count your steps against the protocol. Missing steps? Add them or document why they're skipped.
 2. Verify `protocol_id` and `protocol_file` are set. Run `organon verify --gate triplet-integrity` to confirm bidirectional binding.
-3. List every organon file the agent needs in the `context` array. If you're unsure, err on the side of including more — context overload is a warning, missing context causes silent failures.
+3. List every organon file the agent needs in the `loads` array. If you're unsure, err on the side of including more — context overload is a warning, missing context causes silent failures.
 4. Add `## Error Recovery` with a failure/recovery table. Every tool invocation that can fail needs a recovery path.
 5. For each step, ask: "Can I run this twice safely?" If not, note it and add rollback guidance.
 6. Confirm your workflow operates within its protocol's scope. A methodology workflow shouldn't directly modify product code.
@@ -204,13 +204,13 @@ Workflow-specific anti-patterns. These complement the general anti-patterns in [
 
 | Anti-Pattern | Description | Fix |
 |--------------|-------------|-----|
-| **Context overload** | Workflow loads all organon files instead of the relevant subset | Use `context` array to list only required files; use frontmatter filtering |
+| **Context overload** | Workflow loads all organon files instead of the relevant subset | Use `loads` array to list only required files; use frontmatter filtering |
 | **Silent failure** | Tool invocation fails but workflow continues without reporting | Every tool invocation must check its result; use fail-fast or accumulate-and-report |
 | **Missing error recovery** | No `## Error Recovery` section; agent improvises when things go wrong | Add error recovery table with failure modes and recovery actions |
 | **Protocol drift** | Workflow steps diverge from protocol steps without updating the protocol | Re-sync workflow to protocol or update protocol to reflect evolved understanding |
 | **Tool-free workflow** | Workflow describes steps in prose but references no tools | Every step should reference a specific tool; if no tool exists, the protocol should be `manual` tier |
 | **Monolithic workflow** | Single workflow covers multiple protocols | One workflow per protocol; compose via workflow chaining if needed |
-| **Implicit context** | Workflow assumes agent "knows" things not in the `context` array | Make all required context explicit in `context` |
+| **Implicit context** | Workflow assumes agent "knows" things not in the `loads` array | Make all required context explicit in `loads` |
 | **Orphaned verification** | Workflow runs verification but does not act on the result | Verification results must gate the next step or be surfaced to the user |
 
 ---
@@ -231,12 +231,12 @@ organon verify   # runs all gates including workflow-quality
 | `protocol_id` present and non-empty | error | `WORKFLOW_MISSING_PROTOCOL_ID` |
 | `protocol_file` present and non-empty | error | `WORKFLOW_MISSING_PROTOCOL_FILE` |
 | `tools` array present and non-empty | error | `WORKFLOW_MISSING_TOOLS` |
-| `context` array present and non-empty | error | `WORKFLOW_MISSING_CONTEXT` |
-| Each path in `context` resolves to a file | error | `WORKFLOW_BROKEN_CONTEXT_REF` |
+| `loads` array present and non-empty | error | `WORKFLOW_MISSING_LOADS` |
+| Each path in `loads` resolves to a file | error | `WORKFLOW_BROKEN_LOADS_REF` |
 | Body contains `## Error Recovery` or `## Recovery` | warning | `WORKFLOW_NO_ERROR_RECOVERY` |
 | Recovery section contains a failure/recovery table | warning | `WORKFLOW_RECOVERY_NO_TABLE` |
 | Workflow step count >= protocol step count | warning | `WORKFLOW_STEP_COUNT_LOW` |
-| `context` array has <= 10 entries | warning | `WORKFLOW_CONTEXT_OVERLOAD` |
+| `loads` array has <= 10 entries | warning | `WORKFLOW_LOADS_OVERLOAD` |
 | Each tool in `tools` is referenced in body | warning | `WORKFLOW_UNREFERENCED_TOOL` |
 
 Errors block the gate. Warnings are advisory.

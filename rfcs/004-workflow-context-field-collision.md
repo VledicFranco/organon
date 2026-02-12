@@ -5,7 +5,7 @@ name: workflow-context-field-collision
 version: "1.0"
 summary: Resolve naming collision between organon's workflow `context` field (files to load) and Claude Code's `context` field (fork/inline execution mode)
 token_estimate: 5500
-status: draft
+status: implemented
 created: 2026-02-11
 author: Claude Opus 4.6
 related_files:
@@ -25,13 +25,12 @@ audience: [llm, human]
 
 ## Status
 
-**Current State:** Draft
-
-**Next Milestone:** Prototype solutions against the 7 existing skills, then converge
+**Current State:** Implemented
 
 | Transition | Date | Notes |
 |------------|------|-------|
 | → Draft | 2026-02-11 | Initial RFC created after discovering collision during skill family implementation |
+| → Implemented | 2026-02-11 | Option A (`loads`) implemented across spec, tooling, and all 7 skills |
 
 ---
 

@@ -4,7 +4,7 @@ description: Runs all 5 verification gates and health checks, interprets failure
 protocol_id: PROTO-ORG-4
 protocol_file: organon/protocols/PROTOCOLS.md
 tools: [organon-verify, organon-health, organon-coverage, organon-validate]
-organon_context:
+loads:
   - CLAUDE.md
   - book-llms/three-layer-architecture.md
 ---
@@ -51,7 +51,7 @@ This runs all 5 gates:
 - **references** — File paths and cross-references resolve
 - **triplets** — Protocol↔workflow bindings are bidirectional
 - **coverage** — Invariant coverage tracked
-- **workflow-quality** — Workflows have protocol_id, tools, context, error recovery
+- **workflow-quality** — Workflows have protocol_id, tools, loads, error recovery
 
 ### Step 2: Run Health Check
 
@@ -79,8 +79,8 @@ Map each failure to a fix action:
 | workflow-quality | `WORKFLOW_MISSING_PROTOCOL_ID` | Add `protocol_id: PROTO-SCOPE-N` to workflow frontmatter |
 | workflow-quality | `WORKFLOW_MISSING_PROTOCOL_FILE` | Add `protocol_file: path/to/PROTOCOLS.md` to workflow frontmatter |
 | workflow-quality | `WORKFLOW_MISSING_TOOLS` | Add `tools: [tool-list]` to workflow frontmatter |
-| workflow-quality | `WORKFLOW_MISSING_CONTEXT` | Add `context:` array with organon files to load |
-| workflow-quality | `WORKFLOW_BROKEN_CONTEXT_REF` | Fix path in `context` array to point to existing file |
+| workflow-quality | `WORKFLOW_MISSING_LOADS` | Add `loads:` array with organon files to load |
+| workflow-quality | `WORKFLOW_BROKEN_LOADS_REF` | Fix path in `loads` array to point to existing file |
 | workflow-quality | `WORKFLOW_NO_ERROR_RECOVERY` | Add `## Error Recovery` section with failure/recovery table |
 
 ### Step 4: Guide Fixes

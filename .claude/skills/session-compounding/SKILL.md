@@ -4,7 +4,7 @@ description: Reviews a work session's output to detect improvable patterns, clas
 protocol_id: PROTO-ORG-5
 protocol_file: organon/protocols/PROTOCOLS.md
 tools: [organon-verify, organon-health, organon-find, organon-query]
-organon_context:
+loads:
   - CLAUDE.md
   - book-llms/patterns.md
   - book-llms/workflow-authoring.md

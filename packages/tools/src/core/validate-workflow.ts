@@ -32,7 +32,7 @@ export interface ValidateWorkflowOptions {
 // Constants
 // ---------------------------------------------------------------------------
 
-const CONTEXT_SIZE_THRESHOLD = 10;
+const LOADS_SIZE_THRESHOLD = 10;
 const TABLE_ROW_RE = /^\|[^|]+\|[^|]+\|/m;
 const STEP_RE = /^\d+\.\s/gm;
 
@@ -78,7 +78,7 @@ export async function validateWorkflow(
     const protocolId = frontmatter?.['protocol_id'] as string | undefined;
     const protocolFile = frontmatter?.['protocol_file'] as string | undefined;
     const tools = frontmatter?.['tools'] as string[] | undefined;
-    const context = frontmatter?.['context'] as string[] | undefined;
+    const loads = frontmatter?.['loads'] as string[] | undefined;
 
     if (!protocolId) {
       fileErrors.push({
@@ -110,39 +110,39 @@ export async function validateWorkflow(
       });
     }
 
-    if (!context || !Array.isArray(context) || context.length === 0) {
+    if (!loads || !Array.isArray(loads) || loads.length === 0) {
       fileErrors.push({
         severity: 'error',
-        code: 'WORKFLOW_MISSING_CONTEXT',
-        message: 'Workflow is missing required field: context (must be a non-empty array)',
+        code: 'WORKFLOW_MISSING_LOADS',
+        message: 'Workflow is missing required field: loads (must be a non-empty array)',
         file,
-        suggestion: 'Add context array listing organon files to load before execution',
+        suggestion: 'Add loads array listing organon files to load before execution',
       });
     }
 
-    // --- Context sufficiency checks (errors) ---
+    // --- Loads sufficiency checks (errors) ---
 
-    if (context && Array.isArray(context)) {
-      for (const ctxPath of context) {
-        const absCtxPath = joinPath(projectRoot, ctxPath);
-        const exists = await fs.exists(absCtxPath);
+    if (loads && Array.isArray(loads)) {
+      for (const loadPath of loads) {
+        const absLoadPath = joinPath(projectRoot, loadPath);
+        const exists = await fs.exists(absLoadPath);
         if (!exists) {
           fileErrors.push({
             severity: 'error',
-            code: 'WORKFLOW_BROKEN_CONTEXT_REF',
-            message: `Context path '${ctxPath}' does not resolve to an existing file`,
+            code: 'WORKFLOW_BROKEN_LOADS_REF',
+            message: `Loads path '${loadPath}' does not resolve to an existing file`,
             file,
-            suggestion: `Check the path or remove '${ctxPath}' from context array`,
+            suggestion: `Check the path or remove '${loadPath}' from loads array`,
           });
         }
       }
 
-      // Context overload warning
-      if (context.length > CONTEXT_SIZE_THRESHOLD) {
+      // Loads overload warning
+      if (loads.length > LOADS_SIZE_THRESHOLD) {
         fileWarnings.push({
           severity: 'warning',
-          code: 'WORKFLOW_CONTEXT_OVERLOAD',
-          message: `Context array has ${context.length} entries (threshold: ${CONTEXT_SIZE_THRESHOLD}). Consider narrowing to only required files.`,
+          code: 'WORKFLOW_LOADS_OVERLOAD',
+          message: `Loads array has ${loads.length} entries (threshold: ${LOADS_SIZE_THRESHOLD}). Consider narrowing to only required files.`,
           file,
         });
       }

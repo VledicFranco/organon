@@ -4,7 +4,7 @@ description: Creates new organon files (ETHOS.md, PHILOSOPHY.md, PROTOCOL.md, RE
 protocol_id: PROTO-ORG-6
 protocol_file: organon/protocols/PROTOCOLS.md
 tools: [organon-generate, organon-validate, organon-verify, organon-find, organon-query]
-organon_context:
+loads:
   - book-llms/templates.md
   - book-llms/scopes.md
   - book-llms/frontmatter-system.md

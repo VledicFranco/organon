@@ -73,7 +73,7 @@ token_estimate: number    # Approximate full file token count
 | `procedures` | PROTOCOL.md, protocols/*.md | Step-by-step procedures with verification |
 | `mapping` | components.md | Auto-generated code-to-domain mapping |
 
-**Note on workflows:** Workflows (Layer 2 bindings between protocols and tools) use agent-specific formats and locations (e.g., Claude skills, Cursor rules, runbooks). If a workflow is stored as an organon file, use `type: procedures` with workflow-specific frontmatter fields (`protocol_id`, `protocol_file`, `tools`, `context`). See [templates.md](./templates.md) for the workflow template.
+**Note on workflows:** Workflows (Layer 2 bindings between protocols and tools) use agent-specific formats and locations (e.g., Claude skills, Cursor rules, runbooks). If a workflow is stored as an organon file, use `type: procedures` with workflow-specific frontmatter fields (`protocol_id`, `protocol_file`, `tools`, `loads`). See [templates.md](./templates.md) for the workflow template.
 
 ### Scope Enum
 

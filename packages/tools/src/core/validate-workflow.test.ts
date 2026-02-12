@@ -74,26 +74,26 @@ describe('validateWorkflow', () => {
     );
   });
 
-  it('reports error when context array is missing', async () => {
-    const content = makeWorkflow().replace(/context:\n  - \/ETHOS\.md\n/, '');
+  it('reports error when loads array is missing', async () => {
+    const content = makeWorkflow().replace(/loads:\n  - \/ETHOS\.md\n/, '');
     const fs = new MemoryFileSystem({
       '/project/workflows/test.md': content,
     });
     const config = makeConfig('/project');
     const result = await validateWorkflow({ projectRoot: '/project', config, fs });
     expect(result.errors).toContainEqual(
-      expect.objectContaining({ code: 'WORKFLOW_MISSING_CONTEXT' }),
+      expect.objectContaining({ code: 'WORKFLOW_MISSING_LOADS' }),
     );
   });
 
-  it('reports error when context path does not resolve', async () => {
+  it('reports error when loads path does not resolve', async () => {
     const fs = new MemoryFileSystem({
-      '/project/workflows/test.md': makeWorkflow({ context: ['/nonexistent.md'] }),
+      '/project/workflows/test.md': makeWorkflow({ loads: ['/nonexistent.md'] }),
     });
     const config = makeConfig('/project');
     const result = await validateWorkflow({ projectRoot: '/project', config, fs });
     expect(result.errors).toContainEqual(
-      expect.objectContaining({ code: 'WORKFLOW_BROKEN_CONTEXT_REF' }),
+      expect.objectContaining({ code: 'WORKFLOW_BROKEN_LOADS_REF' }),
     );
   });
 
@@ -122,19 +122,19 @@ describe('validateWorkflow', () => {
     );
   });
 
-  it('warns when context array exceeds threshold', async () => {
-    const manyContextPaths = Array.from({ length: 12 }, (_, i) => `/file${i}.md`);
+  it('warns when loads array exceeds threshold', async () => {
+    const manyLoadsPaths = Array.from({ length: 12 }, (_, i) => `/file${i}.md`);
     const fs = new MemoryFileSystem({
-      '/project/workflows/test.md': makeWorkflow({ context: manyContextPaths }),
+      '/project/workflows/test.md': makeWorkflow({ loads: manyLoadsPaths }),
     });
-    // Create all the context files so they resolve
-    for (const p of manyContextPaths) {
+    // Create all the loads files so they resolve
+    for (const p of manyLoadsPaths) {
       fs.addFile(`/project${p}`, '# content');
     }
     const config = makeConfig('/project');
     const result = await validateWorkflow({ projectRoot: '/project', config, fs });
     expect(result.warnings).toContainEqual(
-      expect.objectContaining({ code: 'WORKFLOW_CONTEXT_OVERLOAD' }),
+      expect.objectContaining({ code: 'WORKFLOW_LOADS_OVERLOAD' }),
     );
   });
 

@@ -328,7 +328,7 @@ name: [workflow-name]
 protocol_id: [PROTO-SCOPE-N]              # ← References protocol (REQUIRED)
 protocol_file: [path/to/PROTOCOLS.md]     # ← Protocol source (REQUIRED)
 tools: [tool-list]                        # Tools orchestrated by this workflow
-context:                                  # Organon files to load before execution
+loads:                                    # Organon files to load before execution
   - [/ETHOS.md]
   - [path/to/domain/ETHOS.md]
 ---

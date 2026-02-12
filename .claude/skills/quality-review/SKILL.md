@@ -4,7 +4,7 @@ description: Semantic review of organon files that goes beyond automated gates. 
 protocol_id: PROTO-ORG-7
 protocol_file: organon/protocols/PROTOCOLS.md
 tools: [organon-verify, organon-validate, organon-health, organon-find, organon-query, organon-coverage]
-organon_context:
+loads:
   - book-llms/ETHOS.md
   - book-llms/patterns.md
   - book-llms/workflow-authoring.md

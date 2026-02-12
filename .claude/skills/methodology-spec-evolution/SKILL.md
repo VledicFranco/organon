@@ -4,7 +4,7 @@ description: Guides evolution of book-llms/ methodology specification files with
 protocol_id: PROTO-ORG-3
 protocol_file: organon/protocols/PROTOCOLS.md
 tools: [organon-verify, organon-validate, organon-find, organon-query, organon-generate, organon-health]
-organon_context:
+loads:
   - book-llms/ETHOS.md
   - book-llms/PHILOSOPHY.md
   - book-llms/overview.md

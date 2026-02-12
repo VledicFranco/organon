@@ -256,7 +256,7 @@ export function makeWorkflow(opts?: {
   protocolId?: string;
   protocolFile?: string;
   tools?: string[];
-  context?: string[];
+  loads?: string[];
   includeRecovery?: boolean;
   steps?: number;
 }): string {
@@ -265,13 +265,13 @@ export function makeWorkflow(opts?: {
     protocolId = 'PROTO-TEST-1',
     protocolFile = 'PROTOCOLS.md',
     tools = ['tool:verify'],
-    context = ['/ETHOS.md'],
+    loads = ['/ETHOS.md'],
     includeRecovery = true,
     steps = 3,
   } = opts ?? {};
 
   const toolsYaml = tools.map((t) => `  - ${t}`).join('\n');
-  const contextYaml = context.map((c) => `  - ${c}`).join('\n');
+  const loadsYaml = loads.map((l) => `  - ${l}`).join('\n');
 
   const stepLines = Array.from({ length: steps }, (_, i) =>
     `${i + 1}. **Step ${i + 1}.** Run \`${tools[0] ?? 'tool:action'}\` to do thing ${i + 1}.`,
@@ -287,8 +287,8 @@ protocol_id: ${protocolId}
 protocol_file: ${protocolFile}
 tools:
 ${toolsYaml}
-context:
-${contextYaml}
+loads:
+${loadsYaml}
 ---
 
 # Workflow: ${name}

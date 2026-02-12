@@ -4,7 +4,7 @@ description: Ensures organon-tools development follows its own ETHOS.md and PHIL
 protocol_id: PROTO-ORG-2
 protocol_file: organon/protocols/PROTOCOLS.md
 tools: [organon-validate, organon-verify, npm-test, npm-build]
-organon_context:
+loads:
   - organon/domains/tools/ETHOS.md
   - organon/domains/tools/PHILOSOPHY.md
   - book-llms/three-layer-architecture.md
