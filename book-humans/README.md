@@ -1,3 +1,15 @@
+---
+type: navigation
+scope: product
+name: book-humans
+version: "1.0"
+summary: Navigation for book-humans — narrative guide for human developers learning the Organon methodology
+token_estimate: 1900
+provides: [table-of-contents, reading-guide, chapter-mapping]
+parent: organon
+audience: [human]
+---
+
 # Organon Book for Humans
 
 **Status:** Planned — Outline finalized, content pending

@@ -1,3 +1,14 @@
+---
+type: navigation
+scope: product
+name: organon
+version: "1.0"
+summary: Public-facing project overview — methodology repository with LLM reference, narrative guide, and CLI tooling
+token_estimate: 2900
+provides: [overview, quick-start, repository-structure, reference-implementation]
+audience: [llm, human]
+---
+
 # Organon Methodology
 
 **A documentation system that treats code as the single source of truth and uses auto-generation to prevent drift.**

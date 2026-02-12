@@ -1,3 +1,15 @@
+---
+type: navigation
+scope: domain
+name: tools
+version: "1.0"
+summary: CLI and MCP server for the Organon methodology — validate frontmatter, run verification gates, query organon files
+token_estimate: 1700
+provides: [architecture, cli-commands, mcp-server, configuration, programmatic-api]
+parent: packages
+audience: [llm, human]
+---
+
 # Organon Tools
 
 CLI tools and MCP server for the **Organon Methodology** — enforce documentation constraints, validate frontmatter, and give agents immediate methodology context.
