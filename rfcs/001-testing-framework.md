@@ -5,7 +5,7 @@ name: testing-framework
 version: "1.0"
 summary: Introduce @organon/testing semantic testing framework to bridge the gap between invariant declaration and automated verification
 token_estimate: 11100
-status: implementing
+status: implemented
 created: 2026-02-10
 author: organon-tools-developer
 related_files:
@@ -27,13 +27,15 @@ audience: [llm, human]
 
 ## Status
 
-**Current State:** Implementing
+**Current State:** Implemented
 
-**Next Milestone:** Phase 2/3 assessment and Phase 3 completion
+**Next Milestone:** None (complete)
 
 | Transition | Date | Notes |
 |------------|------|-------|
 | → Draft | 2026-02-10 | Initial RFC created |
+| → Implementing | 2026-02-12 | Phase 1 core + Phase 2/3 assertions |
+| → Implemented | 2026-02-12 | All phases complete; Jest/Mocha adapters, LSP, incremental testing cut |
 
 ---
 
