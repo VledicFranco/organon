@@ -5,7 +5,7 @@ name: patterns
 version: "1.0"
 summary: Common patterns and anti-patterns — progressive disclosure, enforcement loop, code mapping, verification, onboarding, and more
 token_estimate: 15700
-pattern_count: 22
+pattern_count: 23
 inherits_from: [meta-organon]
 load_priority: medium
 required_for:
@@ -1067,6 +1067,43 @@ Four-Step Loop (micro):
 ```
 
 The Four-Step Loop is the **operational rhythm**. The Enforcement Loop is the **architectural structure**.
+
+---
+
+## Observation Accumulation Pattern
+
+**The problem:** The COMPOUND phase produces ephemeral insights during a session. Lower-priority observations (findings #2 through #6) vanish between sessions. The agent has no memory of "last session I noticed X, and the session before that I noticed X too — now it's a pattern." There's no intermediate artifact between COMPOUND (single-session) and EVOLVE (formal RFC).
+
+**The solution:** Record observations in structured files that persist across sessions. Load prior observations during future COMPOUND phases so patterns can accumulate over time.
+
+### Convention
+
+- **Directory:** `organon/observations/NNN-descriptive-name.md` at project level
+- **Frontmatter:** `type: rationale` (no new artifact type — observations are empirical rationale)
+- **Required sections:** Context, Observations (O1..ON with Signal/Implication/Suggested Action), Patterns to Watch
+- **Mental model:** Signal (noticed once) → Pattern (confirmed across sessions) → Actionable (root cause understood, clear fix)
+
+### When to record
+
+| When | Who | What to Record |
+|------|-----|----------------|
+| A workflow didn't work as expected | The executing agent | What happened, expected vs actual, root cause |
+| A methodology concept needed ad-hoc interpretation | Agent or human | The ambiguity, decision, reasoning |
+| Same friction appeared for the second+ time | Agent that noticed recurrence | Both instances, common root cause |
+| Tooling exposed gap between spec and practice | Developer or agent | Spec expectation, actual behavior, the gap |
+| A pattern emerged not captured anywhere | Anyone who notices | The pattern, where it appears, why it matters |
+
+**When NOT to record:** Single-occurrence friction you already fixed, opinions without evidence, observations already in methodology guidance, session-specific context that won't generalize.
+
+### Enforcement
+
+The session-compounding workflow is the enforcement mechanism — a structured nudge, not a hard gate. It loads prior observations, asks "anything new worth recording?", and records if the session produced insights worth preserving.
+
+### Relationship to other patterns
+
+Observations fill the gap between **Recursive Collaboration** (COMPOUND phase captures insights in a single session) and **RFC-Driven Evolution** (EVOLVE phase formalizes mature decisions). Observations are the intermediate artifact — they accumulate across sessions until a pattern is clear enough to act on.
+
+See [RFC 005](../rfcs/005-observation-synthesis-loop.md) for the full convention specification.
 
 ---
 

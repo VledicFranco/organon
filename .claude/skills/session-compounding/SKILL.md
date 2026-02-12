@@ -8,6 +8,7 @@ loads:
   - CLAUDE.md
   - book-llms/patterns.md
   - book-llms/workflow-authoring.md
+  - organon/observations/README.md
 ---
 
 # Session Compounding Workflow
@@ -33,8 +34,11 @@ Use this skill when:
 1. Load project constraints:
    - Read `CLAUDE.md` (project-level guidance and decision heuristics)
 2. Load pattern references:
-   - Read `book-llms/patterns.md` (Recursive Collaboration section — the pattern this workflow implements)
+   - Read `book-llms/patterns.md` (Recursive Collaboration + Observation Accumulation sections)
    - Read `book-llms/workflow-authoring.md` (workflow quality attributes for evaluating workflow improvements)
+3. Load recent observations:
+   - Read `organon/observations/README.md` (index of existing observation files)
+   - Read the most recent observation file listed in the README (for context on prior findings)
 
 ---
 
@@ -55,6 +59,8 @@ List:
 - Patterns in the work (what was repeated, what was manual)
 
 ### Step 2: Detect Patterns
+
+Review the most recent observation file to check whether this session's findings relate to previously recorded observations. Look for recurrence — the same friction appearing again strengthens a signal into a pattern.
 
 Look for these improvement signals:
 
@@ -112,7 +118,25 @@ With user confirmation, implement the highest-priority improvement:
 - If workflow refinement → edit the skill file
 - If documentation gap → create or update the relevant file
 
-### Step 7: Check for Stale Terminology
+### Step 7: Record Observations (Optional)
+
+If this session produced observations worth preserving beyond the immediate session, record them:
+
+**Decision:**
+- An active observation file covers this topic → **add to it** (new O-entry in the Observations section)
+- No relevant file exists → **create new** `organon/observations/NNN-descriptive-name.md`
+
+**What to record:** Each observation needs Signal (what happened), Implication (what it means), Suggested Action (what to do). See the [Observation Accumulation Pattern](book-llms/patterns.md#observation-accumulation-pattern) for the convention.
+
+**When NOT to record:**
+- Single-occurrence friction you already fixed (just a bug fix)
+- Opinions without evidence
+- Observations already captured in methodology guidance
+- Session-specific context that won't generalize
+
+**Not every session produces observations — that's fine.** Only record when the session revealed something worth remembering across sessions.
+
+### Step 8: Check for Stale Terminology
 
 Search ALL files for terminology that may have become inconsistent during the session:
 
@@ -133,7 +157,7 @@ Check common drift points:
 - Skill descriptions vs actual skill content
 - Protocol names vs workflow names
 
-### Step 8: Run Verification
+### Step 9: Run Verification
 
 ```bash
 cd packages/tools && npx organon verify

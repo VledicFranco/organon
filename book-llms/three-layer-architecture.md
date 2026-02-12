@@ -2,7 +2,7 @@
 type: rationale
 scope: meta
 name: three-layer-architecture
-version: "1.1"
+version: "1.2"
 summary: The enforcement loop — protocols, workflows, tools, and verification (tiered testing, drift detection, violation handling) bind organons to LLM execution
 token_estimate: 10800
 inherits_from: [meta-organon]
@@ -396,7 +396,13 @@ The three layers form a closed loop that makes the methodology self-enforcing:
 └──────────────────────┬───────────────────────────────────────┘
                        ▼
 ┌──────────────────────────────────────────────────────────────┐
-│  5. EVOLVE                                                   │
+│  5. COMPOUND                                                 │
+│     Session learnings captured as persistent observations    │
+│     → Observation files in organon/observations/             │
+└──────────────────────┬───────────────────────────────────────┘
+                       ▼
+┌──────────────────────────────────────────────────────────────┐
+│  6. EVOLVE                                                   │
 │     Results inform organon updates, new invariants captured  │
 │     → Updated ETHOS.md, new protocols, refined heuristics    │
 └──────────────────────┬───────────────────────────────────────┘
@@ -409,6 +415,8 @@ The three layers form a closed loop that makes the methodology self-enforcing:
 **Without the loop:** Organons are documentation. LLMs read them, maybe follow them, maybe don't. No way to know. Drift accumulates silently.
 
 **With the loop:** Organons are enforced constraints. Every implementation goes through Define → Bind → Execute → Verify → Compound → Evolve. Violations are caught by tools, flagged by verification, and fed back to the LLM. The methodology gets stronger with each cycle because new invariants capture new learnings.
+
+**Observations bridge COMPOUND and EVOLVE.** The COMPOUND phase captures session insights as structured observation files (`organon/observations/NNN-name.md`). These persist across sessions, allowing patterns to accumulate. When an observation matures from signal to actionable pattern, it graduates into EVOLVE — becoming an RFC, heuristic addition, or tool improvement. See the [Observation Accumulation Pattern](./patterns.md#observation-accumulation-pattern) for the convention.
 
 ### The LLM's role in the loop
 

@@ -44,10 +44,11 @@ See [book-llms/patterns.md](../book-llms/patterns.md#rfc-driven-evolution-patter
 
 | Number | Title | Status | Author | Created |
 |--------|-------|--------|--------|---------|
-| [001](./001-testing-framework.md) | @organon/testing Framework | Draft | organon-tools-developer | 2026-02-10 |
+| [001](./001-testing-framework.md) | @organon/testing Framework | Implemented | organon-tools-developer | 2026-02-10 |
 | [002](./002-compound-engineering-integration.md) | Recursive Collaboration Pattern | Implemented | Claude Sonnet 4.5 | 2026-02-10 |
 | [003](./003-explore-before-ethos.md) | Explore-Before-Ethos Pattern | Implemented | Claude Sonnet 4.5 | 2026-02-10 |
-| [004](./004-workflow-context-field-collision.md) | Workflow Context Field Collision | Draft | Claude Opus 4.6 | 2026-02-11 |
+| [004](./004-workflow-context-field-collision.md) | Workflow Context Field Collision | Implemented | Claude Opus 4.6 | 2026-02-11 |
+| [005](./005-observation-synthesis-loop.md) | Observation Accumulation Convention | Draft | Claude Opus 4.6 | 2026-02-11 |
 
 ---
 

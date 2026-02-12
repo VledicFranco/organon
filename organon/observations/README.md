@@ -20,7 +20,7 @@ audience: [llm, human]
 
 This directory captures **what we notice while dogfooding**. Not prescriptive (that's `book-llms/`), not procedural (that's `protocols/`), not constraints (that's `ETHOS.md`). Structured observations with enough detail to synthesize across sessions.
 
-See [RFC 005](../../rfcs/005-observation-synthesis-loop.md) for the formal proposal.
+See [RFC 005](../../rfcs/005-observation-synthesis-loop.md) for the convention specification and [Observation Accumulation Pattern](../../book-llms/patterns.md#observation-accumulation-pattern) for the methodology pattern.
 
 ---
 
