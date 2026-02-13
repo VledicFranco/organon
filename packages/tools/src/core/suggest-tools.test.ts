@@ -1,3 +1,6 @@
+/**
+ * @organon-invariant INV-TOOLS-2 every-command-has-tests
+ */
 import { describe, it, expect } from 'vitest';
 import { suggestTools } from './suggest-tools.js';
 import { MemoryFileSystem } from './test-helpers.js';
