@@ -148,7 +148,7 @@ organon upgrade <project-root> --apply    # Apply methodology updates
 ```bash
 organon init [dir]              # Scaffold a new project
 organon upgrade [dir]           # Detect and apply version updates
-organon verify                  # Run all 6 verification gates
+organon verify                  # Run all 9 verification gates
 organon health                  # Project health score (0-100)
 organon validate <file>         # Validate a single organon file
 organon generate <file>         # Auto-generate frontmatter
@@ -157,21 +157,26 @@ organon find --scope=<scope>    # Find by scope
 organon query                   # Query frontmatter across files
 organon coverage                # Invariant test coverage report
 organon generate-tests          # Scaffold tier-4 invariant tests
+organon suggest                 # Suggest automation tier upgrades
+organon release <bump>          # Version bump, tag, and release
 organon mcp                     # Start MCP server (IDE integration)
 ```
 
 ### Verification Gates
 
-`organon verify` runs 6 gates:
+`organon verify` runs 9 gates:
 
 | Gate | What it checks |
 |------|----------------|
 | **frontmatter** | Every organon file has valid YAML frontmatter with required fields |
 | **triplets** | Protocol-workflow-tool bindings are complete and bidirectional |
+| **references** | `inherits_from`, `loads:`, `protocol_file` paths resolve correctly |
+| **placeholder-detection** | Template placeholders like `[Describe...]` have been replaced |
 | **freshness** | Organon files are not stale relative to code changes |
 | **invariant-coverage** | Every invariant in ETHOS.md has at least one tier-4 test |
 | **workflow-quality** | Workflows reference valid protocols and have proper structure |
 | **tier4-tests** | Test files with `@organon-invariant` annotations use `testInvariant()` |
+| **version-alignment** | Config methodology version matches CLI version |
 
 ---
 

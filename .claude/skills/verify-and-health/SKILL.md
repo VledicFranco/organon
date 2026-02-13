@@ -1,6 +1,6 @@
 ---
 name: verify-and-health
-description: Runs all 5 verification gates and health checks, interprets failures with actionable fix guidance, and re-verifies after fixes. Use at session start, before commits, or whenever you need to check project integrity. Lightweight daily-use workflow.
+description: Runs all 9 verification gates and health checks, interprets failures with actionable fix guidance, and re-verifies after fixes. Use at session start, before commits, or whenever you need to check project integrity. Lightweight daily-use workflow.
 protocol_id: PROTO-ORG-4
 protocol_file: organon/protocols/PROTOCOLS.md
 tools: [organon-verify, organon-health]
@@ -46,12 +46,16 @@ Use this skill when:
 cd packages/tools && npx organon verify
 ```
 
-This runs all 5 gates:
-- **frontmatter** — YAML frontmatter present, valid, and truthful
-- **references** — File paths and cross-references resolve
-- **triplets** — Protocol↔workflow bindings are bidirectional
-- **coverage** — Invariant coverage tracked
-- **workflow-quality** — Workflows have protocol_id, tools, loads, error recovery
+This runs all 9 gates:
+- **frontmatter** (blocking) — YAML frontmatter present, valid, and truthful
+- **triplets** (blocking) — Protocol↔workflow bindings are bidirectional
+- **references** (blocking) — `inherits_from`, `loads:`, `protocol_file` resolve
+- **placeholder-detection** (advisory) — Template placeholders like `[Describe...]` remain
+- **freshness** (advisory) — Files reviewed within configured threshold
+- **invariant-coverage** (blocking) — Every non-judgment invariant has ≥1 test
+- **workflow-quality** (blocking) — Workflows have protocol_id, tools, loads, error recovery
+- **tier4-tests** (advisory) — Test files use `@organon-invariant` annotations
+- **version-alignment** (advisory) — Config methodology_version matches CLI version
 
 ### Step 2: Run Health Check
 
@@ -82,6 +86,12 @@ Map each failure to a fix action:
 | workflow-quality | `WORKFLOW_MISSING_LOADS` | Add `loads:` array with organon files to load |
 | workflow-quality | `WORKFLOW_BROKEN_LOADS_REF` | Fix path in `loads` array to point to existing file |
 | workflow-quality | `WORKFLOW_NO_ERROR_RECOVERY` | Add `## Error Recovery` section with failure/recovery table |
+| references | `REFERENCE_BROKEN_INHERIT` | Fix `inherits_from` to reference existing organon `name` fields |
+| references | `REFERENCE_BROKEN_LOADS` | Fix path in workflow `loads:` array to point to existing file |
+| references | `REFERENCE_BROKEN_PROTOCOL_FILE` | Fix `protocol_file` path in workflow frontmatter |
+| placeholder-detection | `PLACEHOLDER_DETECTED` | Replace template placeholders (`[Describe...]`) with real content |
+| tier4-tests | `TIER4_MISSING_ANNOTATION` | Add `@organon-invariant INV-ID` annotation to test files |
+| version-alignment | `VERSION_METHODOLOGY_DRIFT` | Update `methodology_version` in `organon.config.json` to match CLI version |
 
 ### Step 4: Guide Fixes
 
@@ -104,7 +114,7 @@ All gates should pass. Health score should be equal to or higher than before.
 
 ## Verification
 
-- [ ] All 5 gates pass (`organon verify` exits 0)
+- [ ] All 9 gates pass (`organon verify` exits 0)
 - [ ] Health score reported (`organon health` completes)
 - [ ] No regressions from previous health score
 - [ ] All fix actions were specific and actionable

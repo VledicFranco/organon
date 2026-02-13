@@ -18,7 +18,7 @@ audience: [llm, human]
 
 ## Status
 
-**Implementation:** Active development (8 CLI commands, 5 verification gates, 132 tests)
+**Implementation:** Active development (13 CLI commands, 9 verification gates, 252 tests)
 
 ---
 

@@ -18,8 +18,8 @@ All notable changes to this project will be documented in this file.
 - `testGlobs` and `testIgnorePatterns` fields in generated `organon.config.json`
 - Content-aware field recommendations — only warns about missing `principles_count` when file has `## Principles` section
 - **Agent methodology onboarding** (Issue #3):
-  - `organon/PRIMER.md` generated during init — condensed methodology primer (~800 tokens)
-  - `organon/methodology-reference.md` generated during init — detailed reference (~3000 tokens)
+  - `organon/PRIMER.md` generated during init — condensed methodology primer (~1500 tokens)
+  - `organon/methodology-reference.md` generated during init — detailed reference (~3600 tokens)
   - Enriched `CLAUDE.md` template with methodology context, verify failure guidance, and first-session setup checklist
   - Methodology context preambles added to all 5 generated skill templates
 

@@ -66,7 +66,7 @@ related_files:
    - Enforced by: `organon verify` gates, protocol↔workflow bidirectional references, this ETHOS.md file existing
 
 2. **INV-ORG-2: code-is-source-of-truth.** `packages/tools/` source code is authoritative. Documentation about the CLI describes what the code does, never aspirations.
-   - Enforced by: `organon-tools-developer` workflow (PROTO-ORG-2), test suite (137 tests)
+   - Enforced by: `organon-tools-developer` workflow (PROTO-ORG-2), test suite (456 tests across both packages)
 
 3. **INV-ORG-3: every-file-has-frontmatter.** Every organon file has YAML frontmatter. Frontmatter enables progressive disclosure — agents discover, filter, and budget before loading full content.
    - Enforced by: `organon verify --gate frontmatter` gate, `organon validate` 4-stage validation

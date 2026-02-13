@@ -20,7 +20,7 @@ audience: [llm, human]
 
 **RFC:** [001-testing-framework](../../../rfcs/001-testing-framework.md) (Draft)
 
-**Implementation:** Initial implementation complete (testInvariant + assertMaxValue, 65 tests, 100% coverage)
+**Implementation:** Initial implementation complete (7 assertions + testInvariant, 204 tests, 100% coverage)
 
 ---
 
