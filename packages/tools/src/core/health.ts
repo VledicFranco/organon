@@ -7,6 +7,7 @@
 
 import { parseFrontmatter, estimateTokens, parseOrganonFile } from './frontmatter-parser.js';
 import { validateFrontmatter } from './validate-frontmatter.js';
+import { verifyPlaceholders } from './verify-placeholders.js';
 import { joinPath } from './config.js';
 import type {
   DiagnosticMessage,
@@ -140,6 +141,14 @@ export async function health(options: HealthOptions): Promise<HealthResult> {
 
   const freshness = { fresh, stale, unknown, stalestFile };
 
+  // Placeholder penalty (A2): -5 per file with placeholders, capped at -20
+  const placeholderResult = await verifyPlaceholders({ projectRoot, config, fs });
+  const placeholderPenalty = Math.min(placeholderResult.filesWithPlaceholders * 5, 20);
+
+  for (const pw of placeholderResult.warnings) {
+    issues.push(pw);
+  }
+
   // Score calculation (0-100)
   const coverageScore = coverage.percentage; // 0-100
   const validationScore = validationResult.filesChecked > 0
@@ -149,12 +158,12 @@ export async function health(options: HealthOptions): Promise<HealthResult> {
     ? Math.round((fresh / allFiles.length) * 100)
     : 100;
 
-  // Weighted average: coverage 40%, validation 40%, freshness 20%
-  const score = Math.round(
+  // Weighted average: coverage 40%, validation 40%, freshness 20%, minus placeholder penalty
+  const score = Math.max(0, Math.round(
     coverageScore * 0.4 +
     validationScore * 0.4 +
     freshnessScore * 0.2,
-  );
+  ) - placeholderPenalty);
 
   return {
     success: errors.length === 0,

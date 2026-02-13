@@ -2,12 +2,13 @@
  * ETHOS.md scaffold template for organon init.
  */
 
-export const ETHOS_TEMPLATE = `---
+export function ethosTemplate(projectName: string): string {
+  return `---
 type: constraints
 scope: product
-name: my-project
+name: ${projectName}
 version: "1.0"
-summary: Behavioral constraints for this project — edit this to define your product's identity and invariants
+summary: Behavioral constraints for ${projectName} — edit this to define your product's identity and invariants
 token_estimate: 850
 invariants_count: 3
 principles_count: 3
@@ -67,3 +68,7 @@ audience: [llm, human]
 | [Common decision 2] | [What to do] |
 | [Common decision 3] | [What to do] |
 `;
+}
+
+/** @deprecated Use ethosTemplate(projectName) instead. */
+export const ETHOS_TEMPLATE = ethosTemplate('my-project');

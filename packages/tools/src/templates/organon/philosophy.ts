@@ -2,12 +2,13 @@
  * PHILOSOPHY.md scaffold template for organon init.
  */
 
-export const PHILOSOPHY_TEMPLATE = `---
+export function philosophyTemplate(projectName: string): string {
+  return `---
 type: rationale
 scope: product
-name: my-project
+name: ${projectName}
 version: "1.0"
-summary: Design rationale for this project — edit this to explain WHY your project is designed the way it is
+summary: Design rationale for ${projectName} — edit this to explain WHY your project is designed the way it is
 token_estimate: 400
 decision_count: 3
 inherits_from: []
@@ -73,3 +74,7 @@ audience: [llm, human]
 | [Choice 2] | [What you gain] | [What you give up] |
 | [Choice 3] | [What you gain] | [What you give up] |
 `;
+}
+
+/** @deprecated Use philosophyTemplate(projectName) instead. */
+export const PHILOSOPHY_TEMPLATE = philosophyTemplate('my-project');

@@ -158,7 +158,7 @@ token_estimate: 100
       );
     });
 
-    it('warns about missing type-specific fields', async () => {
+    it('warns about missing type-specific fields when section exists (A5)', async () => {
       const fs = new MemoryFileSystem({
         '/project/ETHOS.md': `---
 type: constraints
@@ -169,7 +169,21 @@ summary: Test
 token_estimate: 100
 ---
 
-# Content`,
+# Content
+
+## Invariants
+
+1. **Rule 1.** Must do X.
+
+## Principles (Prioritized)
+
+1. **Speed over safety.** Go fast.
+
+## Decision Heuristics
+
+| Situation | Action |
+|-----------|--------|
+| Case 1 | Do thing |`,
       });
       const config = makeConfig('/project');
       const result = await validateFrontmatter({
@@ -183,6 +197,34 @@ token_estimate: 100
       expect(result.warnings).toContainEqual(
         expect.objectContaining({ code: 'FRONTMATTER_MISSING_TYPE_FIELD' }),
       );
+    });
+
+    it('does NOT warn about missing count fields when section is absent (A5)', async () => {
+      const fs = new MemoryFileSystem({
+        '/project/ETHOS.md': `---
+type: constraints
+scope: domain
+name: test
+version: "1.0"
+summary: Test
+token_estimate: 100
+---
+
+# Content
+
+Just some text, no Invariants/Principles/Heuristics sections.`,
+      });
+      const config = makeConfig('/project');
+      const result = await validateFrontmatter({
+        projectRoot: '/project',
+        config,
+        fs,
+        files: ['ETHOS.md'],
+        stages: [1],
+      });
+      // Should NOT have warnings about missing count fields
+      const typeFieldWarnings = result.warnings.filter(w => w.code === 'FRONTMATTER_MISSING_TYPE_FIELD');
+      expect(typeFieldWarnings).toHaveLength(0);
     });
   });
 
@@ -235,7 +277,7 @@ token_estimate: 100
       );
     });
 
-    it('warns on token estimate drift beyond 2x (load-or-skip misleading)', async () => {
+    it('warns on token estimate drift beyond 50% (B3 tighter tolerance)', async () => {
       const fs = new MemoryFileSystem({
         '/project/ETHOS.md': `---
 type: constraints

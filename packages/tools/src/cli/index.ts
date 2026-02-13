@@ -13,6 +13,8 @@
  *   verify    — Run verification gates
  *   coverage       — Invariant coverage analysis
  *   generate-tests — Generate test scaffolds for uncovered invariants
+ *   suggest        — Suggest automation tier upgrades
+ *   release        — Version bump and release
  *   mcp            — Start MCP server
  */
 
@@ -30,6 +32,8 @@ import { findCommand } from './commands/find.js';
 import { verifyCommand } from './commands/verify.js';
 import { coverageCommand } from './commands/coverage.js';
 import { generateTestsCommand } from './commands/generate-tests.js';
+import { suggestCommand } from './commands/suggest.js';
+import { releaseCommand } from './commands/release.js';
 import { mcpCommand } from './commands/mcp.js';
 
 async function main() {
@@ -46,6 +50,8 @@ async function main() {
     .command(verifyCommand)
     .command(coverageCommand)
     .command(generateTestsCommand)
+    .command(suggestCommand)
+    .command(releaseCommand)
     .command(mcpCommand)
     .demandCommand(1, chalk.red('Please specify a command'))
     .help()

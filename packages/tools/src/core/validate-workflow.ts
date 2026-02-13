@@ -101,13 +101,17 @@ export async function validateWorkflow(
     }
 
     if (!tools || !Array.isArray(tools) || tools.length === 0) {
-      fileErrors.push({
-        severity: 'error',
-        code: 'WORKFLOW_MISSING_TOOLS',
-        message: 'Workflow is missing required field: tools (must be a non-empty array)',
-        file,
-        suggestion: 'Add tools array listing the tools this workflow orchestrates',
-      });
+      // Allow empty tools for agent-tier workflows (A4)
+      const automationTier = frontmatter?.['automation_tier'] as string | undefined;
+      if (!isAgentTierOrExplicitNone(automationTier, tools)) {
+        fileErrors.push({
+          severity: 'error',
+          code: 'WORKFLOW_MISSING_TOOLS',
+          message: 'Workflow is missing required field: tools (must be a non-empty array)',
+          file,
+          suggestion: 'Add tools array listing the tools this workflow orchestrates, or set automation_tier: agent for agent-persona workflows',
+        });
+      }
     }
 
     if (!loads || !Array.isArray(loads) || loads.length === 0) {
@@ -232,6 +236,19 @@ export async function validateWorkflow(
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
+
+/**
+ * Allow empty tools when frontmatter has automation_tier: agent,
+ * or when tools: ["none"] is set explicitly (A4).
+ */
+function isAgentTierOrExplicitNone(
+  automationTier: string | undefined,
+  tools: string[] | undefined,
+): boolean {
+  if (automationTier === 'agent') return true;
+  if (tools && Array.isArray(tools) && tools.length === 1 && tools[0] === 'none') return true;
+  return false;
+}
 
 function countSteps(stepsSection: string): number {
   const matches = stepsSection.match(STEP_RE);
