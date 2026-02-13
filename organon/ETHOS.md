@@ -2,9 +2,9 @@
 type: constraints
 scope: product
 name: organon-project
-version: "1.0"
+version: "1.1"
 summary: Project-level invariants for the Organon methodology repository — formalizes CLAUDE.md constraints with stable IDs
-token_estimate: 2400
+token_estimate: 1800
 invariants_count: 6
 principles_count: 7
 heuristics_count: 10
