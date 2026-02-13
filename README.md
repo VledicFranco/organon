@@ -109,12 +109,15 @@ npm install -g @organon-methodology/tools
 organon init <project-root>
 ```
 
-This creates 12 files:
+This creates 14 files:
 - `organon.config.json` — project configuration
 - `CLAUDE.md` — agent instructions (loaded by Claude Code automatically)
 - `organon/ETHOS.md` — project constraints (placeholder, customize first)
 - `organon/PHILOSOPHY.md` — design rationale
+- `organon/PRIMER.md` — condensed methodology primer for agent onboarding
+- `organon/methodology-reference.md` — detailed methodology reference
 - `organon/protocols/PROTOCOLS.md` — development procedures
+- `organon/observations/README.md` — observation tracking directory
 - `organon/README.md` — navigation
 - `.claude/skills/` — 5 workflow skills (verify-and-health, quality-review, session-compounding, domain-feature-design, organon-file-creation)
 
@@ -130,7 +133,7 @@ All files pass `organon verify` out of the box.
 ### Verify
 
 ```bash
-organon verify --project-root <project-root>    # Run 6 verification gates
+organon verify --project-root <project-root>    # Run 9 verification gates
 organon health --project-root <project-root>    # Health score (0-100)
 ```
 
