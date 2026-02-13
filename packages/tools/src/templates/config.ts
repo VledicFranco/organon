@@ -11,6 +11,8 @@ export const CONFIG_TEMPLATE = `{
     "**/PROTOCOL.md",
     "**/PROTOCOLS.md",
     "**/README.md",
+    "**/PRIMER.md",
+    "**/methodology-reference.md",
     "**/components.md"
   ],
   "ignorePatterns": [

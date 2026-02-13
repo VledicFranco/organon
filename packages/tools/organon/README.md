@@ -4,7 +4,7 @@ scope: product
 name: organon-tools-organon
 version: "1.2"
 summary: Pointer to organon-tools domain governance — all organon files live at project-level organon/domains/tools/
-token_estimate: 40
+token_estimate: 230
 provides: [organon-navigation]
 parent: organon-tools
 audience: [llm, human]

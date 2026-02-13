@@ -4,7 +4,7 @@ scope: domain
 name: tools-domain
 version: "1.0"
 summary: Tools domain — CLI and MCP server for organon verification, generation, and discovery
-token_estimate: 80
+token_estimate: 440
 provides: [tools-domain-navigation]
 parent: organon-self-governance
 audience: [llm, human]

@@ -9,7 +9,7 @@ export const OBSERVATIONS_README_TEMPLATE = [
   'name: observations',
   'version: "1.0"',
   'summary: Index of empirical observations from work sessions',
-  'token_estimate: 50',
+  'token_estimate: 110',
   'provides: [observation-index]',
   'audience: [llm, human]',
   '---',

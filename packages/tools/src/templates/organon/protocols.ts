@@ -11,7 +11,7 @@ export const PROTOCOLS_TEMPLATE = [
   'name: protocols',
   'version: "1.0"',
   'summary: Development protocols for this project — step-by-step procedures with workflow bindings',
-  'token_estimate: 2400',
+  'token_estimate: 1600',
   'protocols_count: 5',
   'protocols:',
   '  - id: PROTO-ORG-1',

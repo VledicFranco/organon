@@ -75,7 +75,7 @@ export const PRIMER_TEMPLATE = [
   '| Field | Purpose | Example |',
   '|-------|---------|---------|',
   '| `type` | File category | navigation, constraints, rationale, procedures, mapping |',
-  '| `scope` | Hierarchy level | product, domain, feature, component, methodology |',
+  '| `scope` | Hierarchy level | product, domain, feature, component, meta, methodology |',
   '| `name` | Unique kebab-case ID | `auth-domain`, `billing-feature` |',
   '| `version` | Semantic version | `"1.0"` |',
   '| `summary` | One-line description | Max 200 chars |',

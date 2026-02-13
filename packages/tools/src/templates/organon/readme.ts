@@ -9,7 +9,7 @@ export const README_TEMPLATE = [
   'name: organon-root',
   'version: "1.0"',
   "summary: Navigation hub for this project's organon hierarchy",
-  'token_estimate: 100',
+  'token_estimate: 350',
   'provides: [organon-navigation]',
   'audience: [llm, human]',
   '---',

@@ -9,7 +9,7 @@ scope: product
 name: ${projectName}
 version: "1.0"
 summary: Behavioral constraints for ${projectName} — edit this to define your product's identity and invariants
-token_estimate: 850
+token_estimate: 450
 invariants_count: 3
 principles_count: 3
 heuristics_count: 3
