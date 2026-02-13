@@ -77,6 +77,8 @@
 | Deciding automation tier for a protocol | Manual: judgment required. Semi-automated: 1-2 steps, single tool. Automated (workflow): ≥5 steps, cross-domain, error-prone, frequent. |
 | Bootstrapping a new project | Run `organon init` to scaffold structure + skills. Edit ETHOS.md first, then verify. |
 | Upgrading an existing project | Run `organon upgrade --dry-run` to see what changed. Use `--apply` to update. |
+| Publishing to npm | Run `/pre-publish-qa` first. Use `/release-publish` for the release. Never publish manually. |
+| Choosing version bump | Patch: bug fixes only. Minor: new features, backward-compatible. Major: breaking changes to CLI or API. |
 
 ---
 
@@ -157,5 +159,4 @@ Do not do the following in this repository:
 - Add runtime application code (services, APIs, databases)
 - Implement Agent Tavern-specific patterns — those belong in that repo
 - Write extended tutorials — that's `book-humans/` work, which has its own planned timeline
-- Publish `@organon/tools` to npm — tooling is not ready yet
 - Split files just because they're long — split only when content serves different scopes or audiences

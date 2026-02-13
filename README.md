@@ -163,7 +163,13 @@ organon find --scope=<scope>    # Find by scope (domain, feature, etc.)
 
 ### Step 1: Install the CLI
 
-Clone this repository and build the tools:
+**Option A: Install from npm (recommended)**
+
+```bash
+npm install -g @organon/tools
+```
+
+**Option B: Build from source**
 
 ```bash
 git clone https://github.com/VledicFranco/organon.git /tmp/organon-repo

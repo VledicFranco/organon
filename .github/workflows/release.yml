@@ -1,0 +1,59 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Build packages (order matters)
+        run: |
+          npm run build -w packages/testing
+          npm run build -w packages/tools
+
+      - name: Test packages
+        run: |
+          npm run test -w packages/testing
+          npm run test -w packages/tools
+
+      # Verify package versions match the release tag
+      - name: Verify versions match tag
+        run: |
+          TAG="${{ github.event.release.tag_name }}"
+          EXPECTED_VERSION="${TAG#v}"
+          for pkg in packages/*/package.json; do
+            PKG_VERSION=$(node -p "require('./$pkg').version")
+            if [ "$PKG_VERSION" != "$EXPECTED_VERSION" ]; then
+              echo "Version mismatch in $pkg: expected $EXPECTED_VERSION, got $PKG_VERSION"
+              exit 1
+            fi
+          done
+          echo "All package versions match tag $TAG"
+
+      # Publish packages with provenance (order matters: testing before tools)
+      - name: Publish @organon/testing
+        run: npm publish -w packages/testing --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish @organon/tools
+        run: npm publish -w packages/tools --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

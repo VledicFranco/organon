@@ -14,7 +14,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "clean": "rm -rf dist",
+    "clean": "node --input-type=module -e \"import{rmSync}from'node:fs';rmSync('dist',{recursive:true,force:true})\"",
     "test": "vitest run",
     "test:watch": "vitest",
     "prepublishOnly": "npm run clean && npm run build",
@@ -27,9 +27,16 @@
     "organon:verify": "tsx src/cli/index.ts verify",
     "organon:mcp": "tsx src/cli/index.ts mcp"
   },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
   "keywords": [
     "organon",
     "documentation",
+    "cli",
+    "mcp",
     "codebase-navigation",
     "auto-generation",
     "architecture",

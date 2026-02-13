@@ -213,7 +213,7 @@ organon discover --interactive
 
 ---
 
-### 4. CI/CD Integration Templates
+### 4. CI/CD Integration Templates — **PARTIALLY IMPLEMENTED (Publishing Infrastructure)**
 
 **Problem:** Teams want verification gates in CI but don't know how to wire them up.
 
@@ -491,7 +491,7 @@ For **maximum adoption impact**, build in this order:
 
 ### Phase 1: Onboarding (Weeks 1-4)
 1. ✅ **`organon init`** - Scaffolding (non-interactive, RFC 006)
-2. **CI templates** - GitHub Actions + pre-commit hooks
+2. ✅ **CI templates** - GitHub Actions CI + release publish workflows
 3. **`organon discover`** - Codebase analysis for migration
 
 **Outcome:** New projects start instantly. Existing projects have migration path.

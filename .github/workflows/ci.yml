@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Build packages (order matters)
+        run: |
+          npm run build -w packages/testing
+          npm run build -w packages/tools
+
+      - name: Test packages
+        run: |
+          npm run test -w packages/testing
+          npm run test -w packages/tools
+
+      - name: Run organon verify
+        run: npx organon verify --project-root ../..
+        working-directory: packages/tools
+
+      - name: Run organon health
+        run: npx organon health --project-root ../..
+        working-directory: packages/tools

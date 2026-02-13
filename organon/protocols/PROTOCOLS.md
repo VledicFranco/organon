@@ -2,10 +2,10 @@
 type: procedures
 scope: product
 name: protocols
-version: "1.1"
-summary: Nine development protocols backing the Organon project's workflow family — covers all 6 enforcement loop phases plus onboarding
-token_estimate: 7100
-protocols_count: 9
+version: "1.2"
+summary: Eleven development protocols backing the Organon project's workflow family — covers all 6 enforcement loop phases plus onboarding and publishing
+token_estimate: 9200
+protocols_count: 11
 protocols:
   - id: PROTO-ORG-1
     name: RFC-Driven Design
@@ -70,6 +70,20 @@ protocols:
     workflow: null
     tools: [organon-upgrade, organon-verify]
     complexity: medium
+  - id: PROTO-ORG-10
+    name: Pre-Publish QA
+    steps: 8
+    automation_tier: automated
+    workflow: pre-publish-qa
+    tools: [organon-verify, organon-health, npm-test, npm-build]
+    complexity: medium
+  - id: PROTO-ORG-11
+    name: Release Publish
+    steps: 7
+    automation_tier: semi-automated
+    workflow: release-publish
+    tools: [organon-verify, npm-test, release-script, gh-cli]
+    complexity: medium
 inherits_from: [organon-project]
 audience: [llm, human, tooling]
 related_files:
@@ -97,6 +111,8 @@ COMPOUND:  PROTO-ORG-5  Session Compounding ............ session-compounding
 EVOLVE:    PROTO-ORG-3  Methodology Evolution .......... methodology-spec-evolution
 ONBOARD:   PROTO-ORG-8  Project Initialization ......... organon init (tool)
            PROTO-ORG-9  Project Upgrade ................ organon upgrade (tool)
+PUBLISH:   PROTO-ORG-10 Pre-Publish QA ................. pre-publish-qa
+           PROTO-ORG-11 Release Publish ................ release-publish
 ```
 
 ---
@@ -591,3 +607,125 @@ Bring an existing organon project up to date with the latest methodology version
 | Upgrade shows "already up to date" | No action needed — project is current |
 | Custom skill was overwritten | Restore from git and manually merge changes |
 | `organon verify` fails after upgrade | Check diff report for unexpected changes, fix or revert |
+
+---
+
+## PROTO-ORG-10: Pre-Publish QA
+
+> Comprehensive quality checks before publishing packages to npm. Catches version misalignment, missing files, broken builds, and test failures.
+
+### Goal
+
+Confirm both packages are ready for npm publication — clean builds, passing tests, healthy organon state, correct file lists, and aligned versions.
+
+### Preconditions
+
+- [ ] Working directory is the organon repository root
+- [ ] `organon-tools` is built and available
+- [ ] Both packages have valid `package.json` with `files` array
+
+### Steps
+
+1. **Clean build both packages.** Build `@organon/testing` first (dependency), then `@organon/tools`. Use `npm run clean && npm run build` in each.
+
+2. **Run all tests.** Execute `npm test` in both `packages/testing` and `packages/tools`. All tests must pass.
+
+3. **Run organon verify.** Execute `organon verify` — all 6 gates must pass.
+
+4. **Run organon health.** Execute `organon health` — score must be 100/100.
+
+5. **Check npm pack dry-run.** Run `npm pack --dry-run` in both packages. Verify file lists include `dist/`, `LICENSE`, and `README.md`. No unexpected files.
+
+6. **Verify version alignment.** Confirm these four locations have the same version:
+   - `packages/tools/package.json` → `version`
+   - `packages/testing/package.json` → `version`
+   - `organon.config.json` → `methodology_version`
+   - `packages/tools/src/templates/config.ts` → `METHODOLOGY_VERSION`
+
+7. **Verify CHANGELOG.md.** Confirm `CHANGELOG.md` has an entry for the current version with a date.
+
+8. **Check for TODOs.** Grep `src/` in both packages for `TODO` or `FIXME`. None should exist in published code.
+
+### Verification
+
+- [ ] Both packages build without errors
+- [ ] All tests pass in both packages
+- [ ] `organon verify` passes all gates
+- [ ] `organon health` score is 100/100
+- [ ] `npm pack --dry-run` shows correct file lists
+- [ ] All four version locations are aligned
+- [ ] CHANGELOG.md has current version entry
+- [ ] No TODOs or FIXMEs in published source
+
+### Recovery
+
+| Failure | Recovery Action |
+|---------|-----------------|
+| Build fails | Fix TypeScript errors. Ensure `@organon/testing` builds before `@organon/tools`. |
+| Tests fail | Fix failing tests before proceeding. Never skip tests for a release. |
+| Version misalignment | Use `scripts/release.mjs` which updates all four locations atomically. |
+| Missing LICENSE in pack | Ensure `LICENSE` file exists in the package directory and is listed in `files` array. |
+| Health score below 100 | Fix organon issues first. Do not publish with degraded health. |
+
+---
+
+## PROTO-ORG-11: Release Publish
+
+> Publish a new version to npm with proper QA, version bumping, and GitHub Release creation.
+
+### Goal
+
+Ship a new version of both packages to npm with proper versioning, changelog, git tag, and GitHub Release.
+
+### Preconditions
+
+- [ ] PROTO-ORG-10 (Pre-Publish QA) passes completely
+- [ ] On `master` branch with clean working tree
+- [ ] `gh` CLI is authenticated
+- [ ] npm credentials are configured (for local publish) or `NPM_TOKEN` secret exists (for CI publish)
+
+### Steps
+
+1. **Run pre-publish QA.** Execute PROTO-ORG-10 as prerequisite. All checks must pass before proceeding.
+
+2. **Determine version bump type.** Based on changes since last release:
+   - **Patch** (`0.3.1`): Bug fixes only, no new features
+   - **Minor** (`0.4.0`): New features, backward-compatible
+   - **Major** (`1.0.0`): Breaking changes to CLI commands, API, or methodology
+
+3. **Run release script.** Execute `node scripts/release.mjs <patch|minor|major>`. The script:
+   - Updates version in both package.json files, organon.config.json, and METHODOLOGY_VERSION constant
+   - Updates CHANGELOG.md with new version header and date
+   - Commits as `chore: release v{version}`
+   - Creates git tag `v{version}`
+   - Pushes commit and tag
+   - Creates GitHub Release with auto-generated notes
+
+4. **Verify GitHub Release.** Confirm the release was created at `https://github.com/VledicFranco/organon/releases`.
+
+5. **Monitor CI publish.** The `release.yml` GitHub Action triggers automatically on release publication. Monitor the workflow run for success.
+
+6. **Verify npm availability.** After CI completes, confirm packages are available:
+   - `npm info @organon/tools`
+   - `npm info @organon/testing`
+
+7. **Update README if major version.** For major version bumps, update install instructions in README.md if the package name or usage changed.
+
+### Verification
+
+- [ ] Pre-publish QA passed (PROTO-ORG-10)
+- [ ] Release script completed without errors
+- [ ] GitHub Release exists with correct tag
+- [ ] GitHub Actions publish workflow succeeded
+- [ ] Both packages are available on npm at the new version
+- [ ] README install instructions are current (for major versions)
+
+### Recovery
+
+| Failure | Recovery Action |
+|---------|-----------------|
+| Release script fails on git push | Check remote access. Ensure `master` is not protected from CLI pushes. |
+| GitHub Actions publish fails | Check `NPM_TOKEN` secret. Verify provenance permissions (`id-token: write`). |
+| Version mismatch in CI | The release workflow verifies tag matches package versions. If mismatch, the release script has a bug — fix and re-release. |
+| npm publish fails (403) | Package may already exist at this version. Check if a partial publish occurred. |
+| npm publish fails (401) | `NPM_TOKEN` is expired or invalid. Regenerate and update GitHub secret. |

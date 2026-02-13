@@ -15,17 +15,24 @@
       "import": "./dist/adapters/vitest.js"
     }
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/VledicFranco/organon.git",
+    "directory": "packages/testing"
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
     "clean": "node --input-type=module -e \"import{rmSync}from'node:fs';rmSync('dist',{recursive:true,force:true})\"",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "prepublishOnly": "npm run clean && npm run build"
   },
   "keywords": [
     "organon",
     "testing",
+    "invariants",
     "invariant",
     "tier-4",
     "verification"

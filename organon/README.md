@@ -2,7 +2,7 @@
 type: navigation
 scope: product
 name: organon-self-governance
-version: "1.1"
+version: "1.2"
 summary: Navigation for the Organon project's own organon hierarchy — self-governance constraints, protocols, domains, and observations
 token_estimate: 300
 provides: [project-ethos, development-protocols]
@@ -18,7 +18,7 @@ This project's own organon hierarchy. The Organon methodology dogfoods itself �
 | Path | Type | Description |
 |------|------|-------------|
 | [ETHOS.md](./ETHOS.md) | constraints | Project-level invariants with stable IDs (INV-ORG-1 through INV-ORG-6) |
-| [protocols/](./protocols/) | procedures | Development protocols (9 protocols, 7 with workflow bindings) |
+| [protocols/](./protocols/) | procedures | Development protocols (11 protocols, 9 with workflow bindings) |
 | [domains/](./domains/) | scopes | Bounded contexts — product domains with their own organon files |
 | [observations/](./observations/) | observation | Empirical observations from dogfooding and real work sessions |
 
