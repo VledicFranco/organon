@@ -2,7 +2,7 @@
 type: rationale
 scope: domain
 name: tools
-version: "1.0"
+version: "1.1"
 summary: Why organon-tools is built with TypeScript/Node, command-based CLI, and pure-function core — design decisions and trade-offs
 token_estimate: 1868
 decision_count: 5
@@ -82,7 +82,7 @@ The Organon methodology (book-llms/) defines verification gates, frontmatter sch
 **Decision:** Core logic lives in pure functions (`src/core/*.ts`); CLI commands (`src/cli/commands/*.ts`) are thin wrappers.
 
 **Rationale:**
-- **Testability:** Pure functions are trivial to test (132 tests, >90% coverage)
+- **Testability:** Pure functions are trivial to test (252 tests, >90% coverage)
 - **Reusability:** Core utilities can be extracted to library later if needed
 - **Correctness:** Pure functions = no hidden state, deterministic behavior
 - **Refactoring safety:** Tests catch regressions when core logic changes

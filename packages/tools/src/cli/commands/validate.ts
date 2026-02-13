@@ -4,7 +4,7 @@
 
 import type { CommandModule } from 'yargs';
 import chalk from 'chalk';
-import { resolveConfig } from '../../core/config.js';
+import { resolveConfig, resolveProjectRoot } from '../../core/config.js';
 import { validateFrontmatter } from '../../core/validate-frontmatter.js';
 import { NodeFileSystem } from '../../core/node-fs.js';
 import type { DiagnosticMessage } from '../../core/types.js';
@@ -48,10 +48,11 @@ export const validateCommand: CommandModule<{}, ValidateArgs> = {
 
   handler: async (args) => {
     const fs = new NodeFileSystem();
-    const config = await resolveConfig(args['project-root'], fs, args.config);
+    const projectRoot = await resolveProjectRoot(args['project-root'], fs);
+    const config = await resolveConfig(projectRoot, fs, args.config);
 
     const result = await validateFrontmatter({
-      projectRoot: args['project-root'],
+      projectRoot,
       config,
       fs,
       files: args.files,

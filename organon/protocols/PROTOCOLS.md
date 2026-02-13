@@ -316,7 +316,7 @@ Confirm project integrity. Surface all issues with actionable fix guidance.
 
 ### Steps
 
-1. **Run verification.** Execute `organon verify` (all 5 gates: frontmatter, references, triplets, coverage, workflow-quality).
+1. **Run verification.** Execute `organon verify` (all 9 gates: frontmatter, triplets, references, placeholder-detection, freshness, invariant-coverage, workflow-quality, tier4-tests, version-alignment).
 
 2. **Run health check.** Execute `organon health` for overall project health score.
 
@@ -336,7 +336,7 @@ Confirm project integrity. Surface all issues with actionable fix guidance.
 
 ### Verification
 
-- [ ] All 5 gates pass
+- [ ] All 9 gates pass
 - [ ] Health score is reported
 - [ ] No regressions from previous health score
 
@@ -630,7 +630,7 @@ Confirm both packages are ready for npm publication — clean builds, passing te
 
 2. **Run all tests.** Execute `npm test` in both `packages/testing` and `packages/tools`. All tests must pass.
 
-3. **Run organon verify.** Execute `organon verify` — all 6 gates must pass.
+3. **Run organon verify.** Execute `organon verify` — all 9 gates must pass.
 
 4. **Run organon health.** Execute `organon health` — score must be 100/100.
 

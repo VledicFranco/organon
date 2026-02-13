@@ -26,7 +26,7 @@ primary_rfcs: []
 
 ## Problem Statement
 
-The Organon methodology has 7 working skills, verified CLI tooling, and a testing framework — but no way to bootstrap a new project or keep existing projects current.
+The Organon methodology has 9 working skills, verified CLI tooling, and a testing framework — but no way to bootstrap a new project or keep existing projects current.
 
 **Current pain points:**
 

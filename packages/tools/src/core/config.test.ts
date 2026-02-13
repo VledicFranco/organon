@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { resolveConfig, joinPath, dirName, baseName } from './config.js';
+import { resolveConfig, joinPath, dirName, baseName, findProjectRoot } from './config.js';
 import { MemoryFileSystem } from './test-helpers.js';
 
 describe('resolveConfig', () => {
@@ -101,5 +101,51 @@ describe('baseName', () => {
 
   it('returns the input for bare filenames', () => {
     expect(baseName('ETHOS.md')).toBe('ETHOS.md');
+  });
+});
+
+describe('findProjectRoot', () => {
+  it('finds project root with organon.config.json', async () => {
+    const fs = new MemoryFileSystem({
+      '/repo/organon.config.json': '{}',
+      '/repo/packages/tools/src/file.ts': 'content',
+    });
+    const result = await findProjectRoot('/repo/packages/tools/src', fs);
+    expect(result).toBe('/repo');
+  });
+
+  it('stops at .git root when no config found', async () => {
+    const fs = new MemoryFileSystem({
+      '/repo/.git/HEAD': 'ref: refs/heads/master',
+      '/repo/packages/tools/src/file.ts': 'content',
+    });
+    const result = await findProjectRoot('/repo/packages/tools/src', fs);
+    expect(result).toBe('/repo');
+  });
+
+  it('returns null when neither config nor .git found', async () => {
+    const fs = new MemoryFileSystem({
+      '/some/deep/path/file.ts': 'content',
+    });
+    const result = await findProjectRoot('/some/deep/path', fs);
+    expect(result).toBeNull();
+  });
+
+  it('finds config at the start directory itself', async () => {
+    const fs = new MemoryFileSystem({
+      '/project/organon.config.json': '{}',
+    });
+    const result = await findProjectRoot('/project', fs);
+    expect(result).toBe('/project');
+  });
+
+  it('prefers config over .git when both exist higher up', async () => {
+    const fs = new MemoryFileSystem({
+      '/repo/organon.config.json': '{}',
+      '/repo/.git/HEAD': 'ref: refs/heads/master',
+      '/repo/packages/tools/file.ts': 'content',
+    });
+    const result = await findProjectRoot('/repo/packages/tools', fs);
+    expect(result).toBe('/repo');
   });
 });

@@ -12,6 +12,9 @@ import { health as runHealth } from './health.js';
 import { computeInvariantCoverage } from './invariant-coverage.js';
 import { validateWorkflow } from './validate-workflow.js';
 import { verifyTier4Tests } from './verify-tier4-tests.js';
+import { verifyPlaceholders } from './verify-placeholders.js';
+import { verifyReferences } from './verify-references.js';
+import { verifyVersionAlignment } from './verify-version-alignment.js';
 import type {
   DiagnosticMessage,
   FileSystem,
@@ -131,6 +134,36 @@ const tier4TestsGate: VerifyGateFn = async ({ projectRoot, config, fs }) => {
   };
 };
 
+const placeholderDetectionGate: VerifyGateFn = async ({ projectRoot, config, fs }) => {
+  const result = await verifyPlaceholders({ projectRoot, config, fs });
+  return {
+    gate: 'placeholder-detection',
+    passed: true, // Advisory — always passes
+    errors: result.errors,
+    warnings: result.warnings,
+  };
+};
+
+const referencesGate: VerifyGateFn = async ({ projectRoot, config, fs }) => {
+  const result = await verifyReferences({ projectRoot, config, fs });
+  return {
+    gate: 'references',
+    passed: result.success,
+    errors: result.errors,
+    warnings: result.warnings,
+  };
+};
+
+const versionAlignmentGate: VerifyGateFn = async ({ projectRoot, config, fs }) => {
+  const result = await verifyVersionAlignment({ projectRoot, config, fs });
+  return {
+    gate: 'version-alignment',
+    passed: true, // Advisory — always passes
+    errors: result.errors,
+    warnings: result.warnings,
+  };
+};
+
 // Register built-in gates
 registerGate('frontmatter', frontmatterGate);
 registerGate('triplets', tripletsGate);
@@ -138,6 +171,9 @@ registerGate('freshness', freshnessGate);
 registerGate('invariant-coverage', invariantCoverageGate);
 registerGate('workflow-quality', workflowQualityGate);
 registerGate('tier4-tests', tier4TestsGate);
+registerGate('placeholder-detection', placeholderDetectionGate);
+registerGate('references', referencesGate);
+registerGate('version-alignment', versionAlignmentGate);
 
 // ---------------------------------------------------------------------------
 // Main

@@ -4,7 +4,7 @@
 
 import type { CommandModule } from 'yargs';
 import chalk from 'chalk';
-import { resolveConfig } from '../../core/config.js';
+import { resolveConfig, resolveProjectRoot } from '../../core/config.js';
 import { generateTests } from '../../core/generate-tests.js';
 import { NodeFileSystem } from '../../core/node-fs.js';
 
@@ -52,10 +52,11 @@ export const generateTestsCommand: CommandModule<{}, GenerateTestsArgs> = {
 
   handler: async (args) => {
     const fs = new NodeFileSystem();
-    const config = await resolveConfig(args['project-root'], fs, args.config);
+    const projectRoot = await resolveProjectRoot(args['project-root'], fs);
+    const config = await resolveConfig(projectRoot, fs, args.config);
 
     const result = await generateTests({
-      projectRoot: args['project-root'],
+      projectRoot,
       config,
       fs,
       invariantIds: args.invariant,

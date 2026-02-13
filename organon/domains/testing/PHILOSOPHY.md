@@ -4,7 +4,7 @@ scope: domain
 name: testing
 version: "1.0"
 summary: Why semantic tier-4 testing exists — design decisions, trade-offs, and the bet we're making
-token_estimate: 2400
+token_estimate: 1230
 decision_count: 5
 inherits_from: [tools]
 load_priority: medium

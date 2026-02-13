@@ -237,4 +237,85 @@ protocols:
     expect(result.success).toBe(false);
     expect(result.errors.length).toBeGreaterThan(0);
   });
+
+  it('allows empty tools for agent-tier workflows (A4)', async () => {
+    const content = `---
+name: agent-workflow
+protocol_id: PROTO-AGENT-1
+protocol_file: PROTOCOLS.md
+automation_tier: agent
+tools: []
+loads:
+  - /ETHOS.md
+---
+
+# Agent Workflow
+
+## Steps
+
+1. Analyze the codebase.
+
+## Error Recovery
+
+| Failure | Recovery Action |
+|---------|-----------------|
+| Fails | Re-run |
+`;
+    const fs = new MemoryFileSystem({
+      '/project/workflows/test.md': content,
+      '/project/ETHOS.md': '# ethos',
+      '/project/PROTOCOLS.md': '# protocols',
+    });
+    const config = makeConfig('/project');
+    const result = await validateWorkflow({ projectRoot: '/project', config, fs });
+    const toolErrors = result.errors.filter(e => e.code === 'WORKFLOW_MISSING_TOOLS');
+    expect(toolErrors).toHaveLength(0);
+  });
+
+  it('allows tools: ["none"] as explicit empty declaration (A4)', async () => {
+    const content = `---
+name: persona-workflow
+protocol_id: PROTO-PERSONA-1
+protocol_file: PROTOCOLS.md
+tools:
+  - none
+loads:
+  - /ETHOS.md
+---
+
+# Persona Workflow
+
+## Steps
+
+1. Act as researcher.
+
+## Error Recovery
+
+| Failure | Recovery Action |
+|---------|-----------------|
+| Fails | Re-run |
+`;
+    const fs = new MemoryFileSystem({
+      '/project/workflows/test.md': content,
+      '/project/ETHOS.md': '# ethos',
+      '/project/PROTOCOLS.md': '# protocols',
+    });
+    const config = makeConfig('/project');
+    const result = await validateWorkflow({ projectRoot: '/project', config, fs });
+    const toolErrors = result.errors.filter(e => e.code === 'WORKFLOW_MISSING_TOOLS');
+    expect(toolErrors).toHaveLength(0);
+  });
+
+  it('still reports missing tools for non-agent workflows (backward compat)', async () => {
+    const content = makeWorkflow().replace(/tools:\n  - tool:verify\n/, '');
+    const fs = new MemoryFileSystem({
+      '/project/workflows/test.md': content,
+      '/project/ETHOS.md': '# ethos',
+    });
+    const config = makeConfig('/project');
+    const result = await validateWorkflow({ projectRoot: '/project', config, fs });
+    expect(result.errors).toContainEqual(
+      expect.objectContaining({ code: 'WORKFLOW_MISSING_TOOLS' }),
+    );
+  });
 });

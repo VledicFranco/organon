@@ -43,7 +43,7 @@ const VALID_SCOPES: FrontmatterScope[] = ['product', 'domain', 'feature', 'compo
 const KEBAB_CASE_RE = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/;
 const VERSION_RE = /^\d+\.\d+$/;
 const MAX_SUMMARY_LENGTH = 200;
-const TOKEN_TOLERANCE = 1.0; // 100% — warn when estimate would mislead load-or-skip decisions (off by 2x+)
+const TOKEN_TOLERANCE = 0.5; // 50% — warn when estimate deviates significantly from actual
 
 // ---------------------------------------------------------------------------
 // Main
@@ -112,7 +112,7 @@ export async function validateFrontmatter(
 
     // Stage 1: Schema validation
     if (stages.includes(1)) {
-      validateSchema(frontmatter, file, fileErrors, fileWarnings);
+      validateSchema(frontmatter, file, body, fileErrors, fileWarnings);
     }
 
     // Stage 2: Reference validation
@@ -154,6 +154,7 @@ export async function validateFrontmatter(
 function validateSchema(
   fm: Frontmatter,
   file: string,
+  body: string,
   errors: DiagnosticMessage[],
   warnings: DiagnosticMessage[],
 ): void {
@@ -234,10 +235,15 @@ function validateSchema(
     });
   }
 
-  // Type-specific required fields
+  // Type-specific required fields (content-aware: only warn when section exists)
   if (fm.type === 'constraints') {
-    for (const field of ['invariants_count', 'principles_count', 'heuristics_count'] as const) {
-      if (fm[field] === undefined) {
+    const sectionFieldMap: Array<[string, string]> = [
+      ['invariants_count', 'Invariants'],
+      ['principles_count', 'Principles'],
+      ['heuristics_count', 'Decision Heuristics'],
+    ];
+    for (const [field, sectionName] of sectionFieldMap) {
+      if (fm[field] === undefined && extractSection(body, sectionName)) {
         warnings.push({
           severity: 'warning',
           code: 'FRONTMATTER_MISSING_TYPE_FIELD',
@@ -250,7 +256,7 @@ function validateSchema(
   }
 
   if (fm.type === 'rationale') {
-    if (fm.decision_count === undefined) {
+    if (fm.decision_count === undefined && extractSection(body, 'Design Decisions')) {
       warnings.push({
         severity: 'warning',
         code: 'FRONTMATTER_MISSING_TYPE_FIELD',

@@ -4,7 +4,7 @@ scope: domain
 name: testing-domain
 version: "1.1"
 summary: Testing domain — semantic framework for tier-4 invariant verification, published as @organon-methodology/testing
-token_estimate: 80
+token_estimate: 500
 provides: [testing-domain-navigation]
 parent: organon-self-governance
 audience: [llm, human]
@@ -20,7 +20,7 @@ audience: [llm, human]
 
 **RFC:** [001-testing-framework](../../../rfcs/001-testing-framework.md) (Draft)
 
-**Implementation:** Initial implementation complete (testInvariant + assertMaxValue, 65 tests, 100% coverage)
+**Implementation:** Initial implementation complete (7 assertions + testInvariant, 204 tests, 100% coverage)
 
 ---
 

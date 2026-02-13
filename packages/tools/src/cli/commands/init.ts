@@ -129,6 +129,16 @@ export const initCommand: CommandModule<{}, InitArgs> = {
       }
     }
 
+    // Show unbound skill diagnostics (A3)
+    const unboundDiags = result.diagnostics.filter((d) => d.code === 'INIT_SKILL_NO_BINDING');
+    if (unboundDiags.length > 0) {
+      console.log();
+      console.log(chalk.yellow(`Found ${unboundDiags.length} skill(s) without protocol bindings:`));
+      for (const d of unboundDiags) {
+        console.log(`  ${chalk.yellow('⚠')} ${d.message}`);
+      }
+    }
+
     // Summary
     console.log();
     if (result.files.size === 0) {

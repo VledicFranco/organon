@@ -6,7 +6,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { init } from './init.js';
+import { init, detectProjectName } from './init.js';
 import { MemoryFileSystem } from './test-helpers.js';
 import { getSkillTemplates, METHODOLOGY_VERSION } from '../templates/index.js';
 
@@ -21,12 +21,14 @@ describe('init', () => {
     });
 
     expect(result.success).toBe(true);
-    expect(result.files.size).toBeGreaterThanOrEqual(7);
+    expect(result.files.size).toBeGreaterThanOrEqual(9);
     expect(result.files.has('organon.config.json')).toBe(true);
     expect(result.files.has('CLAUDE.md')).toBe(true);
     expect(result.files.has('organon/ETHOS.md')).toBe(true);
     expect(result.files.has('organon/PHILOSOPHY.md')).toBe(true);
     expect(result.files.has('organon/README.md')).toBe(true);
+    expect(result.files.has('organon/PRIMER.md')).toBe(true);
+    expect(result.files.has('organon/methodology-reference.md')).toBe(true);
     expect(result.files.has('organon/protocols/PROTOCOLS.md')).toBe(true);
     expect(result.files.has('organon/observations/README.md')).toBe(true);
   });
@@ -41,7 +43,7 @@ describe('init', () => {
     });
 
     expect(result.success).toBe(true);
-    expect(result.files.size).toBe(7 + getSkillTemplates().size);
+    expect(result.files.size).toBe(9 + getSkillTemplates().size);
     expect(result.files.has('.claude/skills/domain-feature-design/SKILL.md')).toBe(true);
     expect(result.files.has('.claude/skills/organon-file-creation/SKILL.md')).toBe(true);
     expect(result.files.has('.claude/skills/quality-review/SKILL.md')).toBe(true);
@@ -95,6 +97,8 @@ describe('init', () => {
       '/project/organon/ETHOS.md': '# ethos',
       '/project/organon/PHILOSOPHY.md': '# phil',
       '/project/organon/README.md': '# readme',
+      '/project/organon/PRIMER.md': '# primer',
+      '/project/organon/methodology-reference.md': '# reference',
       '/project/organon/protocols/PROTOCOLS.md': '# protocols',
       '/project/organon/observations/README.md': '# observations',
     });
@@ -108,7 +112,7 @@ describe('init', () => {
 
     expect(result.success).toBe(true);
     expect(result.files.size).toBe(0);
-    expect(result.skipped.length).toBe(7);
+    expect(result.skipped.length).toBe(9);
     const codes = result.diagnostics.map((d) => d.code);
     expect(codes).toContain('INIT_ALREADY_INITIALIZED');
   });
@@ -230,5 +234,137 @@ describe('init', () => {
     expect(errorDiags.some((d) => d.code === 'INIT_CHECK_ERROR' && d.file?.includes('verify-and-health'))).toBe(true);
     // Other skills should still be generated
     expect(result.files.has('.claude/skills/quality-review/SKILL.md')).toBe(true);
+  });
+
+  it('infers project name from package.json', async () => {
+    const fs = new MemoryFileSystem({
+      '/project/package.json': JSON.stringify({ name: '@scope/my-awesome-project' }),
+    });
+
+    const result = await init({
+      projectRoot: '/project',
+      installSkills: false,
+      force: false,
+      fs,
+    });
+
+    const ethosContent = result.files.get('organon/ETHOS.md');
+    expect(ethosContent).toContain('name: my-awesome-project');
+    expect(ethosContent).toContain('Behavioral constraints for my-awesome-project');
+  });
+
+  it('infers project name from Cargo.toml when no package.json', async () => {
+    const fs = new MemoryFileSystem({
+      '/project/Cargo.toml': '[package]\nname = "rust-tool"\nversion = "0.1.0"',
+    });
+
+    const result = await init({
+      projectRoot: '/project',
+      installSkills: false,
+      force: false,
+      fs,
+    });
+
+    const ethosContent = result.files.get('organon/ETHOS.md');
+    expect(ethosContent).toContain('name: rust-tool');
+  });
+
+  it('falls back to directory name for project name', async () => {
+    const fs = new MemoryFileSystem();
+
+    const result = await init({
+      projectRoot: '/repos/cool-project',
+      installSkills: false,
+      force: false,
+      fs,
+    });
+
+    const ethosContent = result.files.get('organon/ETHOS.md');
+    expect(ethosContent).toContain('name: cool-project');
+  });
+
+  it('uses explicit projectName override', async () => {
+    const fs = new MemoryFileSystem({
+      '/project/package.json': JSON.stringify({ name: 'pkg-name' }),
+    });
+
+    const result = await init({
+      projectRoot: '/project',
+      installSkills: false,
+      force: false,
+      fs,
+      projectName: 'custom-name',
+    });
+
+    const ethosContent = result.files.get('organon/ETHOS.md');
+    expect(ethosContent).toContain('name: custom-name');
+  });
+
+  it('detects pre-existing unbound skills', async () => {
+    const fs = new MemoryFileSystem({
+      '/project/.claude/skills/my-skill/SKILL.md': `---
+name: my-skill
+---
+
+# My Skill
+
+No protocol_id here.
+`,
+    });
+
+    const result = await init({
+      projectRoot: '/project',
+      installSkills: false,
+      force: false,
+      fs,
+    });
+
+    const unboundDiags = result.diagnostics.filter((d) => d.code === 'INIT_SKILL_NO_BINDING');
+    expect(unboundDiags.length).toBe(1);
+    expect(unboundDiags[0].message).toContain('protocol_id');
+  });
+
+  it('does not flag skills with protocol_id as unbound', async () => {
+    const fs = new MemoryFileSystem({
+      '/project/.claude/skills/bound-skill/SKILL.md': `---
+name: bound-skill
+protocol_id: PROTO-TEST-1
+protocol_file: organon/protocols/PROTOCOLS.md
+tools:
+  - organon-verify
+loads:
+  - organon/ETHOS.md
+---
+
+# Bound Skill
+`,
+    });
+
+    const result = await init({
+      projectRoot: '/project',
+      installSkills: false,
+      force: false,
+      fs,
+    });
+
+    const unboundDiags = result.diagnostics.filter((d) => d.code === 'INIT_SKILL_NO_BINDING');
+    expect(unboundDiags.length).toBe(0);
+  });
+
+  it('generated config has testGlobs and testIgnorePatterns', async () => {
+    const fs = new MemoryFileSystem();
+    const result = await init({
+      projectRoot: '/project',
+      installSkills: false,
+      force: false,
+      fs,
+    });
+
+    const configContent = result.files.get('organon.config.json');
+    expect(configContent).toBeDefined();
+    const config = JSON.parse(configContent!);
+    expect(config.testGlobs).toBeDefined();
+    expect(config.testGlobs).toContain('**/*.test.ts');
+    expect(config.testIgnorePatterns).toBeDefined();
   });
 });

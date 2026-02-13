@@ -158,3 +158,57 @@ export function baseName(path: string): string {
   const lastSlash = normalized.lastIndexOf('/');
   return lastSlash === -1 ? normalized : normalized.substring(lastSlash + 1);
 }
+
+/**
+ * Walk up directories looking for organon.config.json.
+ * Stops at .git root or filesystem root.
+ */
+export async function findProjectRoot(
+  startDir: string,
+  fs: FileSystem,
+): Promise<string | null> {
+  let current = startDir.replace(/\\/g, '/').replace(/\/+$/, '');
+
+  while (current) {
+    // Check for organon.config.json
+    if (await fs.exists(joinPath(current, CONFIG_FILENAME))) {
+      return current;
+    }
+
+    // Stop at .git root (common project boundary)
+    if (await fs.exists(joinPath(current, '.git'))) {
+      // .git exists but no config found at this level — this IS the project root
+      // but it has no organon config. Return it as the closest root anyway.
+      return current;
+    }
+
+    // Go up one directory
+    const parent = dirName(current);
+    // Reached filesystem root — stop
+    if (parent === current || parent === '.' || parent === '') {
+      break;
+    }
+    current = parent;
+  }
+
+  return null;
+}
+
+/**
+ * Resolve project root with directory walking fallback.
+ * Used by CLI commands to find the project root when --project-root
+ * is not explicitly specified.
+ */
+export async function resolveProjectRoot(
+  explicitRoot: string | undefined,
+  fs: FileSystem,
+): Promise<string> {
+  // If explicitly provided, use it
+  if (explicitRoot && explicitRoot !== process.cwd()) {
+    return explicitRoot;
+  }
+
+  // Walk up from cwd to find project root
+  const found = await findProjectRoot(process.cwd(), fs);
+  return found ?? process.cwd();
+}

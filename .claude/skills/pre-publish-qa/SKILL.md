@@ -68,7 +68,7 @@ All tests must pass. Zero failures, zero skipped.
 cd packages/tools && npx organon verify --project-root ../..
 ```
 
-All 6 gates must pass: frontmatter, references, triplets, coverage, workflow-quality, tier4-tests.
+All 9 gates must pass: frontmatter, triplets, references, placeholder-detection, freshness, invariant-coverage, workflow-quality, tier4-tests, version-alignment.
 
 ### Step 4: Run Organon Health
 
@@ -122,7 +122,7 @@ No TODO or FIXME comments should exist in published source code. If found, eithe
 
 - [ ] Both packages build without TypeScript errors
 - [ ] All tests pass in both packages (zero failures)
-- [ ] `organon verify` passes all 6 gates
+- [ ] `organon verify` passes all 9 gates
 - [ ] `organon health` reports 100/100
 - [ ] `npm pack --dry-run` shows correct file lists (dist, LICENSE, README)
 - [ ] All four version locations are aligned

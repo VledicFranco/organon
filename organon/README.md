@@ -4,7 +4,7 @@ scope: product
 name: organon-self-governance
 version: "1.2"
 summary: Navigation for the Organon project's own organon hierarchy — self-governance constraints, protocols, domains, and observations
-token_estimate: 300
+token_estimate: 630
 provides: [project-ethos, development-protocols]
 parent: organon-root
 ---

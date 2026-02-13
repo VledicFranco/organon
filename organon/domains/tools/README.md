@@ -2,9 +2,9 @@
 type: navigation
 scope: domain
 name: tools-domain
-version: "1.0"
+version: "1.1"
 summary: Tools domain — CLI and MCP server for organon verification, generation, and discovery
-token_estimate: 80
+token_estimate: 440
 provides: [tools-domain-navigation]
 parent: organon-self-governance
 audience: [llm, human]
@@ -18,7 +18,7 @@ audience: [llm, human]
 
 ## Status
 
-**Implementation:** Active development (8 CLI commands, 5 verification gates, 132 tests)
+**Implementation:** Active development (13 CLI commands, 9 verification gates, 252 tests)
 
 ---
 

@@ -4,7 +4,7 @@ scope: product
 name: observations
 version: "1.1"
 summary: Empirical observations from dogfooding — structured records that accumulate across sessions and graduate into methodology improvements
-token_estimate: 200
+token_estimate: 465
 provides: [observations-directory]
 parent: organon-self-governance
 audience: [llm, human]

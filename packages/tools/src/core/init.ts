@@ -8,15 +8,18 @@
  */
 
 import type { FileSystem, DiagnosticMessage } from './types.js';
-import { joinPath } from './config.js';
+import { joinPath, baseName } from './config.js';
+import { parseFrontmatter } from './frontmatter-parser.js';
 import {
   getSkillTemplates,
-  ETHOS_TEMPLATE,
-  PHILOSOPHY_TEMPLATE,
+  ethosTemplate,
+  philosophyTemplate,
   README_TEMPLATE,
   PROTOCOLS_TEMPLATE,
   CLAUDE_MD_TEMPLATE,
   OBSERVATIONS_README_TEMPLATE,
+  PRIMER_TEMPLATE,
+  METHODOLOGY_REFERENCE_TEMPLATE,
   CONFIG_TEMPLATE,
 } from '../templates/index.js';
 
@@ -29,6 +32,8 @@ export interface InitOptions {
   installSkills: boolean;
   force: boolean;
   fs: FileSystem;
+  /** Override auto-detected project name. */
+  projectName?: string;
 }
 
 export interface InitResult {
@@ -38,6 +43,108 @@ export interface InitResult {
   /** Files skipped because they already exist (and --force not set) */
   skipped: string[];
   diagnostics: DiagnosticMessage[];
+}
+
+// ---------------------------------------------------------------------------
+// Project name detection
+// ---------------------------------------------------------------------------
+
+/**
+ * Detect project name from package.json, Cargo.toml, or directory basename.
+ */
+export async function detectProjectName(
+  projectRoot: string,
+  fs: FileSystem,
+): Promise<string> {
+  // 1. Try package.json
+  try {
+    const packageJson = await fs.readFile(joinPath(projectRoot, 'package.json'));
+    const parsed = JSON.parse(packageJson);
+    if (parsed.name && typeof parsed.name === 'string') {
+      // Strip npm scope (e.g., @org/name → name)
+      const name = parsed.name.replace(/^@[^/]+\//, '');
+      if (name) return toKebabCase(name);
+    }
+  } catch {
+    // package.json not found or unparseable
+  }
+
+  // 2. Try Cargo.toml
+  try {
+    const cargoToml = await fs.readFile(joinPath(projectRoot, 'Cargo.toml'));
+    const nameMatch = cargoToml.match(/^\s*name\s*=\s*"([^"]+)"/m);
+    if (nameMatch?.[1]) {
+      return toKebabCase(nameMatch[1]);
+    }
+  } catch {
+    // Cargo.toml not found
+  }
+
+  // 3. Fallback: directory basename
+  const dirName = baseName(projectRoot.replace(/[/\\]$/, ''));
+  return toKebabCase(dirName || 'my-project');
+}
+
+function toKebabCase(name: string): string {
+  return name
+    .replace(/[^a-zA-Z0-9-]/g, '-')
+    .replace(/([a-z])([A-Z])/g, '$1-$2')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+    .toLowerCase() || 'my-project';
+}
+
+// ---------------------------------------------------------------------------
+// Unbound skill detection
+// ---------------------------------------------------------------------------
+
+/**
+ * Scan workflow paths for .md files without `protocol_id` in frontmatter.
+ * Returns info diagnostics for each unbound skill found.
+ */
+async function detectUnboundSkills(
+  projectRoot: string,
+  fs: FileSystem,
+): Promise<DiagnosticMessage[]> {
+  const diagnostics: DiagnosticMessage[] = [];
+
+  const workflowDirs = [
+    '.claude/skills',
+    '.cursor/rules',
+    'organon/workflows',
+  ];
+
+  for (const dir of workflowDirs) {
+    const fullDir = joinPath(projectRoot, dir);
+    if (!await fs.exists(fullDir)) continue;
+
+    let files: string[];
+    try {
+      files = await fs.glob('**/*.md', { cwd: fullDir, ignore: [] });
+    } catch {
+      continue;
+    }
+
+    for (const file of files) {
+      const fullPath = joinPath(fullDir, file);
+      try {
+        const content = await fs.readFile(fullPath);
+        const { frontmatter } = parseFrontmatter(content);
+        if (!frontmatter?.['protocol_id']) {
+          diagnostics.push({
+            severity: 'info',
+            code: 'INIT_SKILL_NO_BINDING',
+            message: `Skill '${joinPath(dir, file)}' has no protocol_id binding — consider adding protocol_id and protocol_file to its frontmatter`,
+            file: joinPath(dir, file),
+          });
+        }
+      } catch {
+        // Skip files we can't read
+      }
+    }
+  }
+
+  return diagnostics;
 }
 
 // ---------------------------------------------------------------------------
@@ -51,13 +158,18 @@ export async function init(options: InitOptions): Promise<InitResult> {
   const skipped: string[] = [];
   const diagnostics: DiagnosticMessage[] = [];
 
-  // 1. Generate organon scaffold files
+  // Detect project name
+  const projectName = options.projectName ?? await detectProjectName(projectRoot, fs);
+
+  // 1. Generate organon scaffold files (with parameterized templates)
   const organonFiles: Array<[string, string]> = [
     ['organon.config.json', CONFIG_TEMPLATE],
     ['CLAUDE.md', CLAUDE_MD_TEMPLATE],
-    ['organon/ETHOS.md', ETHOS_TEMPLATE],
-    ['organon/PHILOSOPHY.md', PHILOSOPHY_TEMPLATE],
+    ['organon/ETHOS.md', ethosTemplate(projectName)],
+    ['organon/PHILOSOPHY.md', philosophyTemplate(projectName)],
     ['organon/README.md', README_TEMPLATE],
+    ['organon/PRIMER.md', PRIMER_TEMPLATE],
+    ['organon/methodology-reference.md', METHODOLOGY_REFERENCE_TEMPLATE],
     ['organon/protocols/PROTOCOLS.md', PROTOCOLS_TEMPLATE],
     ['organon/observations/README.md', OBSERVATIONS_README_TEMPLATE],
   ];
@@ -118,7 +230,11 @@ export async function init(options: InitOptions): Promise<InitResult> {
     }
   }
 
-  // 3. Summary diagnostic
+  // 3. Detect pre-existing unbound skills (A3)
+  const unboundDiags = await detectUnboundSkills(projectRoot, fs);
+  diagnostics.push(...unboundDiags);
+
+  // 4. Summary diagnostic
   if (files.size === 0 && skipped.length > 0) {
     diagnostics.push({
       severity: 'info',

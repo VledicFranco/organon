@@ -4,7 +4,7 @@
 
 import type { CommandModule } from 'yargs';
 import chalk from 'chalk';
-import { resolveConfig } from '../../core/config.js';
+import { resolveConfig, resolveProjectRoot } from '../../core/config.js';
 import { verify, getRegisteredGates } from '../../core/verify.js';
 import { NodeFileSystem } from '../../core/node-fs.js';
 
@@ -41,10 +41,11 @@ export const verifyCommand: CommandModule<{}, VerifyArgs> = {
 
   handler: async (args) => {
     const fs = new NodeFileSystem();
-    const config = await resolveConfig(args['project-root'], fs, args.config);
+    const projectRoot = await resolveProjectRoot(args['project-root'], fs);
+    const config = await resolveConfig(projectRoot, fs, args.config);
 
     const result = await verify({
-      projectRoot: args['project-root'],
+      projectRoot,
       config,
       fs,
       gates: args.gate,

@@ -4,7 +4,7 @@ scope: product
 name: organon-tools-dev
 version: "1.0"
 summary: Development documentation — design ideas, RFCs, and future work for organon-tools
-token_estimate: 150
+token_estimate: 440
 provides: [design-docs, rfcs, tool-ideas]
 parent: organon-tools
 ---

@@ -3,7 +3,7 @@
  */
 
 export const CONFIG_TEMPLATE = `{
-  "methodology_version": "0.3.0",
+  "methodology_version": "0.4.0",
   "organonPaths": ["organon", "."],
   "organonGlobs": [
     "**/ETHOS.md",
@@ -11,6 +11,8 @@ export const CONFIG_TEMPLATE = `{
     "**/PROTOCOL.md",
     "**/PROTOCOLS.md",
     "**/README.md",
+    "**/PRIMER.md",
+    "**/methodology-reference.md",
     "**/components.md"
   ],
   "ignorePatterns": [
@@ -24,8 +26,18 @@ export const CONFIG_TEMPLATE = `{
     "cursor": ".cursor/rules",
     "generic": "organon/workflows"
   },
-  "freshnessThresholdHours": 720
+  "freshnessThresholdHours": 720,
+  "testGlobs": [
+    "**/*.test.ts",
+    "**/*.test.js",
+    "**/*.spec.ts",
+    "**/*.spec.js"
+  ],
+  "testIgnorePatterns": [
+    "**/node_modules/**",
+    "**/dist/**"
+  ]
 }
 `;
 
-export const METHODOLOGY_VERSION = '0.3.0';
+export const METHODOLOGY_VERSION = '0.4.0';
