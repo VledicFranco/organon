@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-## [0.3.0] - 2025-12-15
+## [0.3.0] - 2026-02-13
 
 ### Added
 - `organon init` — scaffold new projects with config, organon files, and Claude Code skills
@@ -16,10 +16,13 @@ All notable changes to this project will be documented in this file.
 - `tier4-tests` verification gate for invariant coverage tracking
 - Parallel file scanning across all verification gates
 - Version alignment validation between CLI, config, and methodology
+- npm publishing infrastructure: CI workflow, release workflow, release script
+- MCP server dynamic version from package.json
 
 ### Changed
 - Verification gates now run with parallel file scanning for improved performance
 - Health score calculation includes invariant coverage metrics
+- Cross-platform `clean` scripts (Node.js rmSync instead of `rm -rf`)
 
 ### Fixed
 - `organon verify` no longer scans `node_modules/` directories
