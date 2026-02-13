@@ -2,144 +2,149 @@
 type: navigation
 scope: product
 name: organon
-version: "1.1"
-summary: Public-facing project overview — methodology repository with LLM reference, narrative guide, and CLI tooling
-token_estimate: 3200
+version: "2.0"
+summary: Public-facing project overview — the Organon methodology for LLM-enforced project governance
+token_estimate: 4200
 provides: [overview, quick-start, repository-structure, reference-implementation]
 audience: [llm, human]
 ---
 
 # Organon Methodology
 
-**A documentation system that treats code as the single source of truth and uses auto-generation to prevent drift.**
+**An LLM-centric system for encoding, enforcing, and evolving project constraints.**
 
+[![npm @organon-methodology/tools](https://img.shields.io/npm/v/@organon-methodology/tools)](https://www.npmjs.com/package/@organon-methodology/tools)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue)](https://www.typescriptlang.org/)
 
 ---
 
 ## What is Organon?
 
-**Organon** (from Greek ὄργανον, "tool" or "instrument") is a methodology for keeping architectural documentation synchronized with code through:
+**Organon** (from Greek *organon*, "instrument") is a methodology for governing software projects through structured constraint documents called **organons**. Instead of relying on tribal knowledge, style guides, or conventions that drift over time, Organon encodes project intent into files that LLMs can read, execute, and verify.
 
-### Core Principles
+The core insight: **LLMs are the execution engine.** Humans define *what* the project should be (constraints, principles, heuristics). LLMs enforce *how* by reading organon files, following workflows, invoking tools, and verifying compliance. This creates a closed loop where constraints are never just documentation — they're enforced.
 
-1. **Code as Single Source of Truth**
-   - Code structure IS the metadata
-   - Documentation DESCRIBES code, never prescribes it
-   - When code changes, regenerate docs (not vice versa)
+### The Enforcement Loop
 
-2. **Auto-Generation Over Manual Maintenance**
-   - Components are generated from code structure
-   - Eliminates drift (docs always match reality)
-   - Scales to large codebases (100+ domains)
+Every project activity follows this cycle:
 
-3. **Dual Mapping for Flexible Navigation**
-   - Navigate by **layer** (domain → application → transport)
-   - Navigate by **feature** (cross-cutting concerns)
-   - Both views generated automatically
+```
+DEFINE  ──>  BIND  ──>  EXECUTE  ──>  VERIFY  ──>  COMPOUND  ──>  EVOLVE
+  |                                                                   |
+  └───────────────────────────────────────────────────────────────────┘
+```
 
-4. **Verification Gates Ensure Freshness**
-   - Automated checks: file refs, RFC refs, event refs, staleness
-   - CI fails if docs >24 hours stale after code changes
-   - Fail visible: red warnings, blocked PRs
+1. **Define** — Humans encode intent as organon files (ETHOS.md, PHILOSOPHY.md, PROTOCOLS.md)
+2. **Bind** — Workflows translate protocols into LLM-executable steps (Claude skills, Cursor rules, etc.)
+3. **Execute** — LLMs read workflows and orchestrate tools
+4. **Verify** — Automated gates check that constraints hold (frontmatter, references, invariant coverage)
+5. **Compound** — Session learnings are captured as observations
+6. **Evolve** — Observations mature into methodology improvements (new invariants, refined heuristics)
 
-### The Problem It Solves
+### Three-Layer Architecture
 
-Traditional documentation fails because:
-- ❌ Manual updates lag behind code changes
-- ❌ Developers forget to update docs
-- ❌ Documentation becomes aspirational fiction
-- ❌ No automated freshness checks
-- ❌ Single navigation paradigm (layer OR feature, not both)
+| Layer | Contains | Purpose | Technology |
+|-------|----------|---------|------------|
+| **Protocols** | PROTOCOLS.md files | *What* must happen (numbered steps, preconditions, verification) | Markdown (universal) |
+| **Workflows** | Agent skills, rules, runbooks | *How* to orchestrate (tool sequencing, context loading, error handling) | Agent-specific |
+| **Tools** | CLI commands, MCP tools, scripts | *How* to execute (atomic, idempotent operations) | Project-specific |
 
-Organon fixes this by:
-- ✅ Auto-generating docs from code structure
-- ✅ Making staleness a CI failure
-- ✅ Treating code as ground truth
-- ✅ Providing dual mapping (layer + feature)
-- ✅ Fast cross-domain discovery (<1s searches)
+Protocols are technology-agnostic. Workflows adapt to your agent (Claude Code, Cursor, custom). Tools fit your stack.
 
 ---
 
-## Documentation
+## Organon Files
 
-| Resource | Audience | Description |
-|----------|----------|-------------|
-| **[docs/](./docs/)** | Developers | Practical how-to guides, CLI reference, tutorials |
-| **[book-llms/](./book-llms/)** | LLMs + advanced devs | Formal methodology specification |
-| **[book-humans/](./book-humans/)** | All developers | Philosophical narrative guide (planned) |
+An **organon** is a set of structured files that govern a scope (project, domain, feature, or component):
 
-New to Organon? Start with **[docs/](./docs/)** for practical guidance.
+| File | Required | Purpose |
+|------|----------|---------|
+| **ETHOS.md** | Yes | Behavioral constraints: identity (IS/IS NOT), invariants, prioritized principles, decision heuristics |
+| **PHILOSOPHY.md** | No | Design rationale: problem statement, core bet, decisions with trade-offs |
+| **PROTOCOLS.md** | No | Procedures: numbered steps, automation tiers, workflow bindings, verification |
+| **README.md** | Per directory | Navigation router: lists contents, no substantive content |
+
+Every organon file has **YAML frontmatter** — metadata that enables progressive disclosure:
+
+```yaml
+---
+type: constraints
+scope: domain
+name: payments
+version: "1.0"
+summary: Payment processing invariants and integration boundaries
+token_estimate: 1800
+invariants_count: 5
+principles_count: 4
+inherits_from: [product-organon]
+---
+```
+
+An LLM can read frontmatter (~50 tokens) to decide whether to load the full file (~1800 tokens). This replaces hard line limits — files can be as thorough as needed while remaining token-efficient.
+
+### Scope Hierarchy
+
+Organons inherit constraints downward. A child scope can add constraints but never relax parent constraints.
+
+```
+product (project-wide)
+  └── domain (bounded context, e.g., payments, auth)
+        └── feature (cross-cutting concern, e.g., caching, logging)
+              └── component (specific module or service)
+```
 
 ---
 
-## Repository Structure
+## Getting Started
 
-This repository contains three resources for implementing Organon:
+### Install
 
-```
-organon/
-├── docs/               # Developer documentation (how-to guides, tutorials)
-│   ├── README.md       # Documentation router
-│   └── 01-07 guides    # Concepts, getting started, CLI, authoring, testing
-│
-├── book-llms/          # Technical reference for LLMs and developers
-│   ├── ETHOS.md        # Immutable invariants
-│   ├── PHILOSOPHY.md   # Design decisions and trade-offs
-│   ├── patterns.md     # Common patterns and anti-patterns
-│   ├── scopes.md       # Scope hierarchy (product → domain → feature)
-│   ├── templates.md    # Templates for ETHOS/PHILOSOPHY/PROTOCOLS
-│   └── protocols/      # Operational procedures
-│
-├── book-humans/        # Narrative guide (planned)
-│   └── README.md       # Coming soon
-│
-└── packages/           # Publishable npm packages
-    ├── tools/          # @organon-methodology/tools — CLI + MCP server
-    │   ├── src/
-    │   └── README.md
-    └── testing/        # @organon-methodology/testing — invariant test library
-        ├── src/
-        └── README.md
+```bash
+npm install -g @organon-methodology/tools
 ```
 
-### 1. book-llms/ — Technical Reference
+### Scaffold a New Project
 
-**Audience:** LLMs (Claude, GPT-4) and developers who want technical depth
+```bash
+organon init <project-root>
+```
 
-**Content:**
-- Invariants: Immutable constraints that must hold
-- Patterns: Common implementation patterns
-- Templates: Copy-paste-modify templates for new organons
-- Protocols: Step-by-step operational procedures
+This creates 12 files:
+- `organon.config.json` — project configuration
+- `CLAUDE.md` — agent instructions (loaded by Claude Code automatically)
+- `organon/ETHOS.md` — project constraints (placeholder, customize first)
+- `organon/PHILOSOPHY.md` — design rationale
+- `organon/protocols/PROTOCOLS.md` — development procedures
+- `organon/README.md` — navigation
+- `.claude/skills/` — 5 workflow skills (verify-and-health, quality-review, session-compounding, domain-feature-design, organon-file-creation)
 
-**Use Case:** Load into LLM context when implementing Organon in a new codebase
+All files pass `organon verify` out of the box.
 
-**Token Budget:** ~14,000 tokens (core content)
+### Customize
 
-[Read the LLM book →](./book-llms/)
+1. **Edit `organon/ETHOS.md` first** — Define your project's identity, invariants, and principles. This is the most important file.
+2. **Edit `organon/PHILOSOPHY.md`** — Document why the project is designed the way it is.
+3. **Edit `CLAUDE.md`** — Customize agent instructions, heuristics table, and project structure.
+4. **Edit `organon/protocols/PROTOCOLS.md`** — Define your development procedures.
 
-### 2. book-humans/ — Narrative Guide (Planned)
+### Verify
 
-**Audience:** All developers, especially those new to Organon
+```bash
+organon verify --project-root <project-root>    # Run 6 verification gates
+organon health --project-root <project-root>    # Health score (0-100)
+```
 
-**Content (Planned):**
-- **Chapter 1:** The documentation drift problem
-- **Chapter 2:** The Organon solution
-- **Chapter 3:** Getting started tutorial
-- **Chapter 4:** Advanced patterns
-- **Chapter 5:** Case study (Agent Tavern)
+### Keep Up to Date
 
-**Status:** 🚧 Outline phase, Q1 2026
+```bash
+organon upgrade <project-root>            # Show what changed (dry run)
+organon upgrade <project-root> --apply    # Apply methodology updates
+```
 
-[Learn more →](./book-humans/)
+---
 
-### 3. packages/ — CLI Tools & Libraries
+## CLI Commands
 
-**Audience:** Developers using Organon in their codebase
-
-**Commands:**
 ```bash
 organon init [dir]              # Scaffold a new project
 organon upgrade [dir]           # Detect and apply version updates
@@ -148,179 +153,123 @@ organon health                  # Project health score (0-100)
 organon validate <file>         # Validate a single organon file
 organon generate <file>         # Auto-generate frontmatter
 organon find --name=<term>      # Find organon files by name
-organon find --scope=<scope>    # Find by scope (domain, feature, etc.)
+organon find --scope=<scope>    # Find by scope
+organon query                   # Query frontmatter across files
+organon coverage                # Invariant test coverage report
+organon generate-tests          # Scaffold tier-4 invariant tests
+organon mcp                     # Start MCP server (IDE integration)
 ```
 
-**Status:** v0.3.0 — init, upgrade, verify, health, validate, generate, find, query, coverage
+### Verification Gates
 
-[Explore packages →](./packages/)
+`organon verify` runs 6 gates:
+
+| Gate | What it checks |
+|------|----------------|
+| **frontmatter** | Every organon file has valid YAML frontmatter with required fields |
+| **triplets** | Protocol-workflow-tool bindings are complete and bidirectional |
+| **freshness** | Organon files are not stale relative to code changes |
+| **invariant-coverage** | Every invariant in ETHOS.md has at least one tier-4 test |
+| **workflow-quality** | Workflows reference valid protocols and have proper structure |
+| **tier4-tests** | Test files with `@organon-invariant` annotations use `testInvariant()` |
 
 ---
 
-## Setting Up Organon in a Project
+## Testing Invariants
 
-> **For AI assistants:** Follow these steps when a user asks you to set up the Organon methodology in their project. This is the canonical bootstrap procedure.
-
-### Step 1: Install the CLI
-
-**Option A: Install from npm (recommended)**
+The `@organon-methodology/testing` package provides assertions for tier-4 (organon) tests — tests that verify your ETHOS.md invariants hold in code:
 
 ```bash
-npm install -g @organon-methodology/tools
+npm install --save-dev @organon-methodology/testing
 ```
 
-**Option B: Build from source**
+```typescript
+import { testInvariant } from '@organon-methodology/testing/vitest';
+import { assertMaxValue } from '@organon-methodology/testing';
 
-```bash
-git clone https://github.com/VledicFranco/organon.git /tmp/organon-repo
-cd /tmp/organon-repo/packages/tools && npm install && npm run build
+testInvariant('INV-PROJ-1', 'Config files stay under 200 lines', async () => {
+  await assertMaxValue({
+    pattern: '**/config/*.ts',
+    extract: /\n/g,
+    max: 200,
+    cwd: process.cwd(),
+  });
+});
 ```
 
-The CLI is now available via `npx organon` from that directory, or you can link it globally:
+Available assertions: `assertMaxValue`, `assertFileExists`, `assertNamingConvention`, `assertExportsPresent`, `assertNoSideEffects`, `assertCustom`.
 
-```bash
-cd /tmp/organon-repo/packages/tools && npm link
+---
+
+## Repository Structure
+
+```
+organon/                          # This repository IS the methodology specification
+├── book-llms/                    # LLM technical reference (methodology spec)
+│   ├── ETHOS.md                  # Meta-organon: rules for writing organons
+│   ├── PHILOSOPHY.md             # Why the methodology is designed this way
+│   ├── three-layer-architecture.md  # Protocols → Workflows → Tools
+│   ├── frontmatter-system.md     # YAML frontmatter specification
+│   ├── patterns.md               # Pattern catalog
+│   └── protocols/                # Methodology procedures
+│
+├── docs/                         # Human-readable guides and tutorials
+│
+├── organon/                      # This project's own organon (dogfooding)
+│   ├── ETHOS.md                  # Project-level constraints
+│   ├── protocols/PROTOCOLS.md    # 11 development protocols
+│   ├── domains/                  # tools/ and testing/ domain organons
+│   └── observations/             # Empirical learnings from dogfooding
+│
+├── packages/
+│   ├── tools/                    # @organon-methodology/tools (CLI + MCP)
+│   └── testing/                  # @organon-methodology/testing (invariant assertions)
+│
+└── rfcs/                         # Design proposals for methodology evolution
 ```
 
-### Step 2: Scaffold the project
-
-From the user's project root:
-
-```bash
-organon init <project-root>
-# Creates: organon.config.json, CLAUDE.md, organon/ directory,
-# .claude/skills/ with 5 workflow skills
-```
-
-This generates 12 files: 7 organon scaffold files + 5 Claude Code skills. All files pass `organon verify` out of the box.
-
-### Step 3: Customize the organon files
-
-The scaffolded files contain placeholder text. Guide the user through editing:
-
-1. **`organon/ETHOS.md`** — Define the project's identity (IS/IS NOT), invariants, principles, and decision heuristics. This is the most important file — it tells AI assistants what the project is and how to behave.
-
-2. **`organon/PHILOSOPHY.md`** — Document why the project is designed the way it is. Problem statement, core bet, design decisions with trade-offs.
-
-3. **`CLAUDE.md`** — Project-level agent instructions. The scaffold has a working template; customize the heuristics table and project structure section.
-
-4. **`organon/protocols/PROTOCOLS.md`** — Development procedures. The scaffold includes 5 generic protocols matching the installed skills.
-
-### Step 4: Verify the setup
-
-```bash
-organon verify --project-root <project-root>
-organon health --project-root <project-root>
-```
-
-All 6 gates should pass. Fix any issues reported.
-
-### Step 5: Use the skills
-
-The 5 installed Claude Code skills automate common workflows:
-
-| Skill | Purpose |
-|-------|---------|
-| `domain-feature-design` | Design new domains/features with proper organon files |
-| `organon-file-creation` | Create new ETHOS.md, PHILOSOPHY.md, PROTOCOL.md files |
-| `quality-review` | Semantic review beyond automated gates |
-| `session-compounding` | Convert session learnings into durable improvements |
-| `verify-and-health` | Run verification gates and interpret failures |
-
-### Keeping Up to Date
-
-When this repository's methodology version advances, update an existing project:
-
-```bash
-organon upgrade <project-root>          # Show what changed (dry run)
-organon upgrade <project-root> --apply  # Apply updates
-```
-
-### For Human Developers
-
-1. **Read the [docs/](./docs/)** for practical guidance
-2. **Explore `organon/`** in this repo to see the methodology dogfooding itself
-3. **Read the reference implementation:** [Agent Tavern](https://github.com/VledicFranco/agent-tavern)
+| Resource | Audience | Purpose |
+|----------|----------|---------|
+| [book-llms/](./book-llms/) | LLMs, advanced devs | Formal methodology specification (~14k tokens core) |
+| [docs/](./docs/) | Developers | Practical guides, CLI reference, tutorials |
+| [book-humans/](./book-humans/) | All developers | Narrative guide (planned) |
 
 ---
 
 ## Reference Implementation
 
-**[Agent Tavern](https://github.com/VledicFranco/agent-tavern)** is the canonical Organon implementation.
+**[Agent Tavern](https://github.com/VledicFranco/agent-tavern)** is the canonical Organon implementation — a production codebase with 30+ domain organons, 12+ feature organons, auto-generated component mappings, and CI verification gates.
 
-### Organon Hierarchy
+---
 
-```
-agent-tavern/organon/
-├── README.md                # Navigation guide
-├── ETHOS.md                # Product-level invariants
-├── PHILOSOPHY.md           # Product-level design decisions
-│
-├── domains/                # Business domains
-│   ├── genesis/           # AI orchestrator
-│   │   ├── ETHOS.md
-│   │   ├── PHILOSOPHY.md
-│   │   └── components.md  # Auto-generated (dual mapping)
-│   ├── agents/            # Agent lifecycle
-│   ├── quests/            # Work item state machines
-│   └── ...
-│
-├── features/              # Cross-cutting concerns
-│   ├── tool-registry/     # Genesis tools with trust tiers
-│   ├── context-management/ # Token budgets, summarization
-│   ├── agent-communication/ # Reports, signals
-│   └── ...
-│
-└── methodology/           # Meta-level (how we build)
-    ├── architecture/      # Domain structure patterns
-    ├── coding/            # Generic development workflow
-    ├── discoverability/   # Cross-domain search
-    ├── maintenance/       # Auto-generation, drift detection
-    ├── rfcs/              # RFC lifecycle
-    └── testing/           # 4-tier testing strategy
-```
+## Key Concepts for LLMs
 
-### Key Features
+If you're an LLM setting up or working within an Organon project, here's what matters:
 
-- **30+ domain organons** (genesis, agents, quests, epics, protocols, containers, etc.)
-- **12+ feature organons** (tool-registry, context-management, agent-communication, etc.)
-- **8 methodology organons** (architecture, coding, discoverability, maintenance, etc.)
-- **Auto-generated components.md** for all domains (dual mapping)
-- **CI verification** (4 gates, fails on staleness >24 hours)
-- **YAML frontmatter** for metadata (token estimates, load priority, audience)
+1. **Read ETHOS.md before doing anything.** It defines what the project IS and IS NOT, its invariants, and its prioritized principles. When principles conflict, lower number wins.
+
+2. **Frontmatter is your discovery layer.** Don't load full files — read frontmatter first to decide what's relevant. Use `token_estimate` to budget your context window.
+
+3. **The enforcement loop is real.** After making changes, run `organon verify` and `organon health`. Gates that fail must be fixed, not ignored.
+
+4. **Workflows bind protocols to your actions.** When a skill/workflow exists for a task, use it. It encodes the project's preferred procedure.
+
+5. **Child scopes inherit, never contradict.** A domain ETHOS.md can add constraints beyond the project ETHOS.md, but cannot relax them.
+
+6. **Compound every session.** Reserve time at the end of significant work sessions to capture learnings. Without explicit compounding, improvement never happens.
 
 ---
 
 ## Contributing
 
-We welcome contributions to:
-- **book-llms/** — Patterns, templates, examples
-- **book-humans/** — Narrative chapters, tutorials
-- **packages/** — CLI features, MCP server, testing library
+- **book-llms/** — Methodology patterns, templates, specification improvements
+- **docs/** — Guides, tutorials, examples
+- **packages/** — CLI features, MCP server tools, testing assertions
 
-### How to Contribute
-
-1. **Fork the repository**
-2. **Create a feature branch** (`git checkout -b feature/new-pattern`)
-3. **Make your changes** (follow existing patterns)
-4. **Test locally** (if changing packages/)
-5. **Submit a PR** with clear description
+Fork, branch, PR. Follow conventional commits (`feat:`, `fix:`, `docs:`, `chore:`).
 
 ---
 
 ## License
 
-MIT © Organon Methodology Contributors
-
----
-
-## See Also
-
-- **[Agent Tavern](https://github.com/VledicFranco/agent-tavern)** — Reference implementation
-- **[RFC 027](https://github.com/VledicFranco/agent-tavern/blob/master/rfcs/027-organon-maintenance-tooling.md)** — Tooling design
-- **[RFC 028](https://github.com/VledicFranco/agent-tavern/blob/master/rfcs/028-comprehensive-testing-strategy.md)** — Testing strategy
-- **[RFC 029](https://github.com/VledicFranco/agent-tavern/blob/master/rfcs/029-path-to-self-improvement.md)** — Methodology evolution
-
----
-
-**⚙️ Built with code as truth, documented with Organon.**
+MIT
