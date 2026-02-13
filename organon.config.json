@@ -14,7 +14,8 @@
     "**/dist/**",
     "**/.git/**",
     "**/coverage/**",
-    "docs/**"
+    "docs/**",
+    "packages/*/README.md"
   ],
   "workflowPaths": {
     "claudeCode": ".claude/skills",
