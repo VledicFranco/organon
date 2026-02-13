@@ -16,7 +16,7 @@ audience: [llm, human]
 
 # Testing Domain Philosophy
 
-> Why we built @organon/testing this way.
+> Why we built @organon-methodology/testing this way.
 
 ---
 

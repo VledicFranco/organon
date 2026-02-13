@@ -1,12 +1,12 @@
 /**
- * Vitest adapter for @organon/testing.
+ * Vitest adapter for @organon-methodology/testing.
  *
  * Provides a TestRunner that delegates to vitest's `it()` so invariant tests
  * participate in vitest's lifecycle (reporting, --bail, watch-mode, etc.).
  *
  * Usage:
  * ```typescript
- * import { testInvariant, assertMaxValue } from '@organon/testing/vitest';
+ * import { testInvariant, assertMaxValue } from '@organon-methodology/testing/vitest';
  *
  * testInvariant('INV-FOO-1', 'max cache TTL is 24h', async () => {
  *   await assertMaxValue({ files: ['src/config.ts'], pattern: /ttl:\s*(\d+)/, maxValue: 86400 });

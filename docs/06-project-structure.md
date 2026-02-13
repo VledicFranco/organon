@@ -31,7 +31,7 @@ organon/
 │   ├── 02-getting-started.md         ← Install + first run tutorial
 │   ├── 03-cli-reference.md           ← All CLI commands
 │   ├── 04-writing-organon-files.md   ← Authoring guide
-│   ├── 05-testing-invariants.md      ← @organon/testing usage
+│   ├── 05-testing-invariants.md      ← @organon-methodology/testing usage
 │   ├── 06-project-structure.md       ← This file
 │   └── 07-glossary.md               ← Term definitions
 │
@@ -67,7 +67,7 @@ organon/
 │   └── protocols/                    ← Development procedures
 │
 ├── packages/
-│   ├── tools/                        ← @organon/tools CLI (TypeScript, yargs)
+│   ├── tools/                        ← @organon-methodology/tools CLI (TypeScript, yargs)
 │   │   ├── src/
 │   │   │   ├── core/                 ← Pure logic (no I/O)
 │   │   │   ├── cli/commands/         ← 9 CLI commands
@@ -76,7 +76,7 @@ organon/
 │   │   ├── package.json
 │   │   └── vitest.config.ts
 │   │
-│   └── testing/                      ← @organon/testing library
+│   └── testing/                      ← @organon-methodology/testing library
 │       ├── src/
 │       │   ├── core/                 ← Assertions (6) + testInvariant wrapper
 │       │   └── adapters/vitest.ts    ← Vitest adapter
@@ -121,7 +121,7 @@ cd packages/testing && npm test && cd ../..
 cd packages/tools && npm test && cd ../..
 ```
 
-**Build order:** `packages/testing` must build before `packages/tools` because the tools package imports `@organon/testing` for its meta-invariant tests.
+**Build order:** `packages/testing` must build before `packages/tools` because the tools package imports `@organon-methodology/testing` for its meta-invariant tests.
 
 **After editing TypeScript** in `packages/tools/src/`, you must `npm run build` before `organon verify` picks up changes (the CLI runs from `dist/`).
 
@@ -203,7 +203,7 @@ The highest-risk area. Changes here affect the formal methodology definition.
 
 - Read `organon/domains/testing/ETHOS.md` for testing-specific invariants
 - Framework-agnostic core — vitest is the adapter, not the dependency
-- Subpath export: `@organon/testing/vitest` is separate from main entry
+- Subpath export: `@organon-methodology/testing/vitest` is separate from main entry
 - After adding new core files, update file arrays in `testing-invariants.test.ts`
 
 ### organon/ (This Project's Own Organon)

@@ -640,7 +640,7 @@ We will implement the constraints defined above.
 ```markdown
 ### What This Domain IS
 - A semantic testing framework for tier-4 invariant verification
-- TypeScript-native library published as @organon/testing
+- TypeScript-native library published as @organon-methodology/testing
 - Bridge between "declare invariant in ETHOS.md" and "verify in code"
 - Integration layer connecting invariants to test frameworks (not a test runner)
 - Coverage tracker that maps invariant IDs to test implementations

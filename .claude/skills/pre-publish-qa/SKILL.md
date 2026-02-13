@@ -42,7 +42,7 @@ Use this skill when:
 
 ### Step 1: Clean Build Both Packages
 
-Use `npm-build` to compile both packages. Build order matters — `@organon/testing` must build before `@organon/tools`.
+Use `npm-build` to compile both packages. Build order matters — `@organon-methodology/testing` must build before `@organon-methodology/tools`.
 
 ```bash
 cd packages/testing && npm run clean && npm run build
@@ -135,7 +135,7 @@ No TODO or FIXME comments should exist in published source code. If found, eithe
 
 | Failure | Recovery Action |
 |---------|-----------------|
-| Build fails in `@organon/tools` | Check if `@organon/testing` was built first. The tools package depends on it. |
+| Build fails in `@organon-methodology/tools` | Check if `@organon-methodology/testing` was built first. The tools package depends on it. |
 | Tests fail | Fix failing tests. Never skip tests for a release. |
 | `organon verify` gate failure | Use `/verify-and-health` skill to diagnose and fix. |
 | Health score below 100 | Fix organon issues. Check frontmatter accuracy, reference integrity, and triplet bindings. |

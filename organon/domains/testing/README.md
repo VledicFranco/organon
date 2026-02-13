@@ -3,7 +3,7 @@ type: navigation
 scope: domain
 name: testing-domain
 version: "1.1"
-summary: Testing domain — semantic framework for tier-4 invariant verification, published as @organon/testing
+summary: Testing domain — semantic framework for tier-4 invariant verification, published as @organon-methodology/testing
 token_estimate: 80
 provides: [testing-domain-navigation]
 parent: organon-self-governance
@@ -35,7 +35,7 @@ audience: [llm, human]
 
 ## Domain Scope
 
-**Published as:** `@organon/testing` (npm package)
+**Published as:** `@organon-methodology/testing` (npm package)
 
 **Code location:** `packages/testing/`
 

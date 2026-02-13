@@ -1,7 +1,7 @@
 /**
- * Dogfood tests: @organon/testing used inside @organon/tools.
+ * Dogfood tests: @organon-methodology/testing used inside @organon-methodology/tools.
  *
- * These tests exercise the @organon/testing library against real source files
+ * These tests exercise the @organon-methodology/testing library against real source files
  * in this package, proving the API works end-to-end from a consumer perspective.
  *
  * @organon-invariant INV-TOOLS-1 schema-fidelity
@@ -13,7 +13,7 @@
  */
 
 import { describe } from 'vitest';
-import { testInvariant, assertMaxValue } from '@organon/testing/vitest';
+import { testInvariant, assertMaxValue } from '@organon-methodology/testing/vitest';
 import { resolve } from 'node:path';
 import { readdir, readFile } from 'node:fs/promises';
 import { validateFrontmatter } from './validate-frontmatter.js';
@@ -23,7 +23,7 @@ import type { OrganonConfig } from './types.js';
 
 const coreDir = resolve(import.meta.dirname, '.');
 
-describe('@organon/testing dogfood — tools invariant verification', () => {
+describe('@organon-methodology/testing dogfood — tools invariant verification', () => {
   // -------------------------------------------------------------------------
   // INV-TOOLS-1: schema-fidelity — MAX_SUMMARY_LENGTH ≤ 200
   // -------------------------------------------------------------------------

@@ -33,7 +33,7 @@ audience: [llm, human]
 
 ## Domain Scope
 
-**Published as:** `@organon/tools` (npm package)
+**Published as:** `@organon-methodology/tools` (npm package)
 
 **Code location:** `packages/tools/`
 

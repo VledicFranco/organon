@@ -1,5 +1,5 @@
 /**
- * Test helpers for @organon/testing's own tests.
+ * Test helpers for @organon-methodology/testing's own tests.
  *
  * Provides a mock FileSystem implementation for testing resolvers
  * and high-level assertions without real I/O.

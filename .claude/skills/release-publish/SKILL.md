@@ -1,6 +1,6 @@
 ---
 name: release-publish
-description: Publish new version to npm with proper QA, version bumping, changelog, git tag, and GitHub Release. Use when shipping a new release of @organon/tools and @organon/testing.
+description: Publish new version to npm with proper QA, version bumping, changelog, git tag, and GitHub Release. Use when shipping a new release of @organon-methodology/tools and @organon-methodology/testing.
 protocol_id: PROTO-ORG-11
 protocol_file: organon/protocols/PROTOCOLS.md
 tools:
@@ -96,14 +96,14 @@ gh run list --workflow=release.yml --limit 1
 Monitor until the workflow completes successfully. It will:
 - Build and test both packages
 - Verify version/tag alignment
-- Publish `@organon/testing` then `@organon/tools` with provenance
+- Publish `@organon-methodology/testing` then `@organon-methodology/tools` with provenance
 
 ### Step 6: Verify npm Availability
 
 After CI completes:
 ```bash
-npm info @organon/tools version
-npm info @organon/testing version
+npm info @organon-methodology/tools version
+npm info @organon-methodology/testing version
 ```
 
 Both should report the new version.
@@ -125,7 +125,7 @@ For major version bumps, check if README.md install instructions need updating:
 | Fix false positive in verification gate | patch | Gate was incorrectly failing |
 | Add new CLI command | minor | `organon discover` |
 | Add new verification gate | minor | New `imports` gate |
-| Add new assertion to `@organon/testing` | minor | `assertPattern()` |
+| Add new assertion to `@organon-methodology/testing` | minor | `assertPattern()` |
 | New protocol or skill | minor | PROTO-ORG-12 |
 | Rename existing CLI command | **major** | `organon validate` → `organon check` |
 | Change `organon.config.json` schema | **major** | Rename a config key |

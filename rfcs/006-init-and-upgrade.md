@@ -33,7 +33,7 @@ The Organon methodology has 7 working skills, verified CLI tooling, and a testin
 1. **Blank-slate syndrome.** New projects face no starting point — every adoption requires manual file creation, skill copying, and config authoring.
 2. **No migration path.** Existing projects with old methodology versions have no incremental upgrade mechanism.
 3. **Manual skill distribution.** Skills (Layer 2 workflows) must be manually copied between projects and adapted by hand.
-4. **Version misalignment.** @organon/tools is 0.1.0, @organon/testing is 0.2.0-beta, and the methodology has no formal version.
+4. **Version misalignment.** @organon-methodology/tools is 0.1.0, @organon-methodology/testing is 0.2.0-beta, and the methodology has no formal version.
 
 ---
 
@@ -102,8 +102,8 @@ All versions move to **0.3.0**:
 | Component | Before | After |
 |-----------|--------|-------|
 | Methodology | (unversioned) | 0.3.0 |
-| @organon/tools | 0.1.0 | 0.3.0 |
-| @organon/testing | 0.2.0-beta | 0.3.0 |
+| @organon-methodology/tools | 0.1.0 | 0.3.0 |
+| @organon-methodology/testing | 0.2.0-beta | 0.3.0 |
 
 ---
 

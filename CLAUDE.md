@@ -135,7 +135,7 @@ organon/
 └── packages/
     ├── tools/                        ← CLI tooling (TypeScript, yargs)
     │   ├── src/commands/             ← generate, verify, find
-    │   └── package.json              ← @organon/tools
+    │   └── package.json              ← @organon-methodology/tools
     └── testing/                      ← Test utilities and shared test infrastructure
 ```
 

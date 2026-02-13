@@ -3,7 +3,7 @@ type: rationale
 scope: product
 name: testing-framework-design
 version: "0.1"
-summary: Design document for @organon/testing - semantic testing framework for tier-4 invariant verification
+summary: Design document for @organon-methodology/testing - semantic testing framework for tier-4 invariant verification
 token_estimate: 7100
 related_files:
   - ../organon/domains/tools/ETHOS.md
@@ -15,7 +15,7 @@ audience: [llm, human]
 status: draft
 ---
 
-# @organon/testing: Semantic Testing Framework
+# @organon-methodology/testing: Semantic Testing Framework
 
 > A TypeScript-native testing library that bridges the gap between "declare invariant" and "verify invariant in code."
 
@@ -50,12 +50,12 @@ This is a **major adoption blocker**. Teams declare invariants in ETHOS.md but n
 
 A **semantic testing framework** with three components:
 
-1. **Core assertion library** (`@organon/testing/core`)
+1. **Core assertion library** (`@organon-methodology/testing/core`)
    - Pre-built assertions: `assertMaxValue`, `assertNoSideEffects`, `assertFileExists`, etc.
    - Custom assertion builder: `assertCustom`
    - Metadata tracking: links tests to invariant IDs
 
-2. **Test framework adapters** (`@organon/testing/adapters`)
+2. **Test framework adapters** (`@organon-methodology/testing/adapters`)
    - Vitest integration (Phase 1)
    - Jest integration (Phase 2)
    - Mocha integration (Phase 3)
@@ -75,7 +75,7 @@ Link tests to invariant IDs using `testInvariant()` wrapper:
 
 ```typescript
 import { describe } from 'vitest';
-import { testInvariant, assertMaxValue } from '@organon/testing';
+import { testInvariant, assertMaxValue } from '@organon-methodology/testing';
 
 describe('Product Invariants', () => {
   testInvariant('INV-PROD-1', 'cache TTL max 24h', async () => {
@@ -118,7 +118,7 @@ organon generate-tests
 ```typescript
 // tests/organon/invariants.test.ts (auto-generated)
 import { describe } from 'vitest';
-import { testInvariant, assertMaxValue, assertNoSideEffects } from '@organon/testing';
+import { testInvariant, assertMaxValue, assertNoSideEffects } from '@organon-methodology/testing';
 
 describe('Product Invariants', () => {
   testInvariant('INV-PROD-1', 'cache TTL max 24h', async () => {
@@ -185,7 +185,7 @@ organon coverage
 ### Architecture
 
 ```
-@organon/testing/
+@organon-methodology/testing/
 ├── core/
 │   ├── invariant-test.ts          # testInvariant() wrapper
 │   ├── assertions/
@@ -339,7 +339,7 @@ invariants:
 ### Step 2: Generate Test Scaffolds
 
 ```bash
-npm install @organon/testing
+npm install @organon-methodology/testing
 organon generate-tests
 # ✅ Generated tests/organon/invariants.test.ts
 # TODO: Review and customize generated tests
@@ -350,7 +350,7 @@ organon generate-tests
 ```typescript
 // tests/organon/invariants.test.ts
 import { describe } from 'vitest';
-import { testInvariant, assertMaxValue, assertNoSideEffects } from '@organon/testing';
+import { testInvariant, assertMaxValue, assertNoSideEffects } from '@organon-methodology/testing';
 
 describe('Product Invariants', () => {
   testInvariant('INV-CACHE-1', 'ttl max 24h', async () => {
@@ -407,7 +407,7 @@ organon verify --gate=tier4-tests
 - **Pros:** Lighter dependencies, independent versioning
 - **Cons:** Duplication (ETHOS parsing logic), harder to coordinate releases
 
-**Recommendation:** Monorepo with separate npm package (`@organon/testing`). Use workspace setup to share code without forcing dependency bloat.
+**Recommendation:** Monorepo with separate npm package (`@organon-methodology/testing`). Use workspace setup to share code without forcing dependency bloat.
 
 ---
 
@@ -549,8 +549,8 @@ npm test -- --quiet   # Show counts only
 - [ ] Error message quality (clear, actionable)
 - [ ] README with examples
 - [ ] API documentation
-- [ ] Migration guide (from custom tests → @organon/testing)
-- [ ] Publish `@organon/testing@0.1.0` (beta)
+- [ ] Migration guide (from custom tests → @organon-methodology/testing)
+- [ ] Publish `@organon-methodology/testing@0.1.0` (beta)
 
 ---
 

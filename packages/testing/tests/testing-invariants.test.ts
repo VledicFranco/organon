@@ -1,5 +1,5 @@
 /**
- * Structural invariant tests for the @organon/testing domain.
+ * Structural invariant tests for the @organon-methodology/testing domain.
  *
  * Verifies that the testing package follows its own ETHOS.md constraints.
  *

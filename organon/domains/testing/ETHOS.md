@@ -41,7 +41,7 @@ audience: [llm, human, tooling]
 
 ### What This Domain IS
 - A semantic testing framework for tier-4 invariant verification
-- TypeScript-native library published as @organon/testing
+- TypeScript-native library published as @organon-methodology/testing
 - Bridge between "declare invariant" and "verify invariant in code"
 - Integration layer connecting ETHOS.md invariants to test frameworks
 - Coverage tracker that maps invariant IDs to test implementations

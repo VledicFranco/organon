@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - `organon init` — scaffold new projects with config, organon files, and Claude Code skills
 - `organon upgrade` — detect version drift and incrementally update projects
-- `@organon/testing` — semantic testing framework for tier-4 invariant verification
+- `@organon-methodology/testing` — semantic testing framework for tier-4 invariant verification
   - 7 assertion functions: `assertMaxValue`, `assertNoSideEffects`, `assertFileExists`, `assertNaming`, `assertDependency`, `assertCustom`, `testInvariant`
   - `organon generate-tests` CLI for scaffolding invariant tests from ETHOS.md
   - Vitest adapter with `testInvariant` helper

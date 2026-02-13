@@ -96,10 +96,10 @@ organon/
 │   └── README.md       # Coming soon
 │
 └── packages/           # Publishable npm packages
-    ├── tools/          # @organon/tools — CLI + MCP server
+    ├── tools/          # @organon-methodology/tools — CLI + MCP server
     │   ├── src/
     │   └── README.md
-    └── testing/        # @organon/testing — invariant test library
+    └── testing/        # @organon-methodology/testing — invariant test library
         ├── src/
         └── README.md
 ```
@@ -166,7 +166,7 @@ organon find --scope=<scope>    # Find by scope (domain, feature, etc.)
 **Option A: Install from npm (recommended)**
 
 ```bash
-npm install -g @organon/tools
+npm install -g @organon-methodology/tools
 ```
 
 **Option B: Build from source**

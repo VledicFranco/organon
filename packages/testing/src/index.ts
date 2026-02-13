@@ -1,7 +1,7 @@
 /**
- * @organon/testing — Semantic testing framework for tier-4 invariant verification.
+ * @organon-methodology/testing — Semantic testing framework for tier-4 invariant verification.
  *
- * Public API exports for the @organon/testing package.
+ * Public API exports for the @organon-methodology/testing package.
  */
 
 // ---------------------------------------------------------------------------

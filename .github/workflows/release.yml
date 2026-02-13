@@ -48,12 +48,12 @@ jobs:
           echo "All package versions match tag $TAG"
 
       # Publish packages with provenance (order matters: testing before tools)
-      - name: Publish @organon/testing
+      - name: Publish @organon-methodology/testing
         run: npm publish -w packages/testing --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Publish @organon/tools
+      - name: Publish @organon-methodology/tools
         run: npm publish -w packages/tools --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

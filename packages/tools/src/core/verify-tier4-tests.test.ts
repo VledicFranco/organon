@@ -24,7 +24,7 @@ describe('verifyTier4Tests', () => {
     const fs = new MemoryFileSystem({
       '/project/tests/my.test.ts': [
         `// @organon-invariant INV-FOO-1`,
-        `import { testInvariant } from '@organon/testing/vitest';`,
+        `import { testInvariant } from '@organon-methodology/testing/vitest';`,
         `testInvariant('INV-FOO-1', 'test', async () => {});`,
       ].join('\n'),
     });
@@ -41,7 +41,7 @@ describe('verifyTier4Tests', () => {
     expect(result.warnings).toHaveLength(0);
   });
 
-  it('warns when annotated file is missing @organon/testing import', async () => {
+  it('warns when annotated file is missing @organon-methodology/testing import', async () => {
     const fs = new MemoryFileSystem({
       '/project/tests/my.test.ts': [
         `// @organon-invariant INV-FOO-1`,
@@ -66,7 +66,7 @@ describe('verifyTier4Tests', () => {
     const fs = new MemoryFileSystem({
       '/project/tests/my.test.ts': [
         `// @organon-invariant INV-FOO-1`,
-        `import { assertMaxValue } from '@organon/testing/vitest';`,
+        `import { assertMaxValue } from '@organon-methodology/testing/vitest';`,
         `// no testInvariant call`,
       ].join('\n'),
     });
@@ -119,7 +119,7 @@ describe('verifyTier4Tests', () => {
     const fs = new MemoryFileSystem({
       '/project/tests/good.test.ts': [
         `// @organon-invariant INV-FOO-1`,
-        `import { testInvariant } from '@organon/testing/vitest';`,
+        `import { testInvariant } from '@organon-methodology/testing/vitest';`,
         `testInvariant('INV-FOO-1', 'test', async () => {});`,
       ].join('\n'),
       '/project/tests/bad.test.ts': [
@@ -157,7 +157,7 @@ describe('verifyTier4Tests', () => {
 
     const importWarning = result.warnings.find((w) => w.code === 'TIER4_MISSING_IMPORT');
     expect(importWarning).toBeDefined();
-    expect(importWarning!.suggestion).toContain('@organon/testing/vitest');
+    expect(importWarning!.suggestion).toContain('@organon-methodology/testing/vitest');
     expect(importWarning!.file).toBe('tests/my.test.ts');
   });
 });

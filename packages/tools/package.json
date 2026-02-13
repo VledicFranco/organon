@@ -1,5 +1,5 @@
 {
-  "name": "@organon/tools",
+  "name": "@organon-methodology/tools",
   "version": "0.3.0",
   "description": "CLI tools and MCP server for the Organon Methodology - auto-generation, verification, and discovery",
   "type": "module",
@@ -61,7 +61,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@organon/testing": "*",
+    "@organon-methodology/testing": "*",
     "@types/node": "^20.11.0",
     "@types/yargs": "^17.0.32",
     "@vitest/coverage-v8": "^4.0.18",

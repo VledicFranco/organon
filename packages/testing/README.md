@@ -1,11 +1,11 @@
-# @organon/testing
+# @organon-methodology/testing
 
 Semantic testing framework for automated tier-4 invariant verification in [Organon](https://github.com/VledicFranco/organon) projects.
 
 ## Install
 
 ```bash
-npm install --save-dev @organon/testing
+npm install --save-dev @organon-methodology/testing
 ```
 
 ## Assertions
@@ -24,8 +24,8 @@ All assertions resolve files from disk using glob patterns and provide structure
 ## Usage with Vitest
 
 ```ts
-import { testInvariant } from '@organon/testing/vitest';
-import { assertMaxValue } from '@organon/testing';
+import { testInvariant } from '@organon-methodology/testing/vitest';
+import { assertMaxValue } from '@organon-methodology/testing';
 
 testInvariant('INV-EXAMPLE-1', 'README files stay under 100 lines', async () => {
   await assertMaxValue({

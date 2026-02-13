@@ -3,7 +3,7 @@ type: rationale
 scope: product
 name: testing-framework
 version: "1.0"
-summary: Introduce @organon/testing semantic testing framework to bridge the gap between invariant declaration and automated verification
+summary: Introduce @organon-methodology/testing semantic testing framework to bridge the gap between invariant declaration and automated verification
 token_estimate: 11100
 status: implemented
 created: 2026-02-10
@@ -19,7 +19,7 @@ load_priority: high
 audience: [llm, human]
 ---
 
-# RFC 001: @organon/testing - Semantic Testing Framework
+# RFC 001: @organon-methodology/testing - Semantic Testing Framework
 
 > Introduce a TypeScript-native testing library that makes tier-4 invariant verification natural, reusable, and integrated with the Organon ecosystem.
 
@@ -59,7 +59,7 @@ Projects adopting Organon must implement tier-4 testing from scratch. No semanti
 This RFC addresses all three gaps **for TypeScript projects** by creating:
 1. A testing domain within organon-tools (closes product gap)
 2. Reference implementation of tier-4 testing patterns (closes methodology gap)
-3. Reusable @organon/testing library (closes adoption gap)
+3. Reusable @organon-methodology/testing library (closes adoption gap)
 
 **Language scope:** TypeScript-first by necessity (organon-tools is TypeScript, fastest path to validating approach). Future RFCs will address other languages:
 - Scala 3 (planned)
@@ -112,7 +112,7 @@ organon generate-tests
 ### Implement Test
 ```typescript
 import { describe } from 'vitest';
-import { testInvariant, assertMaxValue } from '@organon/testing';
+import { testInvariant, assertMaxValue } from '@organon-methodology/testing';
 
 describe('Product Invariants', () => {
   testInvariant('INV-CACHE-1', 'cache TTL max 24h', async () => {
@@ -200,7 +200,7 @@ audience: [llm, human, tooling]
 
 ### What This Domain IS
 - A semantic testing framework for tier-4 invariant verification
-- TypeScript-native library published as @organon/testing
+- TypeScript-native library published as @organon-methodology/testing
 - Bridge between "declare invariant" and "verify invariant in code"
 - Integration layer connecting ETHOS.md invariants to test frameworks
 - Coverage tracker that maps invariant IDs to test implementations
@@ -307,7 +307,7 @@ audience: [llm, human]
 
 # Testing Domain Philosophy
 
-> Why we built @organon/testing this way.
+> Why we built @organon-methodology/testing this way.
 
 ---
 
@@ -419,10 +419,10 @@ This bet succeeds if:
 - Add link to testing domain in "Domains" section
 
 **`book-llms/invariant-tracking.md`**
-- Add @organon/testing as reference implementation for tier-4 testing
+- Add @organon-methodology/testing as reference implementation for tier-4 testing
 
 **`book-llms/three-layer-architecture.md`**
-- Add @organon/testing as example of Layer 3 (Tools)
+- Add @organon-methodology/testing as example of Layer 3 (Tools)
 
 ### Delete
 
@@ -455,7 +455,7 @@ Once the domain organon is created, implementation builds what the organon defin
 **Package Structure:**
 ```
 packages/
-├── testing/                        ← Published as @organon/testing
+├── testing/                        ← Published as @organon-methodology/testing
 │   ├── src/
 │   │   ├── core/
 │   │   │   ├── invariant-test.ts          # testInvariant() wrapper, metadata
@@ -533,7 +533,7 @@ packages/
 
 ```typescript
 // 1. Semantic test declaration (INV-TEST-3: invariant-id-required)
-import { testInvariant } from '@organon/testing';
+import { testInvariant } from '@organon-methodology/testing';
 
 testInvariant('INV-CACHE-1', 'cache TTL max 24h', async () => {
   await assertMaxValue({
@@ -633,11 +633,11 @@ interface MaxValueOptions {
   - Actionable suggestions ("Did you mean X?")
 - [ ] README.md with complete workflow example
 - [ ] API documentation (TSDoc on all public functions)
-- [ ] Migration guide (custom tests → @organon/testing)
+- [ ] Migration guide (custom tests → @organon-methodology/testing)
 - [ ] Testing domain dogfooding
   - Write tier-4 tests for testing domain itself (INV-TEST-5)
   - Verify 100% coverage
-- [ ] Publish `@organon/testing@0.1.0-beta`
+- [ ] Publish `@organon-methodology/testing@0.1.0-beta`
 
 **Deliverable:** Working testing framework (Vitest-only) with coverage tracking and CLI integration
 
@@ -678,7 +678,7 @@ interface MaxValueOptions {
   - All Phase 1 checklist items completed
   - Package ready for npm publish
 - **Go/No-Go Decision:** If <70% coverage achieved, extend Phase 1 by 1 week before starting Phase 2
-- **Output:** Beta release `@organon/testing@0.1.0-beta`
+- **Output:** Beta release `@organon-methodology/testing@0.1.0-beta`
 
 ---
 
@@ -706,7 +706,7 @@ interface MaxValueOptions {
 - [ ] Watch mode integration (re-run tests on file change)
 - [ ] Incremental testing (only test changed files)
 - [ ] LSP integration (inline errors in IDE)
-- [ ] Publish `@organon/testing@1.0.0` (stable)
+- [ ] Publish `@organon-methodology/testing@1.0.0` (stable)
 
 **Deliverable:** Full multi-framework support + advanced features
 
@@ -719,7 +719,7 @@ These decisions implement the domain principles defined in testing/PHILOSOPHY.md
 **Decision 1: Monorepo with npm Workspaces**
 - **Implements:** Principle 5 (Integration over replacement)
 - **Technical benefit:** Shared tsconfig, shared CI, coordinated releases
-- **User benefit:** Can install `@organon/testing` independently or use with full `organon-tools`
+- **User benefit:** Can install `@organon-methodology/testing` independently or use with full `organon-tools`
 
 **Decision 2: Vitest-First (Phase 1)**
 - **Implements:** Principle 2 (Clarity over brevity - focus > completeness)
@@ -770,7 +770,7 @@ These decisions implement the domain principles defined in testing/PHILOSOPHY.md
 
 **Time-to-first-test:**
 - **Method:** Instrumented `organon generate-tests` command logs timestamps (start → test file created → test passing)
-- **Sample:** First 20 users of @organon/testing beta
+- **Sample:** First 20 users of @organon-methodology/testing beta
 - **Target:** 90th percentile < 5 minutes
 - **Data collection:** Optional telemetry (opt-in), local logs
 
@@ -799,7 +799,7 @@ These decisions implement the domain principles defined in testing/PHILOSOPHY.md
 - **Sample size:** Minimum 10 developers (at least 2 per pilot project)
 
 **Integration speed:**
-- **Method:** Measure from `npm install @organon/testing` to first successful `organon verify --gate=tier4-tests` in CI
+- **Method:** Measure from `npm install @organon-methodology/testing` to first successful `organon verify --gate=tier4-tests` in CI
 - **Tracking:** Combination of telemetry (opt-in) and manual timing for pilot projects
 - **Target:** 90th percentile < 30 minutes
 - **Includes:** Package install, test file creation, first test written, CI configuration, first passing build
@@ -828,7 +828,7 @@ These decisions implement the domain principles defined in testing/PHILOSOPHY.md
 5. ✅ **Error verbosity?** → Verbose default, `--quiet` flag
 
 ### Resolved (During RFC Review)
-6. ✅ **Naming:** `@organon/testing` (matches `@testing-library/*` convention)
+6. ✅ **Naming:** `@organon-methodology/testing` (matches `@testing-library/*` convention)
 7. ✅ **Assertion API:** Options object (`assertMaxValue({ files, pattern, maxValue })`) — clearer, extensible, optional params without breaking changes
 8. ✅ **Test metadata storage:** `.organon/coverage.json` (already referenced throughout docs and architecture)
 
@@ -864,12 +864,12 @@ None — all design questions resolved. Ready for implementation.
 - New frontmatter fields are domain-specific (only in testing domain organon files)
 - Existing projects can adopt incrementally (opt-in, not breaking change)
 - `organon-tools` CLI gains new commands (`generate-tests`, enhanced `coverage`, `verify --gate=tier4-tests`) but existing commands unchanged
-- @organon/testing is a new package (no version to break compatibility with)
+- @organon-methodology/testing is a new package (no version to break compatibility with)
 
-**Migration:** None required. Projects not using @organon/testing are completely unaffected. Projects adopting @organon/testing add it as a new dependency without changing existing code.
+**Migration:** None required. Projects not using @organon-methodology/testing are completely unaffected. Projects adopting @organon-methodology/testing add it as a new dependency without changing existing code.
 
 **Versioning:**
-- @organon/testing will start at `0.1.0-beta` (Phase 1 delivery)
+- @organon-methodology/testing will start at `0.1.0-beta` (Phase 1 delivery)
 - SemVer followed: breaking changes require major version bump
 - organon-tools CLI remains on separate versioning (no coupling)
 

@@ -532,7 +532,7 @@ Create a valid organon project structure from scratch, including config, scaffol
 
 ### Preconditions
 
-- `@organon/tools` is installed and available on PATH (or run via `npx`)
+- `@organon-methodology/tools` is installed and available on PATH (or run via `npx`)
 - Target directory is writable
 - No conflicting `organon.config.json` in parent directories (could cause config resolution confusion)
 
@@ -576,7 +576,7 @@ Bring an existing organon project up to date with the latest methodology version
 ### Preconditions
 
 - An existing organon project with `organon.config.json` exists (or was previously initialized)
-- `@organon/tools` is installed at the target version
+- `@organon-methodology/tools` is installed at the target version
 - Working directory or `--project-root` points to a valid project
 
 ### Steps
@@ -626,7 +626,7 @@ Confirm both packages are ready for npm publication — clean builds, passing te
 
 ### Steps
 
-1. **Clean build both packages.** Build `@organon/testing` first (dependency), then `@organon/tools`. Use `npm run clean && npm run build` in each.
+1. **Clean build both packages.** Build `@organon-methodology/testing` first (dependency), then `@organon-methodology/tools`. Use `npm run clean && npm run build` in each.
 
 2. **Run all tests.** Execute `npm test` in both `packages/testing` and `packages/tools`. All tests must pass.
 
@@ -661,7 +661,7 @@ Confirm both packages are ready for npm publication — clean builds, passing te
 
 | Failure | Recovery Action |
 |---------|-----------------|
-| Build fails | Fix TypeScript errors. Ensure `@organon/testing` builds before `@organon/tools`. |
+| Build fails | Fix TypeScript errors. Ensure `@organon-methodology/testing` builds before `@organon-methodology/tools`. |
 | Tests fail | Fix failing tests before proceeding. Never skip tests for a release. |
 | Version misalignment | Use `scripts/release.mjs` which updates all four locations atomically. |
 | Missing LICENSE in pack | Ensure `LICENSE` file exists in the package directory and is listed in `files` array. |
@@ -706,8 +706,8 @@ Ship a new version of both packages to npm with proper versioning, changelog, gi
 5. **Monitor CI publish.** The `release.yml` GitHub Action triggers automatically on release publication. Monitor the workflow run for success.
 
 6. **Verify npm availability.** After CI completes, confirm packages are available:
-   - `npm info @organon/tools`
-   - `npm info @organon/testing`
+   - `npm info @organon-methodology/tools`
+   - `npm info @organon-methodology/testing`
 
 7. **Update README if major version.** For major version bumps, update install instructions in README.md if the package name or usage changed.
 

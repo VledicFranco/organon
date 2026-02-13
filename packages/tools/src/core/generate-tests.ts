@@ -108,12 +108,12 @@ function matchAssertion(invariant: ExtractedInvariant): AssertionTemplate {
 function testFileHeader(inv: ExtractedInvariant): string {
   return `// @organon-invariant ${inv.id}
 import { describe } from 'vitest';
-import { testInvariant } from '@organon/testing/vitest';
+import { testInvariant } from '@organon-methodology/testing/vitest';
 `;
 }
 
 function scaffoldMaxValue(inv: ExtractedInvariant): string {
-  return `${testFileHeader(inv)}import { assertMaxValue } from '@organon/testing/vitest';
+  return `${testFileHeader(inv)}import { assertMaxValue } from '@organon-methodology/testing/vitest';
 
 describe('${inv.id}', () => {
   testInvariant('${inv.id}', '${inv.name}', async () => {
@@ -129,7 +129,7 @@ describe('${inv.id}', () => {
 }
 
 function scaffoldNoSideEffects(inv: ExtractedInvariant): string {
-  return `${testFileHeader(inv)}import { assertNoSideEffects } from '@organon/testing/vitest';
+  return `${testFileHeader(inv)}import { assertNoSideEffects } from '@organon-methodology/testing/vitest';
 
 describe('${inv.id}', () => {
   testInvariant('${inv.id}', '${inv.name}', async () => {
@@ -143,7 +143,7 @@ describe('${inv.id}', () => {
 }
 
 function scaffoldFileExists(inv: ExtractedInvariant): string {
-  return `${testFileHeader(inv)}import { assertFileExists } from '@organon/testing/vitest';
+  return `${testFileHeader(inv)}import { assertFileExists } from '@organon-methodology/testing/vitest';
 
 describe('${inv.id}', () => {
   testInvariant('${inv.id}', '${inv.name}', async () => {
@@ -156,7 +156,7 @@ describe('${inv.id}', () => {
 }
 
 function scaffoldNamingConvention(inv: ExtractedInvariant): string {
-  return `${testFileHeader(inv)}import { assertNamingConvention } from '@organon/testing/vitest';
+  return `${testFileHeader(inv)}import { assertNamingConvention } from '@organon-methodology/testing/vitest';
 
 describe('${inv.id}', () => {
   testInvariant('${inv.id}', '${inv.name}', async () => {
@@ -171,7 +171,7 @@ describe('${inv.id}', () => {
 }
 
 function scaffoldCustom(inv: ExtractedInvariant): string {
-  return `${testFileHeader(inv)}import { assertCustom } from '@organon/testing/vitest';
+  return `${testFileHeader(inv)}import { assertCustom } from '@organon-methodology/testing/vitest';
 
 describe('${inv.id}', () => {
   testInvariant('${inv.id}', '${inv.name}', async () => {

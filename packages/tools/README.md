@@ -130,7 +130,7 @@ Without a config file, conventions are used: scans for `organon/` and `book-llms
 ## Programmatic API
 
 ```typescript
-import { validateFrontmatter, resolveConfig, NodeFileSystem } from '@organon/tools';
+import { validateFrontmatter, resolveConfig, NodeFileSystem } from '@organon-methodology/tools';
 
 const fs = new NodeFileSystem();
 const config = await resolveConfig('.', fs);

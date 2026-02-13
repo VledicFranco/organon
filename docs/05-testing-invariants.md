@@ -1,6 +1,6 @@
 # Testing Invariants
 
-This guide covers tier-4 testing: writing automated tests that verify your organon invariants hold true in code. The `@organon/testing` package provides assertions purpose-built for this.
+This guide covers tier-4 testing: writing automated tests that verify your organon invariants hold true in code. The `@organon-methodology/testing` package provides assertions purpose-built for this.
 
 ---
 
@@ -44,24 +44,24 @@ Two sub-types:
 
 ## Setup
 
-Install `@organon/testing` as a dev dependency:
+Install `@organon-methodology/testing` as a dev dependency:
 
 ```bash
-npm install --save-dev @organon/testing
+npm install --save-dev @organon-methodology/testing
 ```
 
 The package has a peer dependency on `vitest` (optional). If you use vitest, import from the vitest adapter:
 
 ```typescript
 // vitest adapter — tests run through vitest's it()
-import { testInvariant, assertMaxValue } from '@organon/testing/vitest';
+import { testInvariant, assertMaxValue } from '@organon-methodology/testing/vitest';
 ```
 
 If you use a different test framework, import from the main entry point and provide your own test runner:
 
 ```typescript
 // Framework-agnostic core
-import { testInvariant, assertMaxValue } from '@organon/testing';
+import { testInvariant, assertMaxValue } from '@organon-methodology/testing';
 ```
 
 ---
@@ -75,7 +75,7 @@ Every tier-4 test should use `testInvariant()` instead of bare `it()` or `test()
 3. Produces structured error messages with invariant ID on failure
 
 ```typescript
-import { testInvariant, assertMaxValue } from '@organon/testing/vitest';
+import { testInvariant, assertMaxValue } from '@organon-methodology/testing/vitest';
 
 // @organon-invariant INV-CACHE-1
 testInvariant('INV-CACHE-1', 'cache TTL must not exceed 24 hours', async () => {
@@ -105,7 +105,7 @@ The package provides 6 pre-built assertions for common semantic test patterns.
 Verify that numeric values in files don't exceed a maximum. Useful for config limits, timeouts, thresholds.
 
 ```typescript
-import { assertMaxValue } from '@organon/testing/vitest';
+import { assertMaxValue } from '@organon-methodology/testing/vitest';
 
 await assertMaxValue({
   files: ['src/config/**/*.ts'],        // Glob patterns
@@ -130,7 +130,7 @@ await assertMaxValue({
 Verify that required files exist. Useful for structural invariants like "every domain has an ETHOS.md."
 
 ```typescript
-import { assertFileExists } from '@organon/testing/vitest';
+import { assertFileExists } from '@organon-methodology/testing/vitest';
 
 await assertFileExists({
   patterns: ['organon/domains/*/ETHOS.md'],   // Must match at least one file
@@ -151,7 +151,7 @@ await assertFileExists({
 Verify that files don't contain forbidden imports or patterns. Useful for "modules must be pure" invariants.
 
 ```typescript
-import { assertNoSideEffects } from '@organon/testing/vitest';
+import { assertNoSideEffects } from '@organon-methodology/testing/vitest';
 
 await assertNoSideEffects({
   files: ['src/core/**/*.ts'],
@@ -177,7 +177,7 @@ await assertNoSideEffects({
 Verify that file names or exported names follow a naming convention.
 
 ```typescript
-import { assertNamingConvention } from '@organon/testing/vitest';
+import { assertNamingConvention } from '@organon-methodology/testing/vitest';
 
 await assertNamingConvention({
   files: ['src/commands/*.ts'],
@@ -199,7 +199,7 @@ await assertNamingConvention({
 Verify that specified exports exist in a module. Useful for public API invariants.
 
 ```typescript
-import { assertExportsPresent } from '@organon/testing/vitest';
+import { assertExportsPresent } from '@organon-methodology/testing/vitest';
 
 await assertExportsPresent({
   file: 'src/index.ts',
@@ -220,7 +220,7 @@ await assertExportsPresent({
 Escape hatch for invariants that don't fit the pre-built assertions.
 
 ```typescript
-import { assertCustom } from '@organon/testing/vitest';
+import { assertCustom } from '@organon-methodology/testing/vitest';
 
 await assertCustom({
   name: 'no-circular-dependencies',
@@ -323,7 +323,7 @@ From this project's own `meta-invariants.test.ts`:
 
 ```typescript
 import { describe } from 'vitest';
-import { testInvariant, assertFileExists } from '@organon/testing/vitest';
+import { testInvariant, assertFileExists } from '@organon-methodology/testing/vitest';
 
 describe('Meta-organon invariants', () => {
   // @organon-invariant INV-META-1
@@ -363,11 +363,11 @@ Key patterns:
 
 If you're working in a monorepo (like this project), keep these in mind:
 
-**Build order matters.** The `@organon/testing` package must be built before packages that import it:
+**Build order matters.** The `@organon-methodology/testing` package must be built before packages that import it:
 
 ```bash
 cd packages/testing && npm run build
-cd packages/tools && npm test    # Can now import @organon/testing
+cd packages/tools && npm test    # Can now import @organon-methodology/testing
 ```
 
 **Workspace dependencies** use `"*"` in package.json (npm workspaces), not `"workspace:*"` (pnpm syntax):
@@ -375,12 +375,12 @@ cd packages/tools && npm test    # Can now import @organon/testing
 ```json
 {
   "devDependencies": {
-    "@organon/testing": "*"
+    "@organon-methodology/testing": "*"
   }
 }
 ```
 
-**Subpath export:** Import from `@organon/testing/vitest` for the vitest adapter. Do not export vitest-specific code from the main `@organon/testing` entry point — it would fail in non-vitest contexts.
+**Subpath export:** Import from `@organon-methodology/testing/vitest` for the vitest adapter. Do not export vitest-specific code from the main `@organon-methodology/testing` entry point — it would fail in non-vitest contexts.
 
 **`requireMatches: true`** (the default) prevents silent passes from incorrect glob patterns or file paths. This is intentional — a test that matches zero files should fail, not silently pass.
 

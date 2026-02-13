@@ -43,7 +43,7 @@ The Organon methodology (book-llms/) defines verification gates, frontmatter sch
 - **Universal:** Works with any project in any language (Python, Rust, Scala, etc.)
 - **CI/CD native:** Commands compose in pipelines (`organon verify || exit 1`)
 - **Human-friendly:** `organon validate path/to/file.md` is discoverable; API is not
-- **Single installation:** `npm install -g @organon/tools` vs per-project dependencies
+- **Single installation:** `npm install -g @organon-methodology/tools` vs per-project dependencies
 
 **Trade-off:** CLI is less flexible than library API, but universality > flexibility for methodology enforcement.
 

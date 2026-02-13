@@ -48,7 +48,7 @@ organon [command] [args]
 
 ```typescript
 // If programmatic API, show code example
-import { feature } from '@organon/tools';
+import { feature } from '@organon-methodology/tools';
 ```
 
 ---

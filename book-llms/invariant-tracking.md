@@ -210,7 +210,7 @@ The `judgment-calls` verification gate (V2 planned) will check:
 
 ## Reference Implementation
 
-**`@organon/testing`** (TypeScript) is the first language-specific implementation of tier-4 testing. It provides:
+**`@organon-methodology/testing`** (TypeScript) is the first language-specific implementation of tier-4 testing. It provides:
 
 - **`testInvariant(id, description, fn)`** — wrapper that links test execution to invariant IDs (enforces annotation requirement)
 - **Pre-built assertions** — `assertMaxValue()`, `assertNoSideEffects()`, `assertFileExists()`, etc. for common invariant patterns

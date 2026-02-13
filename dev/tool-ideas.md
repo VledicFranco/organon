@@ -70,7 +70,7 @@ organon init
 
 ---
 
-### 2. Semantic Testing Framework (`@organon/testing`)
+### 2. Semantic Testing Framework (`@organon-methodology/testing`)
 
 **Problem:** Projects must write tier-4 tests from scratch. No reusable patterns for common invariants (max values, no side effects, backwards compatibility).
 
@@ -78,7 +78,7 @@ organon init
 
 **Package structure:**
 ```
-@organon/testing/
+@organon-methodology/testing/
 ├── core/
 │   ├── invariant-test.ts      # testInvariant() wrapper
 │   ├── assertions/
@@ -105,7 +105,7 @@ organon init
 ```typescript
 // tests/organon/invariants.test.ts
 import { describe } from 'vitest';
-import { testInvariant, assertMaxValue, assertNoSideEffects } from '@organon/testing';
+import { testInvariant, assertMaxValue, assertNoSideEffects } from '@organon-methodology/testing';
 
 describe('Product Invariants', () => {
   testInvariant('INV-PROD-1', 'cache TTL max 24h', async () => {
@@ -151,7 +151,7 @@ organon generate-tests
 
 **Implementation notes:**
 - Start with TypeScript support only (Phase 1)
-- Language adapters later: `@organon/testing-py`, `@organon/testing-rust` (Phase 4)
+- Language adapters later: `@organon-methodology/testing-py`, `@organon-methodology/testing-rust` (Phase 4)
 - Integration with `organon coverage`: testing library writes coverage metadata to `.organon/coverage.json`
 - Each assertion is a pure function (testable independently)
 
@@ -501,7 +501,7 @@ For **maximum adoption impact**, build in this order:
 ---
 
 ### Phase 2: Enforcement (Weeks 5-8)
-4. ✅ **`@organon/testing`** - Semantic testing framework (TypeScript first, RFC 001)
+4. ✅ **`@organon-methodology/testing`** - Semantic testing framework (TypeScript first, RFC 001)
 5. ✅ **Test generator** - From ETHOS.md invariants → test scaffolds (RFC 001)
 6. **Enhanced coverage** - Integrate testing library with `organon coverage`
 
@@ -544,7 +544,7 @@ For **maximum adoption impact**, build in this order:
 | Monorepo vs separate packages | Easier development, shared code | Larger dependency footprint |
 
 **Mitigation strategies:**
-- Keep `@organon/testing` as optional peer dependency (doesn't block core CLI)
+- Keep `@organon-methodology/testing` as optional peer dependency (doesn't block core CLI)
 - Provide escape hatches (custom assertions, manual test writing)
 - Document migration path for each tool (don't force all-or-nothing adoption)
 
@@ -552,7 +552,7 @@ For **maximum adoption impact**, build in this order:
 
 ## Open Questions
 
-1. **Monorepo vs separate repos?** Keep `@organon/testing` in organon-tools monorepo or separate package?
+1. **Monorepo vs separate repos?** Keep `@organon-methodology/testing` in organon-tools monorepo or separate package?
    - **Recommendation:** Monorepo (shared code, easier versioning) with separate npm packages
 
 2. **Language support priority?** TypeScript → Python → Rust or different order?
@@ -565,7 +565,7 @@ For **maximum adoption impact**, build in this order:
    - **Recommendation:** Both (static for docs, live for exploration)
 
 5. **Testing framework: separate package or builtin?** Ship with organon-tools or publish separately?
-   - **Recommendation:** Separate package (`@organon/testing`) but linked via monorepo
+   - **Recommendation:** Separate package (`@organon-methodology/testing`) but linked via monorepo
 
 ---
 
@@ -586,7 +586,7 @@ For **maximum adoption impact**, build in this order:
 1. **Review and prioritize** - Stakeholder alignment on Phase 1 tools
 2. **Create RFCs** - For each Phase 1 tool, write detailed RFC in `organon/methodology/rfcs/`
 3. **Spike `organon init`** - Quick prototype to validate approach
-4. **Design `@organon/testing` API** - Get feedback on assertion interface
+4. **Design `@organon-methodology/testing` API** - Get feedback on assertion interface
 5. **Prototype discovery heuristics** - Test domain detection on 3-5 codebases
 
 **Status:** Draft / Awaiting Review

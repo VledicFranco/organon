@@ -1,7 +1,7 @@
 /**
  * Public API for programmatic use of Organon tools.
  *
- * Import from '@organon/tools' or '@organon/tools/core/*'.
+ * Import from '@organon-methodology/tools' or '@organon-methodology/tools/core/*'.
  */
 
 // Core types

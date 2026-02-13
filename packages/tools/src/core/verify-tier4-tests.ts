@@ -2,11 +2,11 @@
  * tier4-tests verification gate.
  *
  * Static analysis gate that checks whether test files with @organon-invariant
- * annotations properly import from @organon/testing and call testInvariant().
+ * annotations properly import from @organon-methodology/testing and call testInvariant().
  *
  * This gate does NOT run tests — that's CI's job. It only checks structure:
  * 1. Find files with @organon-invariant annotations
- * 2. Verify they import from @organon/testing
+ * 2. Verify they import from @organon-methodology/testing
  * 3. Verify they contain testInvariant() calls
  * 4. Report gaps
  */
@@ -48,7 +48,7 @@ const DEFAULT_TEST_GLOBS = [
 ];
 
 const ANNOTATION_RE = /@organon-invariant\s+INV-[\w-]+/;
-const TESTING_IMPORT_RE = /from\s+['"]@organon\/testing/;
+const TESTING_IMPORT_RE = /from\s+['"]@organon-methodology\/testing/;
 const TEST_INVARIANT_RE = /testInvariant\s*\(/;
 
 // ---------------------------------------------------------------------------
@@ -57,7 +57,7 @@ const TEST_INVARIANT_RE = /testInvariant\s*\(/;
 
 /**
  * Verify that test files with @organon-invariant annotations
- * properly use @organon/testing infrastructure.
+ * properly use @organon-methodology/testing infrastructure.
  */
 export async function verifyTier4Tests(options: {
   projectRoot: string;
@@ -92,14 +92,14 @@ export async function verifyTier4Tests(options: {
       annotatedFiles++;
       let isValid = true;
 
-      // Check for @organon/testing import
+      // Check for @organon-methodology/testing import
       if (!TESTING_IMPORT_RE.test(content)) {
         warnings.push({
           severity: 'warning',
           code: 'TIER4_MISSING_IMPORT',
-          message: `Test file has @organon-invariant annotation but does not import from @organon/testing`,
+          message: `Test file has @organon-invariant annotation but does not import from @organon-methodology/testing`,
           file,
-          suggestion: `Add: import { testInvariant } from '@organon/testing/vitest';`,
+          suggestion: `Add: import { testInvariant } from '@organon-methodology/testing/vitest';`,
         });
         isValid = false;
       }

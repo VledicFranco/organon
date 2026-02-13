@@ -15,7 +15,7 @@
  */
 
 import { describe, expect } from 'vitest';
-import { testInvariant } from '@organon/testing/vitest';
+import { testInvariant } from '@organon-methodology/testing/vitest';
 import { resolve } from 'node:path';
 import { readFile, readdir, access } from 'node:fs/promises';
 import { parseFrontmatter, extractSection } from './frontmatter-parser.js';

@@ -234,6 +234,6 @@ describe('generateTests', () => {
     });
 
     expect(result.generated[0].code).toContain("testInvariant('INV-TEST-1'");
-    expect(result.generated[0].code).toContain("import { testInvariant } from '@organon/testing/vitest'");
+    expect(result.generated[0].code).toContain("import { testInvariant } from '@organon-methodology/testing/vitest'");
   });
 });
