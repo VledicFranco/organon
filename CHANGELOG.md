@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- **Scala 3 testing library** (`packages/testing-scala/`) — port of @organon-methodology/testing with feature parity
+  - 6 assertion functions: `assertMaxValue`, `assertNoSideEffects`, `assertFileExists`, `assertNamingConvention`, `assertExportsPresent`, `assertCustom`
+  - `testInvariant` wrapper with invariant ID linking and registry
+  - MUnit adapter (`OrganonSuite` trait)
+  - FileSystem abstraction with os-lib implementation and in-memory test mock
+  - Resolver layer: ParallelReader, GlobExpander, ValueResolver, ImportResolver, StringResolver, FileStemResolver
+  - 66 tests passing
+- Multi-language package organization (sbt project alongside npm workspaces)
+- CI job for Scala tests (`test-scala` in GitHub Actions)
+- Maven Central publishing via sbt-ci-release in release workflow
+- INV-TEST-8 (language-parity) invariant in testing domain
+- RFC 008: Scala 3 Testing Library & Multi-Language Package Strategy
+
+### Changed
+- Release script (`scripts/release.mjs`) now bumps `packages/testing-scala/build.sbt` version
+
 ## [0.4.0] - 2026-02-13
 
 ### Added

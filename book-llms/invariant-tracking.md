@@ -4,7 +4,7 @@ scope: meta
 name: invariant-tracking
 version: "1.1"
 summary: Invariant-to-test tracking specification — how to declare invariant IDs and verify test coverage
-token_estimate: 2800
+token_estimate: 3000
 inherits_from: [meta-organon]
 load_priority: high
 required_for:
@@ -79,6 +79,13 @@ test('ethos is required', () => { ... });
 # Python
 # @organon-invariant INV-META-1
 def test_ethos_required():
+```
+
+```scala
+// Scala 3
+// @organon-invariant INV-META-1
+testInvariant("INV-META-1", "ethos is required"):
+  Assertions.assertFileExists(FileExistsOptions(files = Seq("organon/ETHOS.md")))
 ```
 
 ```rust
@@ -210,16 +217,25 @@ The `judgment-calls` verification gate (V2 planned) will check:
 
 ## Reference Implementation
 
-**`@organon-methodology/testing`** (TypeScript) is the first language-specific implementation of tier-4 testing. It provides:
+Two language-specific implementations of tier-4 testing are available:
 
-- **`testInvariant(id, description, fn)`** — wrapper that links test execution to invariant IDs (enforces annotation requirement)
-- **Pre-built assertions** — `assertMaxValue()`, `assertNoSideEffects()`, `assertFileExists()`, etc. for common invariant patterns
-- **I/O separation** — pure assertion logic in `core/assertions/` (no file system imports), resolver layer in `core/resolvers/` handles file reading
-- **Coverage tracking** — registry maps tested invariant IDs to test results, feeds `organon coverage` gate
+**TypeScript** (`@organon-methodology/testing`):
+- **Source:** `packages/testing/` | **RFC:** [001-testing-framework](../rfcs/001-testing-framework.md)
+- Vitest adapter, 7 assertions, 204 tests
 
-**Source:** `packages/testing/` | **Domain organon:** `organon/domains/testing/` | **RFC:** [001-testing-framework](../rfcs/001-testing-framework.md)
+**Scala 3** (`io.github.vledicfranco:organon-testing_3`):
+- **Source:** `packages/testing-scala/` | **RFC:** [008-scala-testing-library](../rfcs/008-scala-testing-library.md)
+- MUnit adapter, 6 assertions, 66 tests
 
-Future language implementations (Scala, Python, Rust) should follow the same pattern: language-specific assertion libraries that use the universal `@organon-invariant` annotation contract defined above.
+Both implementations provide:
+- **`testInvariant(id, description, fn)`** — wrapper that links test execution to invariant IDs
+- **Pre-built assertions** — `assertMaxValue()`, `assertNoSideEffects()`, `assertFileExists()`, etc.
+- **I/O separation** — pure assertion logic (no file system imports), resolver layer handles file reading
+- **Coverage tracking** — registry maps tested invariant IDs to test results
+
+**Domain organon:** `organon/domains/testing/`
+
+Future language implementations (Python, Rust) should follow the same pattern: language-specific assertion libraries that use the universal `@organon-invariant` annotation contract defined above.
 
 ---
 

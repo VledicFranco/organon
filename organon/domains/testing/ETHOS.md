@@ -2,10 +2,10 @@
 type: constraints
 scope: domain
 name: testing
-version: "1.0"
-summary: Tier-4 invariant verification framework — semantic testing library for TypeScript projects
-token_estimate: 1500
-invariants_count: 7
+version: "1.2"
+summary: Tier-4 invariant verification framework — multi-language semantic testing library (TypeScript, Scala 3)
+token_estimate: 1700
+invariants_count: 8
 principles_count: 5
 heuristics_count: 10
 invariants:
@@ -23,6 +23,8 @@ invariants:
     name: always-async
   - id: INV-TEST-7
     name: composable
+  - id: INV-TEST-8
+    name: language-parity
 inherits_from: [organon-self-governance]
 load_priority: high
 required_for:
@@ -40,8 +42,9 @@ audience: [llm, human, tooling]
 ## Identity
 
 ### What This Domain IS
-- A semantic testing framework for tier-4 invariant verification
-- TypeScript-native library published as @organon-methodology/testing
+- A multi-language semantic testing framework for tier-4 invariant verification
+- TypeScript library published as @organon-methodology/testing (npm)
+- Scala 3 library published as io.github.vledicfranco:organon-testing (Maven Central)
 - Bridge between "declare invariant" and "verify invariant in code"
 - Integration layer connecting ETHOS.md invariants to test frameworks
 - Coverage tracker that maps invariant IDs to test implementations
@@ -84,6 +87,10 @@ audience: [llm, human, tooling]
    - Assertion functions read no module-level mutable variables and write no shared state. Each assertion call is independent of previous calls — output is identical regardless of execution order.
    - Enforced by: static analysis for module-level `let`/`var` in core/assertions/, integration tests verifying assertion output is identical regardless of execution order
 
+8. **INV-TEST-8: language-parity**
+   - Every assertion available in TypeScript must have a Scala 3 equivalent with identical semantics. API shape may differ idiomatically (e.g., `using` context parameters vs optional fields), but behavior and error reporting must match.
+   - Enforced by: cross-language assertion list comparison, matching test scenarios across both implementations
+
 ---
 
 ## Principles (Prioritized)
@@ -120,7 +127,7 @@ Do not do the following in this domain:
 - Build a test runner (integrate with Vitest/Jest/Mocha instead)
 - Validate organon file structure (that's organon-tools core: `organon validate`)
 - Provide mocking, fixture, or snapshot utilities
-- Support non-TypeScript languages (future RFCs will address other languages)
+- Support languages beyond TypeScript and Scala 3 (future RFCs will address Python, Rust, etc.)
 - Auto-generate invariants from code (discovery is a separate concern)
 
 ---
@@ -128,7 +135,7 @@ Do not do the following in this domain:
 ## Verification Checklist
 
 - [ ] Frontmatter present with all required fields
-- [ ] Frontmatter counts match actual content (7 invariants, 5 principles, 10 decision heuristic rows)
+- [ ] Frontmatter counts match actual content (8 invariants, 5 principles, 10 decision heuristic rows)
 - [ ] Identity boundaries are specific and testable
 - [ ] Principles are numbered by priority
 - [ ] No conflicts with parent scope constraints (organon/domains/tools/ETHOS.md)
