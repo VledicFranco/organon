@@ -185,7 +185,9 @@ organon mcp                     # Start MCP server (IDE integration)
 
 ## Testing Invariants
 
-The `@organon-methodology/testing` package provides assertions for tier-4 (organon) tests — tests that verify your ETHOS.md invariants hold in code:
+The testing library provides assertions for tier-4 (organon) tests — tests that verify your ETHOS.md invariants hold in code. Available for TypeScript and Scala 3.
+
+### TypeScript
 
 ```bash
 npm install --save-dev @organon-methodology/testing
@@ -203,6 +205,26 @@ testInvariant('INV-PROJ-1', 'Config files stay under 200 lines', async () => {
     cwd: process.cwd(),
   });
 });
+```
+
+### Scala 3
+
+```scala
+// build.sbt
+libraryDependencies += "io.github.vledicfranco" %% "organon-testing" % "0.0.1" % Test
+```
+
+```scala
+import io.github.vledicfranco.organon.testing.adapters.OrganonSuite
+import io.github.vledicfranco.organon.testing.*
+
+class ConfigInvariantsSpec extends OrganonSuite:
+  testInvariant("INV-PROJ-1", "Config files stay under 200 lines"):
+    Assertions.assertMaxValue(MaxValueOptions(
+      files = Seq("src/**/config/*.scala"),
+      pattern = raw"\n".r,
+      maxValue = 200
+    ))
 ```
 
 Available assertions: `assertMaxValue`, `assertFileExists`, `assertNamingConvention`, `assertExportsPresent`, `assertNoSideEffects`, `assertCustom`.
@@ -231,7 +253,8 @@ organon/                          # This repository IS the methodology specifica
 │
 ├── packages/
 │   ├── tools/                    # @organon-methodology/tools (CLI + MCP)
-│   └── testing/                  # @organon-methodology/testing (invariant assertions)
+│   ├── testing/                  # @organon-methodology/testing (TypeScript invariant assertions)
+│   └── testing-scala/            # organon-testing (Scala 3 invariant assertions)
 │
 └── rfcs/                         # Design proposals for methodology evolution
 ```

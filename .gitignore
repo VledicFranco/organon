@@ -6,6 +6,11 @@ node_modules/
 dist/
 *.tsbuildinfo
 
+# Scala / sbt
+target/
+project/target/
+project/project/
+
 # Temporary collaboration directory
 tmp/
 

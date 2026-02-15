@@ -1,6 +1,6 @@
 # Testing Invariants
 
-This guide covers tier-4 testing: writing automated tests that verify your organon invariants hold true in code. The `@organon-methodology/testing` package provides assertions purpose-built for this.
+This guide covers tier-4 testing: writing automated tests that verify your organon invariants hold true in code. Testing libraries are available for both **TypeScript** (`@organon-methodology/testing`) and **Scala 3** (`io.github.vledicfranco:organon-testing_3`).
 
 ---
 
@@ -44,6 +44,8 @@ Two sub-types:
 
 ## Setup
 
+### TypeScript
+
 Install `@organon-methodology/testing` as a dev dependency:
 
 ```bash
@@ -64,6 +66,23 @@ If you use a different test framework, import from the main entry point and prov
 import { testInvariant, assertMaxValue } from '@organon-methodology/testing';
 ```
 
+### Scala 3
+
+Add to your `build.sbt`:
+
+```scala
+libraryDependencies += "io.github.vledicfranco" %% "organon-testing" % "0.0.1" % Test
+```
+
+Import the MUnit adapter:
+
+```scala
+import io.github.vledicfranco.organon.testing.adapters.OrganonSuite
+import io.github.vledicfranco.organon.testing.*
+```
+
+The `OrganonSuite` trait provides default `FileSystem` (os-lib backed) and `ExecutionContext` (global) as Scala 3 `given` instances.
+
 ---
 
 ## testInvariant() Wrapper
@@ -73,6 +92,8 @@ Every tier-4 test should use `testInvariant()` instead of bare `it()` or `test()
 1. Registers the test with its invariant ID for coverage tracking
 2. Adds the `@organon-invariant` annotation automatically
 3. Produces structured error messages with invariant ID on failure
+
+**TypeScript:**
 
 ```typescript
 import { testInvariant, assertMaxValue } from '@organon-methodology/testing/vitest';
@@ -85,6 +106,22 @@ testInvariant('INV-CACHE-1', 'cache TTL must not exceed 24 hours', async () => {
     maxValue: 86400,
   });
 });
+```
+
+**Scala 3:**
+
+```scala
+import io.github.vledicfranco.organon.testing.adapters.OrganonSuite
+import io.github.vledicfranco.organon.testing.*
+
+class CacheInvariantsSpec extends OrganonSuite:
+  // @organon-invariant INV-CACHE-1
+  testInvariant("INV-CACHE-1", "cache TTL must not exceed 24 hours"):
+    Assertions.assertMaxValue(MaxValueOptions(
+      files = Seq("src/config/*.scala"),
+      pattern = raw"ttl\s*=\s*(\d+)".r,
+      maxValue = 86400
+    ))
 ```
 
 **Parameters:**
@@ -383,6 +420,28 @@ cd packages/tools && npm test    # Can now import @organon-methodology/testing
 **Subpath export:** Import from `@organon-methodology/testing/vitest` for the vitest adapter. Do not export vitest-specific code from the main `@organon-methodology/testing` entry point — it would fail in non-vitest contexts.
 
 **`requireMatches: true`** (the default) prevents silent passes from incorrect glob patterns or file paths. This is intentional — a test that matches zero files should fail, not silently pass.
+
+---
+
+## Scala 3 API Differences
+
+The Scala 3 library mirrors the TypeScript API with idiomatic adaptations:
+
+| Concept | TypeScript | Scala 3 |
+|---------|-----------|---------|
+| Test wrapper | `testInvariant(id, desc, async () => { ... })` | `testInvariant(id, desc): ...` (by-name block) |
+| File system | `fs?: FileSystem` option | `using FileSystem` context parameter |
+| Async | `Promise<void>` | `Future[Unit]` |
+| Options | Object literals | Case classes (`MaxValueOptions`, etc.) |
+| Forbidden imports | Regex patterns | Module name strings (Scala package prefix matching) |
+| Naming conventions | String literals | `Convention` enum (`KebabCase`, `CamelCase`, etc.) |
+
+**Scala-specific features:**
+- Import detection covers Scala imports (`import foo.bar.Baz`, `import foo.bar.*`) alongside JS/TS patterns
+- Export detection covers Scala definitions (`def`, `val`, `class`, `trait`, `object`, `enum`, `type`, `export`)
+- `NoSideEffects` uses Scala package prefix matching (e.g., forbidding `java.io` catches `java.io.File`)
+
+**Full Scala API reference:** See [`packages/testing-scala/README.md`](../packages/testing-scala/README.md)
 
 ---
 

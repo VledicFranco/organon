@@ -105,6 +105,16 @@ configTs = configTs.replace(
 writeFileSync(configTsPath, configTs);
 console.log('  Updated packages/tools/src/templates/config.ts');
 
+// --- Update packages/testing-scala/build.sbt ---
+const buildSbtPath = join(root, 'packages', 'testing-scala', 'build.sbt');
+let buildSbt = readFileSync(buildSbtPath, 'utf-8');
+buildSbt = buildSbt.replace(
+  /ThisBuild \/ version\s*:=\s*"[^"]+"/,
+  `ThisBuild / version      := "${nextVersion}"`,
+);
+writeFileSync(buildSbtPath, buildSbt);
+console.log('  Updated packages/testing-scala/build.sbt');
+
 // --- Update CHANGELOG.md ---
 const changelogPath = join(root, 'CHANGELOG.md');
 const changelog = readFileSync(changelogPath, 'utf-8');

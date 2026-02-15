@@ -2,10 +2,10 @@
 type: rationale
 scope: domain
 name: testing
-version: "1.0"
+version: "1.1"
 summary: Why semantic tier-4 testing exists — design decisions, trade-offs, and the bet we're making
-token_estimate: 1230
-decision_count: 5
+token_estimate: 1800
+decision_count: 8
 inherits_from: [tools]
 load_priority: medium
 required_for:
@@ -103,6 +103,33 @@ Projects declare invariants in ETHOS.md but never automate enforcement. Why?
 
 ### Alt 3: LLM-generates-all-tests (no library)
 **Rejected because:** Non-deterministic, no coverage guarantee, no reusable patterns, debugging harder
+
+### 6. Scala 3 Port: MUnit over ScalaTest (Ecosystem Fit > Familiarity)
+**Choice:** MUnit as the primary test framework adapter for Scala 3
+
+**Benefit:** Lightweight, async-first, part of official Scala Toolkit, minimal dependencies
+
+**Cost:** ScalaTest has larger user base
+
+**Why we chose MUnit:** MUnit's Future-native `test()` maps cleanly to our always-async invariant (INV-TEST-6). ScalaTest adapter can be added later without changing core.
+
+### 7. Scala 3 Port: os-lib over java.nio (Ergonomics > Purity)
+**Choice:** os-lib for real FileSystem implementation
+
+**Benefit:** Clean API (one-liner file reads), cross-platform path handling, idiomatic Scala
+
+**Cost:** Runtime dependency (vs stdlib-only)
+
+**Why we chose os-lib:** java.nio.Files is verbose and blocking. os-lib provides the same semantics with better ergonomics. The FileSystem trait still allows pure test implementations.
+
+### 8. Scala 3 Port: Futures over Cats Effect/ZIO (Simplicity > Power)
+**Choice:** Plain scala.concurrent.Future for async operations
+
+**Benefit:** Zero dependencies beyond stdlib, lower learning curve, matches TypeScript's Promise model
+
+**Cost:** No cancellation, no structured concurrency, no resource safety
+
+**Why we chose Futures:** The testing library's I/O is simple (read files, check existence). Structured concurrency benefits don't justify the dependency weight. Users can wrap in CE/ZIO at the call site if needed.
 
 ## Success Criteria
 
