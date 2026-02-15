@@ -13,6 +13,9 @@ ThisBuild / scmInfo := Some(ScmInfo(
   "scm:git@github.com:VledicFranco/organon.git"
 ))
 
+// Publish to new Sonatype Central (not legacy oss.sonatype.org)
+ThisBuild / sonatypeCredentialHost := xerial.sbt.Sonatype.sonatypeCentralHost
+
 lazy val root = (project in file("."))
   .settings(
     name := "organon-testing",
