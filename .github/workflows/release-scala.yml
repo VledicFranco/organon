@@ -1,0 +1,49 @@
+name: Release Scala
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish (e.g., 0.0.1)'
+        required: true
+
+jobs:
+  publish-scala:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: sbt
+
+      - name: Create version tag for sbt-dynver
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "scala-v${{ github.event.inputs.version }}" -m "Scala testing library v${{ github.event.inputs.version }}"
+
+      - name: Override dynver to use explicit version
+        working-directory: packages/testing-scala
+        run: |
+          echo 'ThisBuild / version := "${{ github.event.inputs.version }}"' >> build.sbt
+          echo 'ThisBuild / isSnapshot := false' >> build.sbt
+
+      - name: Test
+        working-directory: packages/testing-scala
+        run: sbt test
+
+      - name: Publish to Maven Central
+        working-directory: packages/testing-scala
+        run: sbt ci-release
+        env:
+          PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
+          PGP_SECRET: ${{ secrets.PGP_SECRET }}
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          CI_RELEASE: publishSigned
+          CI_SNAPSHOT_RELEASE: publish
