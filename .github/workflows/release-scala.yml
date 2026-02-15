@@ -39,6 +39,9 @@ jobs:
           ThisBuild / dynverSonatypeSnapshots := false
           OVERRIDE
 
+      - name: Import GPG key
+        run: echo "${{ secrets.PGP_SECRET }}" | base64 -d | gpg --batch --import
+
       - name: Verify version override
         working-directory: packages/testing-scala
         run: sbt 'print version'
