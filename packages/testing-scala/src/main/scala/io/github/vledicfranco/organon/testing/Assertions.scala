@@ -190,10 +190,12 @@ object Assertions:
           val foundExports = extractExportNames(content)
           ExportsPresentValidator.validate(options.file, options.expectedExports, foundExports)
         }
-        .recoverWith { case ex: Throwable =>
-          Future.failed(
-            ExportsPresentResolverError(s"Failed to read file \"${options.file}\": ${ex.getMessage}")
-          )
+        .recoverWith {
+          case e: ExportsPresentAssertionError => Future.failed(e) // Re-throw assertion errors as-is
+          case ex: Throwable =>
+            Future.failed(
+              ExportsPresentResolverError(s"Failed to read file \"${options.file}\": ${ex.getMessage}")
+            )
         }
 
   /** Run a user-defined validation function with consistent error handling. */
@@ -211,16 +213,19 @@ object Assertions:
   // Export name extraction (Scala-specific patterns)
   // ---------------------------------------------------------------------------
 
+  /** Optional Scala modifiers that can precede a definition keyword. */
+  private val Mods = raw"""(?:(?:sealed|abstract|final|case|lazy|private|protected|override|inline|given|transparent|opaque|open|implicit)\s+)*"""
+
   /** Patterns to extract export/public definition names from Scala files. */
   private val ExportPatterns: Seq[scala.util.matching.Regex] = Seq(
-    raw"""^\s*def\s+(\w+)""".r,
-    raw"""^\s*val\s+(\w+)""".r,
-    raw"""^\s*var\s+(\w+)""".r,
-    raw"""^\s*class\s+(\w+)""".r,
-    raw"""^\s*trait\s+(\w+)""".r,
-    raw"""^\s*object\s+(\w+)""".r,
-    raw"""^\s*enum\s+(\w+)""".r,
-    raw"""^\s*type\s+(\w+)""".r,
+    raw"""^\s*${Mods}def\s+(\w+)""".r,
+    raw"""^\s*${Mods}val\s+(\w+)""".r,
+    raw"""^\s*${Mods}var\s+(\w+)""".r,
+    raw"""^\s*${Mods}class\s+(\w+)""".r,
+    raw"""^\s*${Mods}trait\s+(\w+)""".r,
+    raw"""^\s*${Mods}object\s+(\w+)""".r,
+    raw"""^\s*${Mods}enum\s+(\w+)""".r,
+    raw"""^\s*${Mods}type\s+(\w+)""".r,
     raw"""^\s*export\s+(\w+)""".r,
     // TS/JS patterns for cross-language compatibility
     raw"""export\s+(?:async\s+)?function\s+(\w+)""".r,

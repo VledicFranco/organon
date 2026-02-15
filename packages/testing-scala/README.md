@@ -7,10 +7,12 @@ Semantic testing framework for tier-4 invariant verification in Scala 3 projects
 Add to your `build.sbt`:
 
 ```scala
-libraryDependencies += "io.github.vledicfranco" %% "organon-testing" % "0.0.1" % Test
+libraryDependencies += "io.github.vledicfranco" %% "organon-testing" % "0.4.0" % Test
 ```
 
 ## Quick Start
+
+### MUnit (OrganonSuite)
 
 ```scala
 import io.github.vledicfranco.organon.testing.adapters.OrganonSuite
@@ -32,6 +34,31 @@ class CacheInvariantsSpec extends OrganonSuite:
       forbiddenModules = Seq("java.io", "java.nio.file.Files", "scala.io.Source")
     ))
 ```
+
+### ScalaTest (OrganonFlatSpec)
+
+```scala
+import io.github.vledicfranco.organon.testing.adapters.OrganonFlatSpec
+import io.github.vledicfranco.organon.testing.*
+
+class CacheInvariantsSpec extends OrganonFlatSpec:
+
+  testInvariant("INV-CACHE-1", "TTL never exceeds 24 hours"):
+    Assertions.assertMaxValue(MaxValueOptions(
+      files = Seq("src/**/*.scala"),
+      pattern = raw"ttl\s*=\s*(\d+)".r,
+      maxValue = 86400,
+      unit = Some("seconds")
+    ))
+
+  testInvariant("INV-CACHE-2", "No direct file system access in core"):
+    Assertions.assertNoSideEffects(NoSideEffectsOptions(
+      files = Seq("src/core/**/*.scala"),
+      forbiddenModules = Seq("java.io", "java.nio.file.Files", "scala.io.Source")
+    ))
+```
+
+The `OrganonFlatSpec` trait provides the same API as `OrganonSuite` but uses ScalaTest's `AnyFlatSpec` with `Matchers`. Each `testInvariant` call registers a ScalaTest test using `it should ... in { }` syntax. The default `assertionTimeout` is 30 seconds (override for longer tests).
 
 ## Assertions
 
@@ -138,7 +165,7 @@ class MyInvariantsSpec extends OrganonSuite:
 | Feature | TypeScript | Scala 3 |
 |---------|-----------|---------|
 | Package | `@organon-methodology/testing` | `io.github.vledicfranco:organon-testing_3` |
-| Test framework | Vitest adapter | MUnit adapter |
+| Test framework | Vitest adapter | MUnit adapter, ScalaTest adapter |
 | FileSystem | `fs?: FileSystem` option | `using FileSystem` context param |
 | Async | `Promise<void>` | `Future[Unit]` |
 | Options | Object literal | Case class |

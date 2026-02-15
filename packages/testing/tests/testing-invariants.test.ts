@@ -161,6 +161,7 @@ describe('INV-TEST-8: language-parity', () => {
     const adapterDir = resolve(scalaMainDir, 'adapters');
     const adapterEntries = await readdir(adapterDir);
     expect(adapterEntries).toContain('MUnitAdapter.scala');
+    expect(adapterEntries).toContain('ScalaTestAdapter.scala');
   });
 });
 

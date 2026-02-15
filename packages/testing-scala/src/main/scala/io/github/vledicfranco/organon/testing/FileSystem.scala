@@ -22,18 +22,16 @@ class OsLibFileSystem()(using ec: ExecutionContext) extends FileSystem:
 
   override def glob(pattern: String, cwd: Option[Path] = None): Future[Seq[Path]] = Future {
     val base = cwd.map(p => os.Path(p.toAbsolutePath)).getOrElse(os.pwd)
-    // Split pattern into directory parts and filename glob
-    val patternPath = os.RelPath(pattern.replace("\\", "/"))
-    val segments    = patternPath.segments.toSeq
+    val normalized = pattern.replace("\\", "/")
 
-    if segments.isEmpty then Seq.empty
+    if normalized.isEmpty then Seq.empty
     else
       // Walk directory and filter by glob pattern
       val allFiles = os.walk(base).filter(os.isFile)
       allFiles
         .filter { f =>
           val rel = f.relativeTo(base).toString.replace("\\", "/")
-          globMatch(rel, pattern.replace("\\", "/"))
+          globMatch(rel, normalized)
         }
         .map(p => p.toNIO)
         .toSeq
