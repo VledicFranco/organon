@@ -1,4 +1,4 @@
-ThisBuild / version      := "0.5.0"
+ThisBuild / version      := "0.0.1"
 ThisBuild / scalaVersion := "3.3.4"
 ThisBuild / organization := "io.github.vledicfranco"
 
@@ -6,7 +6,7 @@ ThisBuild / organization := "io.github.vledicfranco"
 ThisBuild / homepage := Some(url("https://github.com/VledicFranco/organon"))
 ThisBuild / licenses := List("MIT" -> url("https://opensource.org/licenses/MIT"))
 ThisBuild / developers := List(
-  Developer("VledicFranco", "Franco Vledicka", "", url("https://github.com/VledicFranco"))
+  Developer("VledicFranco", "Vledic Franco", "atfm05@gmail.com", url("https://github.com/VledicFranco"))
 )
 ThisBuild / scmInfo := Some(ScmInfo(
   url("https://github.com/VledicFranco/organon"),

@@ -7,14 +7,14 @@ Semantic testing framework for tier-4 invariant verification in Scala 3 projects
 Add to your `build.sbt`:
 
 ```scala
-libraryDependencies += "io.github.vledicfranco" %% "organon-testing" % "0.5.0" % Test
+libraryDependencies += "io.github.vledicfranco" %% "organon-testing" % "0.0.1" % Test
 ```
 
 ## Quick Start
 
 ```scala
-import com.vledicfranco.organon.testing.adapters.OrganonSuite
-import com.vledicfranco.organon.testing.*
+import io.github.vledicfranco.organon.testing.adapters.OrganonSuite
+import io.github.vledicfranco.organon.testing.*
 
 class CacheInvariantsSpec extends OrganonSuite:
 
@@ -122,7 +122,7 @@ Assertions.assertCustom(CustomAssertionOptions(
 Links tests to invariant IDs for coverage tracking:
 
 ```scala
-import com.vledicfranco.organon.testing.adapters.OrganonSuite
+import io.github.vledicfranco.organon.testing.adapters.OrganonSuite
 
 class MyInvariantsSpec extends OrganonSuite:
   testInvariant("INV-PROJ-1", "Config files stay under 200 lines"):
