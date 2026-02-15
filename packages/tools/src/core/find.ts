@@ -14,6 +14,7 @@
 
 import { parseFrontmatter, parseOrganonFile } from './frontmatter-parser.js';
 import { joinPath, dirName } from './config.js';
+import { discoverOrganonFiles } from './discover.js';
 import type {
   DiagnosticMessage,
   FileSystem,
@@ -216,27 +217,4 @@ function findByName(name: string, parsed: ParsedOrganonFile[]): FindMatch[] {
 function isRootFile(path: string): boolean {
   const normalized = path.replace(/\\/g, '/');
   return !normalized.includes('/') || normalized.split('/').length <= 2;
-}
-
-async function discoverOrganonFiles(
-  projectRoot: string,
-  config: OrganonConfig,
-  fs: FileSystem,
-): Promise<string[]> {
-  const allFiles = new Set<string>();
-
-  for (const organonPath of config.organonPaths) {
-    for (const pattern of config.organonGlobs) {
-      const fullPattern = organonPath === '.' ? pattern : `${organonPath}/${pattern}`;
-      const matches = await fs.glob(fullPattern, {
-        cwd: projectRoot,
-        ignore: config.ignorePatterns,
-      });
-      for (const m of matches) {
-        allFiles.add(m);
-      }
-    }
-  }
-
-  return [...allFiles].sort();
 }

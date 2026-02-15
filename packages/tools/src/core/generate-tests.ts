@@ -8,6 +8,7 @@
 
 import { parseFrontmatter } from './frontmatter-parser.js';
 import { joinPath } from './config.js';
+import { discoverOrganonFiles } from './discover.js';
 import {
   extractInvariants,
   scanTestAnnotations,
@@ -200,31 +201,20 @@ export async function generateTests(
   const { projectRoot, config, fs, invariantIds } = options;
 
   // 1. Discover organon files and extract invariants
-  const seenPaths = new Set<string>();
+  const discoveredFiles = await discoverOrganonFiles(projectRoot, config, fs);
   const parsedFiles: Array<{
     path: string;
     frontmatter: { type?: string; invariants?: InvariantEntry[] } | null;
   }> = [];
 
-  for (const organonPath of config.organonPaths) {
-    for (const pattern of config.organonGlobs) {
-      const fullPattern = organonPath === '.' ? pattern : `${organonPath}/${pattern}`;
-      const matches = await fs.glob(fullPattern, {
-        cwd: projectRoot,
-        ignore: config.ignorePatterns,
-      });
-      for (const file of matches) {
-        if (seenPaths.has(file)) continue;
-        seenPaths.add(file);
-        const absPath = joinPath(projectRoot, file);
-        try {
-          const content = await fs.readFile(absPath);
-          const { frontmatter } = parseFrontmatter(content);
-          parsedFiles.push({ path: file, frontmatter });
-        } catch {
-          // Skip unreadable files
-        }
-      }
+  for (const file of discoveredFiles) {
+    const absPath = joinPath(projectRoot, file);
+    try {
+      const content = await fs.readFile(absPath);
+      const { frontmatter } = parseFrontmatter(content);
+      parsedFiles.push({ path: file, frontmatter });
+    } catch {
+      // Skip unreadable files
     }
   }
 

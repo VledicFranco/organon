@@ -6,7 +6,7 @@ import type { OrganonConfig } from './types.js';
 function makeConfig(projectRoot: string): OrganonConfig {
   return {
     projectRoot,
-    organonPaths: ['.'],
+    organonPaths: ['.', 'organon'],
     organonGlobs: ['**/ETHOS.md', '**/PHILOSOPHY.md', '**/PROTOCOLS.md', '**/README.md'],
     ignorePatterns: [],
     workflowPaths: {},

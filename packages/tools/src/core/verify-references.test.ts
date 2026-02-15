@@ -9,10 +9,10 @@ import { verifyReferences } from './verify-references.js';
 import { MemoryFileSystem, makeEthos, makeWorkflow } from './test-helpers.js';
 import type { OrganonConfig } from './types.js';
 
-function makeConfig(projectRoot: string): OrganonConfig {
+function makeConfig(projectRoot: string, extraPaths: string[] = []): OrganonConfig {
   return {
     projectRoot,
-    organonPaths: ['.'],
+    organonPaths: ['.', ...extraPaths],
     organonGlobs: ['**/ETHOS.md', '**/PHILOSOPHY.md', '**/README.md'],
     ignorePatterns: [],
     workflowPaths: { generic: 'workflows' },
@@ -28,7 +28,7 @@ describe('verifyReferences', () => {
       '/project/ETHOS.md': parentEthos,
       '/project/domains/child/ETHOS.md': childEthos,
     });
-    const config = makeConfig('/project');
+    const config = makeConfig('/project', ['domains']);
     const result = await verifyReferences({ projectRoot: '/project', config, fs });
     expect(result.success).toBe(true);
   });

@@ -10,6 +10,7 @@
 
 import { parseFrontmatter } from './frontmatter-parser.js';
 import { joinPath } from './config.js';
+import { discoverOrganonFiles } from './discover.js';
 import type {
   AutomationTier,
   DiagnosticMessage,
@@ -244,25 +245,3 @@ async function discoverWorkflowFiles(
   return [...files].sort();
 }
 
-async function discoverOrganonFiles(
-  projectRoot: string,
-  config: OrganonConfig,
-  fs: FileSystem,
-): Promise<string[]> {
-  const allFiles = new Set<string>();
-
-  for (const organonPath of config.organonPaths) {
-    for (const pattern of config.organonGlobs) {
-      const fullPattern = organonPath === '.' ? pattern : `${organonPath}/${pattern}`;
-      const matches = await fs.glob(fullPattern, {
-        cwd: projectRoot,
-        ignore: config.ignorePatterns,
-      });
-      for (const m of matches) {
-        allFiles.add(m);
-      }
-    }
-  }
-
-  return [...allFiles].sort();
-}

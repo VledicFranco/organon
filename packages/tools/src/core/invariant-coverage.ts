@@ -9,6 +9,7 @@
 
 import { parseFrontmatter } from './frontmatter-parser.js';
 import { joinPath } from './config.js';
+import { discoverOrganonFiles } from './discover.js';
 import type {
   DiagnosticMessage,
   FileSystem,
@@ -189,29 +190,18 @@ export async function computeInvariantCoverage(options: {
 }): Promise<InvariantCoverageResult> {
   const { projectRoot, config, fs: fileSystem } = options;
 
-  // Discover organon files and parse frontmatter (deduplicate by path)
-  const seenPaths = new Set<string>();
+  // Discover organon files and parse frontmatter
+  const files = await discoverOrganonFiles(projectRoot, config, fileSystem);
   const parsedFiles: Array<{ path: string; frontmatter: { type?: string; invariants?: InvariantEntry[] } | null }> = [];
 
-  for (const organonPath of config.organonPaths) {
-    for (const pattern of config.organonGlobs) {
-      const fullPattern = organonPath === '.' ? pattern : `${organonPath}/${pattern}`;
-      const matches = await fileSystem.glob(fullPattern, {
-        cwd: projectRoot,
-        ignore: config.ignorePatterns,
-      });
-      for (const file of matches) {
-        if (seenPaths.has(file)) continue;
-        seenPaths.add(file);
-        const absPath = joinPath(projectRoot, file);
-        try {
-          const content = await fileSystem.readFile(absPath);
-          const { frontmatter } = parseFrontmatter(content);
-          parsedFiles.push({ path: file, frontmatter });
-        } catch {
-          // Skip unreadable files
-        }
-      }
+  for (const file of files) {
+    const absPath = joinPath(projectRoot, file);
+    try {
+      const content = await fileSystem.readFile(absPath);
+      const { frontmatter } = parseFrontmatter(content);
+      parsedFiles.push({ path: file, frontmatter });
+    } catch {
+      // Skip unreadable files
     }
   }
 
