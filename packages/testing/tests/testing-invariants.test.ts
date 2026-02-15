@@ -9,6 +9,7 @@
  * @organon-invariant INV-TEST-5 100-percent-line-coverage
  * @organon-invariant INV-TEST-6 always-async
  * @organon-invariant INV-TEST-7 composable
+ * @organon-invariant INV-TEST-8 language-parity
  */
 
 import { describe, it, expect } from 'vitest';
@@ -130,6 +131,38 @@ describe('INV-TEST-6: always-async', () => {
 // ---------------------------------------------------------------------------
 // INV-TEST-7: composable — no module-level let/var in assertion files
 // ---------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------
+// INV-TEST-8: language-parity — every TS assertion has a Scala equivalent
+// ---------------------------------------------------------------------------
+
+describe('INV-TEST-8: language-parity', () => {
+  it('Scala package has equivalent assertion validators for all TypeScript assertions', async () => {
+    const scalaAssertionsDir = resolve(pkgRoot, '../testing-scala/src/main/scala/io/github/vledicfranco/organon/testing/core/assertions');
+    const entries = await readdir(scalaAssertionsDir);
+    const scalaValidators = entries.filter((f) => f.endsWith('Validator.scala')).map((f) => f.replace('Validator.scala', ''));
+
+    // TypeScript assertions that must have Scala equivalents
+    const tsAssertions = ['MaxValue', 'FileExists', 'NoSideEffects', 'NamingConvention', 'ExportsPresent'];
+
+    for (const assertion of tsAssertions) {
+      expect(
+        scalaValidators,
+        `Scala must have ${assertion}Validator.scala equivalent`,
+      ).toContain(assertion);
+    }
+  });
+
+  it('Scala package has testInvariant and OrganonSuite adapter', async () => {
+    const scalaMainDir = resolve(pkgRoot, '../testing-scala/src/main/scala/io/github/vledicfranco/organon/testing');
+    const mainEntries = await readdir(scalaMainDir);
+    expect(mainEntries).toContain('InvariantTest.scala');
+
+    const adapterDir = resolve(scalaMainDir, 'adapters');
+    const adapterEntries = await readdir(adapterDir);
+    expect(adapterEntries).toContain('MUnitAdapter.scala');
+  });
+});
 
 describe('INV-TEST-7: composable', () => {
   it('core assertion files have no module-level mutable state', async () => {
