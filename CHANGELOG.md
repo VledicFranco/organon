@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-02-16
+
 ### Added
 - **Scala 3 testing library** (`packages/testing-scala/`) — port of @organon-methodology/testing with feature parity
   - 6 assertion functions: `assertMaxValue`, `assertNoSideEffects`, `assertFileExists`, `assertNamingConvention`, `assertExportsPresent`, `assertCustom`
