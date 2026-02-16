@@ -22,7 +22,7 @@ audience: [llm, human]
 - [001-testing-framework](../../../rfcs/001-testing-framework.md) (Implemented)
 - [008-scala-testing-library](../../../rfcs/008-scala-testing-library.md) (Implemented)
 
-**Implementation:** Multi-language — TypeScript (7 assertions, 204 tests) and Scala 3 (6 assertions, 66 tests)
+**Implementation:** Multi-language — TypeScript (7 assertions, 206 tests) and Scala 3 (6 assertions, 71 tests)
 
 ---
 
@@ -47,7 +47,7 @@ audience: [llm, human]
 - Assertions (core verification primitives)
 - Test discovery (mapping invariant IDs to tests)
 - Coverage tracking (tested vs declared invariants)
-- Framework adapters (Vitest, Jest, Mocha)
+- Framework adapters (Vitest for TypeScript, MUnit + ScalaTest for Scala)
 - Metadata reporting (JSON output for tooling)
 
 ---
