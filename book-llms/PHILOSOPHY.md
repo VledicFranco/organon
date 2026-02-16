@@ -2,10 +2,10 @@
 type: rationale
 scope: meta
 name: meta-organon-philosophy
-version: "1.0"
+version: "1.1"
 summary: Why the Organon methodology exists — LLM-centric design, enforcement through automation, progressive disclosure, recursive improvement, and every trade-off
 token_estimate: 4600
-decision_count: 19
+decision_count: 13
 inherits_from: [meta-organon]
 load_priority: low
 required_for:
@@ -162,9 +162,9 @@ The methodology is DESIGNED to compound, not just ASPIRE to compound. This isn't
 **Benefit:** Flexibility for novel domains without abandoning proven Ethos-First pattern for routine work
 
 **Why we chose two patterns:** Originally, Ethos-First Development was universal. But we observed that novel domains (like testing framework in RFC 001) led to ETHOS rewrites when "first principles" turned out impractical. The alternatives were:
-1. Accept ETHOS rewrites as normal (high rework cost)
-2. Skip ETHOS until after implementation (loses guidance during development)
-3. Add exploration phase before ETHOS (validates constraints upfront)
+- Accept ETHOS rewrites as normal (high rework cost)
+- Skip ETHOS until after implementation (loses guidance during development)
+- Add exploration phase before ETHOS (validates constraints upfront)
 
 We chose option 3 for novel domains while keeping option 1 (Ethos-First) as default for known domains.
 
@@ -188,9 +188,9 @@ We chose option 3 for novel domains while keeping option 1 (Ethos-First) as defa
 - Bias toward action (write ETHOS after 2 days, refine during implementation if needed)
 
 **How to enforce:** Before exploration begins, write down:
-1. Key questions to answer (3-5 max)
-2. Exploration end date (1-2 days from now)
-3. Commitment: "After exploration, we WILL write ETHOS regardless of confidence level"
+- Key questions to answer (3-5 max)
+- Exploration end date (1-2 days from now)
+- Commitment: "After exploration, we WILL write ETHOS regardless of confidence level"
 
 **What if questions aren't answered?** Write ETHOS with best current knowledge, mark uncertain invariants with `judgment_call: true`, refine during implementation. Perfect knowledge is impossible; exploration gives "good enough" confidence.
 

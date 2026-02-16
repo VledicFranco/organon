@@ -2,7 +2,7 @@
 type: rationale
 scope: meta
 name: invariant-tracking
-version: "1.1"
+version: "1.2"
 summary: Invariant-to-test tracking specification — how to declare invariant IDs and verify test coverage
 token_estimate: 3000
 inherits_from: [meta-organon]
@@ -221,11 +221,11 @@ Two language-specific implementations of tier-4 testing are available:
 
 **TypeScript** (`@organon-methodology/testing`):
 - **Source:** `packages/testing/` | **RFC:** [001-testing-framework](../rfcs/001-testing-framework.md)
-- Vitest adapter, 7 assertions, 204 tests
+- Vitest adapter, 7 assertions, 206 tests
 
 **Scala 3** (`io.github.vledicfranco:organon-testing_3`):
 - **Source:** `packages/testing-scala/` | **RFC:** [008-scala-testing-library](../rfcs/008-scala-testing-library.md)
-- MUnit adapter, 6 assertions, 66 tests
+- MUnit + ScalaTest adapters, 6 assertions, 71 tests
 
 Both implementations provide:
 - **`testInvariant(id, description, fn)`** — wrapper that links test execution to invariant IDs

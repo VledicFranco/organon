@@ -2,7 +2,7 @@
 type: rationale
 scope: meta
 name: frontmatter-system
-version: "1.1"
+version: "1.2"
 summary: YAML frontmatter specification for progressive disclosure — the mechanism that makes token-efficient big organons possible
 token_estimate: 4500
 inherits_from: [meta-organon]
@@ -338,7 +338,7 @@ Frontmatter must be **truthful** — automated tests enforce accuracy.
 ### Generate Frontmatter
 
 ```bash
-organon frontmatter:generate <file> --update
+organon generate <file>
 ```
 
 Auto-extracts: counts (invariants, principles, heuristics, protocols), token estimate, summary, scope from directory structure. Handles multiple invariant formats: `### 1.`, `1. **`, `### Invariant 1:`.
@@ -346,25 +346,24 @@ Auto-extracts: counts (invariants, principles, heuristics, protocols), token est
 ### Validate Frontmatter
 
 ```bash
-organon frontmatter:validate
+organon validate
 ```
 
 Runs all validation rules (schema, references, truthfulness, consistency).
 
-### Query Frontmatter
+### Query and Discover
 
 ```bash
-organon frontmatter:query --list                    # All organons with metadata
-organon frontmatter:query --scope=domain --verbose   # Filter by scope
-organon frontmatter:query --budget=20000             # Plan context loading
-organon frontmatter:query --related=genesis          # Find related organons
-organon frontmatter:query --task=genesis_tool_impl   # Find organons for task
+organon find --scope domain              # Filter organon files by scope
+organon find --type constraints           # Filter by artifact type
+organon query --scope domain --verbose    # Detailed listing with token totals
+organon query --category constraint       # Filter by epistemic category
 ```
 
 ### Health Check
 
 ```bash
-organon frontmatter:health --detailed --fix-suggestions
+organon health
 ```
 
 Reports coverage, validation status, token analysis, freshness, and actionable suggestions.

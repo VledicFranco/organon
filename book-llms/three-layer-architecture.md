@@ -2,7 +2,7 @@
 type: rationale
 scope: meta
 name: three-layer-architecture
-version: "1.3"
+version: "1.4"
 summary: The enforcement loop — protocols, workflows, tools, verification, and epistemic categories bind organons to LLM execution and external knowledge systems
 token_estimate: 12200
 inherits_from: [meta-organon]
@@ -468,7 +468,7 @@ The `organon export` command produces a structured JSON representation classifie
 
 ```json
 {
-  "version": "0.4.1",
+  "version": "0.5.0",
   "exported_at": "2026-02-15T...",
   "entities": [
     { "id": "organon:domains/tools/ETHOS", "kind": "organon-file", "name": "tools", "scope": "domain", "type": "constraints", "category": "constraint" }

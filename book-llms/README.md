@@ -2,7 +2,7 @@
 type: navigation
 scope: meta
 name: book-llms
-version: "1.0"
+version: "1.1"
 summary: Navigation for the Organon technical reference — methodology spec optimized for LLM consumption
 token_estimate: 850
 provides: [overview, ethos, philosophy, patterns, scopes, templates, frontmatter-system, three-layer-architecture, invariant-tracking, workflow-authoring, protocols]
@@ -34,7 +34,7 @@ Organon is a documentation methodology built on six pillars:
 | [scopes.md](./scopes.md) | rationale | Scope hierarchy (product → domain → feature → component → methodology) |
 | [templates.md](./templates.md) | rationale | Copy-paste templates for ETHOS, PHILOSOPHY, PROTOCOL, WORKFLOW (all with frontmatter) |
 | [frontmatter-system.md](./frontmatter-system.md) | rationale | YAML frontmatter specification — the mechanism for progressive disclosure |
-| [three-layer-architecture.md](./three-layer-architecture.md) | rationale | Protocols → Workflows → Tools enforcement loop — includes tiered testing, verification gates, drift detection |
+| [three-layer-architecture.md](./three-layer-architecture.md) | rationale | Protocols → Workflows → Tools enforcement loop — includes tiered testing, verification gates, drift detection, and epistemic categories for knowledge interoperability |
 | [invariant-tracking.md](./invariant-tracking.md) | rationale | Invariant-to-test tracking — stable IDs, test annotations, coverage reports |
 | [workflow-authoring.md](./workflow-authoring.md) | rationale | Workflow authoring guidance — quality attributes, archetypes, error handling patterns |
 | [protocols/](./protocols/) | procedures | Operational procedures (semantic mapping, etc.) |
