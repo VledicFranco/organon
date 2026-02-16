@@ -1,6 +1,6 @@
 {
   "name": "@organon-methodology/tools",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "CLI tools and MCP server for the Organon Methodology - auto-generation, verification, and discovery",
   "type": "module",
   "main": "dist/index.js",
