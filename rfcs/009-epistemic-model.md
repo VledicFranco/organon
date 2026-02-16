@@ -3,7 +3,7 @@ type: rationale
 scope: product
 name: epistemic-model
 version: "1.0"
-status: implementing
+status: implemented
 summary: Formalize organon's implicit epistemic categories (constraint/assertion/rule) and add knowledge export for interoperability
 token_estimate: 2200
 author: Claude Opus 4.6
