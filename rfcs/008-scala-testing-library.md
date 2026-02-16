@@ -60,7 +60,7 @@ The `@organon-methodology/testing` TypeScript library provides semantic invarian
 
 - **17 main source files:** FileSystem, errors, 6 resolvers, 5 validators, Assertions, InvariantTest, InvariantTestRegistry, MUnitAdapter
 - **10 test files:** TestFileSystem (in-memory mock), 5 validator specs, 2 resolver specs, InvariantTestSpec, MUnitAdapterSpec
-- **66 tests passing** across all modules
+- **75 tests passing** across all modules
 - **Build:** sbt 1.10.7, Scala 3.3.4, os-lib 0.11.4, MUnit 1.1.0
 - **CI:** GitHub Actions job for Scala tests (separate from Node.js job)
 - **Publishing:** sbt-ci-release to Maven Central via `io.github.vledicfranco` namespace

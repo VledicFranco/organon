@@ -45,10 +45,12 @@ const DEFAULT_TEST_GLOBS = [
   '**/*.test.jsx',
   '**/*.spec.ts',
   '**/*.spec.js',
+  '**/*Spec.scala',
+  '**/*Test.scala',
 ];
 
 const ANNOTATION_RE = /@organon-invariant\s+INV-[\w-]+/;
-const TESTING_IMPORT_RE = /from\s+['"]@organon-methodology\/testing/;
+const TESTING_IMPORT_RE = /from\s+['"]@organon-methodology\/testing|import\s+io\.github\.vledicfranco\.organon\.testing\./;
 const TEST_INVARIANT_RE = /testInvariant\s*\(/;
 
 // ---------------------------------------------------------------------------
@@ -94,12 +96,16 @@ export async function verifyTier4Tests(options: {
 
       // Check for @organon-methodology/testing import
       if (!TESTING_IMPORT_RE.test(content)) {
+        const isScala = file.endsWith('.scala');
+        const suggestion = isScala
+          ? `Add: import io.github.vledicfranco.organon.testing.adapters.OrganonSuite`
+          : `Add: import { testInvariant } from '@organon-methodology/testing/vitest';`;
         warnings.push({
           severity: 'warning',
           code: 'TIER4_MISSING_IMPORT',
           message: `Test file has @organon-invariant annotation but does not import from @organon-methodology/testing`,
           file,
-          suggestion: `Add: import { testInvariant } from '@organon-methodology/testing/vitest';`,
+          suggestion,
         });
         isValid = false;
       }

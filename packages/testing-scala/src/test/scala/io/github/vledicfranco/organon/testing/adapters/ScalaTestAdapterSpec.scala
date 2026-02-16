@@ -10,6 +10,7 @@ class ScalaTestAdapterSpec extends OrganonFlatSpec:
   override protected def fileSystem: FileSystem = TestFileSystem(Map(
     "src/config.scala" -> "val ttl = 100\nval timeout = 50",
     "src/core/TypeSystem.scala" -> "package io.constellation\n\ntrait CType\ntrait CValue\nenum CTypeTag",
+    "src/core/Color.scala" -> "package io.constellation\n\nenum Color:\n  case Red, Green, Blue",
   ))(using ExecutionContext.global)
 
   testInvariant("INV-TEST-ADAPTER-1", "ScalaTest adapter registers and runs tests"):
@@ -41,4 +42,10 @@ class ScalaTestAdapterSpec extends OrganonFlatSpec:
     Assertions.assertExportsPresent(ExportsPresentOptions(
       file = "src/core/TypeSystem.scala",
       expectedExports = Seq("CType", "CValue", "CTypeTag")
+    ))
+
+  testInvariant("INV-TEST-ADAPTER-6", "ScalaTest adapter detects enum case members"):
+    Assertions.assertExportsPresent(ExportsPresentOptions(
+      file = "src/core/Color.scala",
+      expectedExports = Seq("Color", "Red", "Green", "Blue")
     ))
