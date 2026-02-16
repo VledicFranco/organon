@@ -177,7 +177,30 @@ describe('exportKnowledgeGraph', () => {
 
     const inherits = result.relationships.filter((r) => r.predicate === 'inherits_from');
     expect(inherits.length).toBeGreaterThan(0);
+    // 'product' doesn't match any entity name, so falls back to organon:product
     expect(inherits.some((r) => r.target === 'organon:product')).toBe(true);
+  });
+
+  it('resolves inherits_from names to entity IDs when possible', async () => {
+    const fs = new MemoryFileSystem({
+      '/project/organon/ETHOS.md': makeEthos({ name: 'my-project', scope: 'product' }),
+      '/project/organon/domains/tools/ETHOS.md': ethosWithInvariants,
+    });
+    // Override the tools ETHOS to inherit from 'my-project' instead of 'product'
+    const toolsEthos = ethosWithInvariants.replace('inherits_from:\n  - product', 'inherits_from:\n  - my-project');
+    fs.addFile('/project/organon/domains/tools/ETHOS.md', toolsEthos);
+
+    const config = makeConfig('/project');
+    const result = await exportKnowledgeGraph({
+      projectRoot: '/project',
+      config,
+      fs,
+      version: '0.4.1',
+    });
+
+    const inherits = result.relationships.filter((r) => r.predicate === 'inherits_from');
+    // Should resolve 'my-project' to the actual entity ID
+    expect(inherits.some((r) => r.target === 'organon:organon/ETHOS')).toBe(true);
   });
 
   it('extracts related_domains relationships', async () => {

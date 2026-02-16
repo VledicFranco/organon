@@ -139,17 +139,25 @@ function buildAssertions(files: ParsedOrganonFile[]): ExportAssertion[] {
 function buildRelationships(files: ParsedOrganonFile[]): ExportRelationship[] {
   const relationships: ExportRelationship[] = [];
 
+  // Build name→entity ID map so inherits_from names resolve to real entities
+  const nameToId = new Map<string, string>();
+  for (const f of files) {
+    if (f.frontmatter?.name) {
+      nameToId.set(f.frontmatter.name, fileId(f));
+    }
+  }
+
   for (const f of files) {
     const fm = f.frontmatter!;
     const id = fileId(f);
 
-    // inherits_from
+    // inherits_from — resolve names to entity IDs when possible
     if (fm.inherits_from) {
       for (const parent of fm.inherits_from) {
         relationships.push({
           source: id,
           predicate: 'inherits_from',
-          target: `organon:${parent}`,
+          target: nameToId.get(parent) ?? `organon:${parent}`,
         });
       }
     }
