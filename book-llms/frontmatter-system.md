@@ -2,7 +2,7 @@
 type: rationale
 scope: meta
 name: frontmatter-system
-version: "1.2"
+version: "1.3"
 summary: YAML frontmatter specification for progressive disclosure — the mechanism that makes token-efficient big organons possible
 token_estimate: 4500
 inherits_from: [meta-organon]
@@ -56,7 +56,7 @@ Every organon file must include these fields:
 ---
 type: string              # File type (see Type Enum below)
 scope: string             # Hierarchy level (see Scope Enum below)
-name: string              # Unique identifier (kebab-case, matches directory)
+name: string              # Unique identifier (kebab-case, matches domain directory when applicable)
 version: string           # Semantic version "X.Y"
 summary: string           # One-sentence description (max 200 chars)
 token_estimate: number    # Approximate full file token count
@@ -326,7 +326,7 @@ Frontmatter must be **truthful** — automated tests enforce accuracy.
 
 ### Consistency Validation
 
-- `name` matches parent directory name
+- `name` matches parent directory name for domain-boundary files (exempt for collection containers: `organon/`, `observations/`, `rfcs/`, `book-llms/`, `protocols/`, `book-humans/`)
 - `scope` matches directory structure (`domains/` → `scope: domain`)
 - Related references are bidirectional (if A references B, B references A)
 - If `automation_tier == "automated"`, workflow binding exists and references back

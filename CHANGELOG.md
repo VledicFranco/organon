@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+- Fix `FRONTMATTER_NAME_DIR_MISMATCH` false positives for files in collection/container directories (`organon/`, `observations/`, `rfcs/`, `book-llms/`, `protocols/`, `book-humans/`) — closes #11, #2
+
 ## [0.5.1] - 2026-02-16
 
 ## [0.5.0] - 2026-02-16

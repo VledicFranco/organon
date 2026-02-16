@@ -7,8 +7,10 @@
 
 import { describe, it, expect } from 'vitest';
 import { init, detectProjectName } from './init.js';
+import { validateFrontmatter } from './validate-frontmatter.js';
 import { MemoryFileSystem } from './test-helpers.js';
 import { getSkillTemplates, METHODOLOGY_VERSION } from '../templates/index.js';
+import type { OrganonConfig } from './types.js';
 
 describe('init', () => {
   it('generates all organon scaffold files', async () => {
@@ -366,5 +368,53 @@ loads:
     expect(config.testGlobs).toBeDefined();
     expect(config.testGlobs).toContain('**/*.test.ts');
     expect(config.testIgnorePatterns).toBeDefined();
+  });
+
+  it('init output passes frontmatter validation (no FRONTMATTER_NAME_DIR_MISMATCH)', async () => {
+    const fs = new MemoryFileSystem();
+    const initResult = await init({
+      projectRoot: '/project',
+      installSkills: false,
+      force: false,
+      fs,
+    });
+
+    expect(initResult.success).toBe(true);
+
+    // Write generated files to the MemoryFileSystem
+    for (const [relativePath, content] of initResult.files) {
+      fs.addFile(`/project/${relativePath}`, content);
+    }
+
+    // Build config from generated organon.config.json
+    const configContent = initResult.files.get('organon.config.json');
+    expect(configContent).toBeDefined();
+    const parsedConfig = JSON.parse(configContent!);
+    const config: OrganonConfig = {
+      projectRoot: '/project',
+      organonPaths: parsedConfig.organonPaths ?? ['.'],
+      organonGlobs: parsedConfig.organonGlobs ?? ['**/ETHOS.md', '**/PHILOSOPHY.md', '**/README.md'],
+      ignorePatterns: parsedConfig.ignorePatterns ?? ['node_modules/**'],
+      workflowPaths: parsedConfig.workflowPaths ?? {},
+      freshnessThresholdHours: parsedConfig.freshnessThresholdHours ?? 24,
+    };
+
+    // Collect all generated .md files (excluding CLAUDE.md which has no frontmatter)
+    const mdFiles = [...initResult.files.keys()]
+      .filter((f) => f.endsWith('.md') && f !== 'CLAUDE.md');
+
+    const validateResult = await validateFrontmatter({
+      projectRoot: '/project',
+      config,
+      fs,
+      files: mdFiles,
+      stages: [1, 4],
+    });
+
+    expect(validateResult.success).toBe(true);
+    const mismatchWarnings = validateResult.warnings.filter(
+      (w) => w.code === 'FRONTMATTER_NAME_DIR_MISMATCH',
+    );
+    expect(mismatchWarnings).toHaveLength(0);
   });
 });

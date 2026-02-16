@@ -405,6 +405,100 @@ token_estimate: 10000
       );
     });
 
+    it('does not warn for files in organon/ container directory', async () => {
+      const fs = new MemoryFileSystem({
+        '/project/organon/ETHOS.md': makeEthos({ name: 'my-project', scope: 'product' }),
+      });
+      const config = makeConfig('/project');
+      const result = await validateFrontmatter({
+        projectRoot: '/project',
+        config,
+        fs,
+        files: ['organon/ETHOS.md'],
+        stages: [4],
+      });
+      expect(result.warnings.filter((w) => w.code === 'FRONTMATTER_NAME_DIR_MISMATCH')).toHaveLength(0);
+    });
+
+    it('does not warn for files in observations/ collection directory', async () => {
+      const fs = new MemoryFileSystem({
+        '/project/organon/observations/001-testing.md': makeEthos({ name: 'testing', scope: 'methodology' }),
+      });
+      const config = makeConfig('/project');
+      config.organonGlobs.push('**/observations/*.md');
+      const result = await validateFrontmatter({
+        projectRoot: '/project',
+        config,
+        fs,
+        files: ['organon/observations/001-testing.md'],
+        stages: [4],
+      });
+      expect(result.warnings.filter((w) => w.code === 'FRONTMATTER_NAME_DIR_MISMATCH')).toHaveLength(0);
+    });
+
+    it('does not warn for files in rfcs/ collection directory', async () => {
+      const fs = new MemoryFileSystem({
+        '/project/rfcs/001-testing.md': makeEthos({ name: 'testing', scope: 'methodology' }),
+      });
+      const config = makeConfig('/project');
+      config.organonGlobs.push('**/rfcs/*.md');
+      const result = await validateFrontmatter({
+        projectRoot: '/project',
+        config,
+        fs,
+        files: ['rfcs/001-testing.md'],
+        stages: [4],
+      });
+      expect(result.warnings.filter((w) => w.code === 'FRONTMATTER_NAME_DIR_MISMATCH')).toHaveLength(0);
+    });
+
+    it('does not warn for files in book-llms/ container directory', async () => {
+      const fs = new MemoryFileSystem({
+        '/project/book-llms/ETHOS.md': makeEthos({ name: 'meta-organon', scope: 'meta' }),
+      });
+      const config = makeConfig('/project');
+      const result = await validateFrontmatter({
+        projectRoot: '/project',
+        config,
+        fs,
+        files: ['book-llms/ETHOS.md'],
+        stages: [4],
+      });
+      expect(result.warnings.filter((w) => w.code === 'FRONTMATTER_NAME_DIR_MISMATCH')).toHaveLength(0);
+    });
+
+    it('still warns for domain directory name mismatch', async () => {
+      const fs = new MemoryFileSystem({
+        '/project/organon/domains/tools/ETHOS.md': makeEthos({ name: 'wrong-name', scope: 'domain' }),
+      });
+      const config = makeConfig('/project');
+      const result = await validateFrontmatter({
+        projectRoot: '/project',
+        config,
+        fs,
+        files: ['organon/domains/tools/ETHOS.md'],
+        stages: [4],
+      });
+      expect(result.warnings).toContainEqual(
+        expect.objectContaining({ code: 'FRONTMATTER_NAME_DIR_MISMATCH' }),
+      );
+    });
+
+    it('does not warn when domain directory name matches', async () => {
+      const fs = new MemoryFileSystem({
+        '/project/organon/domains/tools/ETHOS.md': makeEthos({ name: 'tools', scope: 'domain' }),
+      });
+      const config = makeConfig('/project');
+      const result = await validateFrontmatter({
+        projectRoot: '/project',
+        config,
+        fs,
+        files: ['organon/domains/tools/ETHOS.md'],
+        stages: [4],
+      });
+      expect(result.warnings.filter((w) => w.code === 'FRONTMATTER_NAME_DIR_MISMATCH')).toHaveLength(0);
+    });
+
     it('reports missing workflow for automated protocol', async () => {
       const fs = new MemoryFileSystem({
         '/project/PROTOCOL.md': `---

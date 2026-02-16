@@ -537,6 +537,17 @@ function validateTruthfulness(
 // Stage 4: Consistency
 // ---------------------------------------------------------------------------
 
+// Well-known Organon container/collection directories where name-directory
+// match is inappropriate (these hold files from multiple domains/topics).
+const COLLECTION_CONTAINER_DIRS = new Set([
+  'organon',
+  'book-llms',
+  'book-humans',
+  'observations',
+  'rfcs',
+  'protocols',
+]);
+
 function validateConsistency(
   fm: Frontmatter,
   file: string,
@@ -547,11 +558,11 @@ function validateConsistency(
   const dir = dirName(file);
   const dirParts = dir.replace(/\\/g, '/').split('/');
 
-  // Name should match parent directory
+  // Name should match parent directory (domain-boundary dirs only)
   if (fm.name && dirParts.length > 0) {
     const parentDir = dirParts[dirParts.length - 1];
-    // Only check for non-root files (skip top-level ETHOS.md etc.)
-    if (parentDir !== '.' && parentDir !== '' && baseName(file) !== 'README.md') {
+    // Only check for non-root files, non-READMEs, and non-collection containers
+    if (parentDir !== '.' && parentDir !== '' && baseName(file) !== 'README.md' && !COLLECTION_CONTAINER_DIRS.has(parentDir)) {
       if (fm.name !== parentDir && fm.name !== parentDir.toLowerCase()) {
         warnings.push({
           severity: 'warning',
