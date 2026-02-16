@@ -18,6 +18,7 @@ interface QueryArgs {
   budget?: number;
   name?: string;
   related?: string;
+  category?: string;
   verbose?: boolean;
 }
 
@@ -67,6 +68,11 @@ export const queryCommand: CommandModule<{}, QueryArgs> = {
         describe: 'Filter by related domain or feature',
         type: 'string',
       })
+      .option('category', {
+        describe: 'Filter by epistemic category',
+        type: 'string',
+        choices: ['constraint', 'assertion', 'rule'],
+      })
       .option('verbose', {
         describe: 'Show full file content',
         type: 'boolean',
@@ -74,7 +80,8 @@ export const queryCommand: CommandModule<{}, QueryArgs> = {
       })
       .example('$0 query --scope=meta', 'List all meta-scope organons')
       .example('$0 query --budget=20000', 'Plan context loading within 20K tokens')
-      .example('$0 query --task=genesis_tool_impl', 'Find organons for a specific task');
+      .example('$0 query --task=genesis_tool_impl', 'Find organons for a specific task')
+      .example('$0 query --category=constraint', 'List all constraint (ETHOS) files');
   },
 
   handler: async (args) => {
@@ -94,6 +101,7 @@ export const queryCommand: CommandModule<{}, QueryArgs> = {
       namePattern: args.name,
       relatedDomain: args.related,
       relatedFeature: args.related,
+      category: args.category as any,
       verbose: args.verbose,
     });
 

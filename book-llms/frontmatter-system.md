@@ -2,9 +2,9 @@
 type: rationale
 scope: meta
 name: frontmatter-system
-version: "1.0"
+version: "1.1"
 summary: YAML frontmatter specification for progressive disclosure — the mechanism that makes token-efficient big organons possible
-token_estimate: 4124
+token_estimate: 4500
 inherits_from: [meta-organon]
 load_priority: high
 required_for:
@@ -126,6 +126,23 @@ related_files: string[]       # File paths this RFC impacts or references
 ```
 
 RFCs are rationale files with lifecycle tracking. The `status` field is the most important for progressive disclosure — an implementer agent scanning RFC frontmatter can skip `implemented` or `withdrawn` RFCs immediately. Use `related_files` to list impacted organon and code files so agents can trace RFC→file relationships without loading the full RFC.
+
+### Observations (`type: rationale`, path in `observations/`)
+
+```yaml
+status: string                # signal | pattern | actionable | resolved
+created: string               # ISO 8601 date
+author: string                # Author name or agent identifier
+```
+
+Observations are rationale files capturing empirical learnings from work sessions. The `status` field tracks lifecycle maturity:
+
+- **signal** — Initial observation, single instance, may not recur
+- **pattern** — Observed multiple times, emerging trend
+- **actionable** — Clear enough to drive a change (RFC, heuristic, tool improvement)
+- **resolved** — Graduated into the methodology (became an RFC, invariant, or heuristic)
+
+The `status` field is optional — existing observations without it remain valid. Agents can use it to filter: skip `resolved` observations (already incorporated), prioritize `actionable` ones.
 
 ### PROTOCOL.md (`type: procedures`)
 

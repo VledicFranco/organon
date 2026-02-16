@@ -38,6 +38,8 @@ const DEFAULT_ORGANON_GLOBS = [
   '**/PROTOCOLS.md',
   '**/README.md',
   '**/components.md',
+  '**/observations/*.md',
+  '**/rfcs/*.md',
 ];
 
 const DEFAULT_IGNORE_PATTERNS = [

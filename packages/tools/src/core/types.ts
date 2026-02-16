@@ -61,6 +61,7 @@ export type AutomationTier = 'automated' | 'semi-automated' | 'manual';
 export type LoadPriority = 'high' | 'medium' | 'low';
 export type Complexity = 'high' | 'medium' | 'low';
 export type Audience = 'llm' | 'human' | 'tooling';
+export type EpistemicCategory = 'constraint' | 'assertion' | 'rule';
 
 export interface ProtocolEntry {
   id: string;
@@ -284,6 +285,49 @@ export interface ToolSuggestion {
   reason: string;
   steps: number;
   complexity: Complexity;
+}
+
+// ---------------------------------------------------------------------------
+// Export types
+// ---------------------------------------------------------------------------
+
+export interface ExportEntity {
+  id: string;
+  kind: string;
+  name: string;
+  scope: string;
+  type: string;
+  category: EpistemicCategory | null;
+}
+
+export interface ExportAssertion {
+  id: string;
+  category: EpistemicCategory;
+  source: string;
+  predicate: string;
+  content: string;
+}
+
+export interface ExportRelationship {
+  source: string;
+  predicate: string;
+  target: string;
+}
+
+export interface ExportRule {
+  id: string;
+  predicate: string;
+  targets: string[];
+  type: string;
+}
+
+export interface ExportResult {
+  version: string;
+  exported_at: string;
+  entities: ExportEntity[];
+  assertions: ExportAssertion[];
+  relationships: ExportRelationship[];
+  rules: ExportRule[];
 }
 
 // ---------------------------------------------------------------------------

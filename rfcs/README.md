@@ -52,6 +52,7 @@ See [book-llms/patterns.md](../book-llms/patterns.md#rfc-driven-evolution-patter
 | [006](./006-init-and-upgrade.md) | Init, Upgrade, and Skills as First-Class Citizens | Implemented | Claude Opus 4.6 | 2026-02-12 |
 | [007](./007-v040-release.md) | v0.4.0 — Init/Verify Polish, New Gates, CLI Ergonomics | Implementing | Claude Opus 4.6 | 2026-02-13 |
 | [008](./008-scala-testing-library.md) | Scala 3 Testing Library & Multi-Language Package Strategy | Implemented | Claude Opus 4.6 | 2026-02-14 |
+| [009](./009-epistemic-model.md) | Epistemic Model & Knowledge Interoperability | Implementing | Claude Opus 4.6 | 2026-02-15 |
 
 ---
 

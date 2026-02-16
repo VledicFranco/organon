@@ -11,6 +11,7 @@ import { joinPath } from './config.js';
 import { discoverOrganonFiles } from './discover.js';
 import type {
   DiagnosticMessage,
+  EpistemicCategory,
   FileSystem,
   FrontmatterScope,
   FrontmatterType,
@@ -44,6 +45,8 @@ export interface QueryOptions {
   relatedDomain?: string;
   /** Filter by related feature name */
   relatedFeature?: string;
+  /** Filter by epistemic category */
+  category?: EpistemicCategory;
   /** Include files without frontmatter in results */
   includeInvalid?: boolean;
   /** Return full file content (body) or just frontmatter */
@@ -133,6 +136,11 @@ export async function query(options: QueryOptions): Promise<QueryResult> {
     );
   }
 
+  // Filter by epistemic category
+  if (options.category) {
+    filtered = filtered.filter((f) => classifyCategory(f) === options.category);
+  }
+
   // Sort by load_priority (high first), then by token_estimate (smallest first)
   filtered.sort((a, b) => {
     const priorityOrder = { high: 0, medium: 1, low: 2 };
@@ -184,4 +192,22 @@ export async function query(options: QueryOptions): Promise<QueryResult> {
     errors,
     warnings,
   };
+}
+
+// ---------------------------------------------------------------------------
+// Epistemic category classification
+// ---------------------------------------------------------------------------
+
+/**
+ * Classify an organon file into an epistemic category.
+ *
+ * - constraint: ETHOS.md files (type: constraints)
+ * - assertion: Observation files (type: rationale, path in observations/)
+ * - rule: Protocol files (type: procedures)
+ */
+export function classifyCategory(file: ParsedOrganonFile): EpistemicCategory | null {
+  if (file.frontmatter?.type === 'constraints') return 'constraint';
+  if (file.frontmatter?.type === 'rationale' && file.path.includes('observations/')) return 'assertion';
+  if (file.frontmatter?.type === 'procedures') return 'rule';
+  return null;
 }

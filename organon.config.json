@@ -11,7 +11,9 @@
     "**/PROTOCOL.md",
     "**/PROTOCOLS.md",
     "**/README.md",
-    "**/components.md"
+    "**/components.md",
+    "**/observations/*.md",
+    "**/rfcs/*.md"
   ],
   "ignorePatterns": [
     "**/node_modules/**",

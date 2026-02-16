@@ -2,9 +2,9 @@
 type: rationale
 scope: meta
 name: three-layer-architecture
-version: "1.2"
-summary: The enforcement loop — protocols, workflows, tools, and verification (tiered testing, drift detection, violation handling) bind organons to LLM execution
-token_estimate: 10800
+version: "1.3"
+summary: The enforcement loop — protocols, workflows, tools, verification, and epistemic categories bind organons to LLM execution and external knowledge systems
+token_estimate: 12200
 inherits_from: [meta-organon]
 load_priority: high
 required_for:
@@ -429,6 +429,63 @@ The LLM is the **runtime** that executes the enforcement loop. It is the interfa
 The human's job is to **define** (write organons) and **review** (approve results). The LLM's job is to **execute** (follow workflows, invoke tools) and **report** (surface verification results). The tools' job is to **enforce** (check invariants, validate references, gate merges).
 
 This is what makes Organon **LLM-centric**: the methodology is designed to be consumed and executed by LLMs, with humans as authors and reviewers, not as the execution engine.
+
+---
+
+## Epistemic Categories
+
+Organon files implicitly encode three epistemic categories — types of knowledge that serve different purposes in the enforcement loop. Making these explicit enables interoperability with external knowledge systems and provides an alternative query lens on existing data.
+
+### The three categories
+
+| Category | Definition | What it captures | Organon mapping |
+|----------|-----------|-----------------|-----------------|
+| **Constraint** | Normative declaration — what *should* be true | Design intent, architectural boundaries, behavioral limits | ETHOS.md invariants (`type: constraints`) |
+| **Assertion** | Descriptive claim — what *is* empirically observed | Session learnings, measured outcomes, discovered patterns | Observation files (`type: rationale`, path in `observations/`) |
+| **Rule** | Enforcement logic — what *must* hold, checked automatically | Verification gates, protocol steps, CI checks | PROTOCOL.md procedures (`type: procedures`) |
+
+**These are not new artifact types.** They are an epistemic lens on existing artifacts. An ETHOS.md file is still `type: constraints` — but its epistemic category is "constraint." An observation file is still `type: rationale` — but its epistemic category is "assertion."
+
+### Lifecycle through the enforcement loop
+
+Each category maps to specific phases of the enforcement loop:
+
+```
+Category        Primary loop phase      How it enters the loop
+─────────────   ──────────────────      ──────────────────────
+Constraint      DEFINE                  Human writes ETHOS.md invariant
+Assertion       COMPOUND                Agent captures observation during work
+Rule            VERIFY                  Gate checks constraint against code
+```
+
+**Constraints** are created in DEFINE and consumed in VERIFY (gates check whether code satisfies them). **Assertions** are created in COMPOUND (session learnings) and consumed in EVOLVE (when they mature into new constraints or heuristics). **Rules** are created alongside tools in the BIND/EXECUTE phases and operate in VERIFY.
+
+### Knowledge interoperability
+
+The `organon export` command produces a structured JSON representation classified by epistemic category. This is the interoperability surface — external knowledge systems consume this instead of parsing organon files directly.
+
+**Export format:**
+
+```json
+{
+  "version": "0.4.1",
+  "exported_at": "2026-02-15T...",
+  "entities": [
+    { "id": "organon:domains/tools/ETHOS", "kind": "organon-file", "name": "tools", "scope": "domain", "type": "constraints", "category": "constraint" }
+  ],
+  "assertions": [
+    { "id": "inv:INV-TOOLS-1", "category": "constraint", "source": "organon/domains/tools/ETHOS.md", "predicate": "declares_invariant", "content": "..." }
+  ],
+  "relationships": [
+    { "source": "organon:domains/tools/ETHOS", "predicate": "inherits_from", "target": "organon:ETHOS" }
+  ],
+  "rules": [
+    { "id": "gate:frontmatter", "predicate": "validates", "targets": ["all organon files"], "type": "blocking" }
+  ]
+}
+```
+
+**Design principle:** The export format is a projection, not a database. It contains enough structure for external tools to build their own indexes, but organon files remain the source of truth. Re-exporting always produces a fresh snapshot.
 
 ---
 

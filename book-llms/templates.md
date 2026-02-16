@@ -2,9 +2,9 @@
 type: rationale
 scope: meta
 name: templates
-version: "1.0"
-summary: Copy-paste templates for ETHOS, PHILOSOPHY, PROTOCOL, and WORKFLOW files — all with frontmatter and standardized sections
-token_estimate: 6200
+version: "1.1"
+summary: Copy-paste templates for ETHOS, PHILOSOPHY, PROTOCOL, WORKFLOW, Observation, and RFC files — all with frontmatter and standardized sections
+token_estimate: 7200
 inherits_from: [meta-organon]
 load_priority: medium
 required_for:
@@ -577,6 +577,65 @@ Feature-specific checks (caching invariants):
 - [ ] TTL is set and ≤ 24 hours
 - [ ] Cache miss path works identically to non-cached path
 ```
+
+---
+
+## Observation Template
+
+Observations capture empirical learnings from work sessions. They live in `organon/observations/` and use `type: rationale` (no new artifact type — observations are empirical rationale). The `status` field tracks lifecycle maturity: signal → pattern → actionable → resolved.
+
+```markdown
+---
+type: rationale
+scope: [product|domain|feature|methodology]
+name: [descriptive-name]
+version: "1.0"
+summary: [One-sentence description of what was observed]
+token_estimate: [estimate]
+status: signal
+created: [YYYY-MM-DD]
+author: [author-name]
+audience: [llm, human]
+---
+
+# Observation NNN: [Descriptive Title]
+
+> [One-sentence summary of the key learning]
+
+---
+
+## Context
+
+[What work was being done when this was observed? What prompted the observation?]
+
+## Observations
+
+### O1: [First observation title]
+
+- **Signal:** [What was noticed]
+- **Implication:** [Why it matters]
+- **Suggested Action:** [What could be done about it]
+
+### O2: [Second observation title]
+
+- **Signal:** [What was noticed]
+- **Implication:** [Why it matters]
+- **Suggested Action:** [What could be done about it]
+
+## Patterns to Watch
+
+- [Pattern that may emerge if this recurs]
+- [Related area to monitor]
+```
+
+**Status lifecycle:**
+
+| Status | Meaning | Next step |
+|--------|---------|-----------|
+| `signal` | Noticed once, may not recur | Watch for recurrence |
+| `pattern` | Confirmed across multiple sessions | Investigate root cause |
+| `actionable` | Root cause understood, clear fix | Create RFC or heuristic |
+| `resolved` | Graduated into methodology | Link to resulting change |
 
 ---
 

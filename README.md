@@ -161,6 +161,7 @@ organon query                   # Query frontmatter across files
 organon coverage                # Invariant test coverage report
 organon generate-tests          # Scaffold tier-4 invariant tests
 organon suggest                 # Suggest automation tier upgrades
+organon export                  # Export knowledge graph as JSON
 organon release <bump>          # Version bump, tag, and release
 organon mcp                     # Start MCP server (IDE integration)
 ```
