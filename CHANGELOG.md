@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-02-16
+
 ### Added
 - **`organon export`** — export organon knowledge graph as structured JSON classified by epistemic category (entities, assertions, relationships, rules)
 - **`organon query --category`** — filter organon files by epistemic category (`constraint`, `assertion`, `rule`)

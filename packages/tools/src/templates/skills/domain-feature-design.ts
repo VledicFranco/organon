@@ -16,7 +16,7 @@ export const DOMAIN_FEATURE_DESIGN_SKILL = [
   'loads:',
   '  - organon/ETHOS.md',
   '  - CLAUDE.md',
-  'methodology_version: "0.4.1"',
+  'methodology_version: "0.5.0"',
   '---',
   '',
   '# Domain/Feature Design Skill',

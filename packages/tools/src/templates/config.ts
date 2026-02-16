@@ -3,7 +3,7 @@
  */
 
 export const CONFIG_TEMPLATE = `{
-  "methodology_version": "0.4.1",
+  "methodology_version": "0.5.0",
   "organonPaths": ["organon", "."],
   "organonGlobs": [
     "**/ETHOS.md",
@@ -42,4 +42,4 @@ export const CONFIG_TEMPLATE = `{
 }
 `;
 
-export const METHODOLOGY_VERSION = '0.4.1';
+export const METHODOLOGY_VERSION = '0.5.0';
