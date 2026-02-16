@@ -238,6 +238,9 @@ object Assertions:
 
   private val ExportListPattern = raw"""export\s*\{([^}]+)\}""".r
 
+  /** Scala 3 enum case members: `case Foo` or `case Foo, Bar, Baz` */
+  private val EnumCasePattern = raw"""^\s*case\s+([A-Z]\w+(?:\s*,\s*[A-Z]\w+)*)""".r
+
   /** Extract all exported/public names from file content (pure function, no I/O). */
   def extractExportNames(content: String): Seq[String] =
     val names = Vector.newBuilder[String]
@@ -267,5 +270,12 @@ object Assertions:
                 val nameOnly = trimmed.split(raw"""\s""")(0)
                 if nameOnly.nonEmpty then names += nameOnly
       }
+
+      // Scala 3 enum case members (exclude match arms which contain =>)
+      if !line.contains("=>") then
+        EnumCasePattern.findFirstMatchIn(line).foreach { m =>
+          val caseNames = m.group(1).split(",").map(_.trim).filter(_.nonEmpty)
+          names ++= caseNames
+        }
 
     names.result().toSeq

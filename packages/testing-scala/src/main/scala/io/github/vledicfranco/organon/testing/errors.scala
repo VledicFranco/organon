@@ -81,7 +81,7 @@ case class ExportsPresentResolverError(message0: String)
 // Assertion errors (logical violations after successful resolution)
 // ---------------------------------------------------------------------------
 
-sealed trait AssertionError extends RuntimeException:
+sealed trait OrganonAssertionError extends RuntimeException:
   def violations: Seq[Any]
 
 case class MaxValueAssertionError(violations: Seq[MaxValueViolation])
@@ -94,14 +94,14 @@ case class MaxValueAssertionError(violations: Seq[MaxValueViolation])
         .mkString("\n")
       s"Max value assertion failed: ${violations.length} violation(s) found\n$details"
     })
-    with AssertionError
+    with OrganonAssertionError
 
 case class FileExistsAssertionError(violations: Seq[FileExistsViolation])
     extends RuntimeException({
       val details = violations.map(v => s"  ${v.file}").mkString("\n")
       s"File exists assertion failed: ${violations.length} missing file(s)\n$details"
     })
-    with AssertionError
+    with OrganonAssertionError
 
 case class NoSideEffectsAssertionError(violations: Seq[NoSideEffectsViolation])
     extends RuntimeException({
@@ -110,7 +110,7 @@ case class NoSideEffectsAssertionError(violations: Seq[NoSideEffectsViolation])
         .mkString("\n")
       s"No side effects assertion failed: ${violations.length} forbidden import(s) found\n$details"
     })
-    with AssertionError
+    with OrganonAssertionError
 
 case class NamingConventionAssertionError(violations: Seq[NamingConventionViolation])
     extends RuntimeException({
@@ -122,14 +122,14 @@ case class NamingConventionAssertionError(violations: Seq[NamingConventionViolat
         .mkString("\n")
       s"Naming convention assertion failed: ${violations.length} violation(s) found\n$details"
     })
-    with AssertionError
+    with OrganonAssertionError
 
 case class ExportsPresentAssertionError(violations: Seq[ExportsPresentViolation])
     extends RuntimeException({
       val details = violations.map(v => s"  ${v.file} — missing export \"${v.name}\"").mkString("\n")
       s"Exports present assertion failed: ${violations.length} missing export(s)\n$details"
     })
-    with AssertionError
+    with OrganonAssertionError
 
 // ---------------------------------------------------------------------------
 // Custom assertion error

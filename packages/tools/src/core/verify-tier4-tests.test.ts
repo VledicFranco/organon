@@ -141,6 +141,50 @@ describe('verifyTier4Tests', () => {
     expect(result.warnings.length).toBeGreaterThan(0);
   });
 
+  it('passes when Scala file has organon testing import and testInvariant', async () => {
+    const fs = new MemoryFileSystem({
+      '/project/tests/MySpec.scala': [
+        `// @organon-invariant INV-FOO-1`,
+        `import io.github.vledicfranco.organon.testing.adapters.OrganonSuite`,
+        `testInvariant("INV-FOO-1", "test") {`,
+        `  Future.successful(assert(true))`,
+        `}`,
+      ].join('\n'),
+    });
+
+    const result = await verifyTier4Tests({
+      projectRoot: PROJECT_ROOT,
+      config: makeConfig({ testGlobs: ['**/*Spec.scala'] }),
+      fs,
+    });
+
+    expect(result.success).toBe(true);
+    expect(result.annotatedFiles).toBe(1);
+    expect(result.validFiles).toBe(1);
+    expect(result.warnings).toHaveLength(0);
+  });
+
+  it('warns Scala file with annotation but no organon import with Scala suggestion', async () => {
+    const fs = new MemoryFileSystem({
+      '/project/tests/MySpec.scala': [
+        `// @organon-invariant INV-FOO-1`,
+        `import munit.FunSuite`,
+        `testInvariant("INV-FOO-1", "test") {}`,
+      ].join('\n'),
+    });
+
+    const result = await verifyTier4Tests({
+      projectRoot: PROJECT_ROOT,
+      config: makeConfig({ testGlobs: ['**/*Spec.scala'] }),
+      fs,
+    });
+
+    expect(result.success).toBe(true);
+    const importWarning = result.warnings.find((w) => w.code === 'TIER4_MISSING_IMPORT');
+    expect(importWarning).toBeDefined();
+    expect(importWarning!.suggestion).toContain('OrganonSuite');
+  });
+
   it('reports warning suggestions with correct import path', async () => {
     const fs = new MemoryFileSystem({
       '/project/tests/my.test.ts': [

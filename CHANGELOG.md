@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Fix `FRONTMATTER_NAME_DIR_MISMATCH` false positives for files in collection/container directories (`organon/`, `observations/`, `rfcs/`, `book-llms/`, `protocols/`, `book-humans/`) — closes #11, #2
+- `assertExportsPresent` now detects Scala 3 enum case members (`case Foo, Bar`) — closes #8
+- Rename `AssertionError` → `OrganonAssertionError` to avoid shadowing `java.lang.AssertionError` — closes #9
+- `tier4-tests` gate now recognizes Scala Maven import path (`io.github.vledicfranco.organon.testing`) — closes #10
 
 ## [0.5.1] - 2026-02-16
 

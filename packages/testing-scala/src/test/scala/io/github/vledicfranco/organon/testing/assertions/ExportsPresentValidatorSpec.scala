@@ -48,3 +48,25 @@ class ExportsPresentValidatorSpec extends munit.FunSuite:
       )
     assert(ex.getMessage.contains("src/main.scala"))
     assert(ex.getMessage.contains("myFunc"))
+
+  // --- extractExportNames: enum case detection (#8) ---
+
+  test("extractExportNames detects enum case members"):
+    val content = "enum Color:\n  case Red, Green, Blue"
+    val names = Assertions.extractExportNames(content)
+    assert(names.contains("Color"))
+    assert(names.contains("Red"))
+    assert(names.contains("Green"))
+    assert(names.contains("Blue"))
+
+  test("extractExportNames does not extract match arm cases"):
+    val content = "x match\n  case Foo => doThing()\n  case bar => other()"
+    val names = Assertions.extractExportNames(content)
+    assert(!names.contains("Foo"))
+    assert(!names.contains("bar"))
+
+  test("extractExportNames handles single enum case"):
+    val content = "enum Status:\n  case Active"
+    val names = Assertions.extractExportNames(content)
+    assert(names.contains("Status"))
+    assert(names.contains("Active"))
