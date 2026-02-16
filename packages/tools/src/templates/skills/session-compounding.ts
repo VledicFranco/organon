@@ -16,7 +16,7 @@ export const SESSION_COMPOUNDING_SKILL = [
   'loads:',
   '  - CLAUDE.md',
   '  - organon/observations/README.md',
-  'methodology_version: "0.4.0"',
+  'methodology_version: "0.4.1"',
   '---',
   '',
   '# Session Compounding Workflow',

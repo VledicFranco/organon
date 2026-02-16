@@ -16,7 +16,7 @@ export const ORGANON_FILE_CREATION_SKILL = [
   'loads:',
   '  - organon/ETHOS.md',
   '  - CLAUDE.md',
-  'methodology_version: "0.4.0"',
+  'methodology_version: "0.4.1"',
   '---',
   '',
   '# Organon File Creation Workflow',

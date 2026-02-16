@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { execSync } from 'node:child_process';
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -121,6 +121,24 @@ if (!scope || scope === 'tools') {
   );
   writeFileSync(configTsPath, configTs);
   console.log('  Updated packages/tools/src/templates/config.ts');
+}
+
+// --- Update methodology_version in skill templates (tracks tools version) ---
+if (!scope || scope === 'tools') {
+  const skillsDir = join(root, 'packages', 'tools', 'src', 'templates', 'skills');
+  for (const file of readdirSync(skillsDir)) {
+    if (!file.endsWith('.ts')) continue;
+    const skillPath = join(skillsDir, file);
+    let skillContent = readFileSync(skillPath, 'utf-8');
+    const updated = skillContent.replace(
+      /methodology_version: "[^"]+"/,
+      `methodology_version: "${nextVersion}"`,
+    );
+    if (updated !== skillContent) {
+      writeFileSync(skillPath, updated);
+      console.log(`  Updated skill template: ${file}`);
+    }
+  }
 }
 
 // --- Update packages/testing-scala/build.sbt (only on global release) ---
