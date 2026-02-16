@@ -33,6 +33,7 @@ See [RFC 005](../../rfcs/005-observation-synthesis-loop.md) for the convention s
 | [003](./003-v040-onboarding-dogfood.md) | v0.4.0 Onboarding Dogfood | 2026-02-13 | Complete |
 | [004](./004-scala-publishing-friction.md) | Scala Publishing Friction | 2026-02-15 | Complete |
 | [005](./005-epistemic-export-gaps.md) | Epistemic Export Gaps | 2026-02-15 | Resolved |
+| [006](./006-pre-publish-validation-gaps.md) | Pre-publish Validation Gaps | 2026-02-16 | Signal |
 
 ---
 
