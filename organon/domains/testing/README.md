@@ -22,7 +22,7 @@ audience: [llm, human]
 - [001-testing-framework](../../../rfcs/001-testing-framework.md) (Implemented)
 - [008-scala-testing-library](../../../rfcs/008-scala-testing-library.md) (Implemented)
 
-**Implementation:** Multi-language — TypeScript (7 assertions, 206 tests) and Scala 3 (6 assertions, 71 tests)
+**Implementation:** Multi-language — TypeScript (7 assertions, 285 tests) and Scala 3 (6 assertions, 75 tests)
 
 ---
 
