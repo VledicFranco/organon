@@ -24,7 +24,7 @@ export function registerTools(
   // 1. Validate frontmatter
   server.tool(
     'organon_validate_frontmatter',
-    'Validate organon YAML frontmatter (4-stage: schema, references, truthfulness, consistency)',
+    'Validate YAML frontmatter in organon files across 4 stages: schema, references, truthfulness, consistency. Use after editing organon files, when frontmatter looks wrong, or to check metadata accuracy before committing.',
     {
       files: z.array(z.string()).optional().describe('Specific files to validate (all if omitted)'),
       stages: z.array(z.number().int().min(1).max(4)).optional().describe('Stages: 1=schema, 2=refs, 3=truth, 4=consistency'),
@@ -44,7 +44,7 @@ export function registerTools(
   // 2. Generate frontmatter
   server.tool(
     'organon_generate_frontmatter',
-    'Auto-generate YAML frontmatter for an organon file by analyzing its content',
+    'Generate YAML frontmatter for an organon file by analyzing its content. Use when creating new organon files, when a file is missing frontmatter, or to scaffold metadata for a new ETHOS.md, PHILOSOPHY.md, or PROTOCOL.md.',
     {
       file: z.string().describe('File path (project-relative)'),
       type: z.enum(['navigation', 'constraints', 'rationale', 'procedures', 'mapping']).optional(),
@@ -72,7 +72,7 @@ export function registerTools(
   // 3. Query
   server.tool(
     'organon_query',
-    'Query organon files by metadata (scope, type, priority, task, budget, name, category)',
+    'Search and filter organon files by metadata. Use to find relevant files for a task, discover what constraints apply to a scope, check token budgets, or list files by epistemic category (constraint, assertion, rule). Supports filtering by scope, type, priority, name, and token budget.',
     {
       scope: z.enum(['product', 'domain', 'feature', 'component', 'meta', 'methodology']).optional(),
       type: z.enum(['navigation', 'constraints', 'rationale', 'procedures', 'mapping']).optional(),
@@ -107,7 +107,7 @@ export function registerTools(
   // 4. Health
   server.tool(
     'organon_health',
-    'Show organon health dashboard (coverage, validation, tokens, freshness, score)',
+    'Show project health score and diagnostics. Reports coverage gaps, validation issues, token budgets, file freshness, and an overall score out of 100. Use to check project status, diagnose organon problems, or verify nothing is degraded after changes.',
     {
       fixSuggestions: z.boolean().optional().describe('Include fix suggestions'),
     },
@@ -125,7 +125,7 @@ export function registerTools(
   // 5. Find
   server.tool(
     'organon_find',
-    'Cross-domain discovery — find organons by file path, scope, type, or name',
+    'Find which organon files govern a specific file, directory, or domain. Use when you need to know what constraints apply to code you are editing, or to discover organon files by scope, type, or name.',
     {
       file: z.string().optional().describe('Find organons governing this file'),
       scope: z.enum(['product', 'domain', 'feature', 'component', 'meta', 'methodology']).optional(),
@@ -149,7 +149,7 @@ export function registerTools(
   // 6. Verify triplets
   server.tool(
     'organon_verify_triplets',
-    'Verify protocol-workflow-tool binding integrity (3-layer architecture)',
+    'Check that protocol-workflow-tool bindings are consistent and bidirectional. Use to detect orphaned workflows, missing tool references, or broken links between the three architecture layers.',
     {},
     async () => {
       const result = await verifyTriplets({ projectRoot, config, fs });
@@ -160,7 +160,7 @@ export function registerTools(
   // 7. Suggest tools
   server.tool(
     'organon_suggest_tools',
-    'Analyze protocols and suggest automation tier upgrades',
+    'Suggest which manual protocols could be automated. Analyzes protocol complexity and frequency to recommend automation tier upgrades. Use during planning or session compounding to find automation opportunities.',
     {},
     async () => {
       const result = await suggestTools({ projectRoot, config, fs });
@@ -171,7 +171,7 @@ export function registerTools(
   // 8. Export knowledge graph
   server.tool(
     'organon_export',
-    'Export organon knowledge graph as structured JSON (entities, assertions, relationships, rules)',
+    'Export the full organon knowledge graph as structured JSON with entities, assertions, relationships, and rules. Use for knowledge interoperability, external tool consumption, or analysis of the project organon structure.',
     {
       version: z.string().optional().describe('Version to include in export metadata'),
     },
@@ -189,7 +189,7 @@ export function registerTools(
   // 9. Verify (orchestrator)
   server.tool(
     'organon_verify',
-    'Run verification gates (frontmatter, triplets, freshness — or custom subset)',
+    'Run all 9 verification gates or a specific subset. Checks frontmatter, triplets, references, placeholder detection, freshness, invariant coverage, workflow quality, tier-4 tests, and version alignment. Use before committing, at session start, or to diagnose what is broken.',
     {
       gates: z.array(z.string()).optional().describe('Specific gates to run (all if omitted)'),
     },

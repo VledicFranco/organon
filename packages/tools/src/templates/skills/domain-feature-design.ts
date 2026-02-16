@@ -9,7 +9,7 @@
 export const DOMAIN_FEATURE_DESIGN_SKILL = [
   '---',
   'name: domain-feature-design',
-  'description: Guides agents through proper domain/feature design following Organon methodology. Ensures RFCs contain both organon mutation plan (ETHOS.md, PHILOSOPHY.md content) AND technical implementation plan (architecture, API, phases). Prevents common mistake of writing only technical plan or only organon plan.',
+  'description: Guides agents through proper domain/feature design following Organon methodology. Ensures RFCs contain both organon mutation plan (ETHOS.md, PHILOSOPHY.md content) AND technical implementation plan (architecture, API, phases). Use when designing new domains, features, or significant capabilities that require organon evolution.',
   'protocol_id: PROTO-ORG-1',
   'protocol_file: organon/protocols/PROTOCOLS.md',
   'tools: [organon-validate, organon-verify]',

@@ -1,6 +1,6 @@
 ---
 name: organon-tools-developer
-description: Ensures organon-tools development follows its own ETHOS.md and PHILOSOPHY.md constraints. Use when adding CLI commands, verification gates, MCP tools, or evolving the methodology specification. Dogfoods the Organon methodology by enforcing the 6 invariants (schema fidelity, every command has tests, gates fail not warn, machine-parsable output, idempotent operations, breaking changes require major version bump) and 5 design principles (fail-fast, composability, testability, clarity). Loads organon/domains/tools/ETHOS.md and organon/domains/tools/PHILOSOPHY.md before starting work.
+description: Enforces organon-tools ETHOS.md and PHILOSOPHY.md constraints during development. Use when adding CLI commands, verification gates, MCP tools, or fixing bugs in packages/tools/. Ensures 6 invariants (schema fidelity, test coverage, gates fail not warn, machine-parsable output, idempotency, semver) and 5 design principles (fail-fast, composability, testability, clarity).
 protocol_id: PROTO-ORG-2
 protocol_file: organon/protocols/PROTOCOLS.md
 tools: [organon-verify, npm-test]
