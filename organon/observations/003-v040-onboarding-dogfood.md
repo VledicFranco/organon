@@ -43,7 +43,7 @@ After publishing v0.4.0 to npm, we simulated the new-agent experience: global in
 
 ### O3: ETHOS.md template scaffolds good structure but placeholders need more guidance
 
-**Signal:** The template has `[Describe what your project does — be specific]` but doesn't hint at what "specific" means. A new agent filling this in for the first time has to infer the right level of detail from the structure. The PRIMER.md anti-pattern "Aspiration as invariant" helped, but an agent unfamiliar with organon methodology would benefit from a brief inline example.
+**Signal:** The template has a placeholder like "Describe what your project does — be specific" but doesn't hint at what "specific" means. A new agent filling this in for the first time has to infer the right level of detail from the structure. The PRIMER.md anti-pattern "Aspiration as invariant" helped, but an agent unfamiliar with organon methodology would benefit from a brief inline example.
 
 **Implication:** The templates are functional but could include a commented-out example (e.g., `<!-- Example: A REST API for managing user accounts -->`) to reduce guesswork. This would make the first-fill experience faster.
 
@@ -59,11 +59,11 @@ After publishing v0.4.0 to npm, we simulated the new-agent experience: global in
 
 ### O5: Health score 95/100 out of the box with customized content
 
-**Signal:** After customizing ETHOS.md and PHILOSOPHY.md (but leaving PROTOCOLS.md as template), health was 95/100. The 5-point penalty was from the methodology-reference.md containing `[Describe...]` in its gate table description — same false positive as the canonical repo.
+**Signal:** After customizing ETHOS.md and PHILOSOPHY.md (but leaving PROTOCOLS.md as template), health was 95/100. The 5-point penalty was from the methodology-reference.md containing a placeholder pattern in its gate table description — same false positive as the canonical repo.
 
 **Implication:** The health score reflects real quality well. A freshly customized project (2/7 files edited) scoring 95 is appropriate — it means the scaffolding is good and the agent just needs to fill in the remaining content.
 
-**Suggested Action:** The `[Describe...]` false positive in methodology-reference.md should be fixed in the template — it's a description of the gate, not a placeholder. Could use `(Describe...)` or rephrase to avoid the regex match.
+**Suggested Action:** The placeholder false positive in methodology-reference.md should be fixed in the template — it's a description of the gate, not a placeholder. Rephrase to avoid the regex match.
 
 ### O6: Token estimates on customized files may drift
 

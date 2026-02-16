@@ -175,7 +175,7 @@ organon mcp                     # Start MCP server (IDE integration)
 | **frontmatter** | Every organon file has valid YAML frontmatter with required fields |
 | **triplets** | Protocol-workflow-tool bindings are complete and bidirectional |
 | **references** | `inherits_from`, `loads:`, `protocol_file` paths resolve correctly |
-| **placeholder-detection** | Template placeholders like `[Describe...]` have been replaced |
+| **placeholder-detection** | Template placeholders have been replaced with real content |
 | **freshness** | Organon files are not stale relative to code changes |
 | **invariant-coverage** | Every invariant in ETHOS.md has at least one tier-4 test |
 | **workflow-quality** | Workflows reference valid protocols and have proper structure |

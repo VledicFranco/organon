@@ -5,10 +5,10 @@ name: scala-testing-library
 version: "1.0"
 status: implemented
 summary: Scala 3 port of @organon-methodology/testing with MUnit adapter and Maven Central publishing
-token_estimate: 2500
+token_estimate: 1200
 author: Claude Opus 4.6
 created: "2026-02-14"
-primary_rfcs: ["001"]
+primary_rfcs: [1]
 audience: [llm, human]
 ---
 

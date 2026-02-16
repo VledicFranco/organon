@@ -257,7 +257,9 @@ function validateSchema(
   }
 
   if (fm.type === 'rationale') {
-    if (fm.decision_count === undefined && extractSection(body, 'Design Decisions')) {
+    // decision_count is only expected for PHILOSOPHY.md files, not RFCs or observations
+    const isPhilosophy = file.replace(/\\/g, '/').toUpperCase().includes('PHILOSOPHY');
+    if (isPhilosophy && fm.decision_count === undefined && extractSection(body, 'Design Decisions')) {
       warnings.push({
         severity: 'warning',
         code: 'FRONTMATTER_MISSING_TYPE_FIELD',
@@ -347,10 +349,12 @@ async function validateReferences(
   // Check primary_rfcs reference existing RFC files
   if (fm.primary_rfcs) {
     for (const rfcNum of fm.primary_rfcs) {
-      // Try common RFC file patterns
+      // Try common RFC file patterns (RFC-001*, rfc-001*, 001-*, RFC_1*)
+      const padded = String(rfcNum).padStart(3, '0');
       const patterns = [
-        `**/RFC-${String(rfcNum).padStart(3, '0')}*`,
-        `**/rfc-${String(rfcNum).padStart(3, '0')}*`,
+        `**/RFC-${padded}*`,
+        `**/rfc-${padded}*`,
+        `**/${padded}-*`,
         `**/RFC_${rfcNum}*`,
       ];
       let found = false;
