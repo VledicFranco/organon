@@ -13,7 +13,9 @@ export const CONFIG_TEMPLATE = `{
     "**/README.md",
     "**/PRIMER.md",
     "**/methodology-reference.md",
-    "**/components.md"
+    "**/components.md",
+    "**/observations/*.md",
+    "**/rfcs/*.md"
   ],
   "ignorePatterns": [
     "**/node_modules/**",

@@ -14,6 +14,7 @@
  *   coverage       — Invariant coverage analysis
  *   generate-tests — Generate test scaffolds for uncovered invariants
  *   suggest        — Suggest automation tier upgrades
+ *   export         — Export knowledge graph as JSON
  *   release        — Version bump and release
  *   mcp            — Start MCP server
  */
@@ -33,6 +34,7 @@ import { verifyCommand } from './commands/verify.js';
 import { coverageCommand } from './commands/coverage.js';
 import { generateTestsCommand } from './commands/generate-tests.js';
 import { suggestCommand } from './commands/suggest.js';
+import { exportCommand } from './commands/export.js';
 import { releaseCommand } from './commands/release.js';
 import { mcpCommand } from './commands/mcp.js';
 
@@ -51,6 +53,7 @@ async function main() {
     .command(coverageCommand)
     .command(generateTestsCommand)
     .command(suggestCommand)
+    .command(exportCommand)
     .command(releaseCommand)
     .command(mcpCommand)
     .demandCommand(1, chalk.red('Please specify a command'))

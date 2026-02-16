@@ -107,4 +107,81 @@ describe('query', () => {
     const result = await query({ projectRoot: '/project', config, fs, includeInvalid: true });
     expect(result.files.length).toBe(2);
   });
+
+  describe('category filter', () => {
+    const observationContent = `---
+type: rationale
+scope: product
+name: test-observation
+version: "1.0"
+summary: Test observation
+token_estimate: 300
+status: signal
+created: "2026-02-15"
+---
+
+# Observation
+
+Some learning.
+`;
+
+    function makeCategoryFs() {
+      return new MemoryFileSystem({
+        '/project/organon/ETHOS.md': makeEthos({ name: 'root', scope: 'product' }),
+        '/project/organon/domains/genesis/ETHOS.md': makeEthos({ name: 'genesis', scope: 'domain' }),
+        '/project/organon/observations/001-test.md': observationContent,
+        '/project/organon/domains/genesis/PHILOSOPHY.md': makePhilosophy({ name: 'genesis-phil' }),
+        '/project/README.md': makeReadme({ name: 'root', scope: 'product' }),
+      });
+    }
+
+    function makeCategoryConfig(): OrganonConfig {
+      return {
+        projectRoot: '/project',
+        organonPaths: ['.', 'organon'],
+        organonGlobs: ['**/ETHOS.md', '**/PHILOSOPHY.md', '**/PROTOCOLS.md', '**/README.md', '**/observations/*.md'],
+        ignorePatterns: [],
+        workflowPaths: {},
+        freshnessThresholdHours: 24,
+      };
+    }
+
+    it('filters by constraint category (ETHOS files)', async () => {
+      const fs = makeCategoryFs();
+      const config = makeCategoryConfig();
+      const result = await query({ projectRoot: '/project', config, fs, category: 'constraint' });
+      expect(result.files.length).toBe(2);
+      expect(result.files.every((f) => f.frontmatter?.type === 'constraints')).toBe(true);
+    });
+
+    it('filters by assertion category (observation files)', async () => {
+      const fs = makeCategoryFs();
+      const config = makeCategoryConfig();
+      const result = await query({ projectRoot: '/project', config, fs, category: 'assertion' });
+      expect(result.files.length).toBe(1);
+      expect(result.files[0].path).toContain('observations/');
+    });
+
+    it('filters by rule category (procedure files)', async () => {
+      const fs = makeCategoryFs();
+      const config = makeCategoryConfig();
+      const result = await query({ projectRoot: '/project', config, fs, category: 'rule' });
+      // No protocol files in our test fixture
+      expect(result.files.length).toBe(0);
+    });
+
+    it('category filter combines with other filters', async () => {
+      const fs = makeCategoryFs();
+      const config = makeCategoryConfig();
+      const result = await query({
+        projectRoot: '/project',
+        config,
+        fs,
+        category: 'constraint',
+        scope: 'domain',
+      });
+      expect(result.files.length).toBe(1);
+      expect(result.files[0].frontmatter?.name).toBe('genesis');
+    });
+  });
 });

@@ -20,6 +20,7 @@ Complete reference for the `organon` CLI. All commands share common global optio
 - [Coverage Commands](#coverage-commands)
   - [coverage](#coverage)
 - [Integration Commands](#integration-commands)
+  - [export](#export)
   - [mcp](#mcp)
 - [Configuration](#configuration)
 
@@ -262,6 +263,38 @@ organon coverage --json           # Machine-readable JSON output
 
 ## Integration Commands
 
+### export
+
+Export the organon knowledge graph as structured JSON, classified by epistemic category. Produces entities, assertions, relationships, and rules for consumption by external knowledge systems.
+
+```bash
+organon export                  # Pretty-printed JSON to stdout
+organon export --no-pretty      # Compact JSON (for piping)
+```
+
+**Options:**
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `--pretty` | boolean | `true` | Pretty-print JSON output |
+
+**Output format:**
+
+```json
+{
+  "version": "0.4.1",
+  "exported_at": "2026-02-15T...",
+  "entities": [{ "id": "organon:...", "kind": "organon-file", "category": "constraint" }],
+  "assertions": [{ "id": "inv:INV-...", "category": "constraint", "predicate": "declares_invariant" }],
+  "relationships": [{ "source": "organon:...", "predicate": "inherits_from", "target": "organon:..." }],
+  "rules": [{ "id": "gate:frontmatter", "predicate": "validates", "type": "blocking" }]
+}
+```
+
+**Exit codes:** `0` on success, `1` on error.
+
+---
+
 ### mcp
 
 Start the Organon MCP (Model Context Protocol) server on stdio transport. Enables IDE integration.
@@ -275,7 +308,7 @@ organon mcp --project-root .     # Explicit project root
 
 | Type | Count | Examples |
 |------|-------|---------|
-| Tools | 8 | `organon_validate_frontmatter`, `organon_verify`, `organon_health`, `organon_find`, `organon_query`, `organon_generate_frontmatter`, `organon_verify_triplets`, `organon_suggest_tools` |
+| Tools | 9 | `organon_validate_frontmatter`, `organon_verify`, `organon_health`, `organon_find`, `organon_query`, `organon_generate_frontmatter`, `organon_verify_triplets`, `organon_suggest_tools`, `organon_export` |
 | Resources | 4 | `organon://index`, `organon://file/{path}`, `organon://scope/{scope}`, `organon://health` |
 | Prompts | 4 | `implement-feature`, `review-changes`, `create-organon`, `evolve-organon` |
 

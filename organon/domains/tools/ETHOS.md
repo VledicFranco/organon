@@ -41,7 +41,7 @@ audience: [llm, human]
 ### What Organon Tools IS
 
 - A TypeScript/Node.js CLI for enforcing Organon methodology
-- Command-based architecture using yargs (init, upgrade, generate, validate, verify, coverage, find, query, health)
+- Command-based architecture using yargs (14 commands: init, upgrade, generate, validate, verify, coverage, find, query, health, generate-tests, suggest, export, release, mcp)
 - Project bootstrapping (init) and incremental upgrade (upgrade) for methodology adoption
 - Implementation of verification gates from three-layer-architecture.md
 - Frontmatter generator and validator matching book-llms/ schema exactly

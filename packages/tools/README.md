@@ -42,10 +42,10 @@ packages/tools/src/
 │   ├── suggest-tools.ts    ← Automation tier suggestions
 │   └── verify.ts       ← Gate registry orchestrator
 ├── cli/                ← Thin yargs adapter
-│   └── commands/       ← validate, generate, query, health, find, verify, mcp
+│   └── commands/       ← validate, generate, query, health, find, verify, export, mcp
 ├── mcp/                ← Thin MCP adapter
 │   ├── server.ts       ← stdio transport
-│   ├── tools.ts        ← 8 MCP tools
+│   ├── tools.ts        ← 9 MCP tools
 │   ├── resources.ts    ← 4 MCP resources
 │   └── prompts.ts      ← 4 MCP prompts
 └── index.ts            ← Public API
@@ -81,6 +81,10 @@ organon find --name=frontmatter
 organon verify
 organon verify --gate frontmatter triplets
 
+# Export knowledge graph as JSON
+organon export
+organon export --no-pretty
+
 # Start MCP server
 organon mcp
 ```
@@ -89,7 +93,7 @@ organon mcp
 
 Start with `organon mcp`. Exposes:
 
-**8 Tools:** `organon_validate_frontmatter`, `organon_generate_frontmatter`, `organon_query`, `organon_health`, `organon_find`, `organon_verify_triplets`, `organon_suggest_tools`, `organon_verify`
+**9 Tools:** `organon_validate_frontmatter`, `organon_generate_frontmatter`, `organon_query`, `organon_health`, `organon_find`, `organon_verify_triplets`, `organon_suggest_tools`, `organon_export`, `organon_verify`
 
 **4 Resources:** `organon://index`, `organon://file/{path}`, `organon://scope/{scope}`, `organon://health`
 

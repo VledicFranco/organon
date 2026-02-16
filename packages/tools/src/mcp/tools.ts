@@ -13,6 +13,7 @@ import { find } from '../core/find.js';
 import { verifyTriplets } from '../core/verify-triplets.js';
 import { suggestTools } from '../core/suggest-tools.js';
 import { verify } from '../core/verify.js';
+import { exportKnowledgeGraph } from '../core/export.js';
 
 export function registerTools(
   server: McpServer,
@@ -71,7 +72,7 @@ export function registerTools(
   // 3. Query
   server.tool(
     'organon_query',
-    'Query organon files by metadata (scope, type, priority, task, budget, name)',
+    'Query organon files by metadata (scope, type, priority, task, budget, name, category)',
     {
       scope: z.enum(['product', 'domain', 'feature', 'component', 'meta', 'methodology']).optional(),
       type: z.enum(['navigation', 'constraints', 'rationale', 'procedures', 'mapping']).optional(),
@@ -80,6 +81,7 @@ export function registerTools(
       budget: z.number().optional().describe('Maximum total token budget'),
       name: z.string().optional().describe('Filter by name (substring)'),
       related: z.string().optional().describe('Filter by related domain or feature'),
+      category: z.enum(['constraint', 'assertion', 'rule']).optional().describe('Filter by epistemic category'),
       verbose: z.boolean().optional().describe('Include full file content'),
     },
     async (args) => {
@@ -95,6 +97,7 @@ export function registerTools(
         namePattern: args.name,
         relatedDomain: args.related,
         relatedFeature: args.related,
+        category: args.category,
         verbose: args.verbose,
       });
       return { content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }] };
@@ -165,7 +168,25 @@ export function registerTools(
     },
   );
 
-  // 8. Verify (orchestrator)
+  // 8. Export knowledge graph
+  server.tool(
+    'organon_export',
+    'Export organon knowledge graph as structured JSON (entities, assertions, relationships, rules)',
+    {
+      version: z.string().optional().describe('Version to include in export metadata'),
+    },
+    async (args) => {
+      const result = await exportKnowledgeGraph({
+        projectRoot,
+        config,
+        fs,
+        version: args.version,
+      });
+      return { content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }] };
+    },
+  );
+
+  // 9. Verify (orchestrator)
   server.tool(
     'organon_verify',
     'Run verification gates (frontmatter, triplets, freshness — or custom subset)',

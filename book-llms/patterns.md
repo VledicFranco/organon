@@ -2,9 +2,9 @@
 type: rationale
 scope: meta
 name: patterns
-version: "1.0"
+version: "1.1"
 summary: Common patterns and anti-patterns — progressive disclosure, enforcement loop, code mapping, verification, onboarding, and more
-token_estimate: 15700
+token_estimate: 15800
 pattern_count: 23
 inherits_from: [meta-organon]
 load_priority: medium
@@ -1081,7 +1081,8 @@ The Four-Step Loop is the **operational rhythm**. The Enforcement Loop is the **
 - **Directory:** `organon/observations/NNN-descriptive-name.md` at project level
 - **Frontmatter:** `type: rationale` (no new artifact type — observations are empirical rationale)
 - **Required sections:** Context, Observations (O1..ON with Signal/Implication/Suggested Action), Patterns to Watch
-- **Mental model:** Signal (noticed once) → Pattern (confirmed across sessions) → Actionable (root cause understood, clear fix)
+- **Mental model:** Signal (noticed once) → Pattern (confirmed across sessions) → Actionable (root cause understood, clear fix) → Resolved (graduated into methodology)
+- **Frontmatter status field:** `status: signal | pattern | actionable | resolved` tracks this lifecycle
 
 ### When to record
 
