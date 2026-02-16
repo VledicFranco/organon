@@ -19,8 +19,14 @@ function fail(msg) {
 // --- Validate arguments ---
 const bump = process.argv[2];
 if (!['patch', 'minor', 'major'].includes(bump)) {
-  console.log('Usage: node scripts/release.mjs <patch|minor|major>');
+  console.log('Usage: node scripts/release.mjs <patch|minor|major> [--scope tools|testing]');
   process.exit(1);
+}
+
+const scopeIdx = process.argv.indexOf('--scope');
+const scope = scopeIdx !== -1 ? process.argv[scopeIdx + 1] : undefined;
+if (scope && !['tools', 'testing'].includes(scope)) {
+  fail(`Invalid --scope value '${scope}'. Must be 'tools' or 'testing'.`);
 }
 
 // --- Validate environment ---
@@ -46,13 +52,14 @@ try {
   fail('GitHub CLI (gh) is not installed or not in PATH.');
 }
 
-// --- Read current version ---
-const toolsPackagePath = join(root, 'packages', 'tools', 'package.json');
-const toolsPackage = JSON.parse(readFileSync(toolsPackagePath, 'utf-8'));
-const currentVersion = toolsPackage.version;
+// --- Read current version from target package ---
+const targetPkg = scope || 'tools';
+const targetPackagePath = join(root, 'packages', targetPkg, 'package.json');
+const targetPackage = JSON.parse(readFileSync(targetPackagePath, 'utf-8'));
+const currentVersion = targetPackage.version;
 
 if (!currentVersion) {
-  fail('Could not read current version from packages/tools/package.json.');
+  fail(`Could not read current version from packages/${targetPkg}/package.json.`);
 }
 
 // --- Compute next version ---
@@ -70,50 +77,63 @@ switch (bump) {
     break;
 }
 
-console.log(`Bumping version: ${currentVersion} → ${nextVersion} (${bump})`);
+const scopeLabel = scope ? ` (scope: ${scope})` : ' (all packages)';
+console.log(`Bumping version: ${currentVersion} → ${nextVersion} (${bump})${scopeLabel}`);
 
 // --- Update packages/tools/package.json ---
-toolsPackage.version = nextVersion;
-writeFileSync(toolsPackagePath, JSON.stringify(toolsPackage, null, 2) + '\n');
-console.log('  Updated packages/tools/package.json');
+if (!scope || scope === 'tools') {
+  const toolsPackagePath = join(root, 'packages', 'tools', 'package.json');
+  const toolsPackage = JSON.parse(readFileSync(toolsPackagePath, 'utf-8'));
+  toolsPackage.version = nextVersion;
+  writeFileSync(toolsPackagePath, JSON.stringify(toolsPackage, null, 2) + '\n');
+  console.log('  Updated packages/tools/package.json');
+}
 
 // --- Update packages/testing/package.json ---
-const testingPackagePath = join(root, 'packages', 'testing', 'package.json');
-const testingPackage = JSON.parse(readFileSync(testingPackagePath, 'utf-8'));
-testingPackage.version = nextVersion;
-writeFileSync(testingPackagePath, JSON.stringify(testingPackage, null, 2) + '\n');
-console.log('  Updated packages/testing/package.json');
+if (!scope || scope === 'testing') {
+  const testingPackagePath = join(root, 'packages', 'testing', 'package.json');
+  const testingPackage = JSON.parse(readFileSync(testingPackagePath, 'utf-8'));
+  testingPackage.version = nextVersion;
+  writeFileSync(testingPackagePath, JSON.stringify(testingPackage, null, 2) + '\n');
+  console.log('  Updated packages/testing/package.json');
+}
 
-// --- Update organon.config.json ---
-const configPath = join(root, 'organon.config.json');
-const config = JSON.parse(readFileSync(configPath, 'utf-8'));
-config.methodology_version = nextVersion;
-writeFileSync(configPath, JSON.stringify(config, null, 2) + '\n');
-console.log('  Updated organon.config.json');
+// --- Update organon.config.json (tracks tools version) ---
+if (!scope || scope === 'tools') {
+  const configPath = join(root, 'organon.config.json');
+  const config = JSON.parse(readFileSync(configPath, 'utf-8'));
+  config.methodology_version = nextVersion;
+  writeFileSync(configPath, JSON.stringify(config, null, 2) + '\n');
+  console.log('  Updated organon.config.json');
+}
 
-// --- Update METHODOLOGY_VERSION constant in templates/config.ts ---
-const configTsPath = join(root, 'packages', 'tools', 'src', 'templates', 'config.ts');
-let configTs = readFileSync(configTsPath, 'utf-8');
-configTs = configTs.replace(
-  /export const METHODOLOGY_VERSION = '[^']+';/,
-  `export const METHODOLOGY_VERSION = '${nextVersion}';`,
-);
-configTs = configTs.replace(
-  /"methodology_version": "[^"]+"/,
-  `"methodology_version": "${nextVersion}"`,
-);
-writeFileSync(configTsPath, configTs);
-console.log('  Updated packages/tools/src/templates/config.ts');
+// --- Update METHODOLOGY_VERSION constant in templates/config.ts (tracks tools version) ---
+if (!scope || scope === 'tools') {
+  const configTsPath = join(root, 'packages', 'tools', 'src', 'templates', 'config.ts');
+  let configTs = readFileSync(configTsPath, 'utf-8');
+  configTs = configTs.replace(
+    /export const METHODOLOGY_VERSION = '[^']+';/,
+    `export const METHODOLOGY_VERSION = '${nextVersion}';`,
+  );
+  configTs = configTs.replace(
+    /"methodology_version": "[^"]+"/,
+    `"methodology_version": "${nextVersion}"`,
+  );
+  writeFileSync(configTsPath, configTs);
+  console.log('  Updated packages/tools/src/templates/config.ts');
+}
 
-// --- Update packages/testing-scala/build.sbt ---
-const buildSbtPath = join(root, 'packages', 'testing-scala', 'build.sbt');
-let buildSbt = readFileSync(buildSbtPath, 'utf-8');
-buildSbt = buildSbt.replace(
-  /ThisBuild \/ version\s*:=\s*"[^"]+"/,
-  `ThisBuild / version      := "${nextVersion}"`,
-);
-writeFileSync(buildSbtPath, buildSbt);
-console.log('  Updated packages/testing-scala/build.sbt');
+// --- Update packages/testing-scala/build.sbt (only on global release) ---
+if (!scope) {
+  const buildSbtPath = join(root, 'packages', 'testing-scala', 'build.sbt');
+  let buildSbt = readFileSync(buildSbtPath, 'utf-8');
+  buildSbt = buildSbt.replace(
+    /ThisBuild \/ version\s*:=\s*"[^"]+"/,
+    `ThisBuild / version      := "${nextVersion}"`,
+  );
+  writeFileSync(buildSbtPath, buildSbt);
+  console.log('  Updated packages/testing-scala/build.sbt');
+}
 
 // --- Update CHANGELOG.md ---
 const changelogPath = join(root, 'CHANGELOG.md');
@@ -125,7 +145,7 @@ writeFileSync(changelogPath, updatedChangelog);
 console.log('  Updated CHANGELOG.md');
 
 // --- Git commit and tag ---
-const tag = `v${nextVersion}`;
+const tag = scope ? `${scope}-v${nextVersion}` : `v${nextVersion}`;
 run('git add -A');
 run(`git commit -m "chore: release ${tag}"`);
 console.log(`  Committed: chore: release ${tag}`);

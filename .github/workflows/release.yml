@@ -33,27 +33,66 @@ jobs:
           npm run test -w packages/testing
           npm run test -w packages/tools
 
-      # Verify package versions match the release tag
-      - name: Verify versions match tag
+      # Determine which packages to publish based on tag prefix
+      - name: Determine release scope
+        id: scope
         run: |
           TAG="${{ github.event.release.tag_name }}"
-          EXPECTED_VERSION="${TAG#v}"
-          for pkg in packages/*/package.json; do
-            PKG_VERSION=$(node -p "require('./$pkg').version")
-            if [ "$PKG_VERSION" != "$EXPECTED_VERSION" ]; then
-              echo "Version mismatch in $pkg: expected $EXPECTED_VERSION, got $PKG_VERSION"
-              exit 1
-            fi
-          done
-          echo "All package versions match tag $TAG"
+          if [[ "$TAG" == tools-v* ]]; then
+            echo "publish_tools=true" >> "$GITHUB_OUTPUT"
+            echo "publish_testing=false" >> "$GITHUB_OUTPUT"
+            echo "publish_scala=false" >> "$GITHUB_OUTPUT"
+            echo "expected_version=${TAG#tools-v}" >> "$GITHUB_OUTPUT"
+            echo "Scoped release: tools only"
+          elif [[ "$TAG" == testing-v* ]]; then
+            echo "publish_tools=false" >> "$GITHUB_OUTPUT"
+            echo "publish_testing=true" >> "$GITHUB_OUTPUT"
+            echo "publish_scala=false" >> "$GITHUB_OUTPUT"
+            echo "expected_version=${TAG#testing-v}" >> "$GITHUB_OUTPUT"
+            echo "Scoped release: testing only"
+          else
+            echo "publish_tools=true" >> "$GITHUB_OUTPUT"
+            echo "publish_testing=true" >> "$GITHUB_OUTPUT"
+            echo "publish_scala=true" >> "$GITHUB_OUTPUT"
+            echo "expected_version=${TAG#v}" >> "$GITHUB_OUTPUT"
+            echo "Global release: all packages"
+          fi
 
-      # Publish packages with provenance (order matters: testing before tools)
+      # Verify package versions match the release tag (only for packages being published)
+      - name: Verify versions match tag
+        run: |
+          EXPECTED="${{ steps.scope.outputs.expected_version }}"
+          FAILED=false
+
+          if [ "${{ steps.scope.outputs.publish_tools }}" = "true" ]; then
+            TOOLS_VERSION=$(node -p "require('./packages/tools/package.json').version")
+            if [ "$TOOLS_VERSION" != "$EXPECTED" ]; then
+              echo "Version mismatch in packages/tools: expected $EXPECTED, got $TOOLS_VERSION"
+              FAILED=true
+            fi
+          fi
+
+          if [ "${{ steps.scope.outputs.publish_testing }}" = "true" ]; then
+            TESTING_VERSION=$(node -p "require('./packages/testing/package.json').version")
+            if [ "$TESTING_VERSION" != "$EXPECTED" ]; then
+              echo "Version mismatch in packages/testing: expected $EXPECTED, got $TESTING_VERSION"
+              FAILED=true
+            fi
+          fi
+
+          if [ "$FAILED" = "true" ]; then
+            exit 1
+          fi
+          echo "Package versions match tag"
+
       - name: Publish @organon-methodology/testing
+        if: steps.scope.outputs.publish_testing == 'true'
         run: npm publish -w packages/testing --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish @organon-methodology/tools
+        if: steps.scope.outputs.publish_tools == 'true'
         run: npm publish -w packages/tools --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -61,6 +100,7 @@ jobs:
   publish-scala:
     runs-on: ubuntu-latest
     needs: [publish]
+    if: startsWith(github.event.release.tag_name, 'v')
     steps:
       - uses: actions/checkout@v4
         with:

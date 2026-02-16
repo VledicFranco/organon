@@ -3,7 +3,6 @@
  *
  * Checks:
  * 1. organon.config.json methodology_version matches bundled METHODOLOGY_VERSION
- * 2. Both package.json versions match each other (monorepo sync check)
  *
  * @organon-invariant INV-TOOLS-2 every-command-has-tests
  */
@@ -57,27 +56,6 @@ export async function verifyVersionAlignment(options: {
     }
   } catch {
     // No config file — not an error for this gate
-  }
-
-  // 2. Check monorepo package.json version alignment
-  try {
-    const toolsPkg = JSON.parse(
-      await fs.readFile(joinPath(projectRoot, 'packages/tools/package.json')),
-    );
-    const testingPkg = JSON.parse(
-      await fs.readFile(joinPath(projectRoot, 'packages/testing/package.json')),
-    );
-
-    if (toolsPkg.version && testingPkg.version && toolsPkg.version !== testingPkg.version) {
-      warnings.push({
-        severity: 'warning',
-        code: 'VERSION_PACKAGE_MISMATCH',
-        message: `packages/tools (${toolsPkg.version}) and packages/testing (${testingPkg.version}) versions do not match`,
-        suggestion: 'Ensure both packages have the same version before releasing',
-      });
-    }
-  } catch {
-    // Not a monorepo or packages not found — skip silently
   }
 
   return {

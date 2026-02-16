@@ -17,9 +17,15 @@ All notable changes to this project will be documented in this file.
 - Maven Central publishing via sbt-ci-release in release workflow
 - INV-TEST-8 (language-parity) invariant in testing domain
 - RFC 008: Scala 3 Testing Library & Multi-Language Package Strategy
+- Scoped releases: `--scope tools|testing` flag in release script for individual package publishing
+- Conditional CI publishing: tag prefix (`v*`, `tools-v*`, `testing-v*`) controls which packages are published
 
 ### Changed
 - Release script (`scripts/release.mjs`) now bumps `packages/testing-scala/build.sbt` version
+- Version alignment gate no longer warns on cross-package version mismatch (supports independent versioning)
+
+### Fixed
+- `discoverOrganonFiles` no longer produces false positives for root-path patterns (#6)
 
 ## [0.4.0] - 2026-02-13
 

@@ -44,19 +44,6 @@ describe('verifyVersionAlignment', () => {
     );
   });
 
-  it('warns when package versions mismatch in monorepo', async () => {
-    const fs = new MemoryFileSystem({
-      '/project/packages/tools/package.json': JSON.stringify({ version: '1.0.0' }),
-      '/project/packages/testing/package.json': JSON.stringify({ version: '0.9.0' }),
-    });
-    const config = makeConfig('/project');
-    const result = await verifyVersionAlignment({ projectRoot: '/project', config, fs });
-    expect(result.success).toBe(true); // Advisory
-    expect(result.warnings).toContainEqual(
-      expect.objectContaining({ code: 'VERSION_PACKAGE_MISMATCH' }),
-    );
-  });
-
   it('passes when no config file exists', async () => {
     const fs = new MemoryFileSystem({});
     const config = makeConfig('/project');
@@ -65,11 +52,11 @@ describe('verifyVersionAlignment', () => {
     expect(result.warnings).toHaveLength(0);
   });
 
-  it('passes when packages match', async () => {
+  it('does not check cross-package version alignment', async () => {
     const fs = new MemoryFileSystem({
       '/project/organon.config.json': JSON.stringify({ methodology_version: METHODOLOGY_VERSION }),
       '/project/packages/tools/package.json': JSON.stringify({ version: '1.0.0' }),
-      '/project/packages/testing/package.json': JSON.stringify({ version: '1.0.0' }),
+      '/project/packages/testing/package.json': JSON.stringify({ version: '0.9.0' }),
     });
     const config = makeConfig('/project');
     const result = await verifyVersionAlignment({ projectRoot: '/project', config, fs });
