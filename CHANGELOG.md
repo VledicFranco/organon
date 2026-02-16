@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- **`organon export`** — export organon knowledge graph as structured JSON classified by epistemic category (entities, assertions, relationships, rules)
+- **`organon query --category`** — filter organon files by epistemic category (`constraint`, `assertion`, `rule`)
+- `organon_export` MCP tool and `category` parameter on `organon_query` MCP tool
+- Epistemic Categories section in three-layer-architecture.md formalizing the constraint/assertion/rule model
+- Observation status lifecycle field (`signal | pattern | actionable | resolved`) in frontmatter spec
+- Observation template in templates.md
+- RFC 009: Epistemic Model & Knowledge Interoperability (implemented)
+- `**/observations/*.md` and `**/rfcs/*.md` added to default organon globs (discovery now covers non-standard files)
+
+### Fixed
+- `inherits_from` names in export now resolve to actual entity IDs via name→ID lookup
+- `decision_count` warning no longer fires on RFCs and observations (scoped to PHILOSOPHY.md only)
+- RFC reference lookup now matches `NNN-slug` filenames (fixes false `BROKEN_RFC_REF` warning)
+- Placeholder detection no longer triggers on documentation that quotes the placeholder pattern
+- RFC 008 `token_estimate` corrected (2500→1200)
+
 ## [0.4.1] - 2026-02-16
 
 ### Added
