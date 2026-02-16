@@ -15,7 +15,7 @@ export const VERIFY_AND_HEALTH_SKILL = [
   'tools: [organon-verify, organon-health]',
   'loads:',
   '  - CLAUDE.md',
-  'methodology_version: "0.5.1"',
+  'methodology_version: "0.5.2"',
   '---',
   '',
   '# Verify and Health Workflow',

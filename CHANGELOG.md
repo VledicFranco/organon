@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.5.2] - 2026-02-16
+
 ### Fixed
 - Fix `FRONTMATTER_NAME_DIR_MISMATCH` false positives for files in collection/container directories (`organon/`, `observations/`, `rfcs/`, `book-llms/`, `protocols/`, `book-humans/`) — closes #11, #2
 - `assertExportsPresent` now detects Scala 3 enum case members (`case Foo, Bar`) — closes #8

@@ -1,6 +1,6 @@
 {
   "name": "@organon-methodology/testing",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Semantic testing framework for automated tier-4 invariant verification",
   "type": "module",
   "main": "dist/index.js",
