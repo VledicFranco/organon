@@ -282,7 +282,7 @@ organon export --no-pretty      # Compact JSON (for piping)
 
 ```json
 {
-  "version": "0.4.1",
+  "version": "0.5.2",
   "exported_at": "2026-02-15T...",
   "entities": [{ "id": "organon:...", "kind": "organon-file", "category": "constraint" }],
   "assertions": [{ "id": "inv:INV-...", "category": "constraint", "predicate": "declares_invariant" }],

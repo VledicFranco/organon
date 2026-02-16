@@ -468,7 +468,7 @@ The `organon export` command produces a structured JSON representation classifie
 
 ```json
 {
-  "version": "0.5.0",
+  "version": "0.5.2",
   "exported_at": "2026-02-15T...",
   "entities": [
     { "id": "organon:domains/tools/ETHOS", "kind": "organon-file", "name": "tools", "scope": "domain", "type": "constraints", "category": "constraint" }
