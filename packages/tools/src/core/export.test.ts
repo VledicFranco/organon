@@ -104,7 +104,7 @@ describe('exportKnowledgeGraph', () => {
     });
 
     expect(result.version).toBe('0.4.1');
-    expect(result.exported_at).toBeTruthy();
+    expect(result.exportedAt).toBeTruthy();
     expect(result.entities).toBeInstanceOf(Array);
     expect(result.assertions).toBeInstanceOf(Array);
     expect(result.relationships).toBeInstanceOf(Array);
@@ -126,9 +126,9 @@ describe('exportKnowledgeGraph', () => {
     const toolsEntity = result.entities.find((e) => e.name === 'tools');
     expect(toolsEntity).toBeDefined();
     expect(toolsEntity!.kind).toBe('organon-file');
-    expect(toolsEntity!.type).toBe('constraints');
-    expect(toolsEntity!.category).toBe('constraint');
-    expect(toolsEntity!.scope).toBe('domain');
+    expect(toolsEntity!.attrs?.type).toBe('constraints');
+    expect(toolsEntity!.attrs?.category).toBe('constraint');
+    expect(toolsEntity!.attrs?.scope).toBe('domain');
   });
 
   it('extracts invariants as constraint assertions', async () => {
@@ -141,11 +141,11 @@ describe('exportKnowledgeGraph', () => {
       version: '0.4.1',
     });
 
-    const invariantAssertions = result.assertions.filter((a) => a.category === 'constraint');
+    const invariantAssertions = result.assertions.filter((a) => a.kind === 'SHOULD');
     expect(invariantAssertions.length).toBe(2);
     expect(invariantAssertions[0].id).toBe('inv:INV-TOOLS-1');
     expect(invariantAssertions[0].predicate).toBe('declares_invariant');
-    expect(invariantAssertions[0].content).toBe('schema-fidelity');
+    expect(invariantAssertions[0].args[1].value).toBe('schema-fidelity');
   });
 
   it('extracts observations as assertion assertions', async () => {
@@ -158,11 +158,11 @@ describe('exportKnowledgeGraph', () => {
       version: '0.4.1',
     });
 
-    const obsAssertions = result.assertions.filter((a) => a.category === 'assertion');
+    const obsAssertions = result.assertions.filter((a) => a.kind === 'FACT');
     expect(obsAssertions.length).toBe(1);
     expect(obsAssertions[0].id).toBe('obs:test-observation');
     expect(obsAssertions[0].predicate).toBe('observed');
-    expect(obsAssertions[0].content).toContain('Two review passes');
+    expect(obsAssertions[0].args[0].type).toBe('entity');
   });
 
   it('extracts inherits_from relationships', async () => {
@@ -230,8 +230,8 @@ describe('exportKnowledgeGraph', () => {
 
     // Built-in gates are registered when verify module loads
     expect(result.rules.length).toBeGreaterThan(0);
-    expect(result.rules[0].predicate).toBe('validates');
-    expect(result.rules[0].type).toBe('blocking');
+    expect(result.rules[0].name).toBeDefined();
+    expect(result.rules[0].enforcement).toBe('blocking');
   });
 
   it('skips files without frontmatter', async () => {
@@ -287,10 +287,10 @@ describe('exportKnowledgeGraph', () => {
       version: '0.4.1',
     });
 
-    const categories = result.entities.map((e) => e.category);
+    const categories = result.entities.map((e) => (e.attrs as Record<string, unknown>)?.category ?? null);
     expect(categories).toContain('constraint');
     expect(categories).toContain('assertion');
-    // PHILOSOPHY and README files have null category
+    // PHILOSOPHY and README files have no category in attrs
     expect(categories).toContain(null);
   });
 });

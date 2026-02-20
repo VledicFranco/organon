@@ -291,39 +291,52 @@ export interface ToolSuggestion {
 // Export types
 // ---------------------------------------------------------------------------
 
+/** axiom-db compatible export types (OrganonExportResult contract) */
+
 export interface ExportEntity {
   id: string;
   kind: string;
   name: string;
-  scope: string;
-  type: string;
-  category: EpistemicCategory | null;
+  source: string;
+  attrs?: Record<string, unknown>;
+}
+
+export interface ExportAssertionArg {
+  type: 'entity' | 'literal';
+  id?: string;
+  value?: unknown;
 }
 
 export interface ExportAssertion {
   id: string;
-  category: EpistemicCategory;
-  source: string;
+  kind: 'FACT' | 'SHOULD';
   predicate: string;
-  content: string;
+  args: ExportAssertionArg[];
+  status: 'ACTIVE' | 'SATISFIED' | 'RETIRED' | 'DISPUTED' | 'RETRACTED';
+  source: string;
+  observedAt?: string;
+  evidence?: Array<{ evidenceType: string; ref: string; description?: string }>;
 }
 
 export interface ExportRelationship {
   source: string;
   predicate: string;
   target: string;
+  attrs?: Record<string, unknown>;
 }
 
 export interface ExportRule {
   id: string;
-  predicate: string;
-  targets: string[];
-  type: string;
+  name: string;
+  description?: string;
+  invariantId?: string;
+  enforcement?: string;
+  source: string;
 }
 
 export interface ExportResult {
   version: string;
-  exported_at: string;
+  exportedAt: string;
   entities: ExportEntity[];
   assertions: ExportAssertion[];
   relationships: ExportRelationship[];

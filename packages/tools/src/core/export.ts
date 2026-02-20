@@ -13,6 +13,7 @@ import { classifyCategory } from './query.js';
 import { getRegisteredGates } from './verify.js';
 import type {
   ExportAssertion,
+  ExportAssertionArg,
   ExportEntity,
   ExportRelationship,
   ExportResult,
@@ -64,7 +65,7 @@ export async function exportKnowledgeGraph(options: ExportOptions): Promise<Expo
 
   return {
     version,
-    exported_at: new Date().toISOString(),
+    exportedAt: new Date().toISOString(),
     entities,
     assertions,
     relationships,
@@ -83,14 +84,23 @@ function fileId(file: ParsedOrganonFile): string {
 }
 
 function buildEntities(files: ParsedOrganonFile[]): ExportEntity[] {
-  return files.map((f) => ({
-    id: fileId(f),
-    kind: 'organon-file',
-    name: f.frontmatter!.name,
-    scope: f.frontmatter!.scope,
-    type: f.frontmatter!.type,
-    category: classifyCategory(f),
-  }));
+  return files.map((f) => {
+    const fm = f.frontmatter!;
+    const category = classifyCategory(f);
+    // Fallback: derive name from path when frontmatter name is missing
+    const name = fm.name ?? f.path.replace(/\\/g, '/').replace(/\.md$/, '').split('/').pop() ?? f.path;
+    return {
+      id: fileId(f),
+      kind: 'organon-file',
+      name,
+      source: f.path,
+      attrs: {
+        scope: fm.scope,
+        type: fm.type,
+        ...(category ? { category } : {}),
+      },
+    };
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -99,32 +109,43 @@ function buildEntities(files: ParsedOrganonFile[]): ExportEntity[] {
 
 function buildAssertions(files: ParsedOrganonFile[]): ExportAssertion[] {
   const assertions: ExportAssertion[] = [];
+  const now = new Date().toISOString();
 
   for (const f of files) {
     const fm = f.frontmatter!;
     const category = classifyCategory(f);
+    const entityId = fileId(f);
 
-    // Extract invariants from ETHOS files as constraints
+    // Extract invariants from ETHOS files as SHOULD assertions (desired states)
     if (fm.type === 'constraints' && fm.invariants) {
       for (const inv of fm.invariants) {
         assertions.push({
           id: `inv:${inv.id}`,
-          category: 'constraint',
-          source: f.path,
+          kind: 'SHOULD',
           predicate: 'declares_invariant',
-          content: inv.name,
+          args: [
+            { type: 'entity', id: entityId },
+            { type: 'literal', value: inv.name },
+          ],
+          status: 'ACTIVE',
+          source: f.path,
+          observedAt: now,
         });
       }
     }
 
-    // Extract observations as assertions
+    // Extract observations as FACT assertions (observed reality)
     if (category === 'assertion') {
       assertions.push({
         id: `obs:${fm.name}`,
-        category: 'assertion',
-        source: f.path,
+        kind: 'FACT',
         predicate: 'observed',
-        content: fm.summary,
+        args: [
+          { type: 'entity', id: entityId },
+        ],
+        status: 'ACTIVE',
+        source: f.path,
+        observedAt: now,
       });
     }
   }
@@ -207,8 +228,8 @@ function buildRules(): ExportRule[] {
   const gateNames = getRegisteredGates();
   return gateNames.map((name) => ({
     id: `gate:${name}`,
-    predicate: 'validates',
-    targets: ['all organon files'],
-    type: 'blocking',
+    name: `${name.charAt(0).toUpperCase() + name.slice(1).replace(/-/g, ' ')} gate`,
+    enforcement: 'blocking',
+    source: 'packages/tools/src/cli/commands/verify.ts',
   }));
 }
