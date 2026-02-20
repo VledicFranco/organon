@@ -1,0 +1,26 @@
+# Book chapter manifest — source of truth for chapter order.
+# Add new chapters here. Makefile reads this for compilation.
+# Comment out chapters that are not yet written with `# ` prefix.
+
+chapters:
+  - 00-preface.md
+  - part-1-llm-nature/01-attention-field.md
+  - part-1-llm-nature/02-persona-paradox.md
+  - part-1-llm-nature/03-agreeableness-trap.md
+  - part-1-llm-nature/04-memory-ephemeral.md
+  - part-2-best-practices/05-specification-problem.md
+  - part-2-best-practices/06-engineering-disagreement.md
+  - part-2-best-practices/07-ephemeral-scaffolding.md
+  - part-3-derivation/08-documentation-drift.md
+  - part-3-derivation/09-organon-thesis.md
+  - part-4-foundations/10-three-artifacts.md
+  - part-4-foundations/11-progressive-disclosure.md
+  - part-4-foundations/12-scopes-and-inheritance.md
+  - part-5-enforcement/13-three-layer-architecture.md
+  - part-5-enforcement/14-verification.md
+  - part-5-enforcement/15-evolution.md
+  - part-6-practice/16-getting-started.md
+  - part-6-practice/17-patterns-catalog.md
+  - part-6-practice/18-anti-patterns.md
+  - part-7-at-scale/19-case-study.md
+  - part-7-at-scale/20-adopting-organon.md

@@ -123,11 +123,19 @@ organon/
 │   ├── frontmatter-system.md         ← YAML frontmatter specification
 │   ├── three-layer-architecture.md   ← Protocols → Workflows → Tools
 │   └── protocols/                    ← Step-by-step procedures
-├── book-humans/                      ← Narrative guide (planned, outline only)
+├── book-humans/                      ← Philosophical book on LLM nature + best practices + Organon derivation
+│   ├── README.md                     ← Book structure, TOC, reading guide
+│   ├── 00-preface.md                 ← First chapter (demonstrates frontmatter format)
+│   ├── _book.yaml                    ← Chapter manifest (source of truth for build order)
+│   ├── Makefile                      ← Build system (make build → PDF in tmp/)
+│   └── _build/                       ← Build artifacts
+│       ├── metadata.yaml             ← Pandoc metadata (title, author, fonts)
+│       └── template.typ              ← Typst template (styling, layout, fonts)
 ├── organon/                          ← This project's own organon hierarchy
 │   ├── ETHOS.md                      ← Meta-organon for the organon system
 │   ├── README.md                     ← Navigation
 │   ├── domains/                      ← Bounded contexts of this project
+│   │   ├── book-humans/              ← Book-humans authoring domain (ETHOS.md, PHILOSOPHY.md)
 │   │   ├── tools/                    ← CLI domain (ETHOS.md, PHILOSOPHY.md)
 │   │   └── testing/                  ← Testing domain (ETHOS.md, PHILOSOPHY.md)
 │   ├── observations/                 ← Empirical observations (RFC 005)
@@ -158,5 +166,5 @@ Do not do the following in this repository:
 
 - Add runtime application code (services, APIs, databases)
 - Implement Agent Tavern-specific patterns — those belong in that repo
-- Write extended tutorials — that's `book-humans/` work, which has its own planned timeline
+- Write implementation-specific content — `book-humans/` covers LLM philosophy + best practices + methodology derivation (universal). Application-specific tutorials belong elsewhere.
 - Split files just because they're long — split only when content serves different scopes or audiences

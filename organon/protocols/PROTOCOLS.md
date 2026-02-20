@@ -2,10 +2,10 @@
 type: procedures
 scope: product
 name: protocols
-version: "1.2"
-summary: Eleven development protocols backing the Organon project's workflow family — covers all 6 enforcement loop phases plus onboarding and publishing
-token_estimate: 9200
-protocols_count: 11
+version: "1.3"
+summary: Thirteen development protocols backing the Organon project's workflow family — covers all 6 enforcement loop phases plus onboarding, publishing, and book authoring
+token_estimate: 11800
+protocols_count: 13
 protocols:
   - id: PROTO-ORG-1
     name: RFC-Driven Design
@@ -84,6 +84,20 @@ protocols:
     workflow: release-publish
     tools: [organon-verify, npm-test, release-script, gh-cli]
     complexity: medium
+  - id: PROTO-ORG-12
+    name: Chapter Drafting
+    steps: 8
+    automation_tier: manual
+    workflow: null
+    tools: []
+    complexity: medium
+  - id: PROTO-ORG-13
+    name: Book Compilation
+    steps: 4
+    automation_tier: semi-automated
+    workflow: null
+    tools: [pandoc, typst, make]
+    complexity: low
 inherits_from: [organon-project]
 audience: [llm, human, tooling]
 related_files:
@@ -105,8 +119,10 @@ related_files:
 DEFINE:    PROTO-ORG-1  RFC-Driven Design .............. domain-feature-design
 BIND:      PROTO-ORG-6  Organon File Creation .......... organon-file-creation
 EXECUTE:   PROTO-ORG-2  Tool Development ............... organon-tools-developer
+           PROTO-ORG-12 Chapter Drafting ............... manual (organon/domains/book-humans/ETHOS.md)
 VERIFY:    PROTO-ORG-4  Verification and Health ........ verify-and-health
            PROTO-ORG-7  Quality Review ................. quality-review
+           PROTO-ORG-13 Book Compilation ............... semi-automated (Makefile)
 COMPOUND:  PROTO-ORG-5  Session Compounding ............ session-compounding
 EVOLVE:    PROTO-ORG-3  Methodology Evolution .......... methodology-spec-evolution
 ONBOARD:   PROTO-ORG-8  Project Initialization ......... organon init (tool)
@@ -729,3 +745,125 @@ Ship a new version of both packages to npm with proper versioning, changelog, gi
 | Version mismatch in CI | The release workflow verifies tag matches package versions. If mismatch, the release script has a bug — fix and re-release. |
 | npm publish fails (403) | Package may already exist at this version. Check if a partial publish occurred. |
 | npm publish fails (401) | `NPM_TOKEN` is expired or invalid. Regenerate and update GitHub secret. |
+
+---
+
+## PROTO-ORG-12: Chapter Drafting
+
+> Produce a new chapter for book-humans with correct frontmatter, sound narrative structure, and empirically-grounded claims.
+
+### Goal
+
+Author a new chapter that advances the book's philosophical arc, follows the domain constraints (ETHOS.md + PHILOSOPHY.md), and is ready for editing and integration.
+
+### Preconditions
+
+- [ ] Book outline exists and you know where your chapter fits (`../../book-humans/README.md`)
+- [ ] `organon/domains/book-humans/ETHOS.md` has been read (5 invariants, 4 principles, 8 heuristics)
+- [ ] `organon/domains/book-humans/PHILOSOPHY.md` has been read (design rationale)
+- [ ] Chapter slot is identified (e.g., Part 1, Chapter 2 = `part-1-llm-nature/02-persona-paradox.md`)
+
+### Steps
+
+1. **Verify manuscript position.** Read the book outline in `../../book-humans/README.md`. Understand what chapters come before and after yours. Identify the philosophical thread your chapter should advance.
+
+2. **Update `_book.yaml`.** Edit `../../book-humans/_book.yaml`. If your chapter is in a new directory, create the directory first. Uncomment the line with your chapter filename, or add a new line if the file isn't listed yet.
+
+3. **Create chapter directory if needed.** If writing Part 2 Chapter 5, create `part-2-best-practices/` if it doesn't exist.
+
+4. **Create markdown file with frontmatter.** Create the file (e.g., `part-1-llm-nature/02-persona-paradox.md`) with complete YAML frontmatter:
+   ```yaml
+   ---
+   type: chapter
+   scope: book-humans
+   part: 1
+   part_name: "LLM Nature"
+   chapter: 2
+   title: "The Persona Paradox: Identity and Behavioral Specification"
+   status: planned
+   summary: >
+     One-sentence summary explaining the chapter's thesis.
+   sources: []
+   token_estimate: 0
+   audience: [human]
+   ---
+   ```
+
+5. **Write outline as H2/H3 headings.** Sketch the chapter structure using markdown headings. This is your roadmap.
+
+6. **Write body section by section.** Fill in content under each heading. Ground empirical claims in sources (update `sources:` in frontmatter).
+
+7. **Update `token_estimate`.** When the chapter is ~90% written, count tokens and update the `token_estimate` field.
+
+8. **Set status and commit.** Set `status: draft` in frontmatter. Commit to git. The chapter is now available for editing, review, and compilation.
+
+### Verification
+
+- [ ] File exists in the correct directory (e.g., `part-1-llm-nature/02-persona-paradox.md`)
+- [ ] Frontmatter has all required fields (type, scope, part, chapter, title, status, summary, sources, token_estimate, audience)
+- [ ] Chapter is listed in `../../book-humans/_book.yaml` (uncommented or added)
+- [ ] `make build` in `book-humans/` completes without error (chapter is compilable)
+- [ ] Empirical claims are grounded in `sources:` frontmatter or explicitly labeled as reasoning
+
+### Recovery
+
+| Failure | Recovery Action |
+|---------|-----------------|
+| Wrong directory structure | Check `../../book-humans/README.md` for the expected structure. Create any missing directories. |
+| Frontmatter validation fails | Ensure all required fields are present and spell-checked (e.g., `token_estimate: 0` not `estimate`). |
+| Chapter not in `_book.yaml` | Add or uncomment the chapter line in `../../book-humans/_book.yaml`. |
+| `make build` fails | Usually a markdown syntax error. Check for unescaped backticks, unclosed code blocks, or malformed tables. |
+| Sources missing | Go back through the chapter. Identify empirical claims. Find sources (papers, experiment results, Organon reference) and add to `sources:` field. |
+
+---
+
+## PROTO-ORG-13: Book Compilation
+
+> Compile all written chapters of book-humans to a clean PDF in the workspace tmp/ directory.
+
+### Goal
+
+Produce a publication-ready PDF combining all completed chapters in correct order.
+
+### Preconditions
+
+- [ ] Working directory is `organon/book-humans/`
+- [ ] `pandoc >= 3.1.8` is installed and on PATH
+- [ ] `typst >= 0.11` is installed and on PATH
+- [ ] `python3` is available with PyYAML package installed
+- [ ] At least one chapter file exists (e.g., `00-preface.md`)
+- [ ] `_book.yaml`, `Makefile`, `_build/metadata.yaml`, `_build/template.typ` are present
+
+### Steps
+
+1. **Verify tool versions.** In `organon/book-humans/`, run `make help`. It will check pandoc, typst, and python3 versions and report if any are missing or outdated.
+
+2. **Run build.** Execute `make build`. The Makefile will:
+   - Extract chapter list from `_book.yaml`
+   - Filter to files that exist on disk
+   - Pass chapters to Pandoc with Typst engine
+   - Output to `../../tmp/YYYYMMDD-book-humans.pdf` (timestamped with today's date)
+
+3. **Confirm output.** Check that the PDF was created: `ls -lh ../../tmp/*-book-humans.pdf`. The file should be recent and have non-zero size.
+
+4. **Note the PDF path.** The output path follows the pattern `tmp/YYYYMMDD-book-humans.pdf` for easy discovery. Share this path when distributing the compiled book.
+
+### Verification
+
+- [ ] `make help` shows all tools are available
+- [ ] `make build` completes without errors
+- [ ] PDF file exists in `../../tmp/` with correct timestamp
+- [ ] PDF has non-zero size (≥50KB for preface + a few chapters)
+- [ ] PDF opens and displays chapters in correct order (spot-check first 2 and last 2 chapters)
+
+### Recovery
+
+| Failure | Recovery Action |
+|---------|-----------------|
+| `pandoc` not found | Install pandoc from https://pandoc.org. Add to PATH. |
+| `typst` not found | Install typst from https://typst.app. Add to PATH. |
+| `python3` not found | Install Python 3.x. Add to PATH. |
+| PyYAML import error | Run `pip install pyyaml`. |
+| `make build` reports missing chapters | Check `_book.yaml` for chapters that don't exist. Remove or comment out missing chapters. |
+| PDF is 0 bytes or malformed | Check Makefile output for Typst errors. These usually indicate syntax issues in `_build/template.typ`. Fix template and re-run `make build`. |
+| PDF is blank or has only title page | Check that chapters are listed in `_book.yaml` and files exist. Rebuild. |
