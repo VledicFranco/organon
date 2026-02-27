@@ -2,12 +2,12 @@
   "mcpServers": {
     "organon": {
       "type": "stdio",
-      "command": "npm",
+      "command": "node",
       "args": [
-        "--prefix",
-        "./packages/tools",
-        "run",
-        "mcp"
+        "./packages/tools/dist/cli/index.js",
+        "mcp",
+        "--project-root",
+        "."
       ],
       "env": {}
     }
