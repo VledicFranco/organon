@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "organon": {
+      "type": "stdio",
+      "command": "npm",
+      "args": [
+        "--prefix",
+        "./packages/tools",
+        "run",
+        "mcp"
+      ],
+      "env": {}
+    }
+  }
+}

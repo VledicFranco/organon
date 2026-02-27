@@ -14,6 +14,7 @@ import { verifyTriplets } from '../core/verify-triplets.js';
 import { suggestTools } from '../core/suggest-tools.js';
 import { verify } from '../core/verify.js';
 import { exportKnowledgeGraph } from '../core/export.js';
+import { analyzeVerificationIssues } from './sampling.js';
 
 export function registerTools(
   server: McpServer,
@@ -192,6 +193,7 @@ export function registerTools(
     'Run all 9 verification gates or a specific subset. Checks frontmatter, triplets, references, placeholder detection, freshness, invariant coverage, workflow quality, tier-4 tests, and version alignment. Use before committing, at session start, or to diagnose what is broken.',
     {
       gates: z.array(z.string()).optional().describe('Specific gates to run (all if omitted)'),
+      analyze: z.boolean().optional().describe('Use LLM sampling to analyze issues (requires client sampling capability)'),
     },
     async (args) => {
       const result = await verify({
@@ -200,7 +202,27 @@ export function registerTools(
         fs,
         gates: args.gates,
       });
-      return { content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }] };
+
+      // If analysis requested and there are errors, sample the LLM for diagnostics
+      let analysis: string | undefined;
+      if (args.analyze && result.errors.length > 0) {
+        const failedGates = result.gates
+          .filter((g) => !g.passed)
+          .map((g) => g.gate);
+
+        analysis = await analyzeVerificationIssues(server, {
+          errors: result.errors,
+          warnings: result.warnings,
+          failedGates,
+        });
+      }
+
+      return {
+        content: [
+          { type: 'text' as const, text: JSON.stringify(result, null, 2) },
+          ...(analysis ? [{ type: 'text' as const, text: `## LLM Analysis\n\n${analysis}` }] : []),
+        ],
+      };
     },
   );
 }
