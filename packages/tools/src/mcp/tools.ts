@@ -121,21 +121,37 @@ export function registerTools(
         fixSuggestions: args.fixSuggestions,
       });
 
-      // If analysis requested and health is below 100, sample the LLM for recommendations
-      let analysis: string | undefined;
+      // If analysis requested, include a prompt for Claude to generate recommendations
+      let analysisPrompt: string | undefined;
       if (args.analyze && result.score < 100) {
-        analysis = await analyzeProjectHealth(server, {
-          score: result.score,
-          coverage: result.coverage,
-          validation: result.validation,
-          topIssues: result.issues,
-        });
+        const topIssues = result.issues.slice(0, 5).map((i: any) => `- [${i.code}] ${i.message}`).join('\n');
+
+        analysisPrompt = `
+## Analysis Request
+
+Based on this health report (score: ${result.score}/100), please provide strategic recommendations:
+
+**Current Status:**
+- Coverage: ${result.coverage.percentage}% files with frontmatter
+- Validation: ${result.validation.passing} passing, ${result.validation.failing} failing
+- Issues: ${result.issues.length} total
+
+**Top Issues:**
+${topIssues}
+
+**Your Analysis Should Include:**
+1. **Top 3 Impact Areas** — Which issues would improve score most if fixed?
+2. **Quick Wins** — What can be fixed with minimal effort?
+3. **Strategic Direction** — What's the long-term pattern or theme?
+4. **Priority Roadmap** — Ordered list of next steps (short, medium, long-term)
+
+Be specific, actionable, and focus on impact.`;
       }
 
       return {
         content: [
           { type: 'text' as const, text: JSON.stringify(result, null, 2) },
-          ...(analysis ? [{ type: 'text' as const, text: `## Strategic Recommendations\n\n${analysis}` }] : []),
+          ...(analysisPrompt ? [{ type: 'text' as const, text: analysisPrompt }] : []),
         ],
       };
     },
