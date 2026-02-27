@@ -14,7 +14,7 @@ import { verifyTriplets } from '../core/verify-triplets.js';
 import { suggestTools } from '../core/suggest-tools.js';
 import { verify } from '../core/verify.js';
 import { exportKnowledgeGraph } from '../core/export.js';
-import { analyzeVerificationIssues } from './sampling.js';
+import { analyzeVerificationIssues, analyzeProjectHealth } from './sampling.js';
 
 export function registerTools(
   server: McpServer,
@@ -111,6 +111,7 @@ export function registerTools(
     'Show project health score and diagnostics. Reports coverage gaps, validation issues, token budgets, file freshness, and an overall score out of 100. Use to check project status, diagnose organon problems, or verify nothing is degraded after changes.',
     {
       fixSuggestions: z.boolean().optional().describe('Include fix suggestions'),
+      analyze: z.boolean().optional().describe('Use LLM sampling to get strategic improvement recommendations (requires client sampling capability)'),
     },
     async (args) => {
       const result = await health({
@@ -119,7 +120,24 @@ export function registerTools(
         fs,
         fixSuggestions: args.fixSuggestions,
       });
-      return { content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }] };
+
+      // If analysis requested and health is below 100, sample the LLM for recommendations
+      let analysis: string | undefined;
+      if (args.analyze && result.score < 100) {
+        analysis = await analyzeProjectHealth(server, {
+          score: result.score,
+          coverage: result.coverage,
+          validation: result.validation,
+          topIssues: result.issues,
+        });
+      }
+
+      return {
+        content: [
+          { type: 'text' as const, text: JSON.stringify(result, null, 2) },
+          ...(analysis ? [{ type: 'text' as const, text: `## Strategic Recommendations\n\n${analysis}` }] : []),
+        ],
+      };
     },
   );
 

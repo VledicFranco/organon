@@ -39,6 +39,87 @@ export interface SamplingResponse {
 }
 
 /**
+ * Request LLM analysis of project health and strategic recommendations.
+ *
+ * When organon_health finds issues, this samples the LLM to suggest
+ * strategic improvements and prioritized action items.
+ */
+export async function analyzeProjectHealth(
+  server: McpServer,
+  healthData: {
+    score: number;
+    coverage: any;
+    validation: any;
+    topIssues: DiagnosticMessage[];
+  },
+): Promise<string> {
+  const prompt = `# Organon Project Health Analysis
+
+Current Health Score: ${healthData.score}/100
+
+Coverage:
+- Files with frontmatter: ${healthData.coverage.percentage}%
+
+Validation:
+- Passing: ${healthData.validation.passing}
+- Failing: ${healthData.validation.failing}
+- Warnings: ${healthData.validation.warnings}
+
+Top Issues (first 5):
+${healthData.topIssues
+  .slice(0, 5)
+  .map((issue) => `- [${issue.code}] ${issue.message}${issue.file ? ` (${issue.file})` : ''}`)
+  .join('\n')}
+
+## Task
+Provide strategic recommendations to improve project health:
+1. **Top 3 Impact Areas** — Which issues would improve score most if fixed?
+2. **Quick Wins** — What can be fixed with minimal effort?
+3. **Strategic Direction** — What's the long-term pattern here?
+4. **Priority Roadmap** — Ordered list of next steps (short-term, medium-term, long-term)
+
+Be specific and actionable.`;
+
+  try {
+    const response = await (server as any).request(
+      {
+        jsonrpc: '2.0',
+        method: 'sampling/createMessage',
+        params: {
+          messages: [
+            {
+              role: 'user' as const,
+              content: {
+                type: 'text' as const,
+                text: prompt,
+              },
+            },
+          ],
+          systemPrompt:
+            'You are a strategic advisor for the Organon methodology. You help projects improve health and maturity. Focus on actionable improvements and long-term thinking. Be direct and prioritize impact.',
+          maxTokens: 800,
+          modelPreferences: {
+            hints: [{ name: 'claude' }],
+            intelligencePriority: 0.9,
+            speedPriority: 0.2,
+          },
+        },
+      },
+    );
+
+    if (response?.result?.content?.type === 'text') {
+      return response.result.content.text;
+    }
+
+    return '(Health analysis unavailable)';
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error('Sampling error:', message);
+    return `(Health analysis unavailable: ${message})`;
+  }
+}
+
+/**
  * Request LLM analysis of verification issues.
  *
  * When organon_verify finds errors, this samples the LLM to suggest
