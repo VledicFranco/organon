@@ -2,7 +2,7 @@
 type: protocol
 scope: state-of-the-art
 name: sota-methodology
-version: 0.1.0
+version: 0.2.0
 summary: >
   Protocol for spawning a team of cognitive-function researcher agents to conduct
   iterative state-of-the-art research. Entry point for fresh research sessions.
@@ -49,6 +49,78 @@ If you are a fresh agent starting a research session:
 
 If continuing a previous session: read the existing output document first to
 understand what has been done, then resume at the iteration that makes sense.
+
+---
+
+## Executing Without method Infrastructure
+
+This methodology runs entirely within a single Claude Code session using the
+Agent tool. No external infrastructure required.
+
+**You (the main Claude Code session) are the orchestrator.** You hold all
+session state. Each cognitive function agent runs as a subagent via the Agent
+tool.
+
+### Invocation pattern
+
+For each phase, fill in the template from the **Session Protocol** section
+below and invoke a subagent:
+
+```
+Agent(
+  subagent_type: "general-purpose",
+  prompt: "<filled-in phase template>"
+)
+```
+
+The Agent tool spawns a stateless subagent. It receives only what you pass in
+its prompt — it has no memory of prior agents and cannot read files unless
+you include the content. Always paste the relevant prior output into each
+agent's `<context>` block.
+
+### What runs sequentially vs. in parallel
+
+**Always sequential:**
+- Phase 1 (Architect) — must complete before any Phase 2 work
+- Deep Researcher → Critic — Critic challenges the completed Researcher output
+- Critic → Synthesizer — Synthesizer needs Critic's challenges
+- Synthesizer → Architect re-assessment — re-assessment needs the updated document
+
+**Can run in parallel (single message, multiple Agent tool calls):**
+- Multiple Scout agents on independent sub-questions: send one message with
+  N Agent tool calls, one per sub-question. Each Scout works blind to the
+  others — do NOT pass prior Scout outputs until all are complete.
+
+Example for parallel Scouts:
+```
+# Send as a SINGLE message with two Agent tool calls:
+
+Agent(subagent_type: "general-purpose", prompt: "<Scout prompt for sub-question 1>")
+Agent(subagent_type: "general-purpose", prompt: "<Scout prompt for sub-question 2>")
+```
+
+Both Scouts return before you pass anything to the Deep Researcher.
+
+### Orchestrator responsibilities between phases
+
+After each agent invocation, before invoking the next:
+1. **Check invariants** — did the output satisfy the phase's hard constraints?
+   If not, re-invoke with corrected context. Other agents don't see the failure.
+2. **Summarize, don't relay raw** — strip what's irrelevant to the next agent.
+   Passing 4,000 tokens of Scout output to the Researcher degrades both.
+3. **Update session state** — delta, accumulated outputs, blocking challenges.
+4. **Decide stop/continue** — Architect re-assessment makes this explicit each round.
+
+### Single-agent shortcut (minimal session)
+
+When time is short or the scope is narrow, collapse the team to two agents
+and run them yourself sequentially in a single conversation thread:
+- **Researcher**: you read the sources directly and take notes
+- **Critic + Synthesizer**: a single agent prompt covering both functions
+
+Use this for: gap-filling on an existing document, answering one bounded
+question, updating a stale finding. Not suitable for first-session, full-scope
+research.
 
 ---
 
@@ -230,16 +302,26 @@ cleaner but misleading picture of the research.
 
 Each research session runs four phases (Zimmerman's self-regulation model + orchestrator context loading).
 
-### Phase 0: Context Loading (Orchestrator)
+### Phase 0: Context Loading (Orchestrator — you, not a subagent)
 
-Before invoking any agent, the orchestrator loads relevant prior context:
-- What output document exists already (if any — paste its current state)
-- What constraints or decisions have been established in the 0.6.0 roadmap
-- What the `research-plan.md` specifies for this topic (core questions, search terms)
-- What was covered in the last session (if continuing)
+Before invoking any agent, load:
 
-Compress this into a concise context summary to pass into the Architect's prompt.
-Do not skip this step — an Architect without prior context will re-scope work already done.
+**Always load:**
+- [ ] `research-plan.md` — the area's core questions, specific topics, search terms
+- [ ] The output document for this area (`sota-{area}.md`) — current state or "none — first session"
+
+**Load if relevant to this area:**
+- [ ] The 0.6.0 roadmap document(s) this area informs (listed in `research-plan.md` per area)
+- [ ] Any existing `roadmap-to-0.6.0/*.md` file that already covers relevant sub-topics
+
+**If continuing a prior session:**
+- [ ] The Architect's acceptance criteria from the last session (copy from output doc header or prior notes)
+- [ ] Critic's unresolved challenges from the last session
+- [ ] The delta score and stop/continue rationale
+
+Compress into a concise context block — 200–400 tokens — to paste into the
+Architect's `<context>` block. Do not pass raw file contents. Do not skip this
+step: an Architect without prior context will re-scope work already done.
 
 ---
 
@@ -289,7 +371,14 @@ Produce a scoped research brief for this session:
 
 ### Phase 2: Performance (Scout → Deep Researcher → Critic)
 
-**Run these agents sequentially.** Each receives the previous agent's output.
+**Default: run agents sequentially.** Each receives the previous agent's output.
+
+**Scout parallelism exception:** If the Architect identified 2+ independent sub-questions,
+spawn multiple Scout agents simultaneously — one per sub-question. Send a single message
+with multiple Agent tool calls. Each Scout works blind to the others. Accumulate all
+Scout outputs before passing anything to the Deep Researcher.
+
+Do NOT parallelize Deep Researcher → Critic or Critic → Synthesizer. They are always sequential.
 
 #### Scout prompt template:
 ```
@@ -679,9 +768,10 @@ Before ending any session, check:
 - [ ] "What Appears Novel" section is present and conservative
 - [ ] "Open Questions" section captures what remains unknown
 - [ ] Architect has made stop/continue decision with rationale
-- [ ] If delta < 0.85: next session scope is written with specific, searchable
-      questions (not just "research X more")
+- [ ] If delta < 0.85: next session scope is written with **specific, searchable**
+      questions — "find the primary citation for X" not "research X more"
 - [ ] If stopping: rationale for stopping is recorded in the output document
+- [ ] The output document was actually written or updated (not just notes)
 
 If any item fails: do not close the session. Fix the item or explicitly
 document why it cannot be fixed now.
@@ -702,12 +792,10 @@ assume the agent has memory of prior sessions.
 After 3+ rounds, compress earlier rounds into a summary before starting
 the next. Context degradation at 60+ messages is real.
 
-**Parallelism**: Within a single sub-question, Scout → Deep Researcher →
-Critic → Synthesizer always run sequentially (each depends on the previous
-output). But if the topic has clearly separable sub-questions, you can run
-two full Scout → Researcher pipelines in parallel on different sub-questions,
-then merge before the Critic. Critic and Synthesizer always run sequentially
-and last.
+**Parallelism**: See the **Executing Without method Infrastructure** section
+above for the Agent tool invocation pattern. Short version: Scout agents on
+independent sub-questions can run in parallel (single message, multiple Agent
+calls). Everything else is sequential.
 
 ---
 

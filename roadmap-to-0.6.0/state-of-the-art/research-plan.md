@@ -2,7 +2,7 @@
 type: protocol
 scope: state-of-the-art
 name: research-plan
-version: 0.1.0
+version: 0.2.0
 summary: >
   Structured research plan covering 8 SOTA areas for the v0.6.0 roadmap:
   formal methods, metacognition in LLMs, multi-agent systems, hallucination
@@ -39,18 +39,49 @@ inform. Each area produces one output document in this directory.
 
 ---
 
+## Starting Your First Session
+
+**Step 1 — Pick an area.** Start with Area 2 (Metacognition) or Area 3 (Multi-Agent)
+for fastest payoff. Both are high-priority and produce directly actionable findings.
+
+**Step 2 — Create the output document stub.** Create the file in this directory:
+```
+state-of-the-art/sota-{area}.md
+```
+Leave it empty. The Synthesizer will write it.
+
+**Step 3 — Open a fresh Claude Code session.** Do not continue this session —
+start a new terminal. State contamination degrades agent quality.
+
+**Step 4 — Load context.** Read (Phase 0 of sota-methodology.md):
+- This file: the area's core questions, specific topics, search terms
+- The 0.6.0 roadmap files this area informs (listed per area below)
+- The empty output stub you just created
+
+**Step 5 — Follow sota-methodology.md.** The methodology is self-contained.
+Go to the Quick Start section and run the Session Protocol.
+
+**Step 6 — Stop at the Quality Gate.** Do not run past it. Write "next session
+scope" with specific searchable questions before closing.
+
+---
+
 ## Output Documents
 
-| Document | Covers | Priority |
-|----------|--------|----------|
-| `sota-formal-methods.md` | Dependent types, proof assistants, algebra of methodologies | High |
-| `sota-metacognition-llm.md` | Metacognition in LLMs, self-regulation, process supervision | High |
-| `sota-multi-agent.md` | Multi-agent systems, cognitive architectures, persona effects | High |
-| `sota-hallucination.md` | Hallucination detection, constrained generation, verification | High |
-| `sota-agentic-methodology.md` | Structured agent systems, protocol standards, config-driven agents | Medium |
-| `sota-context-retrieval.md` | RAG, deterministic retrieval, context window management | Medium |
-| `sota-evaluation.md` | Agent evaluation frameworks, benchmarks, measurement | Medium |
-| `sota-industry-landscape.md` | OpenAI, Anthropic, Google, DeepMind, Meta, Microsoft directions | High |
+| Document | Covers | Priority | Est. Sessions |
+|----------|--------|----------|---------------|
+| `sota-formal-methods.md` | Dependent types, proof assistants, algebra of methodologies | High | 3–4 |
+| `sota-metacognition-llm.md` | Metacognition in LLMs, self-regulation, process supervision | High | 2–3 |
+| `sota-multi-agent.md` | Multi-agent systems, cognitive architectures, persona effects | High | 3–4 |
+| `sota-hallucination.md` | Hallucination detection, constrained generation, verification | High | 1–2 (extends existing) |
+| `sota-agentic-methodology.md` | Structured agent systems, protocol standards, config-driven agents | Medium | 2–3 |
+| `sota-context-retrieval.md` | RAG, deterministic retrieval, context window management | Medium | 2 |
+| `sota-evaluation.md` | Agent evaluation frameworks, benchmarks, measurement | Medium | 2 |
+| `sota-industry-landscape.md` | OpenAI, Anthropic, Google, DeepMind, Meta, Microsoft directions | High | 2–3 |
+
+Session estimate = number of 30–45 minute rounds at full team (Architect → Scout → Researcher → Critic → Synthesizer) to reach delta >= 0.85. `sota-hallucination.md` is lower because `hallucination-detection.md` already exists as source material.
+
+**Parallel sessions:** You can run two areas simultaneously in separate Claude Code windows with no conflict — output documents are independent files. Recommended first parallel pair: `sota-metacognition-llm.md` + `sota-multi-agent.md` (both high-priority, both inform the cognitive team architecture).
 
 ---
 
@@ -489,27 +520,68 @@ major organizations are heading.
 
 ## Research Execution Strategy
 
-### Phase 1: High-priority areas (execute first)
+### Priority sequence
 
-1. `sota-formal-methods.md` — foundational for types-as-ontology upgrade
-2. `sota-metacognition-llm.md` — foundational for the metacognition family
-3. `sota-multi-agent.md` — foundational for cognitive-team design
-4. `sota-industry-landscape.md` — situates everything; informs priorities
+| Wave | Areas | Rationale |
+|------|-------|-----------|
+| 1 | Metacognition (2) + Multi-Agent (3) | Directly inform the cognitive team and quality gates; fastest ROI |
+| 1 | Industry Landscape (8) | Situates all other areas; run in parallel with wave 1 |
+| 2 | Formal Methods (1) | Deep area, foundational for types-as-ontology; needs dedicated focus |
+| 2 | Agentic Methodology (5) | Validates YAML-first and MCP directions |
+| 3 | Hallucination (4) | Extends existing work; less urgent |
+| 3 | Evaluation (7) | Needed before experimentation system implementation |
+| 4 | Context Retrieval (6) | Confirmatory; Organon's approach is already differentiated |
 
-### Phase 2: Medium-priority areas
+**Wave 1 can all run simultaneously** in three separate Claude Code sessions.
 
-5. `sota-hallucination.md` — extends existing research in
-   `hallucination-detection.md`; less urgent since that doc is already thorough
-6. `sota-agentic-methodology.md` — important for validating YAML-first and
-   MCP directions; medium urgency
-7. `sota-evaluation.md` — needed before implementing the experimentation
-   system; medium urgency
+### Baseline acceptance criteria (per area)
 
-### Phase 3: Lower-priority areas
+The Architect sets acceptance criteria fresh each session. Use these as starting
+baselines — refine them based on what the session finds.
 
-8. `sota-context-retrieval.md` — RAG is well-understood; Organon's
-   deterministic angle is genuinely novel; research is confirmatory rather
-   than directional
+**Area 1 — Formal Methods:**
+- [ ] Primary citations for QTT / Idris 2 design rationale found and assessed
+- [ ] At least one project using dependent types for domain knowledge (not just theorem proving) identified
+- [ ] Process algebra coverage: CSP, CCS, π-calculus assessed for methodology composition operators
+- [ ] Verdict reached on ontology vs. type system comparison (academic literature surveyed)
+
+**Area 2 — Metacognition:**
+- [ ] Self-Refine, Reflexion, CRITIC papers read and summarized
+- [ ] Process Reward Model literature (Lightman et al.) assessed
+- [ ] Clear answer on: do reasoning models (o1/o3) exhibit qualitatively different metacognitive patterns?
+- [ ] Implication for Organon's two-phase generate/verify pattern stated
+
+**Area 3 — Multi-Agent:**
+- [ ] MetaGPT, AutoGen, ChatDev compared on cognitive function vs. task role distinction
+- [ ] SOAR and ACT-R assessed for applicability to LLM agent design
+- [ ] Empirical evidence on persona/role effects in LLM performance found (or absence noted)
+- [ ] Answer to: does any existing framework assign agents by cognitive function (not task)? (Yes/No + evidence)
+
+**Area 4 — Hallucination:**
+- [ ] Structured output hallucination patterns identified (beyond existing hallucination-detection.md)
+- [ ] Constrained decoding + semantic verification hybrid approach assessed
+- [ ] Impossibility theorem implications clarified for Organon's verification approach
+
+**Area 5 — Agentic Methodology:**
+- [ ] MCP ecosystem current state mapped (servers, clients, adoption)
+- [ ] A2A protocol compared to MCP for Organon's use case
+- [ ] At least one YAML-driven agent system (Dify, Flowise, LangChain LCEL) deeply assessed
+- [ ] IaC maturation arc lessons extracted (what to learn from Terraform → CDK → Pulumi path)
+
+**Area 6 — Context Retrieval:**
+- [ ] GraphRAG assessed for relevance to Organon's frontmatter graph
+- [ ] "Lost in the middle" findings applied to progressive disclosure ordering
+- [ ] Verdict on: does deterministic retrieval (Organon's approach) have prior art?
+
+**Area 7 — Evaluation:**
+- [ ] SWE-bench 2025–2026 state assessed
+- [ ] Process vs. outcome reward model comparison summarized
+- [ ] At least one paper on controlled methodology experiments found (or absence noted and documented)
+
+**Area 8 — Industry Landscape:**
+- [ ] All 5 major orgs covered (Anthropic, OpenAI, Google, Meta, Microsoft) with agentic direction
+- [ ] Internal vs. external metacognition question answered for at least Anthropic + OpenAI
+- [ ] A2A vs. MCP positioning documented
 
 ### For each output document
 
@@ -518,11 +590,11 @@ The Synthesizer agent writes and maintains these documents using the standard
 template. Do not create a different structure — all 8 output documents must follow
 the same format to be comparable and composable.
 
-The authoritative section order is: Summary → Key Findings → Related Work
-(Annotated) → Similar Projects & Directions → Industry Directions → What Organon
-Can Build On → What Appears Novel to Organon → Open Questions → Critic's
-Unresolved Challenges. The document header includes: Research date, Session N of
-estimated M, Informs (links to 0.6.0 roadmap documents), Goal-reaching delta.
+Section order: Summary → Key Findings → Related Work (Annotated) → Similar
+Projects & Directions → Industry Directions → What Organon Can Build On → What
+Appears Novel to Organon → Open Questions → Critic's Unresolved Challenges.
+Document header: Research date, Session N of estimated M, Informs (links to
+0.6.0 roadmap documents), Goal-reaching delta.
 
 ---
 
