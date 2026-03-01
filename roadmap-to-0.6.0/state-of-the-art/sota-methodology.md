@@ -2,7 +2,7 @@
 type: protocol
 scope: state-of-the-art
 name: sota-methodology
-version: 0.2.0
+version: 0.2.1
 summary: >
   Protocol for spawning a team of cognitive-function researcher agents to conduct
   iterative state-of-the-art research. Entry point for fresh research sessions.
@@ -636,6 +636,13 @@ Critic's unresolved challenges: [paste]
    "find the primary academic reference for X and assess whether
    it applies to Y" is specific.
 </task>
+
+<constraints>
+- Assessment only. Do not conduct new web searches or retrieve new sources.
+  Score what is currently in the document against the acceptance criteria.
+  If a blocking challenge is unresolved, record it as unresolved — do not
+  attempt to resolve it inline.
+</constraints>
 ```
 
 ---
