@@ -1,3 +1,27 @@
+---
+type: protocol
+scope: state-of-the-art
+name: sota-methodology
+version: 0.1.0
+summary: >
+  Protocol for spawning a team of cognitive-function researcher agents to conduct
+  iterative state-of-the-art research. Entry point for fresh research sessions.
+  Defines 5 personas (Architect, Scout, Deep Researcher, Critic, Synthesizer),
+  full prompt templates, 3-phase session structure, iteration criteria, and
+  quality gates.
+token_estimate: 2200
+relationships:
+  - type: sibling
+    target: research-plan.md
+    reason: research-plan defines the 8 areas and questions this methodology researches
+  - type: informs
+    target: ../metacognition-cognitive-team.md
+    reason: cognitive function persona model grounds the team composition
+  - type: informs
+    target: ../metacognition-foundations.md
+    reason: two-phase cognition principle grounds the Researcher/Critic separation
+---
+
 # SOTA Research Methodology
 
 > **Entry point for fresh research sessions.** This file is a self-contained
@@ -17,7 +41,8 @@ If you are a fresh agent starting a research session:
 1. Read this file completely
 2. Read `research-plan.md` to understand the full scope and priorities
 3. Identify which output document you are working on (e.g. `sota-multi-agent.md`)
-4. Assemble the team using the personas in **Team Composition**
+4. Read the **Team Composition** section — understand each persona's Be-level
+   identity before running any prompts
 5. Run the **Session Protocol** for one iteration
 6. Write or update the output document
 7. Run the **Quality Gate** checklist before stopping
@@ -31,13 +56,14 @@ understand what has been done, then resume at the iteration that makes sense.
 
 This methodology is grounded in three bodies of research:
 
-**1. Cognitive function over task role** (from `metacognition-cognitive-team.md`)
+**1. Cognitive function over task role** (from `../metacognition-cognitive-team.md`)
 Agents are assigned *cognitive functions* — stable Be-level identities — not
 tasks. A Critic agent is always the Critic whether researching formal methods
 or industry landscape. Identity-level constraints produce more consistent,
 harder-to-confuse behavior than task descriptions.
 
-**2. Engineered disagreement** (from `../agentic-research/`)
+**2. Engineered disagreement** (from the `agentic-research` sibling repo at
+`../../../agentic-research/` relative to this file)
 LLMs default to agreement with same-model agents. Left unengineered, three
 agents will agree on everything, producing no novel insights. Genuine
 innovation — conclusions impossible for any individual — requires structural
@@ -45,7 +71,7 @@ dissent mechanisms: Independent Proposals (no anchoring) and a Designated
 Contrarian (required to challenge). Do not expect organic disagreement.
 Engineer it.
 
-**3. Two-phase cognition** (from `metacognition-foundations.md`)
+**3. Two-phase cognition** (from `../metacognition-foundations.md`)
 Generation and verification run in different cognitive modes. The same agent
 that gathered the research should not also assess its quality. Keep the
 Researcher and the Critic as distinct voices: the Researcher gathers without
@@ -515,7 +541,7 @@ a single well-defined question, updating stale findings.
 
 ## Structural Dissent Protocol
 
-Based on findings from `../agentic-research/`: LLMs default to agreement.
+Based on findings from the `agentic-research` sibling repo: LLMs default to agreement.
 Genuine insight requires engineered disagreement.
 
 **Independent Proposals rule**: when two agents (e.g., Researcher and Critic)
@@ -607,7 +633,9 @@ Before ending any session, check:
 - [ ] "What Appears Novel" section is present and conservative
 - [ ] "Open Questions" section captures what remains unknown
 - [ ] Architect has made stop/continue decision with rationale
-- [ ] If continuing: next session scope is written and specific
+- [ ] If delta < 0.85: next session scope is written with specific, searchable
+      questions (not just "research X more")
+- [ ] If stopping: rationale for stopping is recorded in the output document
 
 If any item fails: do not close the session. Fix the item or explicitly
 document why it cannot be fixed now.
@@ -628,9 +656,12 @@ assume the agent has memory of prior sessions.
 After 3+ rounds, compress earlier rounds into a summary before starting
 the next. Context degradation at 60+ messages is real.
 
-**Parallelism**: Scout and Deep Researcher can run in parallel on
-independent sub-questions if the topic has clearly separable areas.
-Critic and Synthesizer must run sequentially (Critic first).
+**Parallelism**: Within a single sub-question, Scout → Deep Researcher →
+Critic → Synthesizer always run sequentially (each depends on the previous
+output). But if the topic has clearly separable sub-questions, you can run
+two full Scout → Researcher pipelines in parallel on different sub-questions,
+then merge before the Critic. Critic and Synthesizer always run sequentially
+and last.
 
 ---
 

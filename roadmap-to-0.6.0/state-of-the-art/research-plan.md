@@ -1,3 +1,21 @@
+---
+type: protocol
+scope: state-of-the-art
+name: research-plan
+version: 0.1.0
+summary: >
+  Structured research plan covering 8 SOTA areas for the v0.6.0 roadmap:
+  formal methods, metacognition in LLMs, multi-agent systems, hallucination
+  detection, agentic methodology, context retrieval, evaluation, and industry
+  landscape. For each area: core questions, specific topics, search terms, and
+  output document. Use sota-methodology.md to execute each area.
+token_estimate: 2800
+relationships:
+  - type: sibling
+    target: sota-methodology.md
+    reason: sota-methodology is the execution protocol for this research plan
+---
+
 # State of the Art: Research Plan
 
 > Scope: map the academic and industry landscape for every major idea in the
@@ -493,31 +511,18 @@ major organizations are heading.
    deterministic angle is genuinely novel; research is confirmatory rather
    than directional
 
-### For each output document, the structure should be
+### For each output document
 
-```markdown
-# State of the Art: [Area Name]
+Use the output format defined in `sota-methodology.md` (§ Output Document Format).
+The Synthesizer agent writes and maintains these documents using the standard
+template. Do not create a different structure — all 8 output documents must follow
+the same format to be comparable and composable.
 
-> Research date: YYYY-MM-DD
-> Informs: [list of 0.6.0 documents]
-
-## Summary (3-5 sentences: what this area says, what it means for Organon)
-
-## Key Papers & References
-(annotated bibliography — what each says and why it matters)
-
-## Similar Projects
-(what's being built in this space; convergences and divergences)
-
-## Industry Directions
-(what major labs are doing in this area specifically)
-
-## What This Means for Organon
-(specific implications for the 0.6.0 documents this area informs)
-
-## Gaps & Novel Angles
-(what Organon is doing that prior work hasn't done; where we can contribute)
-```
+The authoritative section order is: Summary → Key Findings → Related Work
+(Annotated) → Similar Projects & Directions → Industry Directions → What Organon
+Can Build On → What Appears Novel to Organon → Open Questions → Critic's
+Unresolved Challenges. The document header includes: Research date, Session N of
+estimated M, Informs (links to 0.6.0 roadmap documents), Goal-reaching delta.
 
 ---
 
