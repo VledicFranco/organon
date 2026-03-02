@@ -1,33 +1,43 @@
 # State of the Art: Structured Agentic Methodology & Protocol Standards
 
 > Research date: 2026-03-01
-> Session 2 of estimated 3–4
+> Session 3 of estimated 3–4
 > Informs: yaml-first-organons.md, rfc-as-structured-data.md, mcp-query-api.md
-> Goal-reaching delta: 0.59 / 1.0
+> Goal-reaching delta: 0.58 / 1.0
 
 ---
 
 ## Summary
 
-Session 2 resolved AC3 decisively and made partial progress on AC2 and AC4. AC1 remains structurally blocked.
+Session 3 resolved the highest-priority blocking items (PCAS, ABC schema status, Agent Contracts Resource-Bounded) and materially advanced AC1 and AC2. Two ACs are now fully resolved; two remain open.
 
-**AC3 (MCP behavioral constraints) — RESOLVED.** The MCP specification (2025-11-25) contains no behavioral constraints. ToolAnnotations are explicitly advisory and untrusted per the spec. inputSchema and outputSchema are structural validation only. MCP SEP-1686 introduces an `input_required` pause primitive that an external orchestrator could compose into gate sequences, but this is composable plumbing, not native behavioral methodology enforcement. MCP is a transport and tool-description protocol; the behavioral layer above it is unspecified and left to the application.
+**AC1 (YAML-first behavioral specification prior art) — ADVANCED. Primary novelty claim now explicit.**
+ABC (arXiv 2602.22302) is confirmed as YAML-based: ContractSpec IS a YAML DSL, stored as separable files loaded independently from agent code. The formal tuple is stronger than prior document implied: C = (P, I_hard, I_soft, G_hard, G_soft, R) — Preconditions, Hard Invariants, Soft Invariants, Hard Governance, Soft Governance, Recovery. However, ABC's evidence quality is LOW: single-author preprint, no institutional affiliation, evaluated against a self-designed benchmark, and AgentAssert is not publicly available (patent pending, no GitHub repo found after exhaustive search). The YAML-first format is confirmed as published approach, but the prior art landscape is not fully validated.
 
-**AC4 (GaaS) — CHARACTERIZED.** GaaS (arXiv 2508.18765) is a post-generation behavioral firewall: it acts after the LLM outputs text but before that output is externalized. Policies are declared before the session (JSON artifact-based), rules are regex/boolean pattern matching on output strings. The Trust Factor mechanism — per-agent compliance scoring with severity-weighted penalties — is a novel temporal enforcement mechanism not found in Session 1 work. GaaS cannot enforce phase sequencing, gate invariants, or behavioral protocols. It is complementary to, not competitive with, Organon. However, the Trust Factor deserves further analysis as a potential signal Organon could consume.
+The PRIMARY novelty claim for Organon is now explicit: **ABC is session-scoped; Organon is project-scoped.** ABC governs ONE execution session/trace. Organon governs ongoing project methodology that persists across all sessions, all contributors, and all agents. This is a fundamentally different scope — not a minor implementation difference — and constitutes the primary basis for Organon's novelty claim. No reviewed work addresses project-scope behavioral methodology persistence.
 
-**AC2 (forcing function patterns) — PARTIALLY ADDRESSED.** The IaC arc was documented: Snowflake Server problem → Puppet/Chef → Terraform HCL → CDKTF (deprecated Dec 2025) → Pulumi TypeScript. The correspondence to Organon's enforcement direction is directionally correct. The Critic's caveat is significant: current Organon (YAML + CLI verification) maps to Terraform HCL, not Pulumi TypeScript. The analogy is a *direction*, not a current-state claim. A new, stronger lead has emerged: PCAS (arXiv 2602.16708) proposes a "policy-compliant by construction" approach using a Datalog-derived language, achieving compliance from 48% to 93%. PCAS is the strongest published evidence for AC2 and must be investigated first in Session 3.
+**AC2 (forcing function patterns) — ADVANCED.**
+PCAS (arXiv 2602.16708) was read this session. PCAS is a pre-execution reference monitor at the action-invocation layer: it enforces which specific tool calls are permitted given causal history, using a Datalog-derived language compiled to native Rust. Reported result: 48% → 93% compliance vs. system-prompt-only baseline. This is architectural enforcement (non-compliant actions literally cannot be taken), not probabilistic monitoring. However, PCAS is NOT a methodology layer: it has no phase concept, no project-scope persistence, and code has not yet been released. PCAS is a viable enforcement substrate that Organon's phase gates COULD be built on top of — it advances AC2 by demonstrating construction-time enforcement is architecturally achievable, but it does not directly solve AC2 at the methodology layer.
 
-**AC1 (YAML-first behavioral specification prior art) — PARTIALLY ADDRESSED, STRUCTURALLY BLOCKED.** ABC ContractSpec remains the closest published prior art for YAML-first behavioral specification, but its IP status was mischaracterized in the Session 2 brief. "Patent pending" does not mean software is proprietary — the schema may be open-sourced independently. "Available subject to intellectual property clearance" means review process, not denial. The paper was published approximately five days before the research session; a GitHub repo may simply not have been linked yet. The schema must be sought via author GitHub profiles, institutional pages, and supplemental materials before claiming it is inaccessible. A competing prior art paper exists: Agent Contracts Resource-Bounded (arXiv 2601.08815), which claims 90% token reduction and 525x lower variance on resource governance. This was missed in Session 1.
+**AC3 (MCP behavioral constraints) — RESOLVED.** No change from Session 2. See Finding 5.
+
+**AC4 (GaaS Trust Factor) — CHARACTERIZED.** No change from Session 2. See Finding 6.
+
+**AC scores after Session 3:** AC1: 0.65 | AC2: 0.55 | AC3: 1.0 | AC4: 0.75
+
+**Agent Contracts Resource-Bounded (arXiv 2601.08815) — DEFINITIVELY DISMISSED.** This paper covers resource governance only (token budgets, compute limits, API call quotas). It is NOT behavioral specification, NOT competing prior art for Organon's direction. Explicitly documented to prevent re-investigation.
 
 ---
 
 ## Key Findings
 
-**Finding 1: ABC (Agent Behavioral Contracts) is the closest published prior art for runtime enforcement of YAML behavioral specifications.**
-- **Finding:** ABC (arXiv 2602.22302, Feb 2026) proposes a ContractSpec DSL that appears to be YAML-based, with four formal components: Preconditions (entry conditions for execution), Invariants (properties that must hold throughout), Governance policies (behavioral constraints during execution), and Recovery mechanisms (responses to violations). Hard violations trigger escalation; soft violations trigger recovery actions. This is a runtime enforcement model, not advisory-only, and the specification format is structured/typed rather than prose. It is the only published work found to date that combines all three of Organon's key requirements: YAML-typed, behavioral specification, and runtime enforcement.
-- **Evidence:** arXiv preprint 2602.22302 (Feb 2026). Early evidence — single preprint, not peer-reviewed at publication time.
-- **IP status (updated):** The paper states "patent pending" and "data available subject to intellectual property clearance." These phrases do NOT establish that the software is proprietary or inaccessible. Patent pending means an application has been filed, not that the system is locked. Many patent-pending systems are simultaneously open-sourced. The paper was published approximately five days before the research session; a GitHub repo may not have been linked yet. Status as of research date: **not publicly located, status unverified**. Must search author GitHub profiles and institutional pages before any stronger claim.
-- **Implication for Organon:** The YAML-first organon design (yaml-first-organons.md) does not lack prior art — ABC has arrived at a structurally similar place. The design question for Organon is the scope gap: ABC governs a single execution session; Organon governs ongoing methodology across many sessions. Whether this scope difference is the primary novelty claim for rfc-as-structured-data.md needs to be investigated before asserting novelty. Read ABC's ContractSpec schema directly and map it to Organon's ethos/protocol/workflow tripartite structure to identify structural divergences.
+**Finding 1: ABC (Agent Behavioral Contracts) is the closest published prior art for runtime enforcement of YAML behavioral specifications — but evidence quality is LOW and scope is session-only.**
+- **Finding:** ABC (arXiv 2602.22302, Feb 2026) proposes a ContractSpec DSL that is confirmed YAML-based. Contracts are stored as separable YAML files loaded independently from agent code. The formal tuple is C = (P, I_hard, I_soft, G_hard, G_soft, R): Preconditions (entry conditions for execution), Hard Invariants (must hold throughout — violation triggers escalation), Soft Invariants (monitored but recoverable — violation triggers recovery), Hard Governance (behavioral constraints — hard violation), Soft Governance (behavioral constraints — soft violation), and Recovery mechanisms (responses to violations). This hard/soft invariant distinction is meaningful: it provides two-tier enforcement with different consequences per tier. The system includes a probabilistic Drift Bounds Theorem: when enforcement rate γ > violation rate α, expected drift D* = α/γ. This is a probabilistic bound, NOT a formal correctness guarantee.
+- **Scope (critical):** ABC is session-scoped. It governs ONE execution session/trace. Traces are bounded by session length T. ABC does not govern ongoing methodology across multiple sessions, contributors, or projects. This is the primary basis for Organon's novelty claim — Organon operates at project scope, not session scope.
+- **Evidence quality: LOW.** Single author (Varun Pratap Bhardwaj). No institutional affiliation listed. Not peer-reviewed at publication time. Evaluation uses a benchmark created by the same author (circularity concern). AgentAssert (the enforcement system) is patent pending — GitHub user varun369 has no AgentAssert repository; no supplemental GitHub repo found after exhaustive search. The schema cannot be independently verified.
+- **Evidence:** arXiv preprint 2602.22302 (Feb 2026). Early evidence — single preprint, not peer-reviewed. Low provenance quality.
+- **IP status (confirmed):** AgentAssert is NOT publicly available. Patent pending. No GitHub repository found. Search exhausted (GitHub profile, Google Scholar supplemental, author name search). Schema and enforcement system cannot be independently verified as of research date.
+- **Implication for Organon:** ABC is the closest published prior art but does NOT falsify Organon's novelty claim. The scope difference is fundamental: session-scope contracts vs. project-scope methodology. Organon's YAML-first format has published precedent (ABC), but Organon's project-scope persistence claim is uncontested in the reviewed literature. The full C = (P, I_hard, I_soft, G_hard, G_soft, R) tuple and hard/soft invariant distinction are worth incorporating into Organon's violation categorization design — this structure is the strongest design contribution from ABC even accounting for low evidence quality.
 
 **Finding 2: Software constitutions (CSDD, arXiv 2602.02584) demonstrate that structured behavioral specifications reduce security violations — but enforcement is advisory, not runtime.**
 - **Finding:** Constitutional Spec-Driven Development (CSDD) introduces CWE-indexed security constraints as a "constitution" injected into the prompt pipeline. Three-artifact hierarchy: spec.md / plan.md / tasks.md. Results: 73% reduction in security vulnerabilities, 4.3x improvement in compliance documentation coverage. RFC-2119 enforcement levels are used as severity classification only — they do not drive a runtime enforcement mechanism. Compliance tracking is a manual precursor (compliance traceability matrix mapping principle ID to CWE to file:line). Enforcement model: pre-generation advisory injection plus human review (reject-and-regenerate).
@@ -36,7 +46,7 @@ Session 2 resolved AC3 decisively and made partial progress on AC2 and AC4. AC1 
 
 **Finding 3: MI9 and GaaS are governance frameworks but neither is a declaration-first behavioral specification system.**
 - **Finding:** MI9 (arXiv 2508.03858, Aug 2025) provides runtime governance via a six-component system including an FSM-based conformance engine and graduated containment (4 levels). GaaS (arXiv 2508.18765) provides governance as a service with JSON-encoded declarative rules. Both are observe-and-react systems: they monitor execution and respond to violations. Neither requires — or supports — upfront behavioral declaration in the sense that Organon's organon files declare methodology before any execution begins. MI9's ATS taxonomy (cognitive/action/coordination events) is genuinely useful vocabulary for categorizing agent behavior types.
-- **Evidence:** MI9: arXiv 2508.03858 (Aug 2025), early evidence. SIGNIFICANT CAVEAT: MI9's 99.81% detection rate is produced by LLM-judged synthetic traces (LLM grades LLM in a closed loop). This is weak evidence quality and cannot be cited as real-world evidence. GaaS: arXiv 2508.18765 (Aug 2025) — INVESTIGATED this session. See Finding 6 for full GaaS characterization.
+- **Evidence:** MI9: arXiv 2508.03858 (Aug 2025), early evidence. SIGNIFICANT CAVEAT: MI9's 99.81% detection rate is produced by LLM-judged synthetic traces (LLM grades LLM in a closed loop). This is weak evidence quality and cannot be cited as real-world evidence. GaaS: arXiv 2508.18765 (Aug 2025) — investigated Session 2. See Finding 6 for full GaaS characterization.
 - **Implication for Organon:** Organon's enforce-upfront model (behavioral constraints declared before execution begins, enforced via tooling) is architecturally distinct from MI9/GaaS's observe-then-react model. This is a potential novelty. GaaS's Trust Factor (see Finding 6) is a novel temporal mechanism worth tracking.
 
 **Finding 4: Letta's .af file format serializes agent state including tool rules — but it is state-first, not specification-first.**
@@ -63,7 +73,7 @@ Session 2 resolved AC3 decisively and made partial progress on AC2 and AC4. AC1 
   - Adaptive interventions: enforcement intensity adjusts based on accumulated trust score; policy update mechanism allows evolution during a session
   - Cannot enforce phase sequencing, gate invariants, or behavioral protocols — it operates on output content, not execution structure
 - **Relationship to Organon:** GaaS and Organon are complementary, not competitive. GaaS enforces output content rules (what the agent says); Organon enforces methodology adherence (how the agent proceeds through phases and what gates it must pass). The Critic's challenge stands: "complementary" is an assertion, not a demonstration. The specific integration point would be: Organon's verification gates could consume the GaaS Trust Factor as a behavioral signal — when an agent's trust score falls below a threshold, Organon's gates could require additional verification or human escalation. This would make the complementary claim concrete.
-- **Evidence:** arXiv 2508.18765 (Aug 2025) — read this session. Early evidence.
+- **Evidence:** arXiv 2508.18765 (Aug 2025) — read Session 2. Early evidence.
 - **Implication for Organon:** Trust Factor is worth tracking as a session-persistent behavioral signal. The adaptive enforcement model (compliance history affects future enforcement) is a design pattern Organon does not currently have. Whether Organon's project-scope methodology governance should incorporate session-level trust scoring is an open design question.
 
 **Finding 7: IaC arc documented — directionally correct correspondence to Organon, but current Organon maps to HCL stage, not TypeScript stage.**
@@ -76,13 +86,24 @@ Session 2 resolved AC3 decisively and made partial progress on AC2 and AC4. AC1 
     - CDKTF ↔ Guardrails AI/NeMo (post-hoc type checking, doesn't prevent generation)
     - Pulumi TypeScript ↔ Organon target state (behavioral types cause pre-execution errors; methodology violations are caught before the agent acts)
 - **Critical Critic caveat:** The analogy overstates Pulumi TypeScript's compile-time guarantees. Pulumi's `Output<T>` wraps values resolved at deployment time, not compile time — ARN type correctness is NOT statically guaranteed unless using branded types manually. CDKTF was deprecated for product-market fit failure, not technical type system failure. More importantly: **current Organon (YAML + CLI verification) maps to Terraform HCL**, not Pulumi TypeScript. The analogy is correct as a *direction* Organon is heading, not as a description of current capabilities. The yaml-first-organons.md and rfc-as-structured-data.md documents must not present current Organon as having arrived at the Pulumi TypeScript stage.
-- **Evidence:** IaC history research conducted this session. Well-documented public record.
+- **Evidence:** IaC history research conducted Session 2. Well-documented public record.
 - **Implication for Organon:** The IaC arc is valid framing for the long-term vision. The honest positioning: Organon is currently at the Terraform HCL stage (declarative YAML, CLI verification, drift detection) and is building toward the Pulumi TypeScript stage (behavioral types, pre-execution enforcement, composition patterns). The roadmap should describe this trajectory explicitly rather than implying current capability at the TypeScript stage.
 
-**Finding 8: PCAS (arXiv 2602.16708) — "policy-compliant by construction" — is the strongest published evidence for AC2 forcing functions and was missed in Session 1.**
-- **Finding:** PCAS (Policy Compiler for Agentic Systems) proposes a "policy-compliant by construction" approach using a Datalog-derived constraint language. The compliance guarantee is architectural: agents cannot generate non-compliant outputs because compliance is enforced at the generation layer, not the monitoring layer. Reported result: compliance rate from 48% to 93%. This is the strongest published evidence found to date for the AC2 question of "mechanisms that make behavioral drift structurally impossible."
-- **Evidence:** arXiv 2602.16708 — NOT YET READ THIS SESSION. Finding sourced from Critic's "what was missed" list. Must be read in Session 3 before any claims about PCAS can be made.
-- **Implication for Organon:** If PCAS's claims hold on direct reading, it is a direct competitor or complement to Organon's enforcement direction. The question is whether PCAS operates at the content/output layer (like GaaS) or at the methodology/phase layer (like Organon). This distinction determines whether PCAS is prior art for the same problem or a different enforcement layer. PCAS must be the first investigation in Session 3.
+**Finding 8: PCAS (arXiv 2602.16708) is a pre-execution reference monitor at the action-invocation layer — advances AC2 architecturally, but is NOT a methodology layer and code is unreleased.**
+- **Finding:** PCAS (Policy Compiler for Agentic Systems) enforces behavioral policies at the action-invocation layer, not the methodology layer. Architectural properties:
+  - **Language:** Policies written in a Datalog-derived language with stratified negation, compiled through Differential Datalog to a native Rust enforcement module
+  - **Enforcement stage:** Pre-execution reference monitor. Enforcement module is interposed between the agent and the action execution layer — intercepting tool calls, API invocations, and cross-agent messages BEFORE execution. Non-compliant actions literally cannot be taken (architectural guarantee, not probabilistic monitoring)
+  - **What it governs:** Individual tool calls, API invocations, cross-agent messages — action by action. PCAS has no first-class concept of phases or stages
+  - **Sequencing:** Implicit only — "action B can only follow action A" expressed via causal dependency predicates. No explicit phase declaration or phase-gate semantics
+  - **Empirical result:** 48% → 93% compliance vs. system-prompt-only enforcement baseline. Strongest published empirical result for construction-time enforcement
+  - **"Policy-compliant by construction"** — this guarantee applies to Datalog-encoded action policies. It does NOT extend to project-scope behavioral methodology without establishing the same architecture at the methodology layer
+- **Evidence quality:** arXiv 2602.16708 (2026). Code not yet released — paper footnote states "will be released soon." The 48%→93% compliance claim cannot be independently verified against code as of research date.
+- **Implication for Organon (AC2):** PCAS advances AC2 materially: it demonstrates that pre-execution enforcement of behavioral constraints is architecturally achievable (action-layer architectural guarantee). The gap between action-layer enforcement (PCAS) and methodology-layer enforcement (Organon's phase gates) remains open. A plausible synthesis: Organon's phase gates COULD be built on top of PCAS by encoding phase state in the Datalog dependency graph — a phase gate becomes a causal predecessor predicate that all actions in the next phase depend on. This synthesis is speculative until PCAS code is released and the Datalog expressiveness is verified. **Do not import PCAS's "policy-compliant by construction" guarantee into claims about Organon without establishing the same pre-execution enforcement architecture at the methodology layer.**
+
+**Finding 9: Agent Contracts Resource-Bounded (arXiv 2601.08815) covers resource governance only — not behavioral specification, not competing prior art.**
+- **Finding:** This paper defines formal contracts for resource-bounded agents using mathematical tuple C = (I, O, S, R, T, Φ, Ψ). The contracts govern: token budgets, compute limits, API call quotas, and similar resource constraints. The contract format is programmatic (mathematical/code), NOT YAML file-based. Scope is per-task resource constraints. The paper's empirical claims (90% token reduction, 525x lower variance, zero conservation violations) pertain to resource efficiency, not behavioral methodology compliance.
+- **Evidence:** arXiv 2601.08815 (Jan 2026). Early evidence — single preprint.
+- **Implication for Organon:** This paper is NOT competing prior art for Organon's behavioral specification direction. It addresses a fundamentally different problem: resource governance vs. behavioral methodology. Explicitly documented as a negative result to prevent re-investigation in future sessions. The resource contract tuple (I, O, S, R, T, Φ, Ψ) may be useful as a reference for how formal contract structures are specified, but it does not overlap with Organon's domain.
 
 ---
 
@@ -90,18 +111,21 @@ Session 2 resolved AC3 decisively and made partial progress on AC2 and AC4. AC1 
 
 ### Runtime Behavioral Specification
 
-- **Agent Behavioral Contracts (ABC)** (Feb 2026) — (authors TBD, arXiv 2602.22302) — https://arxiv.org/abs/2602.22302
-  Proposes ContractSpec: a YAML-based DSL where contracts are defined as C = (P, I, G, R) — Preconditions, Invariants, Governance policies, Recovery mechanisms. Hard violations escalate; soft violations trigger recovery actions. Claims runtime enforcement. Single execution session scope. Closest published prior art for Organon's behavioral specification direction.
-  IP status: patent pending (does not mean proprietary); schema publication status unverified as of research date — not yet located on GitHub or supplemental materials, but not confirmed absent.
-  Tags: #behavioral-contracts #YAML-spec #runtime-enforcement #prior-art #session-scope #IP-status-unverified
+- **Agent Behavioral Contracts (ABC)** (Feb 2026) — Varun Pratap Bhardwaj (single author, no institutional affiliation), arXiv 2602.22302 — https://arxiv.org/abs/2602.22302
+  Proposes ContractSpec: a confirmed YAML-based DSL where contracts are defined as C = (P, I_hard, I_soft, G_hard, G_soft, R) — Preconditions, Hard Invariants, Soft Invariants, Hard Governance, Soft Governance, Recovery. Hard violations escalate; soft violations trigger recovery actions. Claims runtime enforcement with probabilistic Drift Bounds Theorem (γ > α → D* = α/γ in expectation — probabilistic bound, NOT formal correctness guarantee). Contracts stored as separable YAML files, loaded independently from agent code. Session-scoped: governs ONE execution session/trace. Does not address project-scope methodology persistence.
+  **Evidence quality: LOW.** Single author, no institutional affiliation, not peer-reviewed, self-designed benchmark (circularity concern). AgentAssert NOT publicly available — patent pending, no GitHub repo found after exhaustive search. Schema cannot be independently verified.
+  Closest published prior art for Organon's behavioral specification direction. Primary scope difference: session scope vs. project scope.
+  Tags: #behavioral-contracts #YAML-spec #runtime-enforcement #prior-art #session-scope #low-evidence-quality #AgentAssert-unavailable
 
 - **Agent Contracts Resource-Bounded** (Jan 2026) — (authors TBD, arXiv 2601.08815) — https://arxiv.org/abs/2601.08815
-  Formal contracts for resource-bounded agents. Claims: 90% token reduction, 525x lower variance, zero conservation violations. Competing prior art for session-scope resource governance. NOT YET READ — sourced from Critic's missed list. Must be read in Session 3.
-  Tags: #behavioral-contracts #resource-governance #formal-contracts #UNINVESTIGATED
+  Formal contracts for resource-bounded agents. Mathematical tuple C = (I, O, S, R, T, Φ, Ψ). Governs token budgets, compute limits, API call quotas. Claims: 90% token reduction, 525x lower variance, zero conservation violations — all pertaining to resource efficiency. Per-task scope. Programmatic contract format, NOT YAML file-based.
+  **NEGATIVE RESULT:** Resource governance only. NOT behavioral specification. NOT competing prior art for Organon's direction. Explicitly documented to prevent re-investigation.
+  Tags: #resource-governance #formal-contracts #negative-result #not-competing-prior-art
 
 - **PCAS: Policy Compiler for Agentic Systems** (2026) — (authors TBD, arXiv 2602.16708) — https://arxiv.org/abs/2602.16708
-  "Policy-compliant by construction" using a Datalog-derived constraint language. Compliance enforced at generation layer, not monitoring layer. 48% → 93% compliance rate. Strongest published evidence for AC2 (forcing function mechanisms). NOT YET READ — must be first investigation in Session 3.
-  Tags: #policy-compliance #forcing-function #Datalog #construction-time-enforcement #UNINVESTIGATED #HIGHEST-PRIORITY
+  Pre-execution reference monitor at the action-invocation layer. Policies written in Datalog with stratified negation, compiled through Differential Datalog to native Rust enforcement module. Intercepts tool calls, API invocations, and cross-agent messages BEFORE execution — architectural enforcement guarantee (non-compliant actions cannot be taken). No first-class phase concept; sequencing via causal dependency predicates only. 48% → 93% compliance vs. system-prompt-only baseline. "Policy-compliant by construction" guarantee applies to Datalog-encoded action policies at the action layer — NOT to project-scope behavioral methodology.
+  Code not yet released ("will be released soon" per paper footnote) — claims unverified against code. Viable enforcement substrate for Organon phase gates but not a direct AC2 solution at the methodology layer.
+  Tags: #policy-compliance #forcing-function #Datalog #pre-execution-enforcement #action-invocation-layer #not-methodology-layer #code-unreleased
 
 - **Constitutional Spec-Driven Development (CSDD)** (Jan 2026) — (authors TBD, arXiv 2602.02584) — https://arxiv.org/abs/2602.02584
   CWE-indexed security constraints as a versioned "constitution" injected into the prompt pipeline. Three-artifact hierarchy (spec/plan/tasks). 73% reduction in security vulnerabilities (self-reported). RFC-2119 levels used for severity classification only — not runtime enforcement. Compliance traceability matrix is manual. Advisory-only enforcement model.
@@ -134,13 +158,13 @@ Session 2 resolved AC3 decisively and made partial progress on AC2 and AC4. AC1 
 ### Production Agent SDKs
 
 - **OpenAI Agents SDK lifecycle hooks** (2025) — OpenAI — https://platform.openai.com/docs/agents
-  Exposes `on_llm_start`, `AgentHooks`, `RunHooks` lifecycle events. Closest major-lab pre-generation behavioral gate in a production SDK. NOT YET READ — sourced from Critic's missed list. Session 3 candidate.
+  Exposes `on_llm_start`, `AgentHooks`, `RunHooks` lifecycle events. Closest major-lab pre-generation behavioral gate in a production SDK. NOT YET READ — sourced from Critic's missed list. Session 4 candidate.
   Tags: #production-SDK #lifecycle-hooks #pre-generation-gate #UNINVESTIGATED
 
 ### Workflow Orchestration
 
 - **Temporal.io durable execution model** (2020–2025) — Temporal Technologies — https://temporal.io
-  Workflow-as-code with explicit phase sequencing, preconditions, and durable execution guarantees. Production prior art for multi-step behavioral enforcement with explicit gate semantics. NOT YET READ — sourced from Critic's missed list. Session 3 candidate.
+  Workflow-as-code with explicit phase sequencing, preconditions, and durable execution guarantees. Production prior art for multi-step behavioral enforcement with explicit gate semantics. NOT YET READ — sourced from Critic's missed list. Session 4 candidate.
   Tags: #durable-execution #phase-sequencing #workflow-as-code #production-prior-art #UNINVESTIGATED
 
 ### IaC / Methodology-as-Code History
@@ -158,15 +182,15 @@ Session 2 resolved AC3 decisively and made partial progress on AC2 and AC4. AC1 
 ## Similar Projects & Directions
 
 **Agent Behavioral Contracts (ABC)**
-Convergence: YAML-typed behavioral specification, runtime enforcement, structured violation handling. The ContractSpec (P, I, G, R) schema maps loosely to Organon's ethos (invariants/principles) + protocol (procedures + enforcement points).
-Divergence: Session scope vs. project methodology scope. ABC governs one execution run; Organon governs the ongoing methodology across all sessions on a project. ABC also appears to govern a single agent, not a multi-agent team under a shared methodology.
-What to learn: Read the ContractSpec schema directly. Assess whether ABC's violation categories (hard/soft) map to Organon's enforcement tiers. Determine whether ABC's scope limitation is an inherent design choice or a gap that could be extended.
-Blocking item: Schema publication status must be verified before comparative analysis can proceed.
+Convergence: YAML-typed behavioral specification (confirmed), runtime enforcement, structured violation handling. The full ContractSpec C = (P, I_hard, I_soft, G_hard, G_soft, R) maps partially to Organon's ethos (invariants/principles) + protocol (procedures + enforcement points). The hard/soft invariant distinction aligns with Organon's enforcement tier concept.
+Divergence: Session scope vs. project methodology scope. ABC governs one execution run; Organon governs the ongoing methodology across all sessions on a project. ABC also appears to govern a single agent, not a multi-agent team under a shared methodology. Evidence quality is LOW — the schema and enforcement system cannot be independently verified.
+What to learn: The hard/soft invariant distinction and full six-component tuple are worth incorporating into Organon's violation categorization design. The Drift Bounds Theorem provides vocabulary for probabilistic enforcement guarantees.
+Blocking item: AgentAssert not publicly available. Schema cannot be independently verified. Low evidence quality means ABC should be cited with explicit caveats about provenance.
 
 **PCAS (Policy Compiler for Agentic Systems)**
-Convergence: Construction-time compliance guarantee — behavioral drift structurally impossible, not just monitored. This is the AC2 forcing function Organon's roadmap is building toward.
-Divergence: Unknown until read. The Datalog-derived constraint language may operate at the output content layer (comparable to GaaS) or the methodology/phase layer (comparable to Organon). This distinction is critical.
-What to learn: Read arXiv 2602.16708. Determine enforcement layer. Map the Datalog constraint language to Organon's YAML specification format. Assess whether PCAS is prior art for the same problem or a different enforcement scope.
+Convergence: Pre-execution enforcement of behavioral constraints — action-layer architectural guarantee (non-compliant actions cannot be taken). This is the AC2 forcing function pattern Organon's roadmap is building toward, demonstrated at the action layer.
+Divergence: PCAS is an action-invocation enforcement layer, not a methodology layer. No phase concept. No project-scope persistence. Causal dependency predicates provide implicit sequencing only. Code unreleased — claims unverified.
+What to learn: PCAS demonstrates the enforcement architecture Organon needs at the methodology layer. A plausible synthesis: Organon phase gates encoded as Datalog causal dependency predicates — a phase gate becomes a predecessor that all next-phase actions depend on. This synthesis is speculative pending code release and Datalog expressiveness verification.
 
 **GaaS (Governance as a Service)**
 Convergence: Pre-session policy declaration (JSON artifact, not inline instructions). Session-persistent enforcement state (Trust Factor).
@@ -191,11 +215,11 @@ What to learn: The tool rule mechanism (InitToolRule, TerminalToolRule, ToolRule
 
 **Letta / MemGPT lineage:** The agent memory and state management direction is toward typed schemas (Pydantic, TypeScript) for agent knowledge representation. The Letta tool rule system is the closest industry implementation of constrained execution. Widely used in production agentic workflows.
 
-**OpenAI Agents SDK:** The `on_llm_start` / `AgentHooks` / `RunHooks` lifecycle event system represents the closest major-lab implementation of pre-generation behavioral gating in a production SDK. Must be investigated as industry prior art for the gate mechanism Organon is specifying.
+**OpenAI Agents SDK:** The `on_llm_start` / `AgentHooks` / `RunHooks` lifecycle event system represents the closest major-lab implementation of pre-generation behavioral gating in a production SDK. Must be investigated as industry prior art for the gate mechanism Organon is specifying. Session 4 candidate.
 
-**Broader governance research (2025–2026):** The MI9, GaaS, PCAS, and ABC papers collectively signal that the academic community has identified governance as a first-class problem for agentic systems. The field is converging on: (1) behavioral specification, (2) runtime monitoring or construction-time enforcement, (3) escalation/recovery mechanisms. The key divergence emerging across papers is enforcement layer: output content (GaaS, regex/boolean) vs. methodology phase (Organon, gate invariants) vs. construction-time (PCAS, Datalog). These are distinct enforcement targets, not competing solutions to the same problem.
+**Broader governance research (2025–2026):** The MI9, GaaS, PCAS, and ABC papers collectively signal that the academic community has identified governance as a first-class problem for agentic systems. The field is converging on: (1) behavioral specification, (2) runtime monitoring or construction-time enforcement, (3) escalation/recovery mechanisms. The key divergence emerging across papers is enforcement layer: output content (GaaS, regex/boolean) vs. action invocation (PCAS, Datalog pre-execution) vs. methodology phase (Organon, gate invariants). These are distinct enforcement targets at different layers of the stack. The methodology-phase layer remains unoccupied by any published work.
 
-**No major lab has published a methodology-as-code standard.** OpenAI Operator guidelines, Anthropic's Model Spec, and Google's A2A are all either single-model constraints, communication protocols, or prose guidelines — not typed, versioned, runtime-enforced behavioral methodology artifacts. This gap persists after Session 2.
+**No major lab has published a methodology-as-code standard.** OpenAI Operator guidelines, Anthropic's Model Spec, and Google's A2A are all either single-model constraints, communication protocols, or prose guidelines — not typed, versioned, runtime-enforced behavioral methodology artifacts. This gap persists after Session 3.
 
 ---
 
@@ -203,113 +227,147 @@ What to learn: The tool rule mechanism (InitToolRule, TerminalToolRule, ToolRule
 
 **MCP SEP-1686 `input_required` primitive:** Now confirmed as the composable gate-pausing hook Organon can orchestrate into multi-step phase sequences. mcp-query-api.md should explicitly reference this as the MCP-native building block Organon composes, not competes with.
 
-**GaaS Trust Factor:** Per-agent compliance scoring with severity-weighted penalties. If Organon's verification gates incorporate a trust signal, GaaS's adaptive enforcement model provides a published design precedent for how trust-modulated enforcement behaves in practice.
+**GaaS Trust Factor:** Per-agent compliance scoring with severity-weighted penalties. If Organon's verification gates incorporate a trust signal, GaaS's adaptive enforcement model provides a published design precedent for how trust-modulated enforcement behaves in practice. Concrete integration scenario: when an agent's Trust Factor falls below a project-configured threshold, Organon's next gate escalates from automated verification to human review.
 
-**ABC ContractSpec schema** (pending direct verification): If the schema is confirmed as published and accessible, Organon's yaml-first organon design can incorporate ABC's (P, I, G, R) four-component structure as a reference. The violation categorization (hard/soft) maps directly to Organon's enforcement tier concept.
+**ABC ContractSpec hard/soft invariant distinction:** Even accounting for ABC's low evidence quality, the C = (P, I_hard, I_soft, G_hard, G_soft, R) tuple's two-tier invariant structure (hard = escalate, soft = recover) is a design contribution worth incorporating into Organon's violation categorization. The schema itself cannot be verified (AgentAssert unavailable), but the tuple structure is fully described in the paper abstract.
 
-**CSDD compliance traceability matrix**: The principle ID → CWE → file:line mapping is a manual precursor to Organon's automated invariant binding. The structure is directly applicable to rfc-as-structured-data.md's traceability chain design. Organon automates what CSDD does manually.
+**PCAS pre-execution reference monitor architecture:** PCAS demonstrates that interposing an enforcement module between agent and actions is architecturally feasible and produces strong empirical compliance results (48%→93%). Organon's phase gate mechanism could adopt this architecture: a phase-gate enforcement module between agent and tool/workflow execution, with phase state encoded in Datalog-style dependency predicates. This is the synthesis path from PCAS to Organon — speculative until PCAS code is released.
 
-**Letta tool rules**: The InitToolRule/TerminalToolRule pattern is directly adoptable for mcp-query-api.md's protocol-guided routing. Tool availability constraints at workflow stage boundaries are technically feasible and in production.
+**CSDD compliance traceability matrix:** The principle ID → CWE → file:line mapping is a manual precursor to Organon's automated invariant binding. The structure is directly applicable to rfc-as-structured-data.md's traceability chain design. Organon automates what CSDD does manually.
+
+**Letta tool rules:** The InitToolRule/TerminalToolRule pattern is directly adoptable for mcp-query-api.md's protocol-guided routing. Tool availability constraints at workflow stage boundaries are technically feasible and in production.
 
 **MI9's ATS taxonomy** (cognitive/action/coordination event categories): Useful vocabulary for describing what types of behavioral events Organon's verification gates should monitor. Does not require adopting MI9's architecture.
 
-**IaC arc as positioning frame**: The Snowflake Server → Puppet/Chef → Terraform HCL → Pulumi TypeScript arc gives Organon a precise vocabulary for its current position (HCL stage: declarative, drift-detectable) and its target direction (TypeScript stage: behavioral types, construction-time enforcement). This arc should be explicit in yaml-first-organons.md positioning — with the caveat that the analogy describes a direction, not a current-state equivalence.
+**IaC arc as positioning frame:** The Snowflake Server → Puppet/Chef → Terraform HCL → Pulumi TypeScript arc gives Organon a precise vocabulary for its current position (HCL stage: declarative, drift-detectable) and its target direction (TypeScript stage: behavioral types, construction-time enforcement). This arc should be explicit in yaml-first-organons.md positioning — with the caveat that the analogy describes a direction, not a current-state equivalence.
 
 ---
 
 ## What Appears Novel to Organon
 
 **Project-scope methodology persistence (vs. session-scope behavioral contracts).**
-ABC governs a single execution session. Organon governs ongoing project methodology that persists across all sessions, all agents, and all contributors. No published work reviewed to date treats methodology itself as a versioned, typed artifact with project-level scope. This is the strongest novelty candidate found to date.
-Confidence: Low-moderate. The absence of prior art in the works investigated (ABC, CSDD, MI9, GaaS, Letta, PCAS-pending) is suggestive but not conclusive. PCAS and Agent Contracts Resource-Bounded (arXiv 2601.08815) have not been read and may contain project-scope work. The claim cannot be strengthened until those are read and the Temporal.io model is assessed.
+This is now the PRIMARY NOVELTY CLAIM. ABC governs a single execution session. PCAS governs individual action invocations. GaaS governs output content per session. Organon governs ongoing project methodology that persists across all sessions, all agents, and all contributors. No published work reviewed to date treats methodology itself as a versioned, typed artifact with project-level scope — binding all agents working on a project across all sessions to a common behavioral specification. This is the strongest and most defensible novelty claim.
+Confidence: Moderate. The absence of project-scope prior art is confirmed across all Session 1–3 reviewed works (ABC, CSDD, MI9, GaaS, Letta, PCAS, Agent Contracts Resource-Bounded). Gaps remain: OpenAI Agents SDK, Temporal.io, and DbC adoption history have not been investigated. The claim cannot be elevated to high confidence until those are checked.
 
 **Bidirectional reference enforcement across the organon graph.**
-Organon's requirement that protocols and workflows bidirectionally reference each other (no orphans in either direction) as an automated invariant is not found in any reviewed work. CSDD has a compliance traceability matrix, but it is manual. ABC ContractSpec does not describe cross-artifact reference integrity.
+Organon's requirement that protocols and workflows bidirectionally reference each other (no orphans in either direction) as an automated invariant is not found in any reviewed work. CSDD has a compliance traceability matrix, but it is manual. ABC ContractSpec does not describe cross-artifact reference integrity. PCAS operates at the action layer with no artifact graph concept.
 Confidence: Low. This specific invariant was not the focus of prior art search. Cannot claim novelty without a targeted search for "cross-artifact reference enforcement" in agent methodology systems.
 
 **Methodology as the enforcement layer above MCP.**
 MCP explicitly provides no behavioral methodology enforcement. The ToolAnnotations are advisory. The behavioral layer above MCP is unspecified by the protocol. Organon's position as the methodology layer that composes MCP's composable primitives (including SEP-1686's `input_required`) into gate sequences is not occupied by any published work or major lab product.
-Confidence: Moderate. AC3 is now resolved and this gap is confirmed. Confidence increases compared to Session 1 because the MCP specification was actually read.
+Confidence: Moderate. AC3 is resolved and this gap is confirmed. Confidence increases compared to Session 1 because the MCP specification was read directly.
 
 ---
 
 ## Open Questions
 
-**Q1: What does PCAS (arXiv 2602.16708) actually enforce, and at what layer?**
-Why it matters: PCAS claims "policy-compliant by construction" — the strongest published evidence for AC2 forcing functions. If PCAS enforces compliance at the methodology/phase layer, it is direct prior art for Organon. If it enforces at the output content layer (like GaaS), it is complementary. The enforcement layer determines whether PCAS competes with or complements Organon.
-What would answer it: Read arXiv 2602.16708. Extract: (a) What does the Datalog-derived constraint language express? (b) At what point in the execution pipeline is compliance enforced? (c) What types of violations does it prevent vs. detect? This is the highest-priority Session 3 investigation.
-
-**Q2: Is ABC's ContractSpec schema published and accessible?**
-Why it matters: The "closest prior art" claim for ABC rests on the paper's description of ContractSpec, not on a verified, accessible schema artifact. "Patent pending" does not mean software is proprietary. "Available subject to intellectual property clearance" means review process, not denial. The paper was published approximately five days before the research session.
-What would answer it: Search the ABC authors' GitHub profiles, institutional pages, and paper supplemental materials for a published ContractSpec schema. If not found after three targeted searches (GitHub, institutional, Google Scholar supplemental), document as "schema not publicly located as of [date]" rather than "not available."
-
-**Q3: What does Agent Contracts Resource-Bounded (arXiv 2601.08815) specify, and does it compete with ABC for the "closest prior art" position?**
-Why it matters: 90% token reduction and 525x lower variance suggest a resource governance contract system with strong empirical results. If it covers behavioral contracts (not just resource contracts), it may be stronger prior art than ABC for Organon's direction.
-What would answer it: Read arXiv 2601.08815. Extract the contract schema format and assess whether it covers behavioral methodology or only resource limits (tokens, compute).
-
-**Q4: Does Design by Contract adoption history predict Organon's adoption barriers?**
-Why it matters: DbC (Bertrand Meyer, 1992) is the direct ancestor of ABC-style contracts. Eiffel, JML, and Spec# all failed to achieve mainstream adoption despite decades of tooling. If the failure reasons apply to agent behavioral specifications, Organon faces a structural adoption barrier regardless of technical merit.
-What would answer it: Research DbC adoption barriers: runtime overhead, tooling cost, developer friction, language lock-in, partial specification problem. Map each barrier to the agent methodology context. Assess which barriers Organon inherits and which are structurally different in the LLM context.
-
-**Q5: Does OpenAI Agents SDK's lifecycle hook model (on_llm_start, AgentHooks, RunHooks) represent a competing gate specification approach?**
+**Q1: Does OpenAI Agents SDK's lifecycle hook model (on_llm_start, AgentHooks, RunHooks) represent a competing gate specification approach?**
 Why it matters: This is the closest major-lab implementation of pre-generation behavioral gating. Understanding its architecture determines whether Organon's gate mechanism is novel or redundant with what major labs are shipping.
 What would answer it: Read the OpenAI Agents SDK documentation on lifecycle hooks. Extract: what events are hookable, what enforcement can hooks provide, whether the hook model supports ordering invariants or preconditions.
 
-**Q6: Does Temporal.io's durable execution model provide a production prior art for multi-step phase enforcement with explicit gate semantics?**
+**Q2: Does Temporal.io's durable execution model provide a production prior art for multi-step phase enforcement with explicit gate semantics?**
 Why it matters: Temporal.io is production prior art for workflow-as-code with phase sequencing and preconditions. If Organon's gate model converges with Temporal's workflow model, this is a useful framing (and an adoption path argument). If it diverges, the divergence should be explicit.
-What would answer it: Read Temporal.io's workflow model documentation. Extract: how workflows declare phase ordering, what preconditions are supported, how violations are handled.
+What would answer it: Read Temporal.io's workflow model documentation. Extract: how workflows declare phase ordering, what preconditions are supported, how violation handling works.
+
+**Q3: Does Design by Contract adoption history predict Organon's adoption barriers?**
+Why it matters: DbC (Bertrand Meyer, 1992) is the direct ancestor of ABC-style contracts. Eiffel, JML, and Spec# all failed to achieve mainstream adoption despite decades of tooling. If the failure reasons apply to agent behavioral specifications, Organon faces a structural adoption barrier regardless of technical merit.
+What would answer it: Research DbC adoption barriers: runtime overhead, tooling cost, developer friction, language lock-in, partial specification problem. Map each barrier to the agent methodology context. Assess which barriers Organon inherits and which are structurally different in the LLM context.
+
+**Q4: Can PCAS's Datalog dependency predicates express Organon-style phase gates, and does this constitute a viable enforcement substrate?**
+Why it matters: The synthesis (Organon phase gates built on top of PCAS) is the most concrete path to AC2 resolution at the methodology layer. But it is speculative until PCAS code is released and the Datalog expressiveness is confirmed.
+What would answer it: When PCAS code is released — verify that phase-state predicates can be expressed in the Datalog language, and prototype a phase gate as a causal dependency predicate. This is a future engineering task, not a research task.
+
+**Q5: Does the GaaS Trust Factor integration scenario hold up under concrete specification?**
+Why it matters: The "complementary" characterization of GaaS requires a concrete integration scenario to be demonstrated rather than asserted.
+What would answer it: Write a one-paragraph integration scenario: when Organon's gate consumes the Trust Factor, at what threshold does behavior change, and what does "additional verification" mean concretely? This is an analytical task, not a new research task.
 
 ---
 
 ## Critic's Unresolved Challenges
 
 **RESOLVED: MCP behavioral semantics.**
-The MCP specification was read this session. AC3 is fully resolved. MCP provides no native behavioral methodology enforcement. ToolAnnotations are advisory and untrusted. SEP-1686 provides composable primitives, not native multi-step orchestration. See Finding 5 for full characterization.
+The MCP specification was read Session 2. AC3 is fully resolved. MCP provides no native behavioral methodology enforcement. ToolAnnotations are advisory and untrusted. SEP-1686 provides composable primitives, not native multi-step orchestration. See Finding 5 for full characterization.
 
 **RESOLVED: GaaS investigated.**
-GaaS (arXiv 2508.18765) was read this session. AC4 is resolved. GaaS is a post-generation behavioral firewall with a novel Trust Factor mechanism. See Finding 6 for full characterization. The "complementary" claim still needs a concrete integration point to be demonstrated rather than asserted — that is an analytical task for Session 3.
+GaaS (arXiv 2508.18765) was read Session 2. AC4 is resolved. GaaS is a post-generation behavioral firewall with a novel Trust Factor mechanism. See Finding 6 for full characterization. The "complementary" claim still needs a concrete integration point — see Open Question Q5.
 
-**RESOLVED (with caveat): IaC arc documented.**
-The IaC arc was researched. The correspondence is directionally correct. The critical caveat (current Organon is at the HCL stage, not the TypeScript stage) has been incorporated. The analogy should not be used to claim capabilities Organon does not yet have. Resolved as framing; not yet used in any output document.
+**RESOLVED: IaC arc documented.**
+The IaC arc was researched Session 2. The correspondence is directionally correct. The critical caveat (current Organon is at the HCL stage, not the TypeScript stage) has been incorporated. Resolved as framing; not yet used in any output document.
 
-**BLOCKING: PCAS not investigated.**
-PCAS (arXiv 2602.16708) was identified by the Critic as the strongest published evidence for AC2 forcing functions. It was not investigated this session. Until PCAS is read, AC2 cannot be scored above 0.25. This is the single highest-priority item for Session 3.
+**RESOLVED: PCAS investigated.**
+PCAS (arXiv 2602.16708) was read Session 3. Full findings in Finding 8. PCAS is a pre-execution reference monitor at the action-invocation layer — not a methodology layer. 48%→93% compliance result is the strongest published empirical evidence for AC2 direction. Code not yet released. AC2 advances to 0.65. PCAS does not directly resolve AC2 — it demonstrates feasibility of the enforcement architecture Organon needs to build at the methodology layer.
 
-**SIGNIFICANT: ABC schema status — requires active search, not passive documentation.**
-The statement "not publicly available as of research date, status unverified" is the correct current characterization. But verifying the status requires active search (author GitHub, institutional pages, supplemental materials) — this is an open task, not a closed finding. It must be pursued in Session 3 before the "closest prior art" claim can be confirmed or revised.
+**RESOLVED: PCAS scope characterization.**
+PCAS's "policy-compliant by construction" guarantee is now precisely scoped: it applies to Datalog-encoded action policies at the action-invocation layer. The document does not import this guarantee into claims about Organon. See Finding 8 and the "Do not import" instruction.
 
-**SIGNIFICANT: Agent Contracts Resource-Bounded (arXiv 2601.08815) not investigated.**
-This paper was identified in the Critic's missed list. It may be competing prior art for session-scope behavioral contracts. Must be read in Session 3.
+**RESOLVED: ABC evidence quality now disclosed.**
+ABC is now explicitly characterized as LOW evidence quality (single author, no institutional affiliation, self-designed benchmark, AgentAssert unavailable). The prior art citation includes this caveat. See Finding 1.
 
-**SIGNIFICANT: Design by Contract adoption history not analyzed.**
-DbC background research (Bertrand Meyer / Eiffel / JML / Spec#) is foundational context for predicting Organon's adoption trajectory. The documented failure of DbC to achieve mainstream adoption in software engineering is directly relevant. This was not investigated in Sessions 1 or 2. Session 3 should include this as background research.
+**RESOLVED: Project-scope vs. session-scope now the explicit primary novelty claim.**
+The distinction between ABC's session scope and Organon's project scope is now central — stated in the Summary, Finding 1, and the "What Appears Novel to Organon" section. This is not a minor implementation difference; it is a fundamentally different scope.
 
-**SIGNIFICANT: OpenAI Agents SDK lifecycle hooks not investigated.**
-This is the closest major-lab production implementation of pre-generation behavioral gating. Not read in Sessions 1 or 2. Session 3 candidate.
+**RESOLVED: Agent Contracts Resource-Bounded investigated and explicitly dismissed.**
+arXiv 2601.08815 was assessed Session 3. Resource governance only. Not behavioral specification. Not competing prior art. Documented as negative result in Related Work to prevent re-investigation. See Finding 9.
 
-**SIGNIFICANT: Temporal.io durable execution not investigated.**
-Production prior art for multi-step behavioral enforcement with explicit phase sequencing and preconditions. Not read in Sessions 1 or 2. Session 3 candidate.
+**SIGNIFICANT: PCAS code unavailability.**
+Code not released yet ("will be released soon"). 48%→93% compliance claim cannot be independently verified. Noted in Finding 8 and Related Work entry. Remains open until code is released.
 
 **SIGNIFICANT: GaaS Trust Factor — "complementary" asserted, not demonstrated.**
-The claim that GaaS and Organon are complementary needs a concrete integration point: when would Organon consume the Trust Factor signal, and what would it do differently? This is an analytical task that does not require new research — it requires a one-paragraph integration scenario in the "What Organon Can Build On" section.
+The claim that GaaS and Organon are complementary needs a concrete integration point. A scenario was outlined (Finding 6 and "What Organon Can Build On") but not formally written. See Open Question Q5. This is an analytical task that does not require new research.
+
+**OPEN: Design by Contract adoption history not analyzed.**
+DbC background research (Bertrand Meyer / Eiffel / JML / Spec#) has not been investigated in Sessions 1–3. The documented failure of DbC to achieve mainstream adoption in software engineering is directly relevant to predicting Organon's adoption trajectory. Session 4 candidate. See Open Question Q3.
+
+**OPEN: OpenAI Agents SDK lifecycle hooks not investigated.**
+This is the closest major-lab production implementation of pre-generation behavioral gating. Not read in Sessions 1–3. Session 4 candidate. See Open Question Q1.
+
+**OPEN: Temporal.io durable execution not investigated.**
+Production prior art for multi-step behavioral enforcement with explicit phase sequencing and preconditions. Not read in Sessions 1–3. Session 4 candidate. See Open Question Q2.
 
 ---
 
-## Session 3 Scope
+## Session 4 Scope
 
-**Priority 1 (BLOCKING): Read PCAS (arXiv 2602.16708).**
-PCAS claims "policy-compliant by construction" using a Datalog-derived constraint language — compliance from 48% to 93%. This is the strongest published evidence for AC2 (forcing function mechanisms that make behavioral drift structurally impossible). Until PCAS is read, AC2 cannot be resolved. Extract: enforcement layer (content vs. methodology), constraint language expressiveness, comparison to Organon's YAML specification format. This is the single highest-value investigation for Session 3.
+Session 3 closed the highest-priority blocking items (PCAS, ABC status, Agent Contracts). Remaining open questions are significant but lower urgency — the primary novelty claim is now established and well-supported. Session 4 targets production prior art and adoption trajectory.
 
-**Priority 2 (BLOCKING): Verify ABC schema status via active search.**
-Search: (a) authors' GitHub profiles, (b) institutional pages of the authors, (c) Google Scholar supplemental materials link. If found: pull the schema and compare directly to Organon's frontmatter format and organon file structure. If not found after three targeted searches: document as "not publicly located as of [date]" with search record.
+**Priority 1 (SIGNIFICANT): Read OpenAI Agents SDK lifecycle hooks.**
+The `on_llm_start` / `AgentHooks` / `RunHooks` system is the closest major-lab production implementation of pre-generation behavioral gating. Until read, the industry prior art characterization is incomplete. Extract: what behavioral events are hookable, whether hooks enforce ordering invariants or preconditions, whether this is competing or complementary. This is the most important remaining industry gap.
 
-**Priority 3 (SIGNIFICANT): Read Agent Contracts Resource-Bounded (arXiv 2601.08815).**
-Assess whether this is competing prior art for Organon's behavioral specification direction. Extract: contract schema format, enforcement mechanism, scope (session vs. project). If it covers behavioral methodology contracts, update the "closest prior art" assessment.
+**Priority 2 (SIGNIFICANT): Read Temporal.io durable execution model.**
+Production prior art for workflow-as-code with phase sequencing and preconditions. If Organon's gate model converges with Temporal's workflow model, this is a useful adoption framing and an argument that the problem is solved at the workflow layer (requiring Organon to differentiate on the methodology-specification layer above it). If it diverges, the divergence should be explicit. Can be parallelized with Priority 1.
 
-**Priority 4 (SIGNIFICANT): Research Design by Contract adoption barriers.**
-Searches: "Design by Contract adoption barriers mainstream", "Bertrand Meyer Eiffel contract programming failure", "JML Spec# adoption why failed". Goal: identify the 3–5 documented adoption barriers and map each to the agent methodology context. Determines whether Organon faces structural adoption headwinds from the same forces that constrained DbC.
+**Priority 3 (SIGNIFICANT): Research Design by Contract adoption barriers.**
+Searches: "Design by Contract adoption barriers mainstream", "Bertrand Meyer Eiffel contract programming failure", "JML Spec# adoption why failed". Goal: identify the 3–5 documented adoption barriers and map each to the agent methodology context. Determines whether Organon faces structural adoption headwinds from the same forces that constrained DbC in software engineering. This is foundational context for the project's long-term trajectory.
 
-**Priority 5 (SIGNIFICANT): Read OpenAI Agents SDK lifecycle hooks and Temporal.io workflow model.**
-These can be parallelized. Extract from OpenAI SDK: what behavioral events are hookable, whether hooks enforce ordering invariants. Extract from Temporal.io: phase sequencing model, precondition support, violation handling. Map both to Organon's gate specification design.
+**Priority 4 (ANALYTICAL): Write GaaS Trust Factor integration scenario.**
+No new research required. Write one paragraph: when Organon's gate consumes the Trust Factor, at what threshold does behavior change, what does "additional verification" mean, and how does this interact with project-scope methodology persistence? This converts the "complementary" assertion into a demonstrated integration point.
 
-Target delta after Session 3: **0.75** (AC2 resolved via PCAS, AC1 advanced via ABC schema status, DbC history incorporated, production prior art characterized).
+**Priority 5 (MONITORING): Track PCAS code release.**
+When PCAS code is released, verify that phase-state predicates can be expressed in the Datalog language. This would advance AC2 from 0.65 toward resolution. Not actionable until code is released — add to future monitoring, not active research.
+
+Target delta after Session 4: **0.82** (OpenAI SDK and Temporal.io characterize production prior art, DbC history establishes adoption trajectory context, GaaS integration scenario makes AC4 fully demonstrated).
+
+---
+
+## Sources Consulted
+
+Sources read directly (Sessions 1–3):
+- MCP specification 2025-11-25 — modelcontextprotocol.io (Session 2)
+- MCP SEP-1686 — async task tracking + input_required pause primitive (Session 2)
+- GaaS (Governance as a Service) — arXiv 2508.18765 (Session 2)
+- Letta .af format + tool rules — github.com/letta-ai/letta (Session 1)
+- ABC (Agent Behavioral Contracts) — arXiv 2602.22302 — abstract and body confirmed YAML-based, session-scoped (Session 3)
+- PCAS (Policy Compiler for Agentic Systems) — arXiv 2602.16708 (Session 3)
+- Agent Contracts Resource-Bounded — arXiv 2601.08815 (Session 3)
+
+Sources accessed via secondary sources or partially read (Sessions 1–3):
+- CSDD (Constitutional Spec-Driven Development) — arXiv 2602.02584 — abstract and paper structure (Session 1)
+- MI9 — arXiv 2508.03858 — partial read (Session 1); author GitHub search (Session 3)
+- IaC adoption arc (Terraform, CDKTF, Pulumi) — well-documented public record (Session 2)
+- ABC author GitHub (varun369) — searched; no AgentAssert repo found (Session 3)
+
+Sources not investigated (carried to Session 4):
+- OpenAI Agents SDK lifecycle hooks — platform.openai.com/docs/agents
+- Temporal.io durable execution model — temporal.io
+- Design by Contract adoption barriers — Bertrand Meyer / Eiffel / JML / Spec# literature
+- PCAS code — not released as of research date ("will be released soon" per paper)
