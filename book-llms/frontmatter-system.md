@@ -120,7 +120,7 @@ pattern_count: number          # For pattern catalogs (e.g., patterns.md) — nu
 ```yaml
 protocols_count: number       # Number of protocols in the file
 protocols:                    # Protocol metadata array
-  - id: string               # Protocol ID (e.g., PROTO-RFC-1)
+  - id: string               # Protocol ID (e.g., PROTO-DEPLOY-1)
     name: string              # Human-readable name
     steps: number             # Number of steps
     automation_tier: string   # automated | semi-automated | manual
@@ -281,7 +281,7 @@ Frontmatter must be **truthful** — automated tests enforce accuracy.
 - `invariants_count` matches actual `## Invariants` entries
 - `principles_count` matches actual `## Principles` entries
 - `protocols_count` matches actual protocol count
-- `token_estimate` should reflect order-of-magnitude cost for context budget planning. Use ~12 tokens/line or ~3.5 chars/token as heuristic. Accuracy matters most for the load-or-skip decision — an agent deciding whether to read a 5000-token file vs a 50000-token file needs to know which bucket it's in, not the exact count. For evolving documents (RFCs, design docs), estimates may drift as content grows; update when the estimate would mislead the load-or-skip decision (e.g., estimate says 5000 but actual is 15000).
+- `token_estimate` should reflect order-of-magnitude cost for context budget planning. Use ~12 tokens/line or ~3.5 chars/token as heuristic. Accuracy matters most for the load-or-skip decision — an agent deciding whether to read a 5000-token file vs a 50000-token file needs to know which bucket it's in, not the exact count. For evolving documents (design docs, version specs), estimates may drift as content grows; update when the estimate would mislead the load-or-skip decision (e.g., estimate says 5000 but actual is 15000).
 - `invariants` array length matches `invariants_count`
 - Each invariant `id` follows `INV-{SCOPE}-{N}` format
 - No duplicate invariant IDs

@@ -143,7 +143,7 @@ Not every protocol needs a workflow. Use these criteria:
 
 | Tier | Criteria | Workflow? | Tool? | Example |
 |------|----------|-----------|-------|---------|
-| **Automated** | ≥5 steps, cross-domain, error-prone, frequent | Yes | Yes | RFC implementation (5 phases, weekly) |
+| **Automated** | ≥5 steps, cross-domain, error-prone, frequent | Yes | Yes | Release pipeline (5 phases, frequent) |
 | **Semi-automated** | 1-2 steps, single tool, infrequent | No | Yes | Regenerate components.md |
 | **Manual** | Judgment required, context-dependent | No | No | Emergency hotfix decisions |
 
@@ -175,7 +175,7 @@ Not every protocol needs a workflow. Use these criteria:
 
 **Examples:**
 - "Run `organon generate components.md`" → 1 step, infrequent → **Semi-automated** (tool exists, no workflow needed)
-- "RFC implementation" → 5 phases, weekly, cross-domain → **Automated** (needs workflow orchestration)
+- "Release pipeline" → 5 phases, frequent, cross-domain → **Automated** (needs workflow orchestration)
 - "Emergency hotfix decision" → Judgment required → **Manual** (no automation)
 
 ---
@@ -524,7 +524,7 @@ When verification detects a violation, severity determines response:
 1. CI blocks the merge
 2. Author fixes the violation
 3. Reviewer validates the fix
-4. If the violation reveals an architectural issue → escalate to RFC
+4. If the violation reveals an architectural issue → update the organon and discuss in PR review
 
 **Principle:** Critical and high violations are never deferred. They block merges. Low violations create tracked follow-ups so they don't accumulate silently.
 
