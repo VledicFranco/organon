@@ -32,6 +32,18 @@ describe('init', () => {
     expect(result.files.has('organon/protocols/PROTOCOLS.md')).toBe(true);
   });
 
+  it('generated ETHOS.md has status: designing', async () => {
+    const fs = new MemoryFileSystem();
+    const result = await init({
+      projectRoot: '/project',
+      installSkills: false,
+      force: false,
+      fs,
+    });
+    const ethos = result.files.get('organon/ETHOS.md');
+    expect(ethos).toContain('status: designing');
+  });
+
   it('generates skill files when installSkills is true', async () => {
     const fs = new MemoryFileSystem();
     const result = await init({

@@ -226,6 +226,176 @@ Just some text, no Invariants/Principles/Heuristics sections.`,
       const typeFieldWarnings = result.warnings.filter(w => w.code === 'FRONTMATTER_MISSING_TYPE_FIELD');
       expect(typeFieldWarnings).toHaveLength(0);
     });
+    it('accepts version-spec as valid type', async () => {
+      const fs = new MemoryFileSystem({
+        '/project/docs/versions/v0-6-0.md': `---
+type: version-spec
+scope: product
+name: v0-6-0
+version: "1.0"
+summary: v0.6.0 release specification
+token_estimate: 100
+status: implementing
+created: "2026-03-12"
+released: "~"
+features: []
+---
+
+# v0.6.0`,
+      });
+      const config = makeConfig('/project');
+      config.organonGlobs.push('**/versions/*.md');
+      const result = await validateFrontmatter({
+        projectRoot: '/project',
+        config,
+        fs,
+        files: ['docs/versions/v0-6-0.md'],
+        stages: [1],
+      });
+      expect(result.errors.filter((e) => e.code === 'FRONTMATTER_INVALID_TYPE')).toHaveLength(0);
+    });
+
+    it('accepts status: stable on domain constraints file', async () => {
+      const fs = new MemoryFileSystem({
+        '/project/organon/domains/tools/ETHOS.md': `---
+type: constraints
+scope: domain
+name: tools
+version: "1.0"
+summary: Tools domain
+token_estimate: 100
+status: stable
+---
+
+# Tools`,
+      });
+      const config = makeConfig('/project');
+      const result = await validateFrontmatter({
+        projectRoot: '/project',
+        config,
+        fs,
+        files: ['organon/domains/tools/ETHOS.md'],
+        stages: [1],
+      });
+      expect(result.errors.filter((e) => e.code === 'FRONTMATTER_INVALID_STATUS')).toHaveLength(0);
+    });
+
+    it('reports FRONTMATTER_INVALID_STATUS for unknown status value', async () => {
+      const fs = new MemoryFileSystem({
+        '/project/ETHOS.md': `---
+type: constraints
+scope: domain
+name: tools
+version: "1.0"
+summary: Tools domain
+token_estimate: 100
+status: archived
+---
+
+# Tools`,
+      });
+      const config = makeConfig('/project');
+      const result = await validateFrontmatter({
+        projectRoot: '/project',
+        config,
+        fs,
+        files: ['ETHOS.md'],
+        stages: [1],
+      });
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({ code: 'FRONTMATTER_INVALID_STATUS' }),
+      );
+    });
+
+    it('warns FRONTMATTER_STATUS_SCOPE_MISMATCH when status on product scope', async () => {
+      const fs = new MemoryFileSystem({
+        '/project/ETHOS.md': `---
+type: constraints
+scope: product
+name: tools
+version: "1.0"
+summary: Tools
+token_estimate: 100
+status: stable
+---
+
+# Tools`,
+      });
+      const config = makeConfig('/project');
+      const result = await validateFrontmatter({
+        projectRoot: '/project',
+        config,
+        fs,
+        files: ['ETHOS.md'],
+        stages: [1],
+      });
+      expect(result.warnings).toContainEqual(
+        expect.objectContaining({ code: 'FRONTMATTER_STATUS_SCOPE_MISMATCH' }),
+      );
+    });
+  });
+
+  describe('Stage 2: References — implemented_by', () => {
+    it('passes when implemented_by paths exist', async () => {
+      const fs = new MemoryFileSystem({
+        '/project/ETHOS.md': `---
+type: constraints
+scope: domain
+name: billing
+version: "1.0"
+summary: Billing domain
+token_estimate: 100
+invariants:
+  - id: INV-BILLING-1
+    name: charge-idempotency
+    implemented_by:
+      - src/billing/Service.ts
+---
+
+# Billing`,
+        '/project/src/billing/Service.ts': '// source file',
+      });
+      const config = makeConfig('/project');
+      const result = await validateFrontmatter({
+        projectRoot: '/project',
+        config,
+        fs,
+        files: ['ETHOS.md'],
+        stages: [2],
+      });
+      expect(result.errors.filter((e) => e.code === 'REFERENCE_BROKEN_IMPL')).toHaveLength(0);
+    });
+
+    it('reports REFERENCE_BROKEN_IMPL for missing implemented_by file', async () => {
+      const fs = new MemoryFileSystem({
+        '/project/ETHOS.md': `---
+type: constraints
+scope: domain
+name: billing
+version: "1.0"
+summary: Billing domain
+token_estimate: 100
+invariants:
+  - id: INV-BILLING-1
+    name: charge-idempotency
+    implemented_by:
+      - src/missing/file.ts
+---
+
+# Billing`,
+      });
+      const config = makeConfig('/project');
+      const result = await validateFrontmatter({
+        projectRoot: '/project',
+        config,
+        fs,
+        files: ['ETHOS.md'],
+        stages: [2],
+      });
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({ code: 'REFERENCE_BROKEN_IMPL' }),
+      );
+    });
   });
 
   describe('Stage 3: Truthfulness', () => {
@@ -420,33 +590,17 @@ token_estimate: 10000
       expect(result.warnings.filter((w) => w.code === 'FRONTMATTER_NAME_DIR_MISMATCH')).toHaveLength(0);
     });
 
-    it('does not warn for files in observations/ collection directory', async () => {
+    it('does not warn for files in versions/ collection directory', async () => {
       const fs = new MemoryFileSystem({
-        '/project/organon/observations/001-testing.md': makeEthos({ name: 'testing', scope: 'methodology' }),
+        '/project/docs/versions/v0-6-0.md': makeEthos({ name: 'v0-6-0', scope: 'product' }),
       });
       const config = makeConfig('/project');
-      config.organonGlobs.push('**/observations/*.md');
+      config.organonGlobs.push('**/versions/*.md');
       const result = await validateFrontmatter({
         projectRoot: '/project',
         config,
         fs,
-        files: ['organon/observations/001-testing.md'],
-        stages: [4],
-      });
-      expect(result.warnings.filter((w) => w.code === 'FRONTMATTER_NAME_DIR_MISMATCH')).toHaveLength(0);
-    });
-
-    it('does not warn for files in rfcs/ collection directory', async () => {
-      const fs = new MemoryFileSystem({
-        '/project/rfcs/001-testing.md': makeEthos({ name: 'testing', scope: 'methodology' }),
-      });
-      const config = makeConfig('/project');
-      config.organonGlobs.push('**/rfcs/*.md');
-      const result = await validateFrontmatter({
-        projectRoot: '/project',
-        config,
-        fs,
-        files: ['rfcs/001-testing.md'],
+        files: ['docs/versions/v0-6-0.md'],
         stages: [4],
       });
       expect(result.warnings.filter((w) => w.code === 'FRONTMATTER_NAME_DIR_MISMATCH')).toHaveLength(0);

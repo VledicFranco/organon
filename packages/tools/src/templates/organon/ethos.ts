@@ -14,6 +14,10 @@ invariants_count: 3
 principles_count: 3
 heuristics_count: 3
 inherits_from: []
+status: designing   # designing → implementing → stable
+                    # designing: no implementation claims required
+                    # implementing: threshold-based coverage applies
+                    # stable: domain-binding gate enforces ≥1 implementation claim
 load_priority: high
 audience: [llm, human]
 ---

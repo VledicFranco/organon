@@ -205,16 +205,6 @@ function buildRelationships(files: ParsedOrganonFile[]): ExportRelationship[] {
       }
     }
 
-    // primary_rfcs
-    if (fm.primary_rfcs) {
-      for (const rfc of fm.primary_rfcs) {
-        relationships.push({
-          source: id,
-          predicate: 'shaped_by_rfc',
-          target: `rfc:${String(rfc).padStart(3, '0')}`,
-        });
-      }
-    }
   }
 
   return relationships;

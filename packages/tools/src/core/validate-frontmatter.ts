@@ -2,7 +2,7 @@
  * Multi-stage frontmatter validation.
  *
  * Stage 1: Schema — required fields, type enums, format rules
- * Stage 2: References — inherits_from, related_domains, related_features, primary_rfcs exist
+ * Stage 2: References — inherits_from, related_domains, related_features, implemented_by paths
  * Stage 3: Truthfulness — counts match content, token_estimate order-of-magnitude accurate
  * Stage 4: Consistency — name↔directory, scope↔directory, bidirectional refs
  */
@@ -39,7 +39,8 @@ export interface ValidateFrontmatterOptions {
 // Constants
 // ---------------------------------------------------------------------------
 
-const VALID_TYPES: FrontmatterType[] = ['navigation', 'constraints', 'rationale', 'procedures', 'mapping'];
+const VALID_TYPES: FrontmatterType[] = ['navigation', 'constraints', 'rationale', 'procedures', 'mapping', 'version-spec'];
+const VALID_DOMAIN_STATUSES = ['designing', 'implementing', 'stable'] as const;
 const VALID_SCOPES: FrontmatterScope[] = ['product', 'domain', 'feature', 'component', 'meta', 'methodology'];
 const KEBAB_CASE_RE = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/;
 const VERSION_RE = /^\d+\.\d+$/;
@@ -256,6 +257,28 @@ function validateSchema(
     }
   }
 
+  // Status field validation (constraints type only)
+  if (fm.type === 'constraints' && (fm as Record<string, unknown>)['status'] !== undefined) {
+    const statusVal = (fm as Record<string, unknown>)['status'];
+    if (!VALID_DOMAIN_STATUSES.includes(statusVal as typeof VALID_DOMAIN_STATUSES[number])) {
+      errors.push({
+        severity: 'error',
+        code: 'FRONTMATTER_INVALID_STATUS',
+        message: `Invalid status '${statusVal}'. Must be one of: ${VALID_DOMAIN_STATUSES.join(', ')}`,
+        file,
+      });
+    }
+    const nonDomainScopes = ['product', 'meta', 'methodology'];
+    if (fm.scope && nonDomainScopes.includes(fm.scope)) {
+      warnings.push({
+        severity: 'warning',
+        code: 'FRONTMATTER_STATUS_SCOPE_MISMATCH',
+        message: `status field is only meaningful on domain/feature scope files, not '${fm.scope}'`,
+        file,
+      });
+    }
+  }
+
   if (fm.type === 'rationale') {
     // decision_count is only expected for PHILOSOPHY.md files, not RFCs or observations
     const isPhilosophy = file.replace(/\\/g, '/').toUpperCase().includes('PHILOSOPHY');
@@ -346,35 +369,42 @@ async function validateReferences(
     }
   }
 
-  // Check primary_rfcs reference existing RFC files
-  if (fm.primary_rfcs) {
-    for (const rfcNum of fm.primary_rfcs) {
-      // Try common RFC file patterns (RFC-001*, rfc-001*, 001-*, RFC_1*)
-      const padded = String(rfcNum).padStart(3, '0');
-      const patterns = [
-        `**/RFC-${padded}*`,
-        `**/rfc-${padded}*`,
-        `**/${padded}-*`,
-        `**/RFC_${rfcNum}*`,
-      ];
-      let found = false;
-      for (const pattern of patterns) {
-        const matches = await fs.glob(pattern, {
-          cwd: projectRoot,
-          ignore: config.ignorePatterns,
-        });
-        if (matches.length > 0) {
-          found = true;
-          break;
+  // Check implemented_by paths in invariant entries
+  if (fm.invariants) {
+    for (const inv of fm.invariants) {
+      if (inv.implemented_by) {
+        for (const implPath of inv.implemented_by) {
+          const absPath = joinPath(projectRoot, implPath);
+          if (!await fs.exists(absPath)) {
+            errors.push({
+              severity: 'error',
+              code: 'REFERENCE_BROKEN_IMPL',
+              message: `implemented_by path '${implPath}' in invariant ${inv.id} does not exist`,
+              file,
+              suggestion: `Check that the path is relative to the project root`,
+            });
+          }
         }
       }
-      if (!found) {
-        warnings.push({
-          severity: 'warning',
-          code: 'FRONTMATTER_BROKEN_RFC_REF',
-          message: `primary_rfcs references RFC ${rfcNum} but no matching file found`,
-          file,
-        });
+    }
+  }
+
+  // Check implemented_by paths in protocol entries
+  if (fm.protocols) {
+    for (const proto of fm.protocols) {
+      if (proto.implemented_by) {
+        for (const implPath of proto.implemented_by) {
+          const absPath = joinPath(projectRoot, implPath);
+          if (!await fs.exists(absPath)) {
+            errors.push({
+              severity: 'error',
+              code: 'REFERENCE_BROKEN_IMPL',
+              message: `implemented_by path '${implPath}' in protocol ${proto.id} does not exist`,
+              file,
+              suggestion: `Check that the path is relative to the project root`,
+            });
+          }
+        }
       }
     }
   }
@@ -543,9 +573,8 @@ const COLLECTION_CONTAINER_DIRS = new Set([
   'organon',
   'book-llms',
   'book-humans',
-  'observations',
-  'rfcs',
   'protocols',
+  'versions',
 ]);
 
 function validateConsistency(

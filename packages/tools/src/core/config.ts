@@ -8,7 +8,7 @@
  */
 
 import { z } from 'zod';
-import type { FileSystem, OrganonConfig } from './types.js';
+import type { FileSystem, OrganonConfig, CoverageConfig } from './types.js';
 
 const CONFIG_FILENAME = 'organon.config.json';
 
@@ -16,6 +16,11 @@ const WorkflowPathsSchema = z.object({
   claudeCode: z.string().optional(),
   cursor: z.string().optional(),
   generic: z.string().optional(),
+}).strict();
+
+const CoverageConfigSchema = z.object({
+  invariantImplementation: z.number().min(0).max(100).optional(),
+  protocolImplementation: z.number().min(0).max(100).optional(),
 }).strict();
 
 const ConfigFileSchema = z.object({
@@ -27,6 +32,9 @@ const ConfigFileSchema = z.object({
   freshnessThresholdHours: z.number().positive().optional(),
   testGlobs: z.array(z.string()).optional(),
   testIgnorePatterns: z.array(z.string()).optional(),
+  sourceGlobs: z.array(z.string()).optional(),
+  sourceIgnorePatterns: z.array(z.string()).optional(),
+  coverage: CoverageConfigSchema.optional(),
 }).strict();
 
 export type ConfigFile = z.infer<typeof ConfigFileSchema>;
@@ -38,8 +46,26 @@ const DEFAULT_ORGANON_GLOBS = [
   '**/PROTOCOLS.md',
   '**/README.md',
   '**/components.md',
-  '**/observations/*.md',
-  '**/rfcs/*.md',
+];
+
+const DEFAULT_SOURCE_GLOBS = [
+  'src/**/*.ts',
+  'src/**/*.js',
+  'src/**/*.tsx',
+  'src/**/*.jsx',
+  'lib/**/*.ts',
+  'lib/**/*.js',
+  '**/*.scala',
+  '**/*.py',
+  '**/*.go',
+  '**/*.rs',
+];
+
+const DEFAULT_SOURCE_IGNORE = [
+  '**/node_modules/**',
+  '**/dist/**',
+  '**/target/**',
+  '**/.git/**',
 ];
 
 const DEFAULT_IGNORE_PATTERNS = [
@@ -83,6 +109,12 @@ export async function resolveConfig(
   const freshnessThresholdHours = fileConfig?.freshnessThresholdHours ?? 24;
   const testGlobs = fileConfig?.testGlobs;
   const testIgnorePatterns = fileConfig?.testIgnorePatterns;
+  const sourceGlobs = fileConfig?.sourceGlobs ?? DEFAULT_SOURCE_GLOBS;
+  const sourceIgnorePatterns = fileConfig?.sourceIgnorePatterns ?? DEFAULT_SOURCE_IGNORE;
+  const coverage: CoverageConfig = {
+    invariantImplementation: fileConfig?.coverage?.invariantImplementation ?? 0,
+    protocolImplementation: fileConfig?.coverage?.protocolImplementation ?? 0,
+  };
 
   return {
     projectRoot,
@@ -93,6 +125,9 @@ export async function resolveConfig(
     freshnessThresholdHours,
     testGlobs,
     testIgnorePatterns,
+    sourceGlobs,
+    sourceIgnorePatterns,
+    coverage,
   };
 }
 

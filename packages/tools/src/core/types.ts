@@ -47,7 +47,10 @@ export type FrontmatterType =
   | 'constraints'
   | 'rationale'
   | 'procedures'
-  | 'mapping';
+  | 'mapping'
+  | 'version-spec';
+
+export type DomainStatus = 'designing' | 'implementing' | 'stable';
 
 export type FrontmatterScope =
   | 'product'
@@ -71,12 +74,14 @@ export interface ProtocolEntry {
   workflow?: string;
   tools?: string[];
   complexity: Complexity;
+  implemented_by?: string[];
 }
 
 export interface InvariantEntry {
   id: string;
   name: string;
   judgment_call?: boolean;
+  implemented_by?: string[];
 }
 
 /**
@@ -98,6 +103,7 @@ export interface Frontmatter {
   principles_count?: number;
   heuristics_count?: number;
   invariants?: InvariantEntry[];
+  status?: DomainStatus;
 
   // PHILOSOPHY-specific (type: rationale)
   decision_count?: number;
@@ -119,8 +125,6 @@ export interface Frontmatter {
   inherits_from?: string[];
   related_domains?: string[];
   related_features?: string[];
-  primary_rfcs?: number[];
-  secondary_rfcs?: number[];
 
   // Context management
   load_priority?: LoadPriority;
@@ -402,6 +406,13 @@ export interface WorkflowPaths {
   generic?: string;
 }
 
+export interface CoverageConfig {
+  /** Minimum % of testable invariants with @organon-implements source claims. Default: 0 */
+  invariantImplementation?: number;
+  /** Minimum % of semi/automated protocols with @organon-implements source claims. Default: 0 */
+  protocolImplementation?: number;
+}
+
 export interface OrganonConfig {
   projectRoot: string;
   organonPaths: string[];
@@ -411,4 +422,7 @@ export interface OrganonConfig {
   freshnessThresholdHours: number;
   testGlobs?: string[];
   testIgnorePatterns?: string[];
+  sourceGlobs?: string[];
+  sourceIgnorePatterns?: string[];
+  coverage?: CoverageConfig;
 }
