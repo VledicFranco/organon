@@ -96,7 +96,6 @@ audience: [llm, human, tooling]
 ```yaml
 related_domains: [payments, tenants]
 related_features: [invoicing, reporting]
-primary_rfcs: [5, 12]            # RFCs that shaped this organon
 related_files:
   - PHILOSOPHY.md
   - ../features/invoicing/ETHOS.md

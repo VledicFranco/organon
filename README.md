@@ -11,7 +11,7 @@ audience: [llm, human]
 
 # Organon Methodology
 
-**An LLM-centric system for encoding, enforcing, and evolving project constraints.**
+**An LLM-centric system for encoding and enforcing project constraints.**
 
 [![npm @organon-methodology/tools](https://img.shields.io/npm/v/@organon-methodology/tools)](https://www.npmjs.com/package/@organon-methodology/tools)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -29,17 +29,15 @@ The core insight: **LLMs are the execution engine.** Humans define *what* the pr
 Every project activity follows this cycle:
 
 ```
-DEFINE  ──>  BIND  ──>  EXECUTE  ──>  VERIFY  ──>  COMPOUND  ──>  EVOLVE
-  |                                                                   |
-  └───────────────────────────────────────────────────────────────────┘
+DEFINE  ──>  BIND  ──>  EXECUTE  ──>  VERIFY
+  |                                      |
+  └──────────────────────────────────────┘
 ```
 
 1. **Define** — Humans encode intent as organon files (ETHOS.md, PHILOSOPHY.md, PROTOCOLS.md)
 2. **Bind** — Workflows translate protocols into LLM-executable steps (Claude skills, Cursor rules, etc.)
 3. **Execute** — LLMs read workflows and orchestrate tools
 4. **Verify** — Automated gates check that constraints hold (frontmatter, references, invariant coverage)
-5. **Compound** — Session learnings are captured as observations
-6. **Evolve** — Observations mature into methodology improvements (new invariants, refined heuristics)
 
 ### Three-Layer Architecture
 
@@ -109,17 +107,18 @@ npm install -g @organon-methodology/tools
 organon init <project-root>
 ```
 
-This creates 14 files:
+This creates 6 core files:
 - `organon.config.json` — project configuration
 - `CLAUDE.md` — agent instructions (loaded by Claude Code automatically)
 - `organon/ETHOS.md` — project constraints (placeholder, customize first)
 - `organon/PHILOSOPHY.md` — design rationale
-- `organon/PRIMER.md` — condensed methodology primer for agent onboarding
-- `organon/methodology-reference.md` — detailed methodology reference
 - `organon/protocols/PROTOCOLS.md` — development procedures
-- `organon/observations/README.md` — observation tracking directory
 - `organon/README.md` — navigation
-- `.claude/skills/` — 5 workflow skills (verify-and-health, quality-review, session-compounding, domain-feature-design, organon-file-creation)
+
+Optionally with `--install-skills`, adds 3 Claude Code workflow skills:
+- `.claude/skills/verify-and-health/` — run verification gates + health check
+- `.claude/skills/quality-review/` — semantic review of organon files
+- `.claude/skills/organon-file-creation/` — create new organon files with correct structure
 
 All files pass `organon verify` out of the box.
 
@@ -133,7 +132,7 @@ All files pass `organon verify` out of the box.
 ### Verify
 
 ```bash
-organon verify --project-root <project-root>    # Run 9 verification gates
+organon verify --project-root <project-root>    # Run 7 verification gates
 organon health --project-root <project-root>    # Health score (0-100)
 ```
 
@@ -151,7 +150,7 @@ organon upgrade <project-root> --apply    # Apply methodology updates
 ```bash
 organon init [dir]              # Scaffold a new project
 organon upgrade [dir]           # Detect and apply version updates
-organon verify                  # Run all 9 verification gates
+organon verify                  # Run all 7 verification gates
 organon health                  # Project health score (0-100)
 organon validate <file>         # Validate a single organon file
 organon generate <file>         # Auto-generate frontmatter
@@ -160,7 +159,7 @@ organon find --scope=<scope>    # Find by scope
 organon query                   # Query frontmatter across files
 organon coverage                # Invariant test coverage report
 organon generate-tests          # Scaffold tier-4 invariant tests
-organon suggest                 # Suggest automation tier upgrades
+organon suggest                 # Suggest automation tier upgrades [deprecated]
 organon export                  # Export knowledge graph as JSON
 organon release <bump>          # Version bump, tag, and release
 organon mcp                     # Start MCP server (IDE integration)
@@ -168,18 +167,16 @@ organon mcp                     # Start MCP server (IDE integration)
 
 ### Verification Gates
 
-`organon verify` runs 9 gates:
+`organon verify` runs 7 gates:
 
 | Gate | What it checks |
 |------|----------------|
 | **frontmatter** | Every organon file has valid YAML frontmatter with required fields |
-| **triplets** | Protocol-workflow-tool bindings are complete and bidirectional |
 | **references** | `inherits_from`, `loads:`, `protocol_file` paths resolve correctly |
+| **triplets** | Protocol → test binding integrity (invariant declared ↔ `@organon-invariant` annotation) |
 | **placeholder-detection** | Template placeholders have been replaced with real content |
 | **freshness** | Organon files are not stale relative to code changes |
-| **invariant-coverage** | Every invariant in ETHOS.md has at least one tier-4 test |
-| **workflow-quality** | Workflows reference valid protocols and have proper structure |
-| **tier4-tests** | Test files with `@organon-invariant` annotations use `testInvariant()` |
+| **invariant-coverage** | Every invariant in ETHOS.md has at least one `@organon-invariant` test |
 | **version-alignment** | Config methodology version matches CLI version |
 
 ---
@@ -249,15 +246,13 @@ organon/                          # This repository IS the methodology specifica
 ├── organon/                      # This project's own organon (dogfooding)
 │   ├── ETHOS.md                  # Project-level constraints
 │   ├── protocols/PROTOCOLS.md    # 11 development protocols
-│   ├── domains/                  # tools/ and testing/ domain organons
-│   └── observations/             # Empirical learnings from dogfooding
+│   └── domains/                  # tools/, testing/, and book-humans/ domain organons
 │
 ├── packages/
 │   ├── tools/                    # @organon-methodology/tools (CLI + MCP)
 │   ├── testing/                  # @organon-methodology/testing (TypeScript invariant assertions)
 │   └── testing-scala/            # organon-testing (Scala 3 invariant assertions)
 │
-└── rfcs/                         # Design proposals for methodology evolution
 ```
 
 | Resource | Audience | Purpose |
@@ -287,8 +282,6 @@ If you're an LLM setting up or working within an Organon project, here's what ma
 4. **Workflows bind protocols to your actions.** When a skill/workflow exists for a task, use it. It encodes the project's preferred procedure.
 
 5. **Child scopes inherit, never contradict.** A domain ETHOS.md can add constraints beyond the project ETHOS.md, but cannot relax them.
-
-6. **Compound every session.** Reserve time at the end of significant work sessions to capture learnings. Without explicit compounding, improvement never happens.
 
 ---
 

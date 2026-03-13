@@ -93,14 +93,12 @@ Execute   →  LLM reads workflow, orchestrates tools
     ↓
 Verify    →  Tools check organon compliance automatically
     ↓
-Evolve    →  Results inform organon updates
-    ↓
     └──── back to Define
 ```
 
 **Without the loop:** organons are documentation. LLMs might follow them, might not.
 
-**With the loop:** organons are enforced constraints. Violations are caught by tools, flagged by verification, and fed back. The methodology gets stronger each cycle.
+**With the loop:** organons are enforced constraints. Violations are caught by tools, flagged by verification, and fed back.
 
 ---
 
@@ -185,7 +183,6 @@ Component (implementation unit)
 | Domain | `organon/domains/billing/` | "Invoice amounts are never negative" |
 | Feature | `organon/features/caching/` | "Cache TTL max 24 hours" |
 | Component | `organon/components/parser/` | "Parser must not depend on runtime" |
-| Methodology | `organon/methodology/rfcs/` | "RFCs require organon impact declaration" |
 
 When an LLM starts work, it loads constraints in order: product first, then domain, then feature. By the time it begins, it has the full constraint hierarchy.
 
@@ -202,7 +199,7 @@ A few terms used throughout this documentation:
 | **Frontmatter** | YAML metadata at the top of every organon file |
 | **Workflow** | The generic term for the agent binding layer (Layer 2) |
 | **Gate** | An automated verification check (e.g., frontmatter truthfulness) |
-| **Enforcement loop** | Define -> Bind -> Execute -> Verify -> Evolve |
+| **Enforcement loop** | Define -> Bind -> Execute -> Verify |
 | **Progressive disclosure** | Layered access to files (frontmatter -> sections -> full file) |
 
 For a complete list, see the [Glossary](./07-glossary.md).

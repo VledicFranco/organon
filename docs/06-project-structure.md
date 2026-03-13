@@ -10,7 +10,6 @@ This page documents the repository layout, key relationships between directories
 - [Key Relationships](#key-relationships)
 - [Development Setup](#development-setup)
 - [Development Workflow](#development-workflow)
-- [RFC Process](#rfc-process)
 - [Health Baseline](#health-baseline)
 - [Contributing by Area](#contributing-by-area)
 
@@ -45,18 +44,10 @@ organon/
 │   ├── frontmatter-system.md         ← YAML frontmatter specification
 │   ├── three-layer-architecture.md   ← Protocols → workflows → tools
 │   ├── invariant-tracking.md         ← Invariant-to-test binding spec
-│   ├── workflow-authoring.md         ← Workflow quality attributes
 │   └── protocols/                    ← Step-by-step methodology procedures
 │
 ├── book-humans/                      ← Narrative guide (planned, outline only)
 │   └── README.md                     ← Table of contents and timeline
-│
-├── rfcs/                             ← Proposals for methodology/tooling changes
-│   ├── README.md                     ← RFC directory and lifecycle
-│   ├── 001-testing-framework.md
-│   ├── 002-compound-engineering-integration.md
-│   ├── 003-explore-before-ethos.md
-│   └── 004-workflow-context-field-collision.md
 │
 ├── organon/                          ← This project's own organon hierarchy
 │   ├── ETHOS.md                      ← Meta-organon for the organon system
@@ -70,7 +61,7 @@ organon/
 │   ├── tools/                        ← @organon-methodology/tools CLI (TypeScript, yargs)
 │   │   ├── src/
 │   │   │   ├── core/                 ← Pure logic (no I/O)
-│   │   │   ├── cli/commands/         ← 9 CLI commands
+│   │   │   ├── cli/commands/         ← CLI commands
 │   │   │   ├── mcp/                  ← MCP server (8 tools, 4 resources, 4 prompts)
 │   │   │   └── index.ts             ← Public API
 │   │   ├── package.json
@@ -140,25 +131,6 @@ cd packages/tools && npm test && cd ../..
 5. **Commit style.** Use conventional commits: `feat:`, `fix:`, `docs:`, `chore:`, `refactor:`.
 
 6. **No force-push to master.** Branch and PR for non-trivial changes.
-
----
-
-## RFC Process
-
-Significant changes to methodology or tooling go through the RFC process:
-
-| When to RFC | When to direct commit |
-|-------------|----------------------|
-| New product-level invariant | Typo fixes, clarifications |
-| New domain or feature organon | File path updates after refactor |
-| New significant CLI feature | Reference updates |
-| Constraint modification or removal | |
-
-**RFC lifecycle:** Draft -> Review -> Accepted -> Implementing -> Implemented
-
-**Same-PR principle:** Organon changes happen in the same PR as implementation. Never defer organon updates.
-
-RFCs live in `rfcs/` and use sequential numbering (`001-name.md`, `002-name.md`). See `rfcs/README.md` for the full lifecycle and existing RFCs.
 
 ---
 
