@@ -1,14 +1,13 @@
 ---
-type: reasoning
+type: rationale
 scope: domain
-domain: book-humans
+name: book-humans
 version: "1.0"
 summary: Design rationale for book-humans — why Markdown, why Typst, why manifest, why frontmatter
-token_estimate: 1000
-decisions_count: 4
-trade_offs_count: 5
-inherits_from: [organon-project, organon-book-systems]
-audience: [llm, human, architecture]
+token_estimate: 3400
+decision_count: 4
+inherits_from: [organon-project]
+audience: [llm, human]
 related_files:
   - ETHOS.md
   - README.md

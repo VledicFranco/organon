@@ -1,12 +1,26 @@
 ---
 type: constraints
 scope: domain
-domain: book-humans
+name: book-humans
 version: "1.0"
 summary: Authoring constraints for book-humans — 5 invariants, 4 principles, 8-row decision heuristics
-token_estimate: 800
-constraints_count: 5
-principles_count: 4
+token_estimate: 2800
+invariants:
+  - id: INV-BKHU-1
+    name: every-chapter-has-frontmatter
+    judgment_call: true
+  - id: INV-BKHU-2
+    name: markdown-only-in-chapters
+    judgment_call: true
+  - id: INV-BKHU-3
+    name: book-yaml-is-authoritative-manifest
+    judgment_call: true
+  - id: INV-BKHU-4
+    name: pdfs-go-to-tmp
+    judgment_call: true
+  - id: INV-BKHU-5
+    name: visual-changes-in-template-only
+    judgment_call: true
 heuristics_count: 8
 inherits_from: [organon-project]
 audience: [llm, human]

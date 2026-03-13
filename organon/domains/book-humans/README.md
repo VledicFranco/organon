@@ -1,10 +1,10 @@
 ---
 type: navigation
 scope: domain
-domain: book-humans
+name: book-humans
 version: "1.0"
 summary: Navigation for book-humans domain — philosophical book on LLM nature, best practices, and Organon derivation methodology
-token_estimate: 150
+token_estimate: 700
 provides: [domain-governance, authoring-constraints, design-philosophy]
 parent: organon
 related_files:
