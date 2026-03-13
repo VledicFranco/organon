@@ -3,20 +3,17 @@ type: rationale
 scope: meta
 name: three-layer-architecture
 version: "1.4"
-summary: The enforcement loop — protocols, workflows, tools, verification, and epistemic categories bind organons to LLM execution and external knowledge systems
+summary: The enforcement loop — protocols, bindings, tools, and verification connect organon constraints to code and tests
 token_estimate: 12200
 inherits_from: [meta-organon]
 load_priority: high
 required_for:
   - protocol_creation
-  - workflow_creation
   - tool_creation
-  - methodology_evolution
   - methodology_enforcement
 audience: [llm, human, tooling]
 related_files:
   - patterns.md
-  - workflow-authoring.md
   - invariant-tracking.md
   - ETHOS.md
 ---
@@ -106,39 +103,32 @@ Three layers bind declarative knowledge to executable behavior. Together they fo
 ```yaml
 # In PROTOCOLS.md frontmatter
 protocols:
-  - id: PROTO-RFC-1
-    name: RFC Implementation
-    steps: 5
+  - id: PROTO-DEPLOY-1
+    name: Deploy to Production
+    steps: 4
     automation_tier: automated    # automated | semi-automated | manual
-    workflow: implement-rfc       # workflow binding name
-    tools: [rfc:context, rfc:verify, organon:generate]
-    complexity: high
+    tools: [organon:verify, organon:health, deploy:run]
+    complexity: medium
 ```
 
 ```markdown
 # In PROTOCOLS.md body
 
-## Protocol 1: RFC Implementation
+## Protocol 1: Deploy to Production
 
-### Phase 0: Context Loading
-1. Read product organons (/ETHOS.md, /PHILOSOPHY.md)
-2. Read RFC Section 1 (Organon Impact)
-3. Load affected domain organons
+### Phase 0: Pre-flight
+1. Run organon verify — all gates must pass
+2. Run organon health — score must be ≥ 80
 
-### Phase 1: Code Changes
-1. Implement domain layer first
-2. Write tests proving invariants hold
+### Phase 1: Deploy
+1. Run deploy:run with target environment
 
-### Phase 2: Organon Updates
-1. Create/update organons declared in Section 1
-2. Regenerate auto-generated docs
+### Phase 2: Verification
+1. Run smoke tests against deployed environment
+2. Confirm all critical paths respond
 
-### Phase 3: Verification
-1. Run all verification gates
-2. All gates must pass
-
-### Phase 4: Completion
-1. Update status, increment versions, commit
+### Phase 3: Completion
+1. Tag the release, update deployment log
 ```
 
 **Key properties:**
@@ -190,141 +180,23 @@ Not every protocol needs a workflow. Use these criteria:
 
 ---
 
-## Layer 2: Workflows (Agent Binding)
+## Layer 2: Bindings (Agent Execution)
 
-**What they are:** The binding layer that translates "what must happen" (protocol) into "what the agent does" (tool invocations in sequence). A workflow can be an agent skill, a system prompt directive, a runbook, a CI/CD pipeline, or any other discoverable mechanism.
+**What they are:** The mechanism that connects protocol declarations to LLM execution. A binding can be an agent skill, a system prompt directive, a runbook, a CI/CD pipeline, or any other discoverable format — Organon does not prescribe the format.
 
-### What counts as a workflow
+**What Organon cares about:** The protocol declares intent (`PROTO-DEPLOY-1: Deploy to Production`). The binding connects that declaration to execution. The specific format is up to the project and the agent technology.
 
-A workflow is any **easily discoverable mechanism** that guides an LLM in instantiating a protocol. The key properties: the agent can find it, it references a protocol, and it orchestrates tools. Different environments offer different workflow mechanisms:
+**The minimal contract:** Any binding should reference its protocol (by ID or file path) so the traceability chain is intact: Protocol → Binding → Tools → Verification.
 
-| Workflow Mechanism | Example | Discovery Method | Best For |
-|--------------------|---------|------------------|----------|
-| **Agent skills** | Claude Code `.claude/skills/`, Cursor `.cursor/rules/` | Loaded by agent framework | Structured, multi-step protocols |
-| **System prompt directives** | `CLAUDE.md`, `.cursorrules`, `.github/copilot-instructions.md` | Auto-loaded at session start | Always-on constraints and simple protocols |
-| **Runbooks** | `organon/workflows/<name>.md` | Agent reads as context | Any LLM, no framework dependency |
-| **Custom assistants** | OpenAI Assistants, Custom GPTs | Pre-configured in platform | Dedicated single-purpose agents |
-| **CI/CD pipeline definitions** | GitHub Actions, GitLab CI jobs | Triggered by events | Enforcement outside the agent session |
-| **Git hooks** | pre-commit, pre-push scripts | Triggered by git operations | Automated gate enforcement |
+| Binding format | Example |
+|----------------|---------|
+| Agent skill | `.claude/skills/deploy/skill.md` |
+| System prompt | `CLAUDE.md` inline instructions |
+| Runbook | `organon/workflows/deploy.md` |
+| CI/CD job | GitHub Actions workflow |
+| Git hook | `pre-push` script |
 
-**Agent skills are the most common workflow mechanism** because they are the most structured and discoverable form. But a plain markdown runbook that an LLM reads and follows is equally valid — the universal contract applies regardless of mechanism.
-
-### The universal contract
-
-Regardless of which mechanism hosts them, all workflow bindings must:
-
-1. **Reference their protocol** — via protocol ID and file path (bidirectional traceability)
-2. **Specify tool orchestration** — which tools to run, in what order, with what arguments
-3. **Provide context loading guidance** — which organon files to load (`loads` array) before execution
-4. **Handle errors** — what to do when tools fail or gates don't pass
-5. **Be discoverable** — the agent can find and invoke the workflow (by command, auto-load, slash command, or autonomous detection)
-
-### Agent-specific locations
-
-The workflow layer is the only layer that varies by agent technology. The protocol and tool layers are universal.
-
-| Agent Technology | Workflow Location | Format |
-|------------------|-------------------|--------|
-| Claude Code | `.claude/skills/<name>/skill.md` | Markdown with YAML frontmatter |
-| Cursor | `.cursor/rules/<name>.md` or `.cursorrules` | Markdown rules |
-| Custom LLM agent | `workflows/<name>.md` or agent config | Varies |
-| OpenAI Assistants | Instructions or function definitions | JSON/text |
-| Any LLM (generic) | `organon/workflows/<name>.md` | Markdown (read by LLM directly) |
-
-### Workflow frontmatter contract
-
-Regardless of agent technology, workflow definitions should include:
-
-```yaml
----
-name: implement-rfc                    # Workflow identifier
-protocol_id: PROTO-RFC-1              # ← References protocol (REQUIRED)
-protocol_file: organon/methodology/rfcs/PROTOCOLS.md  # ← Protocol source (REQUIRED)
-tools: [rfc:context, rfc:verify, organon:generate]     # Tools orchestrated
-loads:                                 # Organon files to load before execution
-  - organon/methodology/rfcs/PROTOCOLS.md
-  - /ETHOS.md
----
-```
-
-### Example: Claude Code skill binding
-
-```markdown
----
-name: implement-rfc
-invocation: /implement-rfc
-user-invocable: true
-protocol_id: PROTO-RFC-1
-protocol_file: organon/methodology/rfcs/PROTOCOLS.md
-tools: [rfc:context, rfc:verify, organon:generate]
-loads:
-  - organon/methodology/rfcs/PROTOCOLS.md
-  - /ETHOS.md
-  - /PHILOSOPHY.md
----
-
-# RFC Implementation Workflow
-
-Implements PROTO-RFC-1 from `organon/methodology/rfcs/PROTOCOLS.md`.
-
-## Phase 0: Context Loading
-1. Load product organons:
-   ```bash
-   cat /ETHOS.md && cat /PHILOSOPHY.md
-   ```
-2. Load RFC context:
-   ```bash
-   npm run rfc:context -- --rfc=<N>
-   ```
-
-## Phase 1: Code Changes
-(Project-specific — implement domain layer, write tests proving invariants hold)
-
-## Phase 2: Organon Updates
-1. Regenerate docs:
-   ```bash
-   npm run organon:generate
-   ```
-2. Validate frontmatter:
-   ```bash
-   npm run organon:validate-frontmatter
-   ```
-...
-```
-
-### Example: Generic LLM workflow (no specific agent)
-
-For LLMs without a native skill system, a workflow can be a plain markdown file the LLM reads:
-
-```markdown
----
-name: implement-rfc
-protocol_id: PROTO-RFC-1
-protocol_file: organon/methodology/rfcs/PROTOCOLS.md
-tools: [rfc:context, rfc:verify, organon:generate]
----
-
-# RFC Implementation Workflow
-
-When implementing an RFC, follow these steps exactly:
-
-## Phase 0: Context Loading
-Read: /ETHOS.md, /PHILOSOPHY.md, and the RFC file.
-Run: `rfc:context --rfc=<N>` to load affected domain organons.
-
-## Phase 1: Code Changes
-Implement domain layer first. Write tests proving invariants hold.
-
-## Phase 2: Organon Updates
-Run: `organon:generate` to regenerate auto-generated docs.
-Run: `organon:validate-frontmatter` to check metadata.
-
-## Phase 3: Verification
-Run: `rfc:verify --rfc=<N>` to check all gates.
-If any gate fails, fix the issue and re-run.
-```
-
-The LLM reads this file as part of its context and follows the instructions. No special agent framework needed.
+The protocol and tool layers are universal. The binding layer is the only layer that varies by agent technology.
 
 ---
 
@@ -379,32 +251,20 @@ The three layers form a closed loop that makes the methodology self-enforcing:
                        ▼
 ┌──────────────────────────────────────────────────────────────┐
 │  2. BIND                                                     │
-│     Workflow translates protocol into LLM-executable steps   │
-│     → Workflow bindings reference protocol + tools             │
+│     Code and tests reference invariant IDs                   │
+│     → @organon-invariant annotations, binding layer          │
 └──────────────────────┬───────────────────────────────────────┘
                        ▼
 ┌──────────────────────────────────────────────────────────────┐
 │  3. EXECUTE                                                  │
-│     LLM reads workflow, orchestrates tools in sequence       │
-│     → Tool invocations: generate, verify, test               │
+│     LLM works within the encoded constraints                 │
+│     → Implements code, writes tests, invokes tools           │
 └──────────────────────┬───────────────────────────────────────┘
                        ▼
 ┌──────────────────────────────────────────────────────────────┐
 │  4. VERIFY                                                   │
 │     Tools check organon compliance, invariants hold          │
 │     → Verification results: pass/fail per gate               │
-└──────────────────────┬───────────────────────────────────────┘
-                       ▼
-┌──────────────────────────────────────────────────────────────┐
-│  5. COMPOUND                                                 │
-│     Session learnings captured as persistent observations    │
-│     → Observation files in organon/observations/             │
-└──────────────────────┬───────────────────────────────────────┘
-                       ▼
-┌──────────────────────────────────────────────────────────────┐
-│  6. EVOLVE                                                   │
-│     Results inform organon updates, new invariants captured  │
-│     → Updated ETHOS.md, new protocols, refined heuristics    │
 └──────────────────────┬───────────────────────────────────────┘
                        │
                        └──────────────── back to DEFINE ───────→
@@ -414,9 +274,7 @@ The three layers form a closed loop that makes the methodology self-enforcing:
 
 **Without the loop:** Organons are documentation. LLMs read them, maybe follow them, maybe don't. No way to know. Drift accumulates silently.
 
-**With the loop:** Organons are enforced constraints. Every implementation goes through Define → Bind → Execute → Verify → Compound → Evolve. Violations are caught by tools, flagged by verification, and fed back to the LLM. The methodology gets stronger with each cycle because new invariants capture new learnings.
-
-**Observations bridge COMPOUND and EVOLVE.** The COMPOUND phase captures session insights as structured observation files (`organon/observations/NNN-name.md`). These persist across sessions, allowing patterns to accumulate. When an observation matures from signal to actionable pattern, it graduates into EVOLVE — becoming an RFC, heuristic addition, or tool improvement. See the [Observation Accumulation Pattern](./patterns.md#observation-accumulation-pattern) for the convention.
+**With the loop:** Organons are enforced constraints. Every implementation goes through Define → Bind → Execute → Verify. Violations are caught by tools, flagged by verification, and fed back to the LLM.
 
 ### The LLM's role in the loop
 
@@ -441,10 +299,10 @@ Organon files implicitly encode three epistemic categories — types of knowledg
 | Category | Definition | What it captures | Organon mapping |
 |----------|-----------|-----------------|-----------------|
 | **Constraint** | Normative declaration — what *should* be true | Design intent, architectural boundaries, behavioral limits | ETHOS.md invariants (`type: constraints`) |
-| **Assertion** | Descriptive claim — what *is* empirically observed | Session learnings, measured outcomes, discovered patterns | Observation files (`type: rationale`, path in `observations/`) |
+| **Assertion** | Descriptive claim — what *is* empirically observed | Learnings, measured outcomes, discovered patterns | User-defined rationale files |
 | **Rule** | Enforcement logic — what *must* hold, checked automatically | Verification gates, protocol steps, CI checks | PROTOCOL.md procedures (`type: procedures`) |
 
-**These are not new artifact types.** They are an epistemic lens on existing artifacts. An ETHOS.md file is still `type: constraints` — but its epistemic category is "constraint." An observation file is still `type: rationale` — but its epistemic category is "assertion."
+**These are not new artifact types.** They are an epistemic lens on existing artifacts. An ETHOS.md file is still `type: constraints` — but its epistemic category is "constraint."
 
 ### Lifecycle through the enforcement loop
 
@@ -454,11 +312,11 @@ Each category maps to specific phases of the enforcement loop:
 Category        Primary loop phase      How it enters the loop
 ─────────────   ──────────────────      ──────────────────────
 Constraint      DEFINE                  Human writes ETHOS.md invariant
-Assertion       COMPOUND                Agent captures observation during work
 Rule            VERIFY                  Gate checks constraint against code
+Assertion       (user-defined)          External to the core loop
 ```
 
-**Constraints** are created in DEFINE and consumed in VERIFY (gates check whether code satisfies them). **Assertions** are created in COMPOUND (session learnings) and consumed in EVOLVE (when they mature into new constraints or heuristics). **Rules** are created alongside tools in the BIND/EXECUTE phases and operate in VERIFY.
+**Constraints** are created in DEFINE and consumed in VERIFY (gates check whether code satisfies them). **Rules** are created alongside tools in the BIND/EXECUTE phases and operate in VERIFY. **Assertions** are optional user-defined learnings — Organon provides the export format but does not prescribe how they are captured.
 
 ### Knowledge interoperability
 
@@ -491,32 +349,15 @@ The `organon export` command produces a structured JSON representation classifie
 
 ## Bidirectional References (Invariant)
 
-Workflows and protocols **must reference each other**. This is a hard invariant — not optional.
+Organon files and code must reference each other. This is a hard invariant — not optional.
 
-**Protocol → Workflow (in PROTOCOLS.md frontmatter):**
-```yaml
-protocols:
-  - id: PROTO-RFC-1
-    automation_tier: automated
-    workflow: implement-rfc    # ← references workflow
-```
+**Protocol → Test:** A protocol declaring an invariant must have at least one `@organon-invariant` annotated test verifying it.
 
-**Workflow → Protocol (in workflow frontmatter):**
-```yaml
-protocol_id: PROTO-RFC-1                              # ← references protocol ID
-protocol_file: organon/methodology/rfcs/PROTOCOLS.md   # ← references protocol file
-```
+**Test → Protocol:** Each annotated test references a stable invariant ID (`INV-SCOPE-N`) that exists in an ETHOS.md file.
 
-**Validation rules:**
-1. If `automation_tier == "automated"`, `workflow` field is required
-2. If `automation_tier == "semi-automated"` or `"manual"`, `workflow` field must be absent (these tiers use tools directly or no automation)
-3. Workflow file must exist (in agent-specific location)
-4. Workflow must include `protocol_id` matching protocol ID
-5. Workflow must include `protocol_file` pointing to PROTOCOLS.md
-6. Orphaned workflows (no protocol) are validation errors
-7. Phantom automation (protocol claims automated but workflow doesn't exist) are validation errors
+**Organon → Code:** Domain organons reference the code they constrain (via components.md or direct paths).
 
-**Why bidirectional:** Prevents orphaned workflows, incomplete protocols, and silent drift between what the protocol says and what the workflow does.
+**Why bidirectional:** Prevents orphaned constraints (invariant declared but never tested), phantom coverage (test references a non-existent invariant), and silent drift between what the organon says and what the code does.
 
 ---
 
@@ -528,11 +369,10 @@ Verification is what distinguishes an enforcement loop from wishful thinking. Wi
 
 | Category | What it checks | Example |
 |----------|----------------|---------|
-| **Reference integrity** | File paths, RFC references, event references in organons | `organon:verify` |
+| **Reference integrity** | File paths and organon references resolve | `organon:verify` |
 | **Frontmatter truthfulness** | Counts match actual content, token estimates are accurate | `organon:validate-frontmatter` |
-| **Triplet integrity** | Protocol ↔ workflow ↔ tool bindings are complete | `organon:verify-triplets` |
 | **Freshness** | Auto-generated files are not stale | Timestamp checks on components.md |
-| **Invariant coverage** | Every invariant in ETHOS.md has a corresponding test | `organon:test-coverage` |
+| **Invariant coverage** | Every invariant in ETHOS.md has a corresponding `@organon-invariant` test | `organon:test-coverage` |
 | **Health** | Overall system integrity score | `organon:health` |
 
 ### Verification as CI gate
@@ -601,10 +441,9 @@ A universal checklist for CI gates. Adapt per project:
 | **All tests pass** | Tiers 1-4 | Yes |
 | **Coverage targets met** | Per-tier thresholds | Yes |
 | **Invariant coverage** | Every ETHOS.md invariant has ≥1 tier-4 test | Yes |
-| **Reference integrity** | File paths, RFC refs, event refs exist | Yes |
+| **Reference integrity** | File paths and organon refs exist | Yes |
 | **Freshness** | Auto-generated files match current state | Yes |
 | **Frontmatter truthfulness** | Counts, token estimates, relationships are accurate | Yes |
-| **RFC status** | If RFC-driven, RFC state matches implementation state | Yes |
 
 **Principle:** Verification gates **fail builds**, not just warn. A warning is an invitation to ignore. A failed build is a constraint.
 
@@ -625,7 +464,7 @@ A universal checklist for CI gates. Adapt per project:
 - `GATE_FAIL` — Gate failed with errors (blocks merge)
 - `GATE_WARN` — Gate passed with warnings (info only, doesn't block)
 
-See [workflow-authoring.md](./workflow-authoring.md) for workflow-quality gate error codes (`WORKFLOW_MISSING_PROTOCOL_ID`, `WORKFLOW_BROKEN_LOADS_REF`, etc.). Other gates use similar diagnostic code patterns.
+Gates use structured diagnostic codes for CI reporting (e.g., `FRONTMATTER_MISSING_FIELD`, `REFERENCE_BROKEN_PATH`, `INVARIANT_UNCOVERED`).
 
 ### Drift detection
 
@@ -719,26 +558,12 @@ make organon-verify             # Makefile
 python -m organon.verify        # Python
 ```
 
-### 3. Promote to workflow when criteria met
+### 3. Close the loop with verification
 
-Once a protocol is complex enough (≥5 steps, error-prone, frequent):
-
-```yaml
-protocols:
-  - id: PROTO-EXAMPLE-1
-    automation_tier: automated   # ← promote
-    workflow: example-workflow    # ← add binding
-    tools: [example:step1, example:step2]
-```
-
-Then create the workflow in your agent's configuration.
-
-### 4. Close the loop with verification
-
-Add verification tools that check the binding integrity:
-- Do all automated protocols have workflows?
-- Do all workflows reference valid protocols?
+Add verification tools that check binding integrity:
+- Does every invariant have a `@organon-invariant` test?
 - Do all referenced tools exist?
+- Are all file paths in organons valid?
 
 ---
 
@@ -763,10 +588,10 @@ A full three-layer architecture implementation typically includes:
 
 | Layer | Example Implementation | Typical Scale |
 |-------|----------------------|---------------|
-| **Protocols** | `organon/methodology/*/PROTOCOLS.md` | 5-15 protocol files, 15-50 individual protocols |
-| **Workflows** | Agent-specific bindings (Claude skills, Cursor rules, runbooks) | 5-10 core workflows |
+| **Protocols** | `organon/*/PROTOCOLS.md` | 5-15 protocol files, 15-50 individual protocols |
+| **Bindings** | Agent skills, system prompts, runbooks, CI jobs | Project-specific |
 | **Tools** | Project scripts (npm, make, bash, Python) | 20-50 tools |
-| **Verification** | Multi-gate system (frontmatter, triplet-integrity, coverage, freshness) | 5-10 gates targeting 100% invariant coverage |
+| **Verification** | Multi-gate system (frontmatter, coverage, references, freshness) | 5-8 gates targeting 100% invariant coverage |
 
 **Expected Benefits:**
 - Protocol execution time reduced 30-50% (consistency, fewer mistakes)
@@ -779,15 +604,12 @@ A full three-layer architecture implementation typically includes:
 | Tool | Purpose |
 |------|---------|
 | `organon:generate` | Auto-generate components.md (dual mapping) |
-| `organon:verify` | Check file/RFC/event references |
+| `organon:verify` | Check file references and organon integrity |
 | `organon:validate-frontmatter` | Validate YAML frontmatter truthfulness |
 | `organon:generate-frontmatter` | Auto-generate frontmatter from content |
 | `organon:query` | Query frontmatter for context budget planning |
 | `organon:health` | Health dashboard (coverage, freshness, validation) |
-| `organon:verify-triplets` | Check protocol↔workflow↔tool binding integrity |
-| `organon:suggest-tools` | Identify protocols that should be automated |
-| `rfc:context` | Load relevant organon context for RFC work |
-| `rfc:verify` | Run 8-gate verification before merge |
+| `organon:coverage` | Invariant-to-test coverage report |
 
 ---
 
@@ -797,15 +619,12 @@ A full three-layer architecture implementation typically includes:
 - **[Frontmatter System](./frontmatter-system.md)** — YAML metadata schema for organon files
 - **[Code-to-Organon Mapping](./patterns.md#code-to-organon-mapping-pattern)** — Auto-generated `components.md` for bidirectional code↔organon navigation (drift detection verifies these)
 - **[Context Loading Strategy](./patterns.md#context-loading-strategy-pattern)** — Token-budget-aware organon loading for LLM sessions
-- **Bidirectional Traceability** — Protocol ↔ workflow ↔ tool, fully linked
-- **Progressive Automation** — Manual → tools → workflows as procedures mature
-- **Executable Documentation** — Documentation that drives code execution, not just describes it
+- **Invariant Traceability** — ETHOS.md invariant → `@organon-invariant` test → coverage gate, fully linked
 
 ## Related Files
 
 | File | Relationship |
 |------|--------------|
 | [overview.md](./overview.md) | High-level methodology overview |
-| [workflow-authoring.md](./workflow-authoring.md) | Workflow quality attributes (Layer 2) |
 | [invariant-tracking.md](./invariant-tracking.md) | Invariant-to-test tracking (verification tier 4) |
-| [templates.md](./templates.md) | Workflow template scaffold |
+| [templates.md](./templates.md) | Organon file templates |

@@ -6,8 +6,8 @@ version: "1.0"
 summary: Core invariants, principles, and heuristics for creating organons — the foundational rules every organon must follow
 token_estimate: 5450
 invariants_count: 10
-principles_count: 9
-heuristics_count: 25
+principles_count: 8
+heuristics_count: 19
 invariants:
   - id: INV-META-1
     name: ethos-required
@@ -93,46 +93,9 @@ related_files:
 
 8. **Progressive disclosure over arbitrary limits.** There are no hard line limits on organon files. Token efficiency is achieved through layered access (frontmatter → section → full file), not by truncating content. Quality and completeness of content must never be sacrificed for brevity.
 
-9. **The enforcement loop must be closable.** Every protocol with `automation_tier: automated` must have a corresponding workflow binding and tools that can verify compliance. Protocols without enforcement mechanisms are suggestions, not constraints. The loop: Define (organon) → Bind (workflow) → Execute (tools) → Verify (automated checks) → Evolve (update organon). See `three-layer-architecture.md`.
+9. **The enforcement loop must be closable.** Every protocol must have tools that can verify compliance. Protocols without enforcement mechanisms are suggestions, not constraints. The loop: Define (organon) → Bind (code + tests) → Execute (tools) → Verify (automated checks). See `three-layer-architecture.md`.
 
 10. **LLMs are the primary interface.** Organons are written for LLM consumption first. LLMs read the organon, execute protocols via workflows, orchestrate tools, and surface results to humans. Humans author and review; LLMs execute and enforce. Every organon design decision must optimize for LLM parsing, LLM action, and LLM-human feedback.
-
----
-
-## Core Properties
-
-The Organon methodology achieves compounding improvements through three structural properties. These are not aspirations but fundamental characteristics of how the methodology works.
-
-### 1. Recursive Structure
-
-Each loop iteration (Define → Bind → Execute → Verify → Compound → Evolve) feeds learnings into the next. Not linear progression but circular improvement. Work in Cycle N generates knowledge that makes Cycle N+1 faster. This recursion is not accidental—it's the fundamental mechanism of the methodology.
-
-**Example:** Cycle 1 manually loads RFC context. Compound phase creates `rfc:load-context` tool. Cycle 2 uses the tool (faster). Cycle 3 adds automation. Each cycle builds on the previous.
-
-### 2. Self-Correction
-
-The methodology improves itself through:
-- **Dogfooding:** Methodology documents itself (meta-organon)
-- **RFC-driven evolution:** Constraints that prove impractical get refined
-- **Workflow refinement:** Unclear steps get clarified based on execution
-
-When methodology constraints don't work, they evolve. This prevents stagnation and ensures the methodology stays practical, not dogmatic.
-
-### 3. Progressive Automation
-
-Work moves through tiers over time:
-
-```
-Manual (Tier 1) → Human does every step
-    ↓ (recognize pattern)
-Semi-automated (Tier 2) → Tools assist, humans orchestrate
-    ↓ (automation matures)
-Automated (Tier 3) → Tools execute, humans review
-```
-
-Each tier unlocks the next: automation creates time → time enables more automation → more automation creates more time. This is the compounding mechanism—improvements accumulate exponentially, not linearly.
-
-**Result:** Compounding improvements emerge naturally from these three properties. The methodology is DESIGNED to compound, not just ASPIRE to compound. Compounding is an emergent property of the structure, not a separate goal.
 
 ---
 
@@ -140,21 +103,19 @@ Each tier unlocks the next: automation creates time → time enables more automa
 
 1. **LLM-centric design.** Organons exist to be consumed and executed by LLMs. Every design decision — frontmatter, standardized sections, decision heuristics, protocol bindings — optimizes for LLM parsing and action. LLMs are the interface between human intent and automated enforcement. Humans define the "what" and "why"; LLMs execute the "how."
 
-2. **Enforcement through automation.** Organons that aren't enforced become fiction. Every constraint should have a path to automated verification. Protocols bind to workflows that orchestrate tools that check invariants. The enforcement loop (Define → Bind → Execute → Verify → Compound → Evolve) is what makes organons real. A constraint without an enforcement path is a suggestion.
+2. **Enforcement through automation.** Organons that aren't enforced become fiction. Every constraint should have a path to automated verification. The enforcement loop (Define → Bind → Execute → Verify) is what makes organons real. A constraint without an enforcement path is a suggestion.
 
-3. **Recursive improvement by design.** The methodology improves itself through iteration. Each cycle generates learnings that feed into the next cycle. Improvements compound: better tools → faster execution → more time for improvement → even better tools. This recursive nature is not accidental—it's the mechanism that makes the methodology sustainable at scale. Compounding is an emergent property of recursive collaboration, not a separate goal.
+3. **Recursive improvement by design.** The methodology improves itself through iteration. Each cycle generates learnings that feed into the next. The mechanism: better tools → faster execution → more consistent results → better tools.
 
-4. **Compound deliberately.** Reserve 5-10% of every significant work session for improving the system itself (tools, workflows, protocols). Without explicit time allocation, improvement never happens. Compounding is distinct from evolution: compound improves methodology (how we work), evolve updates constraints (what we're building). The Compound step in the enforcement loop makes this explicit.
+4. **Clarity over completeness.** A short, clear ethos beats a comprehensive but vague one.
 
-5. **Clarity over completeness.** A short, clear ethos beats a comprehensive but vague one.
+5. **Progressive disclosure over monolithic loading.** Structure every file so agents can access it in layers — frontmatter for discovery, sections for targeted loading, full file only when needed. This is how token efficiency is achieved at scale.
 
-6. **Progressive disclosure over monolithic loading.** Structure every file so agents can access it in layers — frontmatter for discovery, sections for targeted loading, full file only when needed. This is how token efficiency is achieved at scale.
+6. **Constraints over explanations.** State what to do, not why. Put "why" in philosophy.
 
-7. **Constraints over explanations.** State what to do, not why. Put "why" in philosophy.
+7. **Specificity over generality.** "Never force-push to master" beats "Be careful with git."
 
-8. **Specificity over generality.** "Never force-push to master" beats "Be careful with git."
-
-9. **Actionable over aspirational.** "Run tests before merging" beats "Maintain code quality."
+8. **Actionable over aspirational.** "Run tests before merging" beats "Maintain code quality."
 
 ---
 
@@ -232,17 +193,6 @@ Progressive disclosure achieves the same goal (token efficiency) without sacrifi
 | New invariant added to ETHOS.md | Ask: "Can this be verified by a tool?" If yes, create or update a verification tool. If not, document how humans should review it. |
 | Protocol has ≥5 steps and is used frequently | Promote to `automation_tier: automated`, create a workflow binding. |
 | Protocol is used rarely or requires judgment | Keep at `manual` tier. Not everything needs automation. |
-
-### When evolving organons
-
-| Situation | Action |
-|-----------|--------|
-| New product-level invariant | RFC required — high bar, team consensus needed. |
-| New domain or feature organon | RFC for the capability; organon created in same PR as implementation. |
-| Constraint modified or removed | RFC required — document rationale for change and impact. |
-| Clarification, typo, or reference fix | Direct commit, no RFC needed. |
-| File paths changed after refactor | Direct commit, no RFC needed. |
-| Unsure whether RFC is needed | If the change introduces or modifies constraints, use an RFC. If it's maintenance, commit directly. |
 
 ### When to split a file
 
@@ -381,11 +331,8 @@ audience: [llm, human, tooling]
 | Splitting files just for size | Breaks coherence, creates navigation overhead | Keep cohesive content together. Use frontmatter + sections for efficiency. |
 | Non-standard section headings | Agents can't do section-level loading | Use the standardized headings from Structure Templates |
 | Duplicating constraints across scopes | Maintenance burden, divergence | Child inherits from parent |
-| Open enforcement loop | Protocol exists but no workflow or tool verifies it | Close the loop: add workflow binding + verification tool |
+| Open enforcement loop | Protocol exists but no tool verifies it | Close the loop: add a verification tool or test |
 | Human-optimized organon | Prose-heavy, no structured sections, no frontmatter | Restructure for LLM consumption: frontmatter, standardized headings, decision heuristic tables |
-| Orphaned workflow | Workflow exists without protocol reference | Add `protocol_id` and `protocol_file`, or delete the orphan |
-| Phantom automation | Protocol claims `automated` but workflow doesn't exist | Create workflow or change tier to `manual` |
-| Ad-hoc organon evolution | Constraints added without RFC or review | Use RFC process for constraint changes; direct commits only for maintenance |
 | Deferred organon update | Code lands but organon update is "done later" | Same-PR principle: organon changes in the same PR as implementation |
 | Mixed methodology and product | Process docs in product scopes, product docs in methodology | Methodology for how-we-build; domains/features for what-it-does |
 | Untested invariant | Invariant in ETHOS.md but no tier-4 test verifies it | Add organon test with `@organon-invariant` annotation referencing the invariant |
@@ -402,7 +349,6 @@ audience: [llm, human, tooling]
 | [patterns.md](./patterns.md) | Concrete patterns that implement these invariants |
 | [three-layer-architecture.md](./three-layer-architecture.md) | Enforcement loop architecture |
 | [invariant-tracking.md](./invariant-tracking.md) | How invariants bind to tests |
-| [workflow-authoring.md](./workflow-authoring.md) | Workflow quality attributes |
 | [frontmatter-system.md](./frontmatter-system.md) | Progressive disclosure mechanism |
 
 ---

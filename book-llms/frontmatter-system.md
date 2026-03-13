@@ -73,8 +73,6 @@ token_estimate: number    # Approximate full file token count
 | `procedures` | PROTOCOL.md, protocols/*.md | Step-by-step procedures with verification |
 | `mapping` | components.md | Auto-generated code-to-domain mapping |
 
-**Note on workflows:** Workflows (Layer 2 bindings between protocols and tools) use agent-specific formats and locations (e.g., Claude skills, Cursor rules, runbooks). If a workflow is stored as an organon file, use `type: procedures` with workflow-specific frontmatter fields (`protocol_id`, `protocol_file`, `tools`, `loads`). See [templates.md](./templates.md) for the workflow template.
-
 ### Scope Enum
 
 | Value | Description |
@@ -115,34 +113,6 @@ pattern_count: number          # For pattern catalogs (e.g., patterns.md) — nu
 ```
 
 **Note:** Custom `*_count` fields are allowed for catalog-style rationale files. Examples: `pattern_count`, `antipattern_count`, `example_count`. Use when the file enumerates a collection of items that agents may need to count without loading the full content.
-
-### RFCs (`type: rationale`, lifecycle-tracked)
-
-```yaml
-status: string                # draft | review | accepted | implementing | implemented | superseded | withdrawn
-created: string               # ISO 8601 date
-author: string                # Author name or agent identifier
-related_files: string[]       # File paths this RFC impacts or references
-```
-
-RFCs are rationale files with lifecycle tracking. The `status` field is the most important for progressive disclosure — an implementer agent scanning RFC frontmatter can skip `implemented` or `withdrawn` RFCs immediately. Use `related_files` to list impacted organon and code files so agents can trace RFC→file relationships without loading the full RFC.
-
-### Observations (`type: rationale`, path in `observations/`)
-
-```yaml
-status: string                # signal | pattern | actionable | resolved
-created: string               # ISO 8601 date
-author: string                # Author name or agent identifier
-```
-
-Observations are rationale files capturing empirical learnings from work sessions. The `status` field tracks lifecycle maturity:
-
-- **signal** — Initial observation, single instance, may not recur
-- **pattern** — Observed multiple times, emerging trend
-- **actionable** — Clear enough to drive a change (RFC, heuristic, tool improvement)
-- **resolved** — Graduated into the methodology (became an RFC, invariant, or heuristic)
-
-The `status` field is optional — existing observations without it remain valid. Agents can use it to filter: skip `resolved` observations (already incorporated), prioritize `actionable` ones.
 
 ### PROTOCOL.md (`type: procedures`)
 
@@ -251,24 +221,6 @@ Optional: `## Progressive Disclosure Model`, `## Out of Scope`, `## Failure Mode
 
 Optional: `## What This Is Not`
 
-### RFC sections (`type: rationale`, `scope: product`)
-
-RFCs use `type: rationale` but have their own section contract optimized for two reading paths: **reviewers** (full read) and **implementer agents** (targeted sections).
-
-| Heading | Content | Typical size | Implementer needs? |
-|---------|---------|-------------|-------------------|
-| `## Status` | Lifecycle state + transition log | 5-10 lines | Yes (skip if not Accepted/Implementing) |
-| `## Problem Statement` | Gap description, current/desired state | 10-20 lines | Skim |
-| `## Proposed Solution` | High-level approach | 5-10 lines | Yes |
-| `## Organon Impact` | Create/Update/Delete with full file content | 30-150 lines | Yes (primary section) |
-| `## Technical Implementation` | Architecture, API, plan, design decisions | 50-200 lines | Yes (primary section) |
-| `## Success Metrics` | Measurable outcomes | 5-10 lines | Yes |
-| `## Open Questions` | Resolved and still-open questions | 10-30 lines | Only "Still Open" |
-
-Optional: `## Risks & Mitigations`, `## Dependencies`, `## Approval Process`, `## Next Steps`
-
-**Implementer reading path:** Status → Proposed Solution → Organon Impact → Technical Implementation → Open Questions (still open only). Skip Problem Statement details, Risks, Approval Process.
-
 ### PROTOCOL.md sections
 
 | Heading | Content | Typical size |
@@ -312,7 +264,6 @@ Frontmatter must be **truthful** — automated tests enforce accuracy.
 - `inherits_from` organons exist
 - `related_domains` reference existing domains
 - `related_features` reference existing features
-- `primary_rfcs` reference existing RFC files
 
 ### Truthfulness Validation
 
