@@ -2,18 +2,11 @@
 type: procedures
 scope: product
 name: protocols
-version: "1.3"
-summary: Thirteen development protocols backing the Organon project's workflow family — covers all 6 enforcement loop phases plus onboarding, publishing, and book authoring
-token_estimate: 11800
-protocols_count: 13
+version: "1.4"
+summary: Eleven development protocols covering the 4-phase enforcement loop plus onboarding, publishing, and book authoring
+token_estimate: 9000
+protocols_count: 11
 protocols:
-  - id: PROTO-ORG-1
-    name: RFC-Driven Design
-    steps: 15
-    automation_tier: automated
-    workflow: domain-feature-design
-    tools: [organon-validate, organon-verify]
-    complexity: high
   - id: PROTO-ORG-2
     name: Tool Development
     steps: 10
@@ -35,13 +28,6 @@ protocols:
     workflow: verify-and-health
     tools: [organon-verify, organon-health]
     complexity: low
-  - id: PROTO-ORG-5
-    name: Session Compounding
-    steps: 8
-    automation_tier: automated
-    workflow: session-compounding
-    tools: [organon-verify, organon-health, organon-find]
-    complexity: medium
   - id: PROTO-ORG-6
     name: Organon File Creation
     steps: 8
@@ -104,7 +90,6 @@ related_files:
   - ../ETHOS.md
   - ../../CLAUDE.md
   - ../../book-llms/three-layer-architecture.md
-  - ../../book-llms/workflow-authoring.md
 ---
 
 # Organon Development Protocols
@@ -116,86 +101,19 @@ related_files:
 ## Enforcement Loop Coverage
 
 ```
-DEFINE:    PROTO-ORG-1  RFC-Driven Design .............. domain-feature-design
+DEFINE:    PROTO-ORG-6  Organon File Creation .......... organon-file-creation
 BIND:      PROTO-ORG-6  Organon File Creation .......... organon-file-creation
 EXECUTE:   PROTO-ORG-2  Tool Development ............... organon-tools-developer
+           PROTO-ORG-3  Methodology Evolution .......... methodology-spec-evolution
            PROTO-ORG-12 Chapter Drafting ............... manual (organon/domains/book-humans/ETHOS.md)
 VERIFY:    PROTO-ORG-4  Verification and Health ........ verify-and-health
            PROTO-ORG-7  Quality Review ................. quality-review
            PROTO-ORG-13 Book Compilation ............... semi-automated (Makefile)
-COMPOUND:  PROTO-ORG-5  Session Compounding ............ session-compounding
-EVOLVE:    PROTO-ORG-3  Methodology Evolution .......... methodology-spec-evolution
 ONBOARD:   PROTO-ORG-8  Project Initialization ......... organon init (tool)
            PROTO-ORG-9  Project Upgrade ................ organon upgrade (tool)
 PUBLISH:   PROTO-ORG-10 Pre-Publish QA ................. pre-publish-qa
            PROTO-ORG-11 Release Publish ................ release-publish
 ```
-
----
-
-## PROTO-ORG-1: RFC-Driven Design
-
-> Design new domains and features using RFC-Driven Evolution — ensures organon defines "should be" before code implements "what is."
-
-### Goal
-
-Produce a complete RFC with both organon mutation plan and technical implementation plan, ready for review and implementation.
-
-### Preconditions
-
-- [ ] Problem is understood and scope is classified (domain vs feature vs component)
-- [ ] Parent scope ETHOS.md exists and has been read
-- [ ] `book-llms/patterns.md` (RFC-Driven Evolution) has been loaded
-- [ ] `book-llms/templates.md` (RFC Template) has been loaded
-
-### Steps
-
-1. **Load context.** Read `book-llms/patterns.md`, `book-llms/templates.md`, `book-llms/scopes.md`, parent ETHOS.md, `book-llms/frontmatter-system.md`.
-
-2. **Classify scope.** Determine if this is a domain (bounded context), feature (cross-cutting capability), or component (code module).
-
-3. **Answer design questions.** Why does the organon need to evolve? What will the organon define? How will code implement it?
-
-4. **Create RFC file.** Determine next RFC number, create `rfcs/NNN-<feature-name>.md`.
-
-5. **Copy RFC template.** Load from `book-llms/templates.md` → RFC Template section.
-
-6. **Fill frontmatter.** Set type, scope, name, version, summary, token_estimate, status, created, author, related_files.
-
-7. **Write ETHOS.md content.** Write exact identity statements, invariants (with enforcement mechanisms), prioritized principles, and decision heuristics.
-
-8. **Write PHILOSOPHY.md content.** Write problem statement, the bet, trade-offs (minimum 5), alternatives considered, success criteria.
-
-9. **Write update section.** List specific organon files that will be updated with exact changes.
-
-10. **Write architecture.** Package structure, core abstractions (TypeScript interfaces), invariant-to-implementation mapping.
-
-11. **Write API design.** Function signatures, interfaces, design rationale.
-
-12. **Write implementation plan.** Week-by-week for Phase 1, clear deliverables per phase.
-
-13. **Write design decisions.** Minimum 5 technical decisions, each linked to a domain principle.
-
-14. **Complete supporting sections.** Success metrics, risks & mitigations, open questions, dependencies.
-
-15. **Self-review.** Run quality checklist: both organon and technical plans are detailed, invariants are testable, principles are prioritized.
-
-### Verification
-
-- [ ] RFC has both organon mutation plan AND technical implementation plan
-- [ ] ETHOS.md content has ≥3 identity IS/IS NOT statements, ≥3 invariants with enforcement, ≥3 prioritized principles, ≥5 heuristics
-- [ ] PHILOSOPHY.md content has problem, bet, ≥5 trade-offs, ≥3 alternatives, measurable success criteria
-- [ ] Technical plan has architecture, API, phased implementation, ≥5 design decisions
-- [ ] `organon validate` passes on the RFC file
-
-### Recovery
-
-| Failure | Recovery Action |
-|---------|-----------------|
-| Can't classify scope | Re-read `book-llms/scopes.md`, ask: does it have ≥3 unique concepts? |
-| Invariants are too vague | Apply "testable?" filter — if you can't write a verification gate, it's too vague |
-| Missing technical plan | Stop and add architecture, API, implementation phases before proceeding |
-| RFC too large | Split into multiple RFCs with dependency chain |
 
 ---
 
@@ -277,7 +195,7 @@ Update methodology specification while maintaining consistency across all relate
 
 2. **Assess impact.** Run `organon find` to trace references to the concept being changed. Identify all files that reference the affected terminology or concept.
 
-3. **Check backward compatibility.** Will this change break existing organon implementations? If yes, requires RFC and major version bump.
+3. **Check backward compatibility.** Will this change break existing organon implementations? If yes, requires major version bump with CHANGELOG entry.
 
 4. **Make primary change.** Edit the target file in `book-llms/`.
 
@@ -312,7 +230,7 @@ Update methodology specification while maintaining consistency across all relate
 | Stale terminology found after commit | Run full grep sweep again, update all instances |
 | scopes.md out of sync | Re-read scopes.md, update to match current concepts |
 | Version not bumped in a file | Check all files touched in this change, bump any missed |
-| Backward compatibility broken | Create RFC for the breaking change, bump major version |
+| Backward compatibility broken | Bump major version, document the breaking change in CHANGELOG.md |
 | `organon verify` fails | Fix reported issues before committing |
 
 ---
@@ -332,7 +250,7 @@ Confirm project integrity. Surface all issues with actionable fix guidance.
 
 ### Steps
 
-1. **Run verification.** Execute `organon verify` (all 9 gates: frontmatter, triplets, references, placeholder-detection, freshness, invariant-coverage, workflow-quality, tier4-tests, version-alignment).
+1. **Run verification.** Execute `organon verify` (all 7 gates: frontmatter, references, triplets, placeholder-detection, freshness, invariant-coverage, version-alignment).
 
 2. **Run health check.** Execute `organon health` for overall project health score.
 
@@ -342,9 +260,9 @@ Confirm project integrity. Surface all issues with actionable fix guidance.
    |------|---------------|-----|
    | frontmatter | Missing or invalid fields | Add required fields per `frontmatter-system.md` |
    | references | Broken file path | Update path or create missing file |
-   | triplets | Orphaned workflow or phantom automation | Add missing protocol↔workflow reference |
-   | coverage | Invariant without test | Create tier-4 test for the invariant |
-   | workflow-quality | Missing protocol_id, tools, context, or error recovery | Add missing fields to workflow frontmatter/body |
+   | triplets | Orphaned protocol↔test binding | Ensure invariant has `@organon-invariant` test annotation |
+   | invariant-coverage | Invariant without test | Create a test annotated with `@organon-invariant(INV-X-N)` |
+   | version-alignment | Config methodology version mismatch | Update `organon.config.json` methodology_version |
 
 4. **Guide fixes.** For each failure, provide the specific file, field, and value to add or change.
 
@@ -352,7 +270,7 @@ Confirm project integrity. Surface all issues with actionable fix guidance.
 
 ### Verification
 
-- [ ] All 9 gates pass
+- [ ] All 7 gates pass
 - [ ] Health score is reported
 - [ ] No regressions from previous health score
 
@@ -363,59 +281,6 @@ Confirm project integrity. Surface all issues with actionable fix guidance.
 | `organon verify` command not found | Build organon-tools: `cd packages/tools && npm run build` |
 | Gate failure not in decision table | Read gate source code to understand the check, add new entry to table |
 | Fix introduces new failure | Re-run full verification, fix cascading issues |
-
----
-
-## PROTO-ORG-5: Session Compounding
-
-> Review a work session's output, detect improvable patterns, and execute the highest-priority improvement.
-
-### Goal
-
-Capture session learnings and convert at least one into a durable improvement (tool candidate, protocol update, heuristic addition, or workflow refinement).
-
-### Preconditions
-
-- [ ] A significant work session has just completed (meaningful changes made)
-- [ ] `CLAUDE.md` loaded
-- [ ] `book-llms/patterns.md` loaded (Recursive Collaboration section)
-
-### Steps
-
-1. **Review session work.** Examine `git diff` of the session's changes. Identify what was done, what patterns emerged.
-
-2. **Detect patterns.** Look for: repeated manual steps, unclear workflows, new heuristics discovered during work, terminology inconsistencies.
-
-3. **Classify improvements.** Categorize each finding:
-   - **Tool candidate** — repeated operation that could be automated
-   - **Protocol update** — procedure that was followed but isn't documented
-   - **Heuristic addition** — decision that was made repeatedly
-   - **Workflow refinement** — existing workflow that was awkward or incomplete
-
-4. **Prioritize.** Rank by frequency × impact. Most frequent + highest impact = do first.
-
-5. **Generate improvement plan.** For the top improvement, draft the specific change needed.
-
-6. **Execute improvement.** With user confirmation, implement the highest-priority improvement.
-
-7. **Grep for stale terminology.** Search ALL files for old terminology that should have been updated during the session.
-
-8. **Run verification.** `organon verify` and `organon health` to confirm the improvement didn't break anything.
-
-### Verification
-
-- [ ] At least one improvement identified
-- [ ] Highest-priority improvement either executed or documented for future action
-- [ ] `organon verify` passes after any changes
-- [ ] No stale terminology found
-
-### Recovery
-
-| Failure | Recovery Action |
-|---------|-----------------|
-| No patterns detected | Session may have been too small; note for next session |
-| Improvement breaks verification | Revert improvement, re-analyze the approach |
-| User declines execution | Document the improvement in a TODO or RFC for future action |
 
 ---
 
@@ -450,7 +315,7 @@ Produce a valid organon file in the correct location with proper frontmatter, se
 
 7. **Validate.** Run `organon validate` with all 4 stages (schema, content, references, relationships).
 
-8. **Check bidirectional references.** If this file references other organon files, ensure those files reference back. Run `organon verify --gate triplets` if this is a protocol with workflows.
+8. **Check bidirectional references.** If this file references other organon files, ensure those files reference back. If declaring new invariants, ensure tests with `@organon-invariant` annotations exist for each invariant ID.
 
 ### Verification
 
@@ -484,7 +349,6 @@ Identify quality issues that automated gates cannot detect: vague invariants, mi
 - [ ] Review scope selected (specific file, directory, or project-wide)
 - [ ] `book-llms/ETHOS.md` loaded (quality standards)
 - [ ] `book-llms/patterns.md` loaded (anti-patterns to check against)
-- [ ] `book-llms/workflow-authoring.md` loaded (workflow quality attributes)
 
 ### Steps
 

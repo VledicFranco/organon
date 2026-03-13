@@ -2,12 +2,12 @@
 type: constraints
 scope: product
 name: organon-project
-version: "1.1"
+version: "1.2"
 summary: Project-level invariants for the Organon methodology repository — formalizes CLAUDE.md constraints with stable IDs
 token_estimate: 1800
 invariants_count: 6
-principles_count: 7
-heuristics_count: 10
+principles_count: 6
+heuristics_count: 9
 invariants:
   - id: INV-ORG-1
     name: dogfood-methodology
@@ -49,7 +49,7 @@ related_files:
 - A meta-organon: it documents itself using its own rules
 - Three deliverables: `book-llms/` (LLM reference), `book-humans/` (narrative guide), `packages/tools/` (CLI)
 - The canonical definition of the Organon methodology
-- A three-layer system: protocols (knowledge) → workflows (agent bindings) → tools (operations)
+- A constraint-first system: organon files define invariants, code and tests bind to them
 
 ### What This Project IS NOT
 
@@ -75,10 +75,10 @@ related_files:
    - Enforced by: `organon validate` type-specific section checks, `quality-review` workflow (PROTO-ORG-7)
 
 5. **INV-ORG-5: backward-compatible-methodology.** Changes to core methodology must not break existing organon implementations in other projects.
-   - Enforced by: `methodology-spec-evolution` workflow (PROTO-ORG-3), RFC process for breaking changes
+   - Enforced by: `methodology-spec-evolution` workflow (PROTO-ORG-3), CHANGELOG.md major version bump for breaking changes
 
-6. **INV-ORG-6: bidirectional-references.** When a protocol declares `automation_tier: automated`, the referenced workflow must exist and reference back. No orphans in either direction.
-   - Enforced by: `organon verify --gate triplets` gate, `verify-and-health` workflow (PROTO-ORG-4)
+6. **INV-ORG-6: bidirectional-references.** When an invariant is declared in an ETHOS.md, at least one test annotated with `@organon-invariant` must reference it. No invariants without tests; no annotations without matching invariant IDs.
+   - Enforced by: `organon verify --gate invariant-coverage` gate, `verify-and-health` workflow (PROTO-ORG-4)
 
 ---
 
@@ -86,7 +86,7 @@ related_files:
 
 1. **LLM-centric design.** This methodology is built for LLM consumption and execution. Every design decision optimizes for LLM parsing and action.
 
-2. **Enforcement through automation.** Organons that aren't enforced become fiction. The enforcement loop — Define → Bind → Execute → Verify → Compound → Evolve — is what makes this methodology real.
+2. **Enforcement through automation.** Organons that aren't enforced become fiction. The enforcement loop — Define → Bind → Execute → Verify — is what makes this methodology real.
 
 3. **Clarity over completeness.** A clear document beats a comprehensive but vague one.
 
@@ -95,8 +95,6 @@ related_files:
 5. **Constraints over explanations.** State what to do, not why. Put "why" in philosophy files.
 
 6. **Specificity over generality.** Concrete examples beat abstract descriptions.
-
-7. **Protocols before workflows, workflows before tools.** Document the procedure first. Only create a workflow when the protocol is complex enough.
 
 ---
 
@@ -113,14 +111,13 @@ related_files:
 | Unsure if something belongs here vs Agent Tavern | Specification and methodology go here. Implementation-specific patterns stay in Agent Tavern. |
 | README exceeds 100 lines | READMEs are routers, not content. Split content into dedicated files. |
 | Starting a new work session | Run `verify-and-health` workflow (PROTO-ORG-4) to check project integrity. |
-| Ending a significant work session | Run `session-compounding` workflow (PROTO-ORG-5) to capture improvements. |
 
 ---
 
 ## Verification Checklist
 
 - [ ] Frontmatter present with all required fields
-- [ ] Frontmatter counts match actual content (6 invariants, 7 principles, 10 heuristics)
+- [ ] Frontmatter counts match actual content (6 invariants, 6 principles, 9 heuristics)
 - [ ] Identity boundaries are specific and testable
 - [ ] Principles are numbered by priority
 - [ ] No conflicts with meta-organon constraints (book-llms/ETHOS.md)

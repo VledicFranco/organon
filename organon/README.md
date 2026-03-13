@@ -2,8 +2,8 @@
 type: navigation
 scope: product
 name: organon-self-governance
-version: "1.2"
-summary: Navigation for the Organon project's own organon hierarchy — self-governance constraints, protocols, domains, and observations
+version: "1.3"
+summary: Navigation for the Organon project's own organon hierarchy — self-governance constraints, protocols, and domains
 token_estimate: 630
 provides: [project-ethos, development-protocols]
 parent: organon-root
@@ -18,16 +18,15 @@ This project's own organon hierarchy. The Organon methodology dogfoods itself �
 | Path | Type | Description |
 |------|------|-------------|
 | [ETHOS.md](./ETHOS.md) | constraints | Project-level invariants with stable IDs (INV-ORG-1 through INV-ORG-6) |
-| [protocols/](./protocols/) | procedures | Development protocols (11 protocols, 9 with workflow bindings) |
+| [protocols/](./protocols/) | procedures | Development protocols (11 protocols, 7 with workflow bindings) |
 | [domains/](./domains/) | scopes | Bounded contexts — product domains with their own organon files |
-| [observations/](./observations/) | observation | Empirical observations from dogfooding and real work sessions |
 
 ## Domains
 
 | Domain | Purpose | Status |
 |--------|---------|--------|
 | [tools](./domains/tools/) | CLI and MCP server — verification, generation, discovery | Active |
-| [testing](./domains/testing/) | Semantic testing framework for tier-4 invariant verification | Created (RFC 001) |
+| [testing](./domains/testing/) | Semantic testing framework for tier-4 invariant verification | Active |
 
 ## Relationship to CLAUDE.md
 
