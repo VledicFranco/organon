@@ -10,8 +10,6 @@ import { validateFrontmatter } from './validate-frontmatter.js';
 import { verifyTriplets } from './verify-triplets.js';
 import { health as runHealth } from './health.js';
 import { computeInvariantCoverage } from './invariant-coverage.js';
-import { validateWorkflow } from './validate-workflow.js';
-import { verifyTier4Tests } from './verify-tier4-tests.js';
 import { verifyPlaceholders } from './verify-placeholders.js';
 import { verifyReferences } from './verify-references.js';
 import { verifyVersionAlignment } from './verify-version-alignment.js';
@@ -114,26 +112,6 @@ const invariantCoverageGate: VerifyGateFn = async ({ projectRoot, config, fs }) 
   };
 };
 
-const workflowQualityGate: VerifyGateFn = async ({ projectRoot, config, fs }) => {
-  const result = await validateWorkflow({ projectRoot, config, fs });
-  return {
-    gate: 'workflow-quality',
-    passed: result.success,
-    errors: result.errors,
-    warnings: result.warnings,
-  };
-};
-
-const tier4TestsGate: VerifyGateFn = async ({ projectRoot, config, fs }) => {
-  const result = await verifyTier4Tests({ projectRoot, config, fs });
-  return {
-    gate: 'tier4-tests',
-    passed: result.success,
-    errors: result.errors,
-    warnings: result.warnings,
-  };
-};
-
 const placeholderDetectionGate: VerifyGateFn = async ({ projectRoot, config, fs }) => {
   const result = await verifyPlaceholders({ projectRoot, config, fs });
   return {
@@ -166,13 +144,11 @@ const versionAlignmentGate: VerifyGateFn = async ({ projectRoot, config, fs }) =
 
 // Register built-in gates
 registerGate('frontmatter', frontmatterGate);
+registerGate('references', referencesGate);
 registerGate('triplets', tripletsGate);
+registerGate('placeholder-detection', placeholderDetectionGate);
 registerGate('freshness', freshnessGate);
 registerGate('invariant-coverage', invariantCoverageGate);
-registerGate('workflow-quality', workflowQualityGate);
-registerGate('tier4-tests', tier4TestsGate);
-registerGate('placeholder-detection', placeholderDetectionGate);
-registerGate('references', referencesGate);
 registerGate('version-alignment', versionAlignmentGate);
 
 // ---------------------------------------------------------------------------

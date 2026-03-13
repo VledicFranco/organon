@@ -35,6 +35,9 @@ const DEFAULT_TEST_GLOBS = [
 ];
 
 const ANNOTATION_RE = /@organon-invariant\s+(INV-[\w-]+(?:\s+INV-[\w-]+)*)/g;
+const ANNOTATION_PRESENT_RE = /@organon-invariant\s+INV-[\w-]+/;
+const TESTING_IMPORT_RE = /from\s+['"]@organon-methodology\/testing|import\s+io\.github\.vledicfranco\.organon\.testing\./;
+const TEST_INVARIANT_RE = /testInvariant\s*\(/;
 
 // ---------------------------------------------------------------------------
 // Types
@@ -180,6 +183,59 @@ export function computeCoverage(
 }
 
 /**
+ * Check that test files with @organon-invariant annotations import from
+ * @organon-methodology/testing and call testInvariant(). Produces warnings.
+ */
+async function checkTestInfrastructure(
+  fs: FileSystem,
+  projectRoot: string,
+  config: OrganonConfig,
+): Promise<DiagnosticMessage[]> {
+  const testGlobs = config.testGlobs ?? DEFAULT_TEST_GLOBS;
+  const ignorePatterns = config.testIgnorePatterns ?? config.ignorePatterns;
+  const warnings: DiagnosticMessage[] = [];
+
+  for (const pattern of testGlobs) {
+    const files = await fs.glob(pattern, { cwd: projectRoot, ignore: ignorePatterns });
+    for (const file of files) {
+      const absPath = joinPath(projectRoot, file);
+      let content: string;
+      try {
+        content = await fs.readFile(absPath);
+      } catch {
+        continue;
+      }
+      if (!ANNOTATION_PRESENT_RE.test(content)) continue;
+
+      if (!TESTING_IMPORT_RE.test(content)) {
+        const isScala = file.endsWith('.scala');
+        warnings.push({
+          severity: 'warning',
+          code: 'TIER4_MISSING_IMPORT',
+          message: `Test file has @organon-invariant annotation but does not import from @organon-methodology/testing`,
+          file,
+          suggestion: isScala
+            ? `Add: import io.github.vledicfranco.organon.testing.adapters.OrganonSuite`
+            : `Add: import { testInvariant } from '@organon-methodology/testing/vitest';`,
+        });
+      }
+
+      if (!TEST_INVARIANT_RE.test(content)) {
+        warnings.push({
+          severity: 'warning',
+          code: 'TIER4_MISSING_TEST_INVARIANT',
+          message: `Test file has @organon-invariant annotation but does not call testInvariant()`,
+          file,
+          suggestion: `Wrap assertions with testInvariant('INV-ID', 'description', async () => { ... });`,
+        });
+      }
+    }
+  }
+
+  return warnings;
+}
+
+/**
  * Full coverage pipeline: discover organon files, extract invariants,
  * scan tests, compute coverage.
  */
@@ -206,6 +262,10 @@ export async function computeInvariantCoverage(options: {
   }
 
   const invariants = extractInvariants(parsedFiles);
-  const annotations = await scanTestAnnotations(fileSystem, projectRoot, config);
-  return computeCoverage(invariants, annotations);
+  const [annotations, infraWarnings] = await Promise.all([
+    scanTestAnnotations(fileSystem, projectRoot, config),
+    checkTestInfrastructure(fileSystem, projectRoot, config),
+  ]);
+  const coverage = computeCoverage(invariants, annotations);
+  return { ...coverage, warnings: [...coverage.warnings, ...infraWarnings] };
 }

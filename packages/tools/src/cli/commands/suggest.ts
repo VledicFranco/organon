@@ -16,7 +16,7 @@ interface SuggestArgs {
 
 export const suggestCommand: CommandModule<{}, SuggestArgs> = {
   command: 'suggest',
-  describe: 'Suggest automation tier upgrades for manual protocols',
+  describe: '[deprecated] Suggest automation tier upgrades for manual protocols',
 
   builder: (yargs) => {
     return yargs
@@ -43,6 +43,12 @@ export const suggestCommand: CommandModule<{}, SuggestArgs> = {
     const fs = new NodeFileSystem();
     const projectRoot = await resolveProjectRoot(args['project-root'], fs);
     const config = await resolveConfig(projectRoot, fs, args.config);
+
+    if (args.format !== 'json') {
+      console.log(chalk.yellow('Warning: `organon suggest` is deprecated and will be removed in a future version.'));
+      console.log(chalk.yellow('Workflow automation tiers are no longer part of the Organon methodology scope.'));
+      console.log();
+    }
 
     const result = await suggestTools({ projectRoot, config, fs });
 

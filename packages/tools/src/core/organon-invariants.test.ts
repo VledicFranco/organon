@@ -17,8 +17,7 @@ import { testInvariant, assertMaxValue } from '@organon-methodology/testing/vite
 import { resolve } from 'node:path';
 import { readdir, readFile } from 'node:fs/promises';
 import { validateFrontmatter } from './validate-frontmatter.js';
-import { validateWorkflow } from './validate-workflow.js';
-import { MemoryFileSystem, makeEthos, makeWorkflow } from './test-helpers.js';
+import { MemoryFileSystem, makeEthos } from './test-helpers.js';
 import type { OrganonConfig } from './types.js';
 
 const coreDir = resolve(import.meta.dirname, '.');
@@ -83,24 +82,27 @@ describe('@organon-methodology/testing dogfood — tools invariant verification'
     'INV-TOOLS-3',
     'verification gates produce errors (not warnings) for blocking checks',
     async () => {
-      // A workflow missing required fields should produce errors, not warnings
+      // A file missing required frontmatter fields should produce errors, not warnings
       const fs = new MemoryFileSystem({
-        '/project/workflows/bad.md': '# No frontmatter',
+        '/project/ETHOS.md': '# No frontmatter',
       });
       const config: OrganonConfig = {
         projectRoot: '/project',
         organonPaths: ['.'],
         organonGlobs: ['**/ETHOS.md'],
         ignorePatterns: [],
-        workflowPaths: { generic: 'workflows' },
+        workflowPaths: {},
         freshnessThresholdHours: 24,
       };
-      const result = await validateWorkflow({ projectRoot: '/project', config, fs });
+      const result = await validateFrontmatter({ projectRoot: '/project', config, fs });
       // Must fail (not just warn)
       if (result.success) {
-        throw new Error('Gate should fail for invalid workflow, not silently pass');
+        throw new Error('Gate should fail for missing frontmatter, not silently pass');
       }
-      // All blocking issues must be errors, not warnings
+      // Blocking issues must be errors, not warnings
+      if (result.errors.length === 0) {
+        throw new Error('Expected at least one error diagnostic for missing frontmatter');
+      }
       for (const err of result.errors) {
         if (err.severity !== 'error') {
           throw new Error(`Blocking diagnostic ${err.code} has severity '${err.severity}', expected 'error'`);

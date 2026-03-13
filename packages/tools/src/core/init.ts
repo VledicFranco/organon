@@ -17,9 +17,6 @@ import {
   README_TEMPLATE,
   PROTOCOLS_TEMPLATE,
   CLAUDE_MD_TEMPLATE,
-  OBSERVATIONS_README_TEMPLATE,
-  PRIMER_TEMPLATE,
-  METHODOLOGY_REFERENCE_TEMPLATE,
   CONFIG_TEMPLATE,
 } from '../templates/index.js';
 
@@ -168,10 +165,7 @@ export async function init(options: InitOptions): Promise<InitResult> {
     ['organon/ETHOS.md', ethosTemplate(projectName)],
     ['organon/PHILOSOPHY.md', philosophyTemplate(projectName)],
     ['organon/README.md', README_TEMPLATE],
-    ['organon/PRIMER.md', PRIMER_TEMPLATE],
-    ['organon/methodology-reference.md', METHODOLOGY_REFERENCE_TEMPLATE],
     ['organon/protocols/PROTOCOLS.md', PROTOCOLS_TEMPLATE],
-    ['organon/observations/README.md', OBSERVATIONS_README_TEMPLATE],
   ];
 
   for (const [relativePath, content] of organonFiles) {

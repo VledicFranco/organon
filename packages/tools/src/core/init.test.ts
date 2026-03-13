@@ -23,16 +23,13 @@ describe('init', () => {
     });
 
     expect(result.success).toBe(true);
-    expect(result.files.size).toBeGreaterThanOrEqual(9);
+    expect(result.files.size).toBeGreaterThanOrEqual(6);
     expect(result.files.has('organon.config.json')).toBe(true);
     expect(result.files.has('CLAUDE.md')).toBe(true);
     expect(result.files.has('organon/ETHOS.md')).toBe(true);
     expect(result.files.has('organon/PHILOSOPHY.md')).toBe(true);
     expect(result.files.has('organon/README.md')).toBe(true);
-    expect(result.files.has('organon/PRIMER.md')).toBe(true);
-    expect(result.files.has('organon/methodology-reference.md')).toBe(true);
     expect(result.files.has('organon/protocols/PROTOCOLS.md')).toBe(true);
-    expect(result.files.has('organon/observations/README.md')).toBe(true);
   });
 
   it('generates skill files when installSkills is true', async () => {
@@ -45,11 +42,9 @@ describe('init', () => {
     });
 
     expect(result.success).toBe(true);
-    expect(result.files.size).toBe(9 + getSkillTemplates().size);
-    expect(result.files.has('.claude/skills/domain-feature-design/SKILL.md')).toBe(true);
+    expect(result.files.size).toBe(6 + getSkillTemplates().size);
     expect(result.files.has('.claude/skills/organon-file-creation/SKILL.md')).toBe(true);
     expect(result.files.has('.claude/skills/quality-review/SKILL.md')).toBe(true);
-    expect(result.files.has('.claude/skills/session-compounding/SKILL.md')).toBe(true);
     expect(result.files.has('.claude/skills/verify-and-health/SKILL.md')).toBe(true);
   });
 
@@ -99,10 +94,7 @@ describe('init', () => {
       '/project/organon/ETHOS.md': '# ethos',
       '/project/organon/PHILOSOPHY.md': '# phil',
       '/project/organon/README.md': '# readme',
-      '/project/organon/PRIMER.md': '# primer',
-      '/project/organon/methodology-reference.md': '# reference',
       '/project/organon/protocols/PROTOCOLS.md': '# protocols',
-      '/project/organon/observations/README.md': '# observations',
     });
 
     const result = await init({
@@ -114,7 +106,7 @@ describe('init', () => {
 
     expect(result.success).toBe(true);
     expect(result.files.size).toBe(0);
-    expect(result.skipped.length).toBe(9);
+    expect(result.skipped.length).toBe(6);
     const codes = result.diagnostics.map((d) => d.code);
     expect(codes).toContain('INIT_ALREADY_INITIALIZED');
   });
