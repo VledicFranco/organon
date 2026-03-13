@@ -4,6 +4,33 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.6.0] - unreleased
+
+### Added
+- **Bidirectional implementation binding** — `@organon-implements` comment annotation for source files; three reference forms: scope (`domains/billing`), invariant ID (`INV-BILLING-1`), protocol ID (`PROTO-BILLING-1`)
+- **`implemented_by:` frontmatter field** on invariant and protocol entries — organon side of the bidirectional binding; validated by the `references` gate
+- **Domain lifecycle field** — `status: designing | implementing | stable` on domain/feature ETHOS.md; `organon init` scaffolds `status: designing` with explanatory comment
+- **Three new verification gates** (7 → 10): `domain-binding` (structural, 100% for stable domains), `implementation-coverage` (configurable threshold), `protocol-coverage` (configurable threshold)
+- **Coverage configuration** — `sourceGlobs`, `sourceIgnorePatterns`, and `coverage.invariantImplementation` / `coverage.protocolImplementation` thresholds in `organon.config.json`; thresholds default to `0` (opt-in)
+- **Extended `organon coverage` command** — domain binding status, invariant implementation %, protocol implementation %, and chain completeness (declare → implement → verify) dashboard
+- **`docs/versions/`** — new subdirectory for per-release version specs with `type: version-spec` frontmatter
+- **`type: version-spec`** added to the frontmatter type enum in `book-llms/frontmatter-system.md`
+
+### Removed
+- RFC lifecycle, RFC templates, RFC-specific frontmatter fields (`status: draft|review|accepted|implementing|implemented`, `primary_rfcs`, `secondary_rfcs`)
+- Compounding (`COMPOUND` phase from enforcement loop, `session-compounding` skill, compound heuristics)
+- Workflow & skill authoring guidance (`workflow-quality` gate, `domain-feature-design` skill, workflow templates)
+- Observations system (`organon/observations/`, observation templates, observation frontmatter fields)
+- `organon/PRIMER.md` and `organon/methodology-reference.md` from init scaffold
+
+### Changed
+- Enforcement loop: 6 phases (`DEFINE → BIND → EXECUTE → VERIFY → COMPOUND → EVOLVE`) → 4 phases (`DEFINE → BIND → EXECUTE → VERIFY`)
+- Verification gates: 9 → 7 (cleanup) → 10 (with new coverage gates)
+- `organon init` scaffold: 14 files → 6 core files + 3 optional skills (`verify-and-health`, `quality-review`, `organon-file-creation`)
+- `triplets` gate redefined: protocol → test binding integrity (invariant declared ↔ `@organon-invariant` annotation); no longer checks workflow leg
+- `organon suggest` marked deprecated (workflow automation tiers no longer in scope)
+- `docs/v0.6.0-plan.md` → `docs/versions/v0.6.0.md` (moved to versioned spec directory)
+
 ## [0.5.2] - 2026-02-16
 
 ### Fixed

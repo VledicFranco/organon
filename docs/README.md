@@ -37,7 +37,7 @@ Start with [Project Structure](./06-project-structure.md) for layout and workflo
 |----------|------------|
 | [book-llms/](../book-llms/) | Formal methodology specification (LLM-optimized technical reference) |
 | [book-humans/](../book-humans/) | Philosophical narrative guide (planned, outline only) |
-| [rfcs/](../rfcs/) | Proposals for methodology and tooling changes |
+| [versions/](./versions/) | Per-release version specs — vision, what changed, implementation status |
 | [CLAUDE.md](../CLAUDE.md) | Agent behavioral constraints for this repository |
 
 ---

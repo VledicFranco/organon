@@ -72,6 +72,7 @@ token_estimate: number    # Approximate full file token count
 | `rationale` | PHILOSOPHY.md | Reasoning, trade-offs, design decisions |
 | `procedures` | PROTOCOL.md, protocols/*.md | Step-by-step procedures with verification |
 | `mapping` | components.md | Auto-generated code-to-domain mapping |
+| `version-spec` | docs/versions/vN.N.N.md | Per-release specification: vision, what changed, implementation status |
 
 ### Scope Enum
 
@@ -146,6 +147,18 @@ source_globs: string[]        # Source patterns scanned (e.g., ["src/**/*.scala"
 
 **Drift detection:** The `freshness` verification gate regenerates the mapping and compares with committed version. `generated_from` and `source_globs` enable reproducible generation.
 
+### docs/versions/vN.N.N.md (`type: version-spec`)
+
+```yaml
+version: string               # Semantic version (e.g., "0.6.0")
+status: string                # planning | implementing | released
+created: string               # ISO 8601 date work began
+released: string              # ISO 8601 date of release (~ if unreleased)
+features: string[]            # Short feature identifiers included in this release
+```
+
+Version spec files use `scope: product`. They live in `docs/versions/` and document the vision, what changed, and implementation status for a release. Not validated by the standard organon gates (they are developer docs, not organon constraint files).
+
 ---
 
 ## Relationship Fields
@@ -159,8 +172,6 @@ inherits_from: string[]       # Parent organon names (e.g., [product], [meta-org
 # Cross-references
 related_domains: string[]     # Related domain names
 related_features: string[]    # Related feature names
-primary_rfcs: number[]        # RFCs that created/shaped this organon
-secondary_rfcs: number[]      # Supporting RFCs
 
 # Context management
 load_priority: high | medium | low
@@ -253,7 +264,7 @@ Frontmatter must be **truthful** — automated tests enforce accuracy.
 ### Schema Validation
 
 - All required fields present (`type`, `scope`, `name`, `version`, `summary`, `token_estimate`)
-- Types match enums (`type` ∈ {navigation, constraints, rationale, procedures, mapping})
+- Types match enums (`type` ∈ {navigation, constraints, rationale, procedures, mapping, version-spec})
 - Scope matches enums (`scope` ∈ {product, domain, feature, component, meta, methodology})
 - `name` is kebab-case
 - `version` is semver format "X.Y"
@@ -277,10 +288,10 @@ Frontmatter must be **truthful** — automated tests enforce accuracy.
 
 ### Consistency Validation
 
-- `name` matches parent directory name for domain-boundary files (exempt for collection containers: `organon/`, `observations/`, `rfcs/`, `book-llms/`, `protocols/`, `book-humans/`)
+- `name` matches parent directory name for domain-boundary files (exempt for collection containers: `organon/`, `book-llms/`, `protocols/`, `book-humans/`, `versions/`)
 - `scope` matches directory structure (`domains/` → `scope: domain`)
 - Related references are bidirectional (if A references B, B references A)
-- If `automation_tier == "automated"`, workflow binding exists and references back
+- If `automation_tier == "automated"`, `implemented_by` entries exist in the protocol frontmatter
 
 ---
 
