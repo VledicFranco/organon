@@ -13,6 +13,9 @@ import { computeInvariantCoverage } from './invariant-coverage.js';
 import { verifyPlaceholders } from './verify-placeholders.js';
 import { verifyReferences } from './verify-references.js';
 import { verifyVersionAlignment } from './verify-version-alignment.js';
+import { domainBindingGate } from './domain-binding.js';
+import { implementationCoverageGate } from './verify-implementation-coverage.js';
+import { protocolCoverageGate } from './verify-protocol-coverage.js';
 import type {
   DiagnosticMessage,
   FileSystem,
@@ -142,13 +145,16 @@ const versionAlignmentGate: VerifyGateFn = async ({ projectRoot, config, fs }) =
   };
 };
 
-// Register built-in gates
+// Register built-in gates (order: structural → coverage → advisory)
 registerGate('frontmatter', frontmatterGate);
 registerGate('references', referencesGate);
+registerGate('domain-binding', domainBindingGate);
 registerGate('triplets', tripletsGate);
 registerGate('placeholder-detection', placeholderDetectionGate);
 registerGate('freshness', freshnessGate);
 registerGate('invariant-coverage', invariantCoverageGate);
+registerGate('implementation-coverage', implementationCoverageGate);
+registerGate('protocol-coverage', protocolCoverageGate);
 registerGate('version-alignment', versionAlignmentGate);
 
 // ---------------------------------------------------------------------------

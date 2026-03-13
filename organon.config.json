@@ -26,5 +26,15 @@
     "cursor": ".cursor/rules",
     "generic": "organon/workflows"
   },
-  "freshnessThresholdHours": 720
+  "freshnessThresholdHours": 720,
+  "sourceGlobs": [
+    "packages/**/*.ts",
+    "packages/**/*.scala"
+  ],
+  "sourceIgnorePatterns": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/*.test.ts",
+    "**/*.spec.ts"
+  ]
 }

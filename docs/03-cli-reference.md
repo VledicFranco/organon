@@ -91,10 +91,13 @@ organon verify --gate frontmatter triplets  # Run specific gates
 |------|----------------|
 | `frontmatter` | Frontmatter schema, truthfulness, and consistency |
 | `references` | `inherits_from`, `loads:`, `protocol_file` paths resolve correctly |
+| `domain-binding` | Every stable domain/feature has at least one `@organon-implements` source claim |
 | `triplets` | Protocol → test binding integrity (invariant declared ↔ `@organon-invariant` annotation) |
 | `placeholder-detection` | Template placeholders have been replaced with real content |
 | `freshness` | Organon files are not stale relative to code changes |
 | `invariant-coverage` | Every ETHOS.md invariant has a corresponding `@organon-invariant` test |
+| `implementation-coverage` | % of invariants with `@organon-implements` source claims meets configured threshold |
+| `protocol-coverage` | % of semi-automated/automated protocols with `@organon-implements` meets configured threshold |
 | `version-alignment` | Config methodology version matches CLI version |
 
 **Exit codes:** 0 = all gates passed, 1 = one or more gates failed.

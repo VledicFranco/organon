@@ -4,6 +4,7 @@ scope: domain
 name: testing
 version: "1.2"
 summary: Tier-4 invariant verification framework — multi-language semantic testing library (TypeScript, Scala 3)
+status: stable
 token_estimate: 1700
 invariants_count: 8
 principles_count: 5

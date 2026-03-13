@@ -4,6 +4,7 @@ scope: domain
 name: book-humans
 version: "1.0"
 summary: Authoring constraints for book-humans — 5 invariants, 4 principles, 8-row decision heuristics
+status: implementing
 token_estimate: 2800
 invariants:
   - id: INV-BKHU-1

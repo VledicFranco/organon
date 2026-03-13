@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /**
  * Organon CLI — Tools for the Organon Methodology.
+ * @organon-implements domains/tools
  *
  * Commands:
  *   init      — Bootstrap a new project with Organon structure

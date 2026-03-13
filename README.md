@@ -132,7 +132,7 @@ All files pass `organon verify` out of the box.
 ### Verify
 
 ```bash
-organon verify --project-root <project-root>    # Run 7 verification gates
+organon verify --project-root <project-root>    # Run 10 verification gates
 organon health --project-root <project-root>    # Health score (0-100)
 ```
 
@@ -150,7 +150,7 @@ organon upgrade <project-root> --apply    # Apply methodology updates
 ```bash
 organon init [dir]              # Scaffold a new project
 organon upgrade [dir]           # Detect and apply version updates
-organon verify                  # Run all 7 verification gates
+organon verify                  # Run all 10 verification gates
 organon health                  # Project health score (0-100)
 organon validate <file>         # Validate a single organon file
 organon generate <file>         # Auto-generate frontmatter
@@ -167,16 +167,19 @@ organon mcp                     # Start MCP server (IDE integration)
 
 ### Verification Gates
 
-`organon verify` runs 7 gates:
+`organon verify` runs 10 gates:
 
 | Gate | What it checks |
 |------|----------------|
 | **frontmatter** | Every organon file has valid YAML frontmatter with required fields |
 | **references** | `inherits_from`, `loads:`, `protocol_file` paths resolve correctly |
+| **domain-binding** | Every stable domain/feature has at least one `@organon-implements` source claim |
 | **triplets** | Protocol → test binding integrity (invariant declared ↔ `@organon-invariant` annotation) |
 | **placeholder-detection** | Template placeholders have been replaced with real content |
 | **freshness** | Organon files are not stale relative to code changes |
 | **invariant-coverage** | Every invariant in ETHOS.md has at least one `@organon-invariant` test |
+| **implementation-coverage** | % of invariants with `@organon-implements` source claims meets configured threshold |
+| **protocol-coverage** | % of semi-automated/automated protocols with `@organon-implements` meets configured threshold |
 | **version-alignment** | Config methodology version matches CLI version |
 
 ---

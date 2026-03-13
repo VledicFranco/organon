@@ -146,6 +146,51 @@ describe('verify', () => {
     expect(result.gates[0].passed).toBe(false);
   });
 
+  it('registers all 10 built-in gates', () => {
+    const gates = getRegisteredGates();
+    expect(gates).toContain('domain-binding');
+    expect(gates).toContain('implementation-coverage');
+    expect(gates).toContain('protocol-coverage');
+    // Built-ins from before Phase 7
+    expect(gates).toContain('frontmatter');
+    expect(gates).toContain('references');
+    expect(gates).toContain('triplets');
+    expect(gates).toContain('placeholder-detection');
+    expect(gates).toContain('freshness');
+    expect(gates).toContain('invariant-coverage');
+    expect(gates).toContain('version-alignment');
+  });
+
+  it('runs only domain-binding gate when specified', async () => {
+    const fs = new MemoryFileSystem({
+      '/project/ETHOS.md': makeEthos({ name: 'test', scope: 'product' }),
+    });
+    const config = makeConfig('/project');
+    const result = await verify({ projectRoot: '/project', config, fs, gates: ['domain-binding'] });
+    expect(result.gates).toHaveLength(1);
+    expect(result.gates[0].gate).toBe('domain-binding');
+  });
+
+  it('runs only implementation-coverage gate when specified', async () => {
+    const fs = new MemoryFileSystem({
+      '/project/ETHOS.md': makeEthos({ name: 'test', scope: 'product' }),
+    });
+    const config = makeConfig('/project');
+    const result = await verify({ projectRoot: '/project', config, fs, gates: ['implementation-coverage'] });
+    expect(result.gates).toHaveLength(1);
+    expect(result.gates[0].gate).toBe('implementation-coverage');
+  });
+
+  it('runs only protocol-coverage gate when specified', async () => {
+    const fs = new MemoryFileSystem({
+      '/project/ETHOS.md': makeEthos({ name: 'test', scope: 'product' }),
+    });
+    const config = makeConfig('/project');
+    const result = await verify({ projectRoot: '/project', config, fs, gates: ['protocol-coverage'] });
+    expect(result.gates).toHaveLength(1);
+    expect(result.gates[0].gate).toBe('protocol-coverage');
+  });
+
   it('success is true only when all gates pass', async () => {
     const fs = new MemoryFileSystem({
       '/project/ETHOS.md': makeEthos({ name: 'test', scope: 'product' }),
