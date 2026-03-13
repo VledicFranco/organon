@@ -240,10 +240,10 @@ Generated scaffolds include:
 
 ### coverage
 
-Analyze invariant test coverage. Reports which invariants have tests, which are judgment calls, and which are uncovered.
+Implementation coverage dashboard across four axes: domain binding, invariant implementation, protocol implementation, and chain completeness.
 
 ```bash
-organon coverage                  # Human-readable coverage report
+organon coverage                  # Four-section dashboard
 organon coverage --json           # Machine-readable JSON output
 ```
 
@@ -252,17 +252,25 @@ organon coverage --json           # Machine-readable JSON output
 | Option | Type | Description |
 |--------|------|-------------|
 | `--json` | boolean | Output as JSON |
+| `--project-root` | string | Project root directory (default: cwd) |
 
-**Output columns:**
+**Dashboard sections:**
 
-| Column | Description |
-|--------|-------------|
-| ID | Invariant ID (e.g., `INV-META-1`) |
-| Name | Short kebab-case label |
-| Status | `covered`, `judgment` (judgment_call), or `uncovered` |
-| Tests | File(s) containing tests for this invariant |
+**Section 1 — Domain Binding:** For each domain/feature organon, shows whether at least one source file claims `@organon-implements <scope>`. Domains with `status: designing` or `status: implementing` are shown as exempt.
 
-**Exit codes:** 0 = all testable invariants covered, 1 = uncovered invariants exist.
+**Section 2 — Invariant Implementation:** Percentage of non-judgment-call invariants (in domain/feature scope, not designing) that have at least one `@organon-implements` source claim. Shows configured threshold pass/fail.
+
+**Section 3 — Protocol Implementation:** Percentage of semi-automated/automated protocols (in domain/feature scope, not designing) with `@organon-implements` source claims. Shows configured threshold pass/fail.
+
+**Section 4 — Chain Completeness:** Counts invariants by traceability status:
+- **Complete** — has both `@organon-implements` claim and `@organon-invariant` test
+- **Impl only** — has `@organon-implements` but no test
+- **Test only** — has `@organon-invariant` test but no impl claim
+- **Missing** — neither claim nor test
+
+**JSON output keys:** `domainBinding`, `invariantImplementation`, `protocolImplementation`, `chainCompleteness`.
+
+**Exit codes:** 0 always (coverage is informational; use `organon verify` for blocking checks).
 
 ---
 
@@ -371,7 +379,13 @@ Place `organon.config.json` at your project root to customize behavior.
     "cursor": ".cursor/rules",
     "generic": "organon/workflows"
   },
-  "freshnessThresholdHours": 720
+  "freshnessThresholdHours": 720,
+  "sourceGlobs": ["src/**/*.ts", "src/**/*.js", "packages/**/*.ts"],
+  "sourceIgnorePatterns": ["**/node_modules/**", "**/dist/**", "**/*.test.ts"],
+  "coverage": {
+    "invariantImplementation": 80,
+    "protocolImplementation": 80
+  }
 }
 ```
 
@@ -384,5 +398,9 @@ Place `organon.config.json` at your project root to customize behavior.
 | `ignorePatterns` | string[] | Glob patterns to exclude from scanning |
 | `workflowPaths` | object | Agent-specific workflow directories |
 | `freshnessThresholdHours` | number | Hours before a file is considered stale (default: 720 = 30 days) |
+| `sourceGlobs` | string[] | Source file patterns to scan for `@organon-implements` annotations |
+| `sourceIgnorePatterns` | string[] | Patterns to exclude from source scanning |
+| `coverage.invariantImplementation` | number | % threshold for `implementation-coverage` gate (0-100, default: 0) |
+| `coverage.protocolImplementation` | number | % threshold for `protocol-coverage` gate (0-100, default: 0) |
 
 Without a config file, the CLI uses conventions: it scans for `organon/` and `book-llms/` directories automatically.

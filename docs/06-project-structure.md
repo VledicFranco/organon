@@ -38,7 +38,7 @@ organon/
 │   ├── ETHOS.md                      ← Meta-organon: rules for writing organons
 │   ├── PHILOSOPHY.md                 ← Meta-organon: reasoning behind the rules
 │   ├── overview.md                   ← High-level methodology overview
-│   ├── patterns.md                   ← 22 documented patterns
+│   ├── patterns.md                   ← 21 documented patterns
 │   ├── scopes.md                     ← Scope hierarchy specification
 │   ├── templates.md                  ← Copy-paste scaffolds for all artifact types
 │   ├── frontmatter-system.md         ← YAML frontmatter specification
@@ -53,8 +53,9 @@ organon/
 │   ├── ETHOS.md                      ← Meta-organon for the organon system
 │   ├── README.md                     ← Navigation
 │   ├── domains/
-│   │   ├── tools/                    ← CLI domain (ETHOS.md, PHILOSOPHY.md)
-│   │   └── testing/                  ← Testing domain (ETHOS.md, PHILOSOPHY.md)
+│   │   ├── tools/                    ← CLI domain (ETHOS.md, PHILOSOPHY.md) — status: stable
+│   │   ├── testing/                  ← Testing domain (ETHOS.md, PHILOSOPHY.md) — status: stable
+│   │   └── book-humans/              ← Book-humans domain (ETHOS.md, PHILOSOPHY.md) — status: implementing
 │   └── protocols/                    ← Development procedures
 │
 ├── packages/
