@@ -25,7 +25,8 @@
     "organon:health": "tsx src/cli/index.ts health",
     "organon:find": "tsx src/cli/index.ts find",
     "organon:verify": "tsx src/cli/index.ts verify",
-    "organon:mcp": "tsx src/cli/index.ts mcp"
+    "organon:mcp": "tsx src/cli/index.ts mcp",
+    "mcp": "node dist/cli/index.js mcp"
   },
   "files": [
     "dist",
